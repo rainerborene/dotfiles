@@ -89,7 +89,7 @@ let g:CommandTMaxHeight=10
 let g:CommandTMatchWindowAtTop=1
 
 "delete a buffer without closing the window
-nmap <C-Q>! <Plug>Kwbd
+nmap <leader>q <Plug>Kwbd
 
 "apply any changes on .vimrc automatically
 if has("autocmd")
