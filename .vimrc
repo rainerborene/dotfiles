@@ -46,6 +46,9 @@ set hidden
 "turn off needless toolbar on gvim/mvim
 set guioptions-=T
 
+"enable 256 colors in vim
+set t_Co=256
+
 "turn on syntax highlighting
 syntax on
 
@@ -95,3 +98,6 @@ nmap <leader>q <Plug>Kwbd
 if has("autocmd")
     autocmd bufwritepost .vimrc source $MYVIMRC
 endif
+
+"file patterns that vim should ignore
+set wildignore+=.git,*.pyc
