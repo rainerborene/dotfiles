@@ -1,102 +1,217 @@
-" Vim color file
-" Converted from Textmate theme Mac Classic using Coloration v0.2.2 (http://github.com/sickill/coloration)
+" Vim color scheme
+"
+" Name:         mac_classic.vim
+" Maintainer:   Drew Neil <andrew.jr.neil@gmail.com>
+" License:      public domain
+" Version:      0.1
 
-set background=dark
+" Boilerplate: {{{1
+set background=light
 highlight clear
 
 if exists("syntax_on")
   syntax reset
 endif
 
-let g:colors_name = "Mac Classic"
+let g:colors_name = "mac_classic"
 
-hi Cursor  guifg=NONE guibg=#000000 gui=NONE
-hi Visual  guifg=NONE guibg=#c6deff gui=NONE
-hi CursorLine  guifg=NONE guibg=#ededed gui=NONE
-hi CursorColumn  guifg=NONE guibg=#ededed gui=NONE
-hi LineNr  guifg=#808080 guibg=#ffffff gui=NONE
-hi VertSplit  guifg=#cfcfcf guibg=#cfcfcf gui=NONE
-hi MatchParen  guifg=#0000ff guibg=NONE gui=bold
-hi StatusLine  guifg=#000000 guibg=#cfcfcf gui=bold
-hi StatusLineNC  guifg=#000000 guibg=#cfcfcf gui=NONE
-hi Pmenu  guifg=NONE guibg=NONE gui=NONE
-hi PmenuSel  guifg=NONE guibg=#c6deff gui=NONE
-hi IncSearch  guifg=NONE guibg=#ababff gui=NONE
-hi Search  guifg=NONE guibg=#ababff gui=NONE
-hi Directory  guifg=#c5060b guibg=NONE gui=bold
-hi Folded  guifg=#0066ff guibg=#ffffff gui=NONE
 
-hi Normal  guifg=#000000 guibg=#ffffff gui=NONE
-hi Boolean  guifg=#585cf6 guibg=NONE gui=bold
-hi Character  guifg=#c5060b guibg=NONE gui=bold
-hi Comment  guifg=#0066ff guibg=NONE gui=italic
-hi Conditional  guifg=#0000ff guibg=NONE gui=bold
-hi Constant  guifg=#c5060b guibg=NONE gui=bold
-hi Define  guifg=#0000ff guibg=NONE gui=bold
-hi ErrorMsg  guifg=#ffffff guibg=#990000 gui=NONE
-hi WarningMsg  guifg=#ffffff guibg=#990000 gui=NONE
-hi Float  guifg=#0000cd guibg=NONE gui=NONE
-hi Function  guifg=#0000a2 guibg=NONE gui=bold
-hi Identifier  guifg=#0000ff guibg=NONE gui=bold
-hi Keyword  guifg=#0000ff guibg=NONE gui=bold
-hi Label  guifg=#036a07 guibg=NONE gui=NONE
-hi NonText  guifg=#bfbfbf guibg=#ededed gui=NONE
-hi Number  guifg=#0000cd guibg=NONE gui=NONE
-hi Operator  guifg=#0000ff guibg=NONE gui=bold
-hi PreProc  guifg=#0000ff guibg=NONE gui=bold
-hi Special  guifg=#000000 guibg=NONE gui=NONE
-hi SpecialKey  guifg=#bfbfbf guibg=#ededed gui=NONE
-hi Statement  guifg=#0000ff guibg=NONE gui=bold
-hi StorageClass  guifg=#0000ff guibg=NONE gui=bold
-hi String  guifg=#036a07 guibg=NONE gui=NONE
-hi Tag  guifg=NONE guibg=NONE gui=NONE
-hi Title  guifg=#000000 guibg=NONE gui=bold
-hi Todo  guifg=#0066ff guibg=NONE gui=inverse,bold,italic
-hi Type  guifg=NONE guibg=NONE gui=NONE
-hi Underlined  guifg=NONE guibg=NONE gui=underline
-hi rubyClass  guifg=#0000ff guibg=NONE gui=bold
-hi rubyFunction  guifg=#0000a2 guibg=NONE gui=bold
-hi rubyInterpolationDelimiter  guifg=NONE guibg=NONE gui=NONE
-hi rubySymbol  guifg=#c5060b guibg=NONE gui=bold
-hi rubyConstant  guifg=#6d79de guibg=NONE gui=bold
-hi rubyStringDelimiter  guifg=#036a07 guibg=NONE gui=NONE
-hi rubyBlockParameter  guifg=NONE guibg=NONE gui=NONE
-hi rubyInstanceVariable  guifg=#318495 guibg=NONE gui=NONE
-hi rubyInclude  guifg=#0000ff guibg=NONE gui=bold
-hi rubyGlobalVariable  guifg=#318495 guibg=NONE gui=NONE
-hi rubyRegexp  guifg=#036a07 guibg=NONE gui=NONE
-hi rubyRegexpDelimiter  guifg=#036a07 guibg=NONE gui=NONE
-hi rubyEscape  guifg=#26b31a guibg=NONE gui=NONE
-hi rubyControl  guifg=#0000ff guibg=NONE gui=bold
-hi rubyClassVariable  guifg=NONE guibg=NONE gui=NONE
-hi rubyOperator  guifg=#0000ff guibg=NONE gui=bold
-hi rubyException  guifg=#0000ff guibg=NONE gui=bold
-hi rubyPseudoVariable  guifg=#318495 guibg=NONE gui=NONE
-hi rubyRailsUserClass  guifg=#6d79de guibg=NONE gui=bold
-hi rubyRailsARAssociationMethod  guifg=#3c4c72 guibg=NONE gui=bold
-hi rubyRailsARMethod  guifg=#3c4c72 guibg=NONE gui=bold
-hi rubyRailsRenderMethod  guifg=#3c4c72 guibg=NONE gui=bold
-hi rubyRailsMethod  guifg=#3c4c72 guibg=NONE gui=bold
-hi erubyDelimiter  guifg=NONE guibg=NONE gui=NONE
-hi erubyComment  guifg=#0066ff guibg=NONE gui=italic
-hi erubyRailsMethod  guifg=#3c4c72 guibg=NONE gui=bold
-hi htmlTag  guifg=#1c02ff guibg=NONE gui=NONE
-hi htmlEndTag  guifg=#1c02ff guibg=NONE gui=NONE
-hi htmlTagName  guifg=#1c02ff guibg=NONE gui=NONE
-hi htmlArg  guifg=#1c02ff guibg=NONE gui=NONE
-hi htmlSpecialChar  guifg=#c5060b guibg=NONE gui=bold
-hi javaScriptFunction  guifg=#0000ff guibg=NONE gui=bold
-hi javaScriptRailsFunction  guifg=#3c4c72 guibg=NONE gui=bold
-hi javaScriptBraces  guifg=NONE guibg=NONE gui=NONE
-hi yamlKey  guifg=NONE guibg=NONE gui=NONE
-hi yamlAnchor  guifg=#318495 guibg=NONE gui=NONE
-hi yamlAlias  guifg=#318495 guibg=NONE gui=NONE
-hi yamlDocumentHeader  guifg=NONE guibg=#f2f2f2 gui=NONE
-hi cssURL  guifg=NONE guibg=NONE gui=NONE
-hi cssFunctionName  guifg=#3c4c72 guibg=NONE gui=bold
-hi cssColor  guifg=#c5060b guibg=NONE gui=bold
-hi cssPseudoClassId  guifg=NONE guibg=NONE gui=NONE
-hi cssClassName  guifg=NONE guibg=NONE gui=NONE
-hi cssValueLength  guifg=#0000cd guibg=NONE gui=NONE
-hi cssCommonAttr  guifg=#06960e guibg=NONE gui=bold
-hi cssBraces  guifg=NONE guibg=NONE gui=NONE
+" Colors: {{{1
+" TODO figure out how to not highlight TODO
+"
+" #000000
+" #3C4C72 - BLUE/GREY - cursor, rails helpers
+" #0000A2 - D.BLUE - numbers & function names
+" #1E39F6 - BLUE
+" #0066FF - L.BLUE - Comments, TODOs and folds
+" #6E79F1 - L.PURPLE - Booleans, Ruby Constants & CSS definitions
+" #318495 - BLUE/GREEN - Ruby instance/global/pseudo variables
+" #007B22 - D.GREEN - Strings, Labels and code blocks in Markdown
+" #00BC41 - L.GREEN - CSS common attributes & ruby interpolation
+" #990000 - BURGUNDY - Errors and Warnings
+" #D51015 - RED for constants, symbols, numbers
+" #E18AC7 - PINK RegularExpressions in Ruby
+" #FFCE77 - ORANGE - Incremental Search
+" #FFE6BB - L.ORANGE - Search
+" #C6DEFF - VL.BLUE Visual, Current StatusLine & AutoComplete selection
+" #808080 - Line numbers
+" #CFCFCF - VerticalSplit separator
+" #DFDFDF - Invisible Characters
+" #EFEFEF - LineNumber & Non-Current StatusLine
+" #F0F6FF - CursorLine & CursorColumn
+" #FFFFFF - WHITE
+" }}}
+
+" GUI: {{{1
+hi Cursor  guifg=#FFFFFF ctermfg=15 guibg=#3C4C72 ctermbg=240
+hi Visual  guibg=#C6DEFF ctermbg=189
+hi CursorLine  guibg=#F0F6FF ctermbg=15
+hi CursorColumn  guibg=#F0F6FF ctermbg=15
+hi LineNr  guifg=#808080 ctermfg=244 guibg=#EFEFEF ctermbg=7
+hi VertSplit  guifg=#FFFFFF ctermfg=15 guibg=#CFCFCF ctermbg=252 gui=NONE
+hi MatchParen  guifg=#1E39F6 ctermfg=27 guibg=NONE gui=bold
+hi Pmenu guibg=#EFEFEF ctermbg=7
+hi PmenuSel  guibg=#C6DEFF ctermbg=189
+hi Directory  guifg=#D51015 ctermfg=160 gui=bold
+hi Folded  guifg=#0066FF ctermfg=27 guibg=#FFFFFF ctermbg=15
+" StatusLine: {{{2
+hi StatusLine  guifg=#000000 ctermfg=0 guibg=#C6DEFF ctermbg=189 gui=italic
+hi StatusLineNC  guifg=#000000 ctermfg=0 guibg=#EFEFEF ctermbg=7 gui=NONE
+
+" Search: {{{2
+" [IncSearch is stronger than Search]
+hi IncSearch  guifg=NONE guibg=#FFCE77 ctermbg=222 gui=NONE
+hi Search  guibg=#FFE6BB ctermbg=223
+
+" Syntax: {{{1
+hi Normal  guifg=#000000 ctermfg=0 guibg=#FFFFFF ctermbg=15
+hi Boolean  guifg=#6E79F1 ctermfg=69 gui=bold
+hi Character  guifg=#D51015 ctermfg=160 gui=bold
+hi Comment  guifg=#0066FF ctermfg=27 gui=italic
+hi Conditional  guifg=#1E39F6 ctermfg=27 gui=bold
+hi Constant  guifg=#D51015 ctermfg=160 gui=bold
+hi Define  guifg=#1E39F6 ctermfg=27 gui=bold
+hi ErrorMsg  guifg=#FFFFFF ctermfg=15 guibg=#990000 ctermbg=88
+hi WarningMsg  guifg=#FFFFFF ctermfg=15 guibg=#990000 ctermbg=88
+hi Float  guifg=#0000A2 ctermfg=19
+hi Function  guifg=#0000A2 ctermfg=19 gui=bold
+hi Identifier  guifg=#1E39F6 ctermfg=27 gui=bold
+hi Keyword  guifg=#1E39F6 ctermfg=27 gui=bold
+hi Label  guifg=#007B22 ctermfg=28
+hi Number  guifg=#0000A2 ctermfg=19
+hi Operator  guifg=#1E39F6 ctermfg=27 gui=bold
+hi PreProc  guifg=#1E39F6 ctermfg=27 gui=bold
+hi Special  guifg=#000000 ctermfg=0
+hi Statement  guifg=#1E39F6 ctermfg=27 gui=bold
+hi StorageClass  guifg=#1E39F6 ctermfg=27 gui=bold
+hi String  guifg=#007B22 ctermfg=28
+hi Title  guifg=#000000 ctermfg=0 gui=bold
+hi Todo  guifg=#0066FF ctermfg=27 gui=inverse,bold,italic
+hi Underlined  gui=underline
+
+" Invisible character colors
+hi NonText  guifg=#DFDFDF ctermfg=253 guibg=#FFFFFF ctermbg=15
+hi SpecialKey  guifg=#DFDFDF ctermfg=253 guibg=#FFFFFF ctermbg=15
+
+" Diff styles {{{1
+hi diffAdded guifg=#007B22 guibg=#FFFFFF ctermfg=28 ctermbg=15
+hi diffRemoved guifg=#D51015 guibg=#FFFFFF ctermfg=160 ctermbg=15
+hi diffFile guifg=#6E79F1 guibg=#FFFFFF ctermfg=69 ctermbg=15
+hi diffNewFile guifg=#6E79F1 guibg=#FFFFFF ctermfg=69 ctermbg=15
+hi diffLine guifg=#000000 guibg=#FFFFFF ctermfg=0 ctermbg=15
+" Git styles {{{1
+hi gitcommitSelectedType guifg=#007B22 guibg=#FFFFFF ctermfg=28 ctermbg=15
+hi link gitcommitSelectedFile gitcommitSelectedType
+hi gitcommitDiscardedType guifg=#D51015 guibg=#FFFFFF ctermfg=160 ctermbg=15
+hi link gitcommitDiscardedFile gitcommitDiscardedType
+hi gitcommitUntrackedFile guifg=#6E79F1 guibg=#FFFFFF ctermfg=69 ctermbg=15
+" Ruby styles {{{1
+hi rubyClass  guifg=#1E39F6 ctermfg=27 gui=bold
+hi rubyFunction  guifg=#0000A2 ctermfg=19 gui=bold
+hi rubyInterpolationDelimiter  guifg=#00BC41 ctermfg=35
+hi rubyInterpolation  guifg=#00BC41 ctermfg=35
+hi rubySymbol  guifg=#D51015 ctermfg=160 gui=bold
+hi rubyConstant  guifg=#6E79F1 ctermfg=69 gui=bold
+hi rubyStringDelimiter  guifg=#007B22 ctermfg=28
+hi rubyInstanceVariable  guifg=#318495 ctermfg=66
+hi rubyInclude  guifg=#1E39F6 ctermfg=27 gui=bold
+hi rubyGlobalVariable  guifg=#318495 ctermfg=66
+hi rubyRegexp  guifg=#E18AC7 ctermfg=176
+hi rubyRegexpAnchor  guifg=#E18AC7 ctermfg=176
+hi rubyRegexpQuantifier  guifg=#E18AC7 ctermfg=176
+hi rubyRegexpParens  guifg=#E18AC7 ctermfg=176
+hi rubyRegexpEscape  guifg=#00BC41 ctermfg=35
+hi rubyRegexpCharClass  guifg=#00BC41 ctermfg=35
+hi rubyRegexpDelimiter  guifg=#E18AC7 ctermfg=176
+hi rubyEscape  guifg=#00BC41 ctermfg=35
+hi rubyControl  guifg=#1E39F6 ctermfg=27 gui=bold
+hi rubyOperator  guifg=#1E39F6 ctermfg=27 gui=bold
+hi rubyException  guifg=#1E39F6 ctermfg=27 gui=bold
+hi rubyPseudoVariable  guifg=#318495 ctermfg=66
+hi rubyRailsUserClass  guifg=#6E79F1 ctermfg=69 gui=bold
+hi rubyRailsARAssociationMethod  guifg=#3C4C72 ctermfg=240 gui=bold
+hi rubyRailsARMethod  guifg=#3C4C72 ctermfg=240 gui=bold
+hi rubyRailsRenderMethod  guifg=#3C4C72 ctermfg=240 gui=bold
+hi rubyRailsMethod  guifg=#3C4C72 ctermfg=240 gui=bold
+hi link erubyComment Comment
+hi erubyRailsMethod  guifg=#3C4C72 ctermfg=240 gui=bold
+
+" HTML: {{{1
+hi htmlTag  guifg=#1E39F6 ctermfg=27
+hi link htmlEndTag htmlTag
+hi link htmlTagName htmlTag
+hi link htmlArg htmlTag
+hi htmlSpecialChar  guifg=#D51015 ctermfg=160 gui=bold
+hi htmlH1 gui=bold
+hi link htmlH2 htmlH1
+hi link htmlH3 htmlH1
+hi link htmlH4 htmlH1
+hi link htmlH5 htmlH1
+hi link htmlH6 htmlH1
+
+" JavaScript: {{{1
+hi javaScriptFunction  guifg=#1E39F6 ctermfg=27 gui=bold
+hi javaScriptFuncName  guifg=#318495 ctermfg=66 gui=italic
+hi javaScriptLabel  guifg=#0000A2 ctermfg=19 gui=bold
+hi javaScriptRailsFunction  guifg=#3C4C72 ctermfg=240 gui=bold
+hi javaScriptType  guifg=#318495 ctermfg=66 gui=none
+hi javaScriptArgument  guifg=#318495 ctermfg=66 gui=italic
+hi javaScriptRegexpString  guifg=#E18AC7 ctermfg=176 gui=NONE
+hi javaScriptSpecial  guifg=#00BC41 ctermfg=35 gui=NONE
+" NOTE: Syntax Highlighting for javascript doesn't match the
+" TextMate version very accurately, because the javascript
+" syntax file does not create matches for some items. In
+" particular:
+" * javaScriptArgument - e.g. function(argument)
+" * javaScriptFuncName for object literal style functions - e.g.: 
+"     myFunction: function() { ... }
+
+" YAML: {{{1
+hi yamlAnchor  guifg=#318495 ctermfg=66
+hi yamlAlias  guifg=#318495 ctermfg=66
+hi yamlDocumentHeader  guibg=#F2F2F2 ctermbg=7
+
+" CSS: {{{1
+hi cssTagName  gui=bold
+hi cssIdentifier  gui=italic
+hi link cssClassName cssIdentifier
+hi cssDefinition  guifg=#6E79F1 ctermfg=69
+hi link cssRenderProp cssDefinition
+hi link cssTextProp cssDefinition
+hi link cssFontProp cssDefinition
+hi link cssColorProp cssDefinition
+hi link cssBoxProp cssDefinition
+hi link cssGeneratedContentProp cssDefinition
+hi link cssUIProp cssDefinition
+hi cssCommonAttr  guifg=#00BC41 ctermfg=35
+hi link cssRenderAttr cssCommonAttr
+hi link cssTextAttr cssCommonAttr
+hi link cssFontAttr cssCommonAttr
+hi link cssGeneratedContentAttr cssCommonAttr
+hi cssURL  guifg=#007B22 ctermfg=28
+hi cssFunctionName  guifg=#3C4C72 ctermfg=240 gui=bold
+hi cssColor  guifg=#D51015 ctermfg=160 gui=bold
+hi cssValueLength  guifg=#0000A2 ctermfg=19
+hi cssImportant  guifg=#1E39F6 ctermfg=27 gui=bold
+
+" Vimscript: {{{1
+hi vimGroup  guifg=#007B22 ctermfg=28 gui=bold
+hi link vimHiGroup vimGroup
+hi vimCommentTitle  guifg=#3C4C72 ctermfg=240 gui=bold
+hi helpSpecial guifg=#6E79F1 ctermfg=69
+
+" Markdown: {{{1
+hi markdownBold gui=bold
+hi markdownItalic gui=italic
+hi markdownCode  guifg=#007B22 ctermfg=28
+hi link markdownCodeBlock markdownCode
+
+" Outliner: {{{1
+hi BT1 guifg=#808080 ctermfg=244 gui=italic
+hi OL1 guifg=#000000 ctermfg=0 gui=bold
+hi OL2 guifg=#0000A2 ctermfg=19 gui=bold
+hi OL3 guifg=#007B22 ctermfg=28 gui=bold
+hi OL4 guifg=#6E79F1 ctermfg=69 gui=NONE
+" Modelines: {{{1
+" vim: nowrap fdm=marker
+" }}}
