@@ -22,38 +22,47 @@ set showcmd "show incomplete cmds down the bottom
 set showmode "show current mode down the bottom
 
 set incsearch "find the next match as we type the search
-set hlsearch "hilight searches by default
+set hlsearch "highlight searches by default
 
 set number "add line numbers
 set showbreak=...
 set wrap linebreak nolist
-
-"add some line space for easy reading
-set linespace=4
+set listchars=tab:▸\ ,eol:¬
 
 "disable visual bell
 set visualbell t_vb=
 
+ "always show status line
+set laststatus=2
+
+"useful status information at bottom of screen
+set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
+
 "indent settings
-set shiftwidth=4
-set softtabstop=4
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 set autoindent
 
 "hide buffers when not displayed
 set hidden
 
-"turn off needless toolbar on gvim/mvim
-set guioptions-=T
+"add some line space for easy reading
+set linespace=4
 
 "enable 256 colors in vim
 set t_Co=256
+
+if has("gui_running")
+  set guioptions-=T "turn off needless toolbar on gvim/mvim
+  set guifont=bitstream\ vera\ sans\ mono\ 11 "downloaded on http://www.dafont.com/bitstream-vera-mono.font 
+endif
 
 "turn on syntax highlighting
 syntax on
 
 "the best color scheme
-colorscheme mac_classic
+colorscheme blackboard
 
 "vertical/horizontal scroll off settings
 set scrolloff=3
@@ -94,10 +103,19 @@ let g:CommandTMatchWindowAtTop=1
 "delete a buffer without closing the window
 nmap <leader>q <Plug>Kwbd
 
-"apply any changes on .vimrc automatically
 if has("autocmd")
-    autocmd bufwritepost .vimrc source $MYVIMRC
+  autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
+  autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
+  autocmd FileType markdown setlocal wrap linebreak nolist
+
+  "apply any changes on .vimrc automatically
+  autocmd bufwritepost .vimrc source $MYVIMRC
 endif
 
 "file patterns that vim should ignore
 set wildignore+=.git,*.pyc
+
+"keep swap files in one location
+set backupdir=$HOME/.vim/tmp
+set directory=$HOME/.vim/tmp
