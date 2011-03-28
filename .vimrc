@@ -119,3 +119,8 @@ set wildignore+=.git,*.pyc
 "keep swap files in one location
 set backupdir=$HOME/.vim/tmp
 set directory=$HOME/.vim/tmp
+
+"zencoding plugin settings
+let g:user_zen_settings = {
+\ 'indentation' : '  '
+\}
