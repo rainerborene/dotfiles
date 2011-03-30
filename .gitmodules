@@ -13,3 +13,9 @@
 [submodule "bundle/zencoding"]
 	path = bundle/zencoding
 	url = https://github.com/mattn/zencoding-vim/
+[submodule "bundle/supertab"]
+	path = bundle/supertab
+	url = git://github.com/ervandew/supertab.git
+[submodule "bundle/javascript"]
+	path = bundle/javascript
+	url = https://github.com/pangloss/vim-javascript
