@@ -93,6 +93,11 @@ set nofoldenable        "dont fold by default
 nnoremap <C-L> :nohls<CR><C-L>
 inoremap <C-L> <C-O>:nohls<CR>
 
+"vimgrep key-mappings
+map <F3> :cnext<CR>
+map <F4> :cc<CR>
+map <F5> :cprev<CR>
+
 "map to CommandT TextMate style finder
 nnoremap <leader>t :CommandT<CR>
 
