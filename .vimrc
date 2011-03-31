@@ -118,8 +118,8 @@ if has("autocmd")
   autocmd bufwritepost .vimrc source $MYVIMRC
 endif
 
-"file patterns that vim should ignore
-set wildignore+=.git,*.pyc
+set wildmode=list:longest     "make cmdline tab completion similar to bash
+set wildignore+=.git,*.pyc,*~ "stuff to ignore when searching and tab completing
 
 "keep swap files in one location
 set backupdir=$HOME/.vim/tmp
