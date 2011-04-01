@@ -98,8 +98,11 @@ map <F3> :cnext<CR>
 map <F4> :cc<CR>
 map <F5> :cprev<CR>
 
+"redefine leader mapping
+let mapleader = ","
+
 "map to CommandT TextMate style finder
-nnoremap <leader>t :CommandT<CR>
+nnoremap <leader>o :CommandT<CR>
 
 "Command-T configuration
 let g:CommandTMaxHeight=10
