@@ -61,7 +61,7 @@ endif
 "turn on syntax highlighting
 syntax on
 
-"the best color scheme
+"my favorite color scheme
 colorscheme vibrantink
 
 "vertical/horizontal scroll off settings
@@ -105,7 +105,7 @@ let mapleader = ","
 nnoremap <leader>b :BufExplorer<cr>
 
 "map to CommandT TextMate style finder
-nnoremap <leader>o :CommandT<CR>
+nnoremap <leader>t :CommandT<CR>
 
 "Command-T configuration
 let g:CommandTMaxHeight=10
@@ -132,6 +132,8 @@ set backupdir=$HOME/.vim/tmp
 set directory=$HOME/.vim/tmp
 
 "zencoding plugin settings
+let g:use_zen_complete_tag = 1
+let g:user_zen_expandabbr_key = '<c-e>'
 let g:user_zen_settings = {
 \ 'indentation' : '  '
 \}
