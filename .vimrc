@@ -62,7 +62,7 @@ endif
 syntax on
 
 "the best color scheme
-colorscheme blackboard
+colorscheme vibrantink
 
 "vertical/horizontal scroll off settings
 set scrolloff=3
@@ -98,8 +98,11 @@ map <F3> :cnext<CR>
 map <F4> :cc<CR>
 map <F5> :cprev<CR>
 
-"redefine leader mapping
+"using another leader mapping
 let mapleader = ","
+
+"map to bufexplorer
+nnoremap <leader>b :BufExplorer<cr>
 
 "map to CommandT TextMate style finder
 nnoremap <leader>o :CommandT<CR>
