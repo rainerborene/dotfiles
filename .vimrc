@@ -32,7 +32,7 @@ set listchars=tab:▸\ ,eol:¬
 "disable visual bell
 set visualbell t_vb=
 
- "always show status line
+"always show status line
 set laststatus=2
 
 "useful status information at bottom of screen
@@ -62,7 +62,7 @@ endif
 syntax on
 
 "my favorite color scheme
-colorscheme vibrantink
+colorscheme vividchalk
 
 "vertical/horizontal scroll off settings
 set scrolloff=3
