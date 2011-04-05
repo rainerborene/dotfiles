@@ -50,10 +50,10 @@ set hidden
 "add some line space for easy reading
 set linespace=4
 
-"enable 256 colors in vim
-set t_Co=256
-
 if has("gui_running")
+  "tell the term has 256 colors
+  set t_Co=256
+
   set guioptions-=T "turn off needless toolbar on gvim/mvim
   set guifont=bitstream\ vera\ sans\ mono\ 11 "downloaded on http://www.dafont.com/bitstream-vera-mono.font 
 endif
@@ -113,6 +113,12 @@ let g:CommandTMatchWindowAtTop=1
 
 "delete a buffer without closing the window
 nmap <leader>q <Plug>Kwbd
+
+" Don't use Ex mode; use Q for formatting
+map Q gqj
+
+"make Y consistent with C and D
+nnoremap Y y$
 
 if has("autocmd")
   autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim setlocal ts=2 sts=2 sw=2 expandtab
