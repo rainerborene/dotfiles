@@ -114,6 +114,9 @@ let g:CommandTMatchWindowAtTop=1
 "delete a buffer without closing the window
 nmap <leader>q <Plug>Kwbd
 
+"markdown to html
+nmap <leader>md :%!Markdown.pl --html4tags <cr>
+
 " Don't use Ex mode; use Q for formatting
 map Q gqj
 
