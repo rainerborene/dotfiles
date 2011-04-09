@@ -55,7 +55,12 @@ if has("gui_running")
   set t_Co=256
 
   set guioptions-=T "turn off needless toolbar on gvim/mvim
-  set guifont=bitstream\ vera\ sans\ mono\ 11 "downloaded on http://www.dafont.com/bitstream-vera-mono.font 
+  
+  if has("mac")
+    set guifont=Monaco:h14
+  elseif has("unix")
+    set guifont=bitstream\ vera\ sans\ mono\ 11 "downloaded on http://www.dafont.com/bitstream-vera-mono.font 
+  endif
 endif
 
 "turn on syntax highlighting
