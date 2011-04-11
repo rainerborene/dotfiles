@@ -148,8 +148,7 @@ set backupdir=$HOME/.vim/tmp
 set directory=$HOME/.vim/tmp
 
 "zencoding plugin settings
-let g:use_zen_complete_tag = 1
-let g:user_zen_expandabbr_key = '<c-e>'
+let g:use_zen_complete_tag = 1 "mapped to <C-X>O
 let g:user_zen_settings = {
 \ 'indentation' : '  '
 \}
