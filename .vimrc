@@ -59,7 +59,7 @@ if has("gui_running")
   if has("mac")
     set guifont=Monaco:h14
   elseif has("unix")
-    set guifont=bitstream\ vera\ sans\ mono\ 11 "downloaded on http://www.dafont.com/bitstream-vera-mono.font 
+    set guifont=bitstream\ vera\ sans\ mono\ 11
   endif
 endif
 
