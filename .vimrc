@@ -51,9 +51,7 @@ set hidden
 set linespace=4
 
 if has("gui_running")
-  "tell the term has 256 colors
-  set t_Co=256
-
+  set t_Co=256      "tell the term has 256 colors
   set guioptions-=T "turn off needless toolbar on gvim/mvim
   
   if has("mac")
@@ -102,6 +100,10 @@ inoremap <C-L> <C-O>:nohls<CR>
 map <F3> :cnext<CR>
 map <F4> :cc<CR>
 map <F5> :cprev<CR>
+
+map \\ <Plug>NERDCommenterInvert
+let g:NERDCreateDefaultMappings = 0 "disable default mappings
+let g:NERDSpaceDelims = 1           "extra space after and before delimiter
 
 "using another leader mapping
 let mapleader = ","
