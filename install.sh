@@ -19,10 +19,10 @@ if [ ! -e "/usr/bin/ack-grep" ]; then
   if [ "$(uname -o)" == "GNU/Linux" ]; then
     echo "*** Installing ack-grep..."
     sudo apt-get install ack-grep
+  else
+    echo "Sorry, but you have to install ack-grep first."
+    exit 1
   fi
-else
-  echo "Sorry, but you have to install ack-grep first."
-  exit 1
 fi
 
 TTY="/dev/$( ps -p$$ | tail -1 | awk '{print$2}' )"
