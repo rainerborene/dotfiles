@@ -101,6 +101,7 @@ map <F3> :cnext<CR>
 map <F4> :cc<CR>
 map <F5> :cprev<CR>
 
+"nerdcommenter settings
 map \\ <Plug>NERDCommenterInvert
 let g:NERDCreateDefaultMappings = 0 "disable default mappings
 let g:NERDSpaceDelims = 1           "extra space after and before delimiter
@@ -129,6 +130,12 @@ map Q gqj
 
 "make Y consistent with C and D
 nnoremap Y y$
+
+"speed up buffer switching
+map <C-k> <C-W>k
+map <C-j> <C-W>j
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
 if has("autocmd")
   autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim setlocal ts=2 sts=2 sw=2 expandtab
