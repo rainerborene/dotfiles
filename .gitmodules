@@ -28,3 +28,6 @@
 [submodule "bundle/ack"]
 	path = bundle/ack
 	url = git://github.com/mileszs/ack.vim.git
+[submodule "bundle/sparkup"]
+	path = bundle/sparkup
+	url = git://github.com/kogakure/vim-sparkup.git
