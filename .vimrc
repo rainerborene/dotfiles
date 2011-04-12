@@ -146,3 +146,5 @@ set wildignore+=.git,*.pyc,*~ "stuff to ignore when searching and tab completing
 "keep swap files in one location
 set backupdir=$HOME/.vim/tmp
 set directory=$HOME/.vim/tmp
+
+let g:ackprg="ack-grep -H --nocolor --nogroup --column"
