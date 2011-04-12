@@ -37,7 +37,7 @@ rm -Rf .vimrc .gvimrc ~/.vim
 
 # Clone repository
 echo "*** Downloading..."
-git clone git://github.com/rainerborene/vimfiles.git .vim > /dev/null 
+git clone git://github.com/rainerborene/vimfiles.git .vim > /dev/null 2>&1
 ln -s .vim/.vimrc
 
 # Create tmp directory
@@ -46,12 +46,12 @@ mkdir tmp
 
 # Initialize submodules
 echo "*** Updating modules..."
-git submodule update --init > /dev/null
+git submodule update --init > /dev/null 2>&1
 
 # Compile Command-T extension
 echo "*** Compiling extensions..."
 cd ~/.vim/bundle/command-t
-rake make > /dev/null
+rake make > /dev/null 2>&1
 
 # Done.
 echo "*** Installed"
