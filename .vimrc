@@ -18,11 +18,11 @@ set ignorecase
 "store lots of :cmdline history
 set history=1000
 
-set showcmd "show incomplete cmds down the bottom
+set showcmd  "show incomplete cmds down the bottom
 set showmode "show current mode down the bottom
 
 set incsearch "find the next match as we type the search
-set hlsearch "highlight searches by default
+set hlsearch  "highlight searches by default
 
 set number "add line numbers
 set showbreak=...
@@ -92,10 +92,6 @@ set foldmethod=indent   "fold based on indent
 set foldnestmax=3       "deepest fold is 3 levels
 set nofoldenable        "dont fold by default
 
-"make <c-l> clear the highlight as well as redraw
-nnoremap <C-L> :nohls<CR><C-L>
-inoremap <C-L> <C-O>:nohls<CR>
-
 "vimgrep key-mappings
 map <F3> :cnext<CR>
 map <F4> :cc<CR>
@@ -108,6 +104,9 @@ let g:NERDSpaceDelims = 1           "extra space after and before delimiter
 
 "using another leader mapping
 let mapleader = ","
+
+"clear search highlight
+nmap <silent> <leader>n :silent :nohlsearch<CR>
 
 "map to bufexplorer
 nnoremap <leader>b :BufExplorer<cr>
