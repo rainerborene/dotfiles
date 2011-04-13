@@ -95,7 +95,7 @@ set foldmethod=indent   "fold based on indent
 set foldnestmax=3       "deepest fold is 3 levels
 set nofoldenable        "dont fold by default
 
-"vimgrep key-mappings
+"vimgrep navigation
 map <F3> :cnext<CR>
 map <F4> :cc<CR>
 map <F5> :cprev<CR>
@@ -115,7 +115,7 @@ nmap <silent> <buffer> <leader>s :set spell!<CR>
 nmap <silent> <leader>n :silent :nohlsearch<CR>
 
 "map to bufexplorer
-nnoremap <leader>b :BufExplorer<cr>
+map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar>buffers<Bar>endif<CR>
 
 "map to CommandT TextMate style finder
 nnoremap <leader>t :CommandT<CR>
