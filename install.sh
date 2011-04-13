@@ -42,7 +42,8 @@ ln -s .vim/.vimrc
 
 # Create tmp directory
 cd ~/.vim
-mkdir tmp
+mkdir tmp spell
+wget --no-check-certificate -O ~/.vim/spell/pt.utf-8.spl http://github.com/rosenfeld/git-spell-pt-br/raw/master/pt.utf-8.spl > /dev/null 2>&1
 
 # Initialize submodules
 echo "*** Updating modules..."

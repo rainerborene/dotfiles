@@ -50,6 +50,9 @@ set hidden
 "add some line space for easy reading
 set linespace=4
 
+"spell checking languages
+set spelllang=pt,en
+
 if has("gui_running")
   set t_Co=256      "tell the term has 256 colors
   set guioptions-=T "turn off needless toolbar on gvim/mvim
@@ -105,6 +108,9 @@ let g:NERDSpaceDelims = 1           "extra space after and before delimiter
 "using another leader mapping
 let mapleader = ","
 
+"toggle spell checking option
+nmap <silent> <buffer> <leader>s :set spell!<CR>
+
 "clear search highlight
 nmap <silent> <leader>n :silent :nohlsearch<CR>
 
@@ -140,7 +146,8 @@ if has("autocmd")
   autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim setlocal ts=2 sts=2 sw=2 expandtab
   autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
   autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
-  autocmd FileType markdown setlocal wrap linebreak nolist
+  autocmd FileType markdown setlocal wrap linebreak nolist 
+  autocmd FileType gitcommit setlocal spell
 
   "apply any changes on .vimrc automatically
   autocmd bufwritepost .vimrc source $MYVIMRC
