@@ -12,8 +12,8 @@ set nocompatible
 "allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-"ignore case when searching
-set ignorecase
+"case insensitive searches become sensitive with capitals
+set smartcase
 
 "store lots of :cmdline history
 set history=1000

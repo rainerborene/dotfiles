@@ -40,9 +40,11 @@ echo "*** Downloading..."
 git clone git://github.com/rainerborene/vimfiles.git .vim > /dev/null 2>&1
 ln -s .vim/.vimrc
 
-# Create tmp directory
+# Create tmp and spell directories
 cd ~/.vim
 mkdir tmp spell
+
+# Download spell file
 wget --no-check-certificate -O ~/.vim/spell/pt.utf-8.spl http://github.com/rosenfeld/git-spell-pt-br/raw/master/pt.utf-8.spl > /dev/null 2>&1
 
 # Initialize submodules
