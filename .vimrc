@@ -127,6 +127,9 @@ let g:CommandTMatchWindowAtTop=1
 "delete a buffer without closing the window
 nmap <leader>q <Plug>Kwbd
 
+"wipe all buffers which are not active
+nmap <leader>hq <Plug>CloseHiddenBuffers
+
 "markdown to html
 nmap <leader>md :%!Markdown.pl --html4tags <cr>
 

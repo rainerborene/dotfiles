@@ -59,3 +59,26 @@ endfunction
 
 command! Kwbd call <SID>Kwbd(1)
 nnoremap <silent> <Plug>Kwbd :<C-u>Kwbd<CR>
+
+" https://github.com/nelstrom/dotfiles/blob/master/vimrc#L270
+function! CloseHiddenBuffers()
+  " figure out which buffers are visible in any tab
+  let visible = {}
+  for t in range(1, tabpagenr('$'))
+    for b in tabpagebuflist(t)
+      let visible[b] = 1
+    endfor
+  endfor
+  " close any buffer that are loaded and not visible
+  let l:tally = 0
+  for b in range(1, bufnr('$'))
+    if bufloaded(b) && !has_key(visible, b)
+      let l:tally += 1
+      exe 'bw ' . b
+    endif
+  endfor
+  echon "Deleted " . l:tally . " buffers"
+endfun
+
+command! CloseHiddenBuffers call CloseHiddenBuffers()
+nnoremap <silent> <Plug>CloseHiddenBuffers :<C-u>CloseHiddenBuffers<CR>
