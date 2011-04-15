@@ -31,3 +31,6 @@
 [submodule "bundle/sparkup"]
 	path = bundle/sparkup
 	url = git://github.com/kogakure/vim-sparkup.git
+[submodule "bundle/coffee-script"]
+	path = bundle/coffee-script
+	url = git://github.com/kchmck/vim-coffee-script.git
