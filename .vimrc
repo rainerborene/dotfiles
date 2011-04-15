@@ -13,6 +13,7 @@ set nocompatible
 set backspace=indent,eol,start
 
 "case insensitive searches become sensitive with capitals
+set ignorecase
 set smartcase
 
 "store lots of :cmdline history
@@ -28,6 +29,8 @@ set number "add line numbers
 set showbreak=...
 set wrap linebreak nolist
 set listchars=tab:▸\ ,eol:¬
+set textwidth=79 "terminal width
+set formatoptions=qrn1
 
 "disable visual bell
 set visualbell t_vb=
@@ -56,19 +59,25 @@ set spelllang=pt,en
 if has("gui_running")
   set t_Co=256      "tell the term has 256 colors
   set guioptions-=T "turn off needless toolbar on gvim/mvim
+  set guioptions-=r "no scrollbar
   
   if has("mac")
     set guifont=Monaco:h14
   elseif has("unix")
     set guifont=bitstream\ vera\ sans\ mono\ 11
   endif
+
+  highlight SpellBad term=underline gui=undercurl guisp=Orange
 endif
 
 "turn on syntax highlighting
 syntax on
 
 "my favorite color scheme
-colorscheme vividchalk
+colorscheme ir_black
+
+"regardless of the colorscheme I wand a magenta cursor
+hi Cursor guifg=black guibg=magenta
 
 "vertical/horizontal scroll off settings
 set scrolloff=3
@@ -108,14 +117,14 @@ let g:NERDSpaceDelims = 1           "extra space after and before delimiter
 "using another leader mapping
 let mapleader = ","
 
-"toggle spell checking option
-nmap <silent> <buffer> <leader>s :set spell!<CR>
-
 "clear search highlight
 nmap <silent> <leader>n :silent :nohlsearch<CR>
 
 "map to bufexplorer
 map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar>buffers<Bar>endif<CR>
+
+"ack searching
+nmap <Leader>a <Esc>:Ack
 
 "map to CommandT TextMate style finder
 nnoremap <leader>t :CommandT<CR>
@@ -144,6 +153,9 @@ map <C-k> <C-W>k
 map <C-j> <C-W>j
 map <C-h> <C-W>h
 map <C-l> <C-W>l
+
+nnoremap j gj
+nnoremap k gk
 
 if has("autocmd")
   autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim setlocal ts=2 sts=2 sw=2 expandtab
