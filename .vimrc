@@ -60,7 +60,8 @@ if has("gui_running")
   set t_Co=256      "tell the term has 256 colors
   set guioptions-=T "turn off needless toolbar on gvim/mvim
   set guioptions-=r "no scrollbar
-  
+  set lines=999 columns=999 
+
   if has("mac")
     set guifont=Monaco:h14
   elseif has("unix")
