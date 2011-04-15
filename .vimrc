@@ -76,7 +76,7 @@ syntax on
 "my favorite color scheme
 colorscheme ir_black
 
-"regardless of the colorscheme I wand a magenta cursor
+"regardless of the colorscheme I want a magenta cursor
 hi Cursor guifg=black guibg=magenta
 
 "vertical/horizontal scroll off settings
