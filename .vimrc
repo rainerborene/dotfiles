@@ -29,7 +29,7 @@ set number "add line numbers
 set showbreak=...
 set wrap linebreak nolist
 set listchars=tab:▸\ ,eol:¬
-set textwidth=79 "terminal width
+set textwidth=79 
 set formatoptions=qrn1
 
 "disable visual bell
@@ -159,14 +159,17 @@ nnoremap j gj
 nnoremap k gk
 
 if has("autocmd")
-  autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim setlocal ts=2 sts=2 sw=2 expandtab
-  autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
+  autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType php,apache,sql setlocal ts=4 sts=4 sw=4 noexpandtab
   autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
   autocmd FileType markdown setlocal wrap linebreak nolist 
   autocmd FileType gitcommit setlocal spell
 
   "apply any changes on .vimrc automatically
   autocmd bufwritepost .vimrc source $MYVIMRC
+
+  "remove trailing whitespaces and ^M chars
+  autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
 endif
 
 set wildmode=list:longest     "make cmdline tab completion similar to bash
@@ -177,3 +180,8 @@ set backupdir=$HOME/.vim/tmp
 set directory=$HOME/.vim/tmp
 
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+
+"use local vimrc if available
+if filereadable(expand("~/.vimrc.local"))
+  source ~/.vimrc.local
+endif
