@@ -1,6 +1,6 @@
 Vim truly the best editor ever.
 
-## Installing
+## Installation
 
     $ curl https://github.com/rainerborene/vimfiles/raw/master/install.sh | bash
 
