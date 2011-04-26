@@ -110,8 +110,8 @@ map <F3> :cnext<CR>
 map <F4> :cc<CR>
 map <F5> :cprev<CR>
 
-"nerdcommenter settings
 map \\ <Plug>NERDCommenterInvert
+
 let g:NERDCreateDefaultMappings = 0 "disable default mappings
 let g:NERDSpaceDelims = 1           "extra space after and before delimiter
 
@@ -182,6 +182,8 @@ set backupdir=$HOME/.vim/tmp
 set directory=$HOME/.vim/tmp
 
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+
+let g:Gitv_WipeAllOnClose = 1
 
 "use local vimrc if available
 if filereadable(expand("~/.vimrc.local"))
