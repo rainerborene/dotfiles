@@ -16,9 +16,6 @@
 [submodule "bundle/javascript"]
 	path = bundle/javascript
 	url = https://github.com/pangloss/vim-javascript
-[submodule "bundle/vividchalk"]
-	path = bundle/vividchalk
-	url = https://github.com/tpope/vim-vividchalk
 [submodule "bundle/markdown"]
 	path = bundle/markdown
 	url = git://github.com/plasticboy/vim-markdown.git
@@ -37,3 +34,6 @@
 [submodule "bundle/gitv"]
 	path = bundle/gitv
 	url = git://github.com/gregsexton/gitv.git
+[submodule "bundle/matchit"]
+	path = bundle/matchit
+	url = git://github.com/edsono/vim-matchit.git
