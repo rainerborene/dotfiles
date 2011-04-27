@@ -9,7 +9,7 @@
 # Rainer Borene
 
 # Utility for updating themes
-if [ "$1" == "upgrade" ]; then
+if [ "$1" == "themes" ]; then
   cd ~/.vim/colors
   function theme() {
     curl --url $1 -O > /dev/null 2>&1
