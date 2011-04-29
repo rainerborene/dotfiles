@@ -175,7 +175,7 @@ endif
 set wildmode=list:longest     "make cmdline tab completion similar to bash
 set wildignore+=.git,*.pyc,*~ "stuff to ignore when searching and tab completing
 
-let g:netrw_list_hide='^\.,.\(pyc\|pyo\|o\)$'
+let g:netrw_list_hide='^\.,.\(pyc\|pyo\)$'
 
 "keep swap files in one location
 set backupdir=$HOME/.vim/tmp
