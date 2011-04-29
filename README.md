@@ -8,6 +8,9 @@ browser. But If you really want to be productive on editing and writing beautifu
 code in less time you should test and see Vim powers by yourself. This is my Vim
 distribution that you can use to start with it quickly.
 
+**Note:** There are no guarantees this will work on Windows. It's recommended to use 
+[MacVim](http://code.google.com/p/macvim/) or [gVim](http://www.vim.org/download.php#unix) for Linux.
+
 ### Installation
 
     $ curl https://github.com/rainerborene/vimfiles/raw/master/install.sh | bash
@@ -42,7 +45,7 @@ Everyone is permitted to copy and distribute verbatim or modified
 copies of this license document, and changing it is allowed as long
 as the name is changed.
 
-DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE   
 TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
 0. You just DO WHAT THE FUCK YOU WANT TO.
