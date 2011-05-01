@@ -26,6 +26,7 @@ set incsearch "find the next match as we type the search
 set hlsearch  "highlight searches by default
 
 set number "add line numbers
+set numberwidth=5
 set showbreak=...
 set wrap linebreak nolist
 set listchars=tab:▸\ ,eol:¬
@@ -42,10 +43,13 @@ set laststatus=2
 set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 
 "indent settings
+set autoindent
+set smartindent
+set tabstop=4
 set shiftwidth=2
 set softtabstop=2
 set expandtab
-set autoindent
+set nosmarttab
 
 "hide buffers when not displayed
 set hidden
@@ -58,8 +62,9 @@ set spelllang=pt,en
 
 if has("gui_running")
   set t_Co=256      "tell the term has 256 colors
-  set guioptions-=T "turn off needless toolbar on gvim/mvim
-  set guioptions-=r "no scrollbar
+  set guioptions-=T "don't show toolbar in the GUI
+  set guioptions-=r "turn off right scroll bar
+  set guioptions-=L "turn off left scroll bar
   set lines=999 columns=999 
 
   if has("mac")
@@ -67,18 +72,17 @@ if has("gui_running")
   elseif has("unix")
     set guifont=bitstream\ vera\ sans\ mono\ 11
   endif
-
-  highlight SpellBad term=underline gui=undercurl guisp=Orange
 endif
+
+"my favorite color scheme
+colorscheme ir_black
+colorscheme ir_black_mod
 
 "turn on syntax highlighting
 syntax on
 
-"my favorite color scheme
-colorscheme ir_black
-
-"regardless of the colorscheme I want a magenta cursor
-hi Cursor guifg=black guibg=magenta
+"highlight current line
+set cursorline
 
 "vertical/horizontal scroll off settings
 set scrolloff=3
@@ -155,8 +159,17 @@ map <C-j> <C-W>j
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+"sane movement with wrap turned on
 nnoremap j gj
 nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+nnoremap <Up> gk
+nnoremap <Down> gj
+vnoremap <Up> gk
+vnoremap <Down> gj
+inoremap <Up> <C-o>gk
+inoremap <Down> <C-o>gj
 
 if has("autocmd")
   autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
