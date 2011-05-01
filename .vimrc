@@ -75,8 +75,8 @@ if has("gui_running")
 endif
 
 "my favorite color scheme
-colorscheme ir_black
-colorscheme ir_black_mod
+set background=dark
+colorscheme solarized
 
 "turn on syntax highlighting
 syntax on
