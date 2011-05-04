@@ -1,5 +1,5 @@
 .DS_Store
 .netrwhist
 *.swp
-tmp/
-spell/
+vim/tmp/
+vim/spell/

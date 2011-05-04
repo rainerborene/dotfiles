@@ -10,10 +10,10 @@
 
 # Utility for updating themes
 if [ "$1" == "themes" ]; then
-  cd ~/.vim/colors
   function theme() {
     curl --url $1 -O > /dev/null 2>&1
   }
+  cd ~/.dotfiles/vim/colors
   echo "*** Updating themes..."
   theme "https://github.com/nelstrom/vim-blackboard/raw/master/colors/blackboard.vim"
   theme "https://github.com/nelstrom/vim-mac-classic-theme/raw/master/colors/mac_classic.vim"
@@ -38,30 +38,39 @@ if ! type -p ack &> /dev/null; then
 fi
 
 # Make sure we want to proceed with installation.
-read -p "Vim related files will be deleted. Are you sure you want to proceed [y/n]? " ANSWER
+read -p "Some config files will be overwritten. Are you sure you want to proceed [y/n]? " ANSWER
 [ $ANSWER == "y" ] || exit 1
 
 # Remove current vim configuration
-cd ~ && rm -Rf .vimrc .gvimrc ~/.vim
+cd ~ && rm -Rf .vimrc .gvimrc .vim .bash_profile .bashrc .dotfiles
 
 # Clone repository
 echo "*** Downloading..."
-git clone git://github.com/rainerborene/vimfiles.git .vim > /dev/null 2>&1
-ln -s .vim/.vimrc
+git clone git://github.com/rainerborene/dotfiles.git .dotfiles > /dev/null 2>&1
+ln -s .dotfiles/vim/ .vim
+ln -s .dotfiles/.vimrc
+ln -s .dotfiles/.bashrc
+
+cat << END > ~/.bash_profile
+if [ -f ~/.bashrc ]; then
+  source ~/.bashrc
+fi
+END
 
 # Create tmp and spell directories
-cd ~/.vim && mkdir tmp spell
+cd ~/.dotfiles/vim && mkdir tmp spell
 
 # Download spell file
-wget --no-check-certificate -O ~/.vim/spell/pt.utf-8.spl http://github.com/rosenfeld/git-spell-pt-br/raw/master/pt.utf-8.spl > /dev/null 2>&1
+wget --no-check-certificate -O ~/.dotfiles/vim/spell/pt.utf-8.spl http://github.com/rosenfeld/git-spell-pt-br/raw/master/pt.utf-8.spl > /dev/null 2>&1
 
 # Initialize submodules
 echo "*** Updating modules..."
+cd ~/.dotfiles
 git submodule update --init > /dev/null 2>&1
 
 # Compile Command-T extension
 echo "*** Compiling extensions..."
-cd ~/.vim/bundle/command-t
+cd ~/.dotfiles/vim/bundle/command-t
 rake make > /dev/null 2>&1
 
 # Done.

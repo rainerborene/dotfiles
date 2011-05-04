@@ -1,6 +1,8 @@
-Vim truly the best editor ever.
+# ~rainerborene dotfiles
 
 ## Getting Started
+
+### Vim
 
 Don't worry I'll not try to convince you that Vim is the best editor of history.
 If you're comfortable with your current text editor stay with it and close your
@@ -8,34 +10,25 @@ browser. But If you really want to be productive on editing and writing beautifu
 code in less time you should test and see Vim powers by yourself. This is my Vim
 distribution that you can use to start with it quickly.
 
-**Note:** There are no guarantees this will work on Windows. It's recommended to use 
-[MacVim](http://code.google.com/p/macvim/) or [gVim](http://www.vim.org/download.php#unix) for Linux.
+#### Installation
 
-### Installation
+    $ curl https://github.com/rainerborene/dotfiles/raw/master/install.sh | bash
 
-    $ curl https://github.com/rainerborene/vimfiles/raw/master/install.sh | bash
-
-### Learning
+#### Learning
 
 Vim is one of the open source projects that has the best documentation I have 
-ever seen. I started with Vim by watching Vimcasts videos and reading the 
-official documentation (I still do it). Just don't limit with these ways.
+ever seen. If you prefer you can start watching Vimcasts videos or reading 
+the official documentation, blogs and others. Some cool stuff below:
 
 - [Vimcasts](http://vimcasts.org)
 - [Thought Bot Blog](http://robots.thoughtbot.com)
 - [Akita On Rails](http://akitaonrails.com)
 - [Official Documentation](http://vimdoc.sourceforge.net/htmldoc/usr_toc.html)
 
-### Resources
-
-- [Bitstream Vera Sans Mono](http://www.dafont.com/bitstream-vera-mono.font)
-
 ### Credits
 
-Thank to tpope for his amazing work on fugitive and other plugins. Drew Nils 
-for running Vimcasts, and everyone else who contributed to Vim. I won't lie 
-to you, my vimrc was entirely [based](https://github.com/tpope/tpope) on [other](https://github.com/nelstrom/dotfiles) 
-people's [vimrc](https://github.com/akitaonrails/vimfiles).
+I won't lie to you, my vimrc was entirely [based](https://github.com/tpope/tpope) 
+on [other](https://github.com/nelstrom/dotfiles) people's [vimrc](https://github.com/akitaonrails/vimfiles).
 
 ## License
 

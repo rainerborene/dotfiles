@@ -191,8 +191,8 @@ set wildignore+=.git,*.pyc,*~ "stuff to ignore when searching and tab completing
 let g:netrw_list_hide='^\.,.\(pyc\|pyo\)$'
 
 "keep swap files in one location
-set backupdir=$HOME/.vim/tmp
-set directory=$HOME/.vim/tmp
+set backupdir=$HOME/.dotfiles/vim/tmp
+set directory=$HOME/.dotfiles/vim/tmp
 
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 
