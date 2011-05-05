@@ -1,0 +1,17 @@
+# Specific commands for Linux
+if [ "$(uname -s)" == "Linux" ]; then
+  alias pbcopy='xclip -selection clipboard'
+  alias pbpaste='xclip -selection clipboard -o'
+fi
+
+# Lazy aliases
+alias cdd='cd -'
+alias ll='ls -laGh'
+alias fn='find . -name'
+
+# Git aliases
+alias g='git'
+alias gs='git status'
+
+# Reload .bashrc
+alias reload='source ~/.bashrc'
