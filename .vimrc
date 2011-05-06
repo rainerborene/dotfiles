@@ -177,6 +177,7 @@ if has("autocmd")
   autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
   autocmd FileType markdown setlocal wrap linebreak nolist 
   autocmd FileType gitcommit setlocal spell
+  autocmd BufNewFile,BufRead Rakefile,Capfile,Gemfile,Termfile,config.ru setfiletype ruby
 
   "apply any changes on .vimrc automatically
   autocmd bufwritepost .vimrc source $MYVIMRC

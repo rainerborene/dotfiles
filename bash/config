@@ -2,6 +2,10 @@ function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 
+if [ "${COLORTERM}" == "gnome-terminal" ]; then
+  export TERM="gnome-256color"
+fi
+
 # Use vim as an editor
 export EDITOR=vim
 

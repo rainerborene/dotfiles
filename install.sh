@@ -50,6 +50,7 @@ git clone git://github.com/rainerborene/dotfiles.git .dotfiles > /dev/null 2>&1
 ln -s .dotfiles/vim/ .vim
 ln -s .dotfiles/.vimrc
 ln -s .dotfiles/.bashrc
+ln -s .dotfiles/.tmux.conf
 
 cat << END > ~/.bash_profile
 if [ -f ~/.bashrc ]; then
