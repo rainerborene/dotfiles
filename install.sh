@@ -1,12 +1,7 @@
 #!/bin/bash
-#        _           
-# __   _(_)_ __ ___  
-# \ \ / / | '_ ` _ \ 
-#  \ V /| | | | | | |
-#   \_/ |_|_| |_| |_|
-#
-# My vim life.
-# Rainer Borene
+# 
+# ~rainerborene dotfiles
+# Licensed under the WTFPL License.
 
 # Utility for updating themes
 if [ "$1" == "themes" ]; then
@@ -41,16 +36,16 @@ fi
 read -p "Some config files will be overwritten. Are you sure you want to proceed [y/n]? " ANSWER
 [ $ANSWER == "y" ] || exit 1
 
-# Remove current vim configuration
+# Remove some config files
 cd ~ && rm -Rf .vimrc .gvimrc .vim .bash_profile .bashrc .dotfiles
 
 # Clone repository
 echo "*** Downloading..."
 git clone git://github.com/rainerborene/dotfiles.git .dotfiles > /dev/null 2>&1
-ln -s .dotfiles/vim/ .vim
-ln -s .dotfiles/.vimrc
-ln -s .dotfiles/.bashrc
-ln -s .dotfiles/.tmux.conf
+ln -s ~/.dotfiles/vim/ .vim
+for filename in .vimrc .bashrc .tmux.conf; do
+  ln -s "~/.dotfiles/$filename"
+done
 
 cat << END > ~/.bash_profile
 if [ -f ~/.bashrc ]; then
@@ -61,7 +56,7 @@ END
 # Create tmp and spell directories
 cd ~/.dotfiles/vim && mkdir tmp spell
 
-# Download spell file
+# Download portuguese spellfile
 wget --no-check-certificate -O ~/.dotfiles/vim/spell/pt.utf-8.spl http://github.com/rosenfeld/git-spell-pt-br/raw/master/pt.utf-8.spl > /dev/null 2>&1
 
 # Initialize submodules
