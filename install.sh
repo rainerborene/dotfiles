@@ -13,6 +13,7 @@ if [ "$1" == "themes" ]; then
   theme "https://github.com/nelstrom/vim-blackboard/raw/master/colors/blackboard.vim"
   theme "https://github.com/nelstrom/vim-mac-classic-theme/raw/master/colors/mac_classic.vim"
   theme "https://github.com/tpope/vim-vividchalk/raw/master/colors/vividchalk.vim"
+  theme "https://github.com/joshuaclayton/dotfiles/raw/master/vim/colors/customgithub.vim"
   theme "http://blog.toddwerth.com/entry_files/8/ir_black.vim"
   echo "*** Done"
   exit 1
@@ -28,8 +29,8 @@ fi
 # See http://petdance.com/ack/ for more information.
 if ! type -p ack &> /dev/null; then
   echo "*** Installing ack..."
-  sudo curl http://betterthangrep.com/ack-standalone -o /usr/local/bin/ack > /dev/null 2>&1
-  sudo chmod 0755 /usr/local/bin/ack
+  curl http://betterthangrep.com/ack-standalone -o /usr/local/bin/ack > /dev/null 2>&1
+  chmod 0755 /usr/local/bin/ack
 fi
 
 # Make sure we want to proceed with installation.
@@ -43,8 +44,8 @@ cd ~ && rm -Rf .vimrc .gvimrc .vim .bash_profile .bashrc .dotfiles
 echo "*** Downloading..."
 git clone git://github.com/rainerborene/dotfiles.git .dotfiles > /dev/null 2>&1
 ln -s ~/.dotfiles/vim/ .vim
-for filename in .vimrc .bashrc .tmux.conf; do
-  ln -s "~/.dotfiles/$filename"
+for filename in vimrc gvimrc bashrc tmux.conf; do
+  ln -s ~/.dotfiles/$filename
 done
 
 cat << END > ~/.bash_profile
@@ -57,7 +58,8 @@ END
 cd ~/.dotfiles/vim && mkdir tmp spell
 
 # Download portuguese spellfile
-wget --no-check-certificate -O ~/.dotfiles/vim/spell/pt.utf-8.spl http://github.com/rosenfeld/git-spell-pt-br/raw/master/pt.utf-8.spl > /dev/null 2>&1
+cd ~/.dotfiles/vim/spell/ 
+curl -O http://github.com/rosenfeld/git-spell-pt-br/raw/master/pt.utf-8.spl > /dev/null 2>&1
 
 # Initialize submodules
 echo "*** Updating modules..."

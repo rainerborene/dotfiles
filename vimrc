@@ -75,8 +75,7 @@ if has("gui_running")
 endif
 
 "my favorite color scheme
-set background=dark
-colorscheme solarized
+colorscheme customgithub
 
 "turn on syntax highlighting
 syntax on
