@@ -61,6 +61,9 @@ set linespace=4
 set spelllang=pt,en
 
 if has("gui_running")
+  set background=dark
+  colorscheme solarized
+
   set t_Co=256      "tell the term has 256 colors
   set guioptions-=T "don't show toolbar in the GUI
   set guioptions-=r "turn off right scroll bar
@@ -72,10 +75,9 @@ if has("gui_running")
   elseif has("unix")
     set guifont=bitstream\ vera\ sans\ mono\ 11
   endif
+else
+  colorscheme customgithub
 endif
-
-"my favorite color scheme
-colorscheme customgithub
 
 "turn on syntax highlighting
 syntax on

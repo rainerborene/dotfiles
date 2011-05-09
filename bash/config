@@ -1,18 +1,9 @@
-function parse_git_branch {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
-}
-
 if [ "${COLORTERM}" == "gnome-terminal" ]; then
   export TERM="gnome-256color"
 fi
 
-# Use vim as an editor
-export EDITOR=vim
-
-# History
 export HISTCONTROL=erasedups
 export HISTSIZE=10000
 shopt -s histappend
 
-# Prompt
-export PS1="\u@\h:\w \$(parse_git_branch)\$ "
+export PS1="\u@\h:\w\$(__git_ps1)\$ "
