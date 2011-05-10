@@ -44,8 +44,8 @@ cd ~ && rm -Rf .vimrc .gvimrc .vim .bash_profile .bashrc .dotfiles
 echo "*** Downloading..."
 git clone git://github.com/rainerborene/dotfiles.git .dotfiles > /dev/null 2>&1
 ln -s ~/.dotfiles/vim/ .vim
-for filename in vimrc gvimrc bashrc tmux.conf; do
-  ln -s ~/.dotfiles/$filename
+for filename in vimrc bashrc tmux.conf; do
+  ln -s ~/.dotfiles/$filename ~/.$filename
 done
 
 cat << END > ~/.bash_profile
