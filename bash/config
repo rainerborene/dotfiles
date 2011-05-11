@@ -6,4 +6,4 @@ export HISTCONTROL=erasedups
 export HISTSIZE=10000
 shopt -s histappend
 
-export PS1="\u@\h:\w\$(__git_ps1)\$ "
+export PS1="\u:\w\$(__git_ps1)\$ "
