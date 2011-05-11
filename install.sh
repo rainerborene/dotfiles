@@ -37,17 +37,17 @@ fi
 read -p "Some config files will be overwritten. Are you sure you want to proceed [y/n]? " ANSWER
 [ $ANSWER == "y" ] || exit 1
 
-# Remove some config files
-cd ~ && rm -Rf .vimrc .gvimrc .vim .bash_profile .bashrc .dotfiles
-
 # Clone repository
 echo "*** Downloading..."
 git clone git://github.com/rainerborene/dotfiles.git .dotfiles > /dev/null 2>&1
-ln -s ~/.dotfiles/vim/ .vim
-for filename in vimrc bashrc tmux.conf; do
-  ln -s ~/.dotfiles/$filename ~/.$filename
+
+# Remove files and create symlinks
+rm -Rf ~/.vim && ln -s ~/.dotfiles/vim/ .vim
+for config in $(cd ~/.dotfiles && ls -II *{rc,conf}); do
+  rm -Rf ~/.$config && ln -s ~/.dotfiles/$config ~/.$config
 done
 
+# Override bash profile file
 cat << END > ~/.bash_profile
 if [ -f ~/.bashrc ]; then
   source ~/.bashrc

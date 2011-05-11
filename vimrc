@@ -60,11 +60,13 @@ set linespace=4
 "spell checking languages
 set spelllang=pt,en
 
+"tell the term has 256 colors
+set t_Co=256      
+
 if has("gui_running")
   set background=dark
   colorscheme solarized
 
-  set t_Co=256      "tell the term has 256 colors
   set guioptions-=T "don't show toolbar in the GUI
   set guioptions-=r "turn off right scroll bar
   set guioptions-=L "turn off left scroll bar
@@ -101,6 +103,9 @@ cab wQ wq
 cab WQ wq
 cab Q  q
 
+"because escape is too far away
+imap jj <ESC>
+
 "key mapping for tab navigation
 nmap <Tab> gt
 nmap <S-Tab> gT
@@ -131,6 +136,8 @@ map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar
 
 "ack searching
 nmap <Leader>a <Esc>:Ack
+
+map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
 "map to CommandT TextMate style finder
 nnoremap <leader>t :CommandT<CR>
