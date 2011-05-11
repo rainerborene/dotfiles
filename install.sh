@@ -39,7 +39,7 @@ read -p "Some config files will be overwritten. Are you sure you want to proceed
 
 # Clone repository
 echo "*** Downloading..."
-git clone git://github.com/rainerborene/dotfiles.git .dotfiles > /dev/null 2>&1
+rm -Rf ~/.dotfiles && git clone git://github.com/rainerborene/dotfiles.git .dotfiles > /dev/null 2>&1
 
 # Remove files and create symlinks
 rm -Rf ~/.vim && ln -s ~/.dotfiles/vim/ .vim
