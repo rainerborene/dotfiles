@@ -3,11 +3,16 @@ set bell-style none
 
 set input-meta on
 set output-meta on
+set completion-ignore-case on
+set visible-stats on
+set show-all-if-ambiguous on
 
 set editing-mode emacs
 
-C-n: history-search-forward
-C-p: history-search-backward
+"\M-s": menu-complete
+
+"\e[A": history-search-backward
+"\e[B": history-search-forward
 
 # some defaults / modifications for the emacs mode
 $if mode=emacs
@@ -40,11 +45,7 @@ $if term=rxvt
 $endif
 
 # for non RH/Debian xterm, can't hurt for RH/Debian xterm
-# "\eOH": beginning-of-line
-# "\eOF": end-of-line
-
-# for freebsd console
-# "\e[H": beginning-of-line
-# "\e[F": end-of-line
+"\eOH": beginning-of-line
+"\eOF": end-of-line
 
 $endif

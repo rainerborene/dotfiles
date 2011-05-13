@@ -1,2 +1,4 @@
 source ~/.dotfiles/bash/bash_completion.d/git-completion.bash
 source ~/.dotfiles/bash/bash_completion.d/rake-completion.bash
+
+complete -o nospace -A command killall

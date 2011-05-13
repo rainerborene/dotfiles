@@ -1,9 +1,25 @@
+# set the TERM correctly for gnome terminal
 if [ "${COLORTERM}" == "gnome-terminal" ]; then
   export TERM="gnome-256color"
 fi
 
+# notify of bg job completion immediately
+set -o notify
+
+export IGNOREEOF=1
 export HISTCONTROL=erasedups
 export HISTSIZE=10000
-shopt -s histappend
+export PROMPT_COMMAND='history -a'
 
-export PS1="λ \w\$(__git_ps1)$ "
+# shell options
+shopt -s histappend
+shopt -s autocd
+shopt -s cdspell
+shopt -s extglob
+shopt -s no_empty_cmd_completion
+
+# default umask
+umask 0022
+
+# prompt
+export PS1="λ \w\$(__git_ps1)\$ "

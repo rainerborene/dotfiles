@@ -137,6 +137,7 @@ map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar
 "ack searching
 nmap <Leader>a <Esc>:Ack
 
+"open directory dirname of current file
 map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
 "map to CommandT TextMate style finder
