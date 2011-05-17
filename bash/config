@@ -6,20 +6,25 @@ fi
 # notify of bg job completion immediately
 set -o notify
 
+# history stuff
 export IGNOREEOF=1
 export HISTCONTROL=erasedups
 export HISTSIZE=10000
 export PROMPT_COMMAND='history -a'
 
 # shell options
-shopt -s histappend >/dev/null 2>&1
 shopt -s autocd >/dev/null 2>&1
 shopt -s cdspell >/dev/null 2>&1
 shopt -s extglob >/dev/null 2>&1
+shopt -s histappend >/dev/null 2>&1
+shopt -s hostcomplete >/dev/null 2>&1
 shopt -s no_empty_cmd_completion >/dev/null 2>&1
 
 # default umask
 umask 0022
 
 # prompt
-export PS1="λ \w\$(__git_ps1)\$ "
+NO_COLOR='\[\e[0m\]'
+EBLACK='\[\e[1;30m\]'
+
+export PS1="λ \w${EBLACK}\$(__git_ps1)${NO_COLOR} \$ "

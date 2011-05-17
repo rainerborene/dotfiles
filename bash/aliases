@@ -1,27 +1,42 @@
-alias ..='cd ..'
+# dir aliases
 alias cdd='cd -'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
+# basic commands
 alias ll='ls --color=auto -laGh'
 alias fn='find . -name'
 alias hi='history | tail -20'
-alias b='bundle'
+
+# git
 alias g='git'
 alias gb='git branch'
 alias gba='git branch -a'
-alias gc='git commit -v'
+alias gco='git checkout'
 alias gs='git status'
+alias gc='git commit -v'
+alias gd='git diff --cached'
 alias gl='git log --oneline --color'
 alias gp='git push'
 alias gu='git pull'
-alias gi='gem install'
-alias reload='source ~/.bashrc'
 
-# Commit pending changes and quote all args as message
+# commit pending changes and quote all args as message
 function gg() {
   git commit -v -a -m "$*"
 }
 
-# Command line clipboard (ala Mac OS X)
+# ruby related things
+alias r='rake'
+alias b='bundle'
+alias gi='gem install'
+
+# command line clipboard (ala Mac OS X)
 if [ "$(uname)" == "Linux" ]; then
   alias pbcopy='xclip -selection clipboard'
   alias pbpaste='xclip -selection clipboard -o'
 fi
+
+# source dotfiles
+alias reload='source ~/.bashrc'
