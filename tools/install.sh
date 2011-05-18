@@ -43,7 +43,7 @@ cd ~/.dotfiles/vim && mkdir tmp spell
 
 # Download portuguese spellfile
 cd ~/.dotfiles/vim/spell/ 
-curl -O http://github.com/rosenfeld/git-spell-pt-br/raw/master/pt.utf-8.spl > /dev/null 2>&1
+curl -O http://stoa.usp.br/vim/files/-1/7458/pt.utf-8.spl > /dev/null 2>&1
 
 # Initialize submodules
 echo "*** Updating modules..."
