@@ -25,6 +25,6 @@ umask 0022
 
 # prompt
 NO_COLOR='\[\e[0m\]'
-EBLACK='\[\e[1;30m\]'
+RED='\[\033[0;31m\]'
 
-export PS1="λ \w${EBLACK}\$(__git_ps1)${NO_COLOR} \$ "
+export PS1="λ \w${RED}\$(__git_ps1)${NO_COLOR} \$ "
