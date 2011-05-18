@@ -2,13 +2,12 @@
 
 ## Installation
 
-    $ curl -s https://github.com/rainerborene/dotfiles/raw/master/install.sh | sudo bash
+    $ curl -s https://github.com/rainerborene/dotfiles/raw/master/tools/install.sh | bash
 
 This will clone this repository and create symlinks for all config files in your 
-home directory. You can run the below commands to update.
+home directory. After some time you might want to keep updated with the main
+repository, you could run the following commands to sync:
 
-    $ cd ~/.dotfiles/
-    $ git pull origin master
-    $ git submodule foreach git pull origin master
+    $ cd ~/.dotfiles/tools && ./sync.sh
 
-And you're done.
+Have fun.

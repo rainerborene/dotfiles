@@ -3,22 +3,6 @@
 # ~rainerborene dotfiles
 # Licensed under the WTFPL License.
 
-# Utility for updating themes
-if [ "$1" == "themes" ]; then
-  function theme() {
-    curl --url $1 -O > /dev/null 2>&1
-  }
-  cd ~/.dotfiles/vim/colors
-  echo "*** Updating themes..."
-  theme "https://github.com/nelstrom/vim-blackboard/raw/master/colors/blackboard.vim"
-  theme "https://github.com/nelstrom/vim-mac-classic-theme/raw/master/colors/mac_classic.vim"
-  theme "https://github.com/tpope/vim-vividchalk/raw/master/colors/vividchalk.vim"
-  theme "https://github.com/joshuaclayton/dotfiles/raw/master/vim/colors/customgithub.vim"
-  theme "http://blog.toddwerth.com/entry_files/8/ir_black.vim"
-  echo "*** Done"
-  exit 1
-fi
-
 # Check if git is installed.
 if ! type -p git &> /dev/null; then
   echo "What? You don't have Git installed."
@@ -29,8 +13,8 @@ fi
 # See http://petdance.com/ack/ for more information.
 if ! type -p ack &> /dev/null; then
   echo "*** Installing ack..."
-  curl http://betterthangrep.com/ack-standalone -o /usr/local/bin/ack > /dev/null 2>&1
-  chmod 0755 /usr/local/bin/ack
+  sudo curl http://betterthangrep.com/ack-standalone -o /usr/local/bin/ack > /dev/null 2>&1
+  sudo chmod 0755 /usr/local/bin/ack
 fi
 
 # Make sure we want to proceed with installation.
