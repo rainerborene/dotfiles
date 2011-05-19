@@ -1,3 +1,4 @@
 source ~/.dotfiles/bash/bash_completion.d/git-completion.bash
 source ~/.dotfiles/bash/bash_completion.d/rake-completion.bash
+source ~/.dotfiles/bash/bash_completion.d/django-completion.bash
 test -r /etc/bash_completion && source /etc/bash_completion
