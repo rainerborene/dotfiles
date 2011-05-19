@@ -185,12 +185,13 @@ if has("autocmd")
   autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
   autocmd FileType markdown setlocal wrap linebreak nolist 
   autocmd FileType gitcommit setlocal spell
-  autocmd BufNewFile,BufRead Rakefile,Capfile,Gemfile,Termfile,config.ru setfiletype ruby
+  autocmd BufNewFile,BufRead Rakefile,Capfile,Gemfile,config.ru setfiletype ruby
+  autocmd BufReadPost fugitive://* set bufhidden=delete
 
   "apply any changes on .vimrc automatically
-  autocmd bufwritepost .vimrc source $MYVIMRC
+  autocmd BufWritePost .vimrc source $MYVIMRC
 
-  "remove trailing whitespaces and ^M chars
+  "remove trailing whitespaces
   autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
 endif
 
