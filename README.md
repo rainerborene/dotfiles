@@ -6,8 +6,9 @@
 
 This will clone this repository and create symlinks for all config files in your 
 home directory. After some time you might want to keep updated with the main
-repository, you could run the following commands to sync:
+repository, you could run the following command inside the dotfiles directory
+to sync:
 
-    $ cd ~/.dotfiles/tools && ./sync.sh
+    $  git pull origin master
 
 Have fun.

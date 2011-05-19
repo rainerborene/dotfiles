@@ -1,10 +1,14 @@
 #!/bin/bash
+#
+# This script updates "manually" some themes and syncronizes
+# git submodules. Optionally, you can commit these changes too.
+
 function theme() {
   curl --url $1 -O > /dev/null 2>&1
 }
 
 function submodule_do() {
-  git submodule foreach $*
+  git submodule foreach git $*
 }
 
 cd ~/.dotfiles/vim/colors
