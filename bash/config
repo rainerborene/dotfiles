@@ -23,6 +23,10 @@ shopt -s no_empty_cmd_completion >/dev/null 2>&1
 # default umask
 umask 0022
 
+# colors
+export GREP_OPTIONS="--color=auto"
+export CLICOLOR="auto"
+
 # prompt
 NO_COLOR='\[\e[0m\]'
 RED='\[\033[0;31m\]'
