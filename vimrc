@@ -195,6 +195,7 @@ if has("autocmd")
   autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
 endif
 
+set wildmenu                  "turn on wild menu
 set wildmode=list:longest     "make cmdline tab completion similar to bash
 set wildignore+=.git,*.pyc,*~ "stuff to ignore when searching and tab completing
 

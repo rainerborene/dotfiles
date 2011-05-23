@@ -27,7 +27,7 @@ rm -Rf ~/.dotfiles && git clone git://github.com/rainerborene/dotfiles.git .dotf
 
 # Remove files and create symlinks
 rm -Rf ~/.vim && ln -s ~/.dotfiles/vim/ .vim
-for config in $(cd ~/.dotfiles && ls *rc *.conf); do
+for config in $(cd ~/.dotfiles && ls *rc *.conf dircolors); do
   rm -Rf ~/.$config && ln -s ~/.dotfiles/$config ~/.$config
 done
 

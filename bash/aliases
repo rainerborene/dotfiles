@@ -6,8 +6,8 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
 # basic commands
-alias lc='ls --color -1'
 alias ls='ls --color'
+alias lc='ls --color -1'
 alias ll='ls --color -laGh'
 alias fn='find . -name'
 alias hi='history | tail -20'

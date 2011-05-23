@@ -23,9 +23,14 @@ shopt -s no_empty_cmd_completion >/dev/null 2>&1
 # default umask
 umask 0022
 
-# colors
+# color options
 export GREP_OPTIONS="--color=auto"
 export CLICOLOR="auto"
+
+# enable color support of ls
+[[ -p dircolors && -e "$HOME/.dotfiles" ]] && {
+  eval "$(dircolors -b ~/.dircolors)" 
+}
 
 # prompt
 NO_COLOR='\[\e[0m\]'
