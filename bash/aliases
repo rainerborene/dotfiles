@@ -35,10 +35,11 @@ alias r='rake'
 alias b='bundle'
 alias gi='gem install'
 
-# command line clipboard (ala Mac OS X)
+# linux specific aliases
 if [ "$(uname)" == "Linux" ]; then
   alias pbcopy='xclip -selection clipboard'
   alias pbpaste='xclip -selection clipboard -o'
+  alias open='gnome-open'
 fi
 
 # source dotfiles
