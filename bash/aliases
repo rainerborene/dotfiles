@@ -14,16 +14,19 @@ alias hi='history | tail -20'
 
 # git
 alias g='git'
+alias ga='git add'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gco='git checkout'
 alias gs='git status'
 alias gc='git commit -v'
+alias gcm='git commit -m'
 alias gd='git diff --color'
 alias gdc='git diff --cached --color'
 alias gl='git log --oneline --color'
-alias gp='git push'
-alias gu='git pull'
+alias gsm='git submodule'
+alias gps='git push'
+alias gpl='git pull'
 
 # commit pending changes and quote all args as message
 function gg() {
@@ -33,7 +36,11 @@ function gg() {
 # ruby related things
 alias r='rake'
 alias b='bundle'
-alias gi='gem install'
+alias be='bundle exec'
+alias gems='gem search -b'
+alias geml='gem list -l'
+alias gemi='gem install'
+alias gemu='gem uninstall'
 
 # linux specific aliases
 if [ "$(uname)" == "Linux" ]; then

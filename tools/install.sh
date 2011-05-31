@@ -3,6 +3,11 @@
 # ~rainerborene dotfiles
 # Licensed under the WTFPL License.
 
+# Send everything to /dev/null
+function silence() {
+  $* > /dev/null 2>&1
+}
+
 # Check if git is installed.
 if ! type -p git &> /dev/null; then
   echo "What? You don't have Git installed."
@@ -13,7 +18,7 @@ fi
 # See http://petdance.com/ack/ for more information.
 if ! type -p ack &> /dev/null; then
   echo "*** Installing ack..."
-  sudo curl http://betterthangrep.com/ack-standalone -o /usr/local/bin/ack > /dev/null 2>&1
+  silence sudo curl http://betterthangrep.com/ack-standalone -o /usr/local/bin/ack 
   sudo chmod 0755 /usr/local/bin/ack
 fi
 
@@ -23,7 +28,7 @@ read -p "Some config files will be overwritten. Are you sure you want to proceed
 
 # Clone repository
 echo "*** Downloading..."
-rm -Rf ~/.dotfiles && git clone git://github.com/rainerborene/dotfiles.git .dotfiles > /dev/null 2>&1
+rm -Rf ~/.dotfiles && silence git clone git://github.com/rainerborene/dotfiles.git ~/.dotfiles
 
 # Remove files and create symlinks
 rm -Rf ~/.vim && ln -s ~/.dotfiles/vim/ .vim
@@ -42,18 +47,17 @@ END
 cd ~/.dotfiles/vim && mkdir tmp spell
 
 # Download portuguese spellfile
-cd ~/.dotfiles/vim/spell/ 
-curl -O http://stoa.usp.br/vim/files/-1/7458/pt.utf-8.spl > /dev/null 2>&1
+cd ~/.dotfiles/vim/spell/ && silence curl -O http://stoa.usp.br/vim/files/-1/7458/pt.utf-8.spl
 
 # Initialize submodules
 echo "*** Updating modules..."
 cd ~/.dotfiles
-git submodule update --init > /dev/null 2>&1
+silence git submodule update --init 
 
 # Compile Command-T extension
 echo "*** Compiling extensions..."
 cd ~/.dotfiles/vim/bundle/command-t
-rake make > /dev/null 2>&1
+silence rake make 
 
 # Done.
 echo "*** Installed"
