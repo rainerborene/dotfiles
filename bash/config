@@ -1,3 +1,5 @@
+# vim:set ft=sh:
+
 # set the TERM correctly for gnome terminal
 if [ "${COLORTERM}" == "gnome-terminal" ]; then
   export TERM="gnome-256color"
@@ -28,12 +30,12 @@ export GREP_OPTIONS="--color=auto"
 export CLICOLOR="auto"
 
 # enable color support of ls
-[[ -p dircolors && -e "$HOME/.dotfiles" ]] && {
+[[ -p dircolors && -e "$HOME/.dircolors" ]] && {
   eval "$(dircolors -b ~/.dircolors)" 
 }
 
 # prompt
 NO_COLOR='\[\e[0m\]'
-RED='\[\033[0;31m\]'
+GREEN='\[\033[0;32m\]'
 
-export PS1="λ \w${RED}\$(__git_ps1)${NO_COLOR} \$ "
+export PS1="λ \w${GREEN}\$(__git_ps1 ' %s')${NO_COLOR} "
