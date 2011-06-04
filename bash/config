@@ -1,7 +1,8 @@
 # vim:set ft=sh:
+UNAME=$(uname)
 
 # set the TERM correctly for gnome terminal
-if [ "${COLORTERM}" == "gnome-terminal" ]; then
+if [ "$COLORTERM" == "gnome-terminal" ]; then
   export TERM="gnome-256color"
 fi
 
@@ -36,6 +37,19 @@ export CLICOLOR="auto"
 
 # prompt
 NO_COLOR='\[\e[0m\]'
+EBLACK='\[\e[1;30m\]'
 GREEN='\[\033[0;32m\]'
 
-export PS1="λ \w${GREEN}\$(__git_ps1 ' %s')${NO_COLOR} "
+function prompt_compact() {
+  export PS1="λ \w${GREEN}\$(__git_ps1 ' %s')${NO_COLOR} "
+}
+
+function prompt_expanded() {
+  export PS1="\n\u:\w ${EBLACK}\$(__git_ps1 '[%s]')${NO_COLOR} \n→ "
+}
+
+if [ "$UNAME" == "Darwin" ]; then
+  prompt_expanded
+else
+  prompt_compact
+fi

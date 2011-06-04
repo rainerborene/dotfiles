@@ -1,3 +1,6 @@
+# vim:set ft=sh:
+UNAME=$(uname)
+
 # dir aliases
 alias cdd='cd -'
 alias ..='cd ..'
@@ -6,9 +9,6 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
 # basic commands
-alias ls='ls --color'
-alias lc='ls --color -1'
-alias ll='ls --color -laGh'
 alias fn='find . -name'
 alias hi='history | tail -20'
 
@@ -43,10 +43,18 @@ alias gemi='gem install'
 alias gemu='gem uninstall'
 
 # linux specific aliases
-if [ "$(uname)" == "Linux" ]; then
+if [ "$UNAME" == "Linux" ]; then
+  alias ls='ls --color'
+  alias lc='ls --color -1'
+  alias ll='ls --color -laGh'
   alias pbcopy='xclip -selection clipboard'
   alias pbpaste='xclip -selection clipboard -o'
   alias open='gnome-open'
+else
+  # mac osx
+  alias lc='ls -1'
+  alias ll='ls -lhoGa'
+  alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
 fi
 
 # source dotfiles
