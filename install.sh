@@ -3,7 +3,6 @@
 # ~rainerborene dotfiles
 # Licensed under the WTFPL License.
 
-CURRENT_DIR=$(pwd)
 DOTIGNORE="README.md install.sh bash"
 
 # Git must be installed on your machine.
@@ -90,6 +89,3 @@ case $1 in
   update) update; exit ;;
   install|*) install; exit ;;
 esac
-
-# Back to where we was before.
-cd $CURRENT_DIR
