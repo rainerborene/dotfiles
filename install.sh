@@ -55,20 +55,20 @@ function install () {
 
 function update() {
   cd ~/.dotfiles \
-    && git submodule -q foreach git clean -f \
+    && git submodule -q foreach git clean -q -f \
     && git submodule -q foreach git pull -q origin master
 
   echo "*** Updating..."
   cd ~/.dotfiles/vim/colors
-  curl https://github.com/nelstrom/vim-blackboard/raw/master/colors/blackboard.vim -Os
-  curl https://github.com/nelstrom/vim-mac-classic-theme/raw/master/colors/mac_classic.vim -Os
-  curl https://github.com/tpope/vim-vividchalk/raw/master/colors/vividchalk.vim -Os
-  curl https://github.com/joshuaclayton/dotfiles/raw/master/vim/colors/customgithub.vim -Os
+  curl https://raw.github.com/nelstrom/vim-blackboard/master/colors/blackboard.vim -Os
+  curl https://raw.github.com/nelstrom/vim-mac-classic-theme/master/colors/mac_classic.vim -Os
+  curl https://raw.github.com/tpope/vim-vividchalk/master/colors/vividchalk.vim -Os
+  curl https://raw.github.com/joshuaclayton/dotfiles/master/vim/colors/customgithub.vim -Os
   curl http://blog.toddwerth.com/entry_files/8/ir_black.vim -Os
 
   cd ~/.dotfiles/vim/autoload
-  curl https://github.com/tpope/vim-pathogen/raw/master/autoload/pathogen.vim -Os
-  curl https://github.com/tpope/vim-repeat/raw/master/autoload/repeat.vim -Os
+  curl https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim -Os
+  curl https://raw.github.com/tpope/vim-repeat/master/autoload/repeat.vim -Os
 }
 
 #
