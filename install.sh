@@ -19,7 +19,7 @@ fi
 function install() {
   # Make sure we want to proceed with installation
   read -p "Are you sure you want to proceed [y/n]? " ANSWER
-  [ $ANSWER == "y" ] || exit 1
+  [[ $ANSWER == "y" ]] || exit 1
 
   # Clone repository and initialize modules
   echo "*** Downloading..."
