@@ -40,7 +40,7 @@ function install() {
 
   # Download portuguese spell file for Vim
   curl --url http://stoa.usp.br/vim/files/-1/7458/pt.utf-8.spl \
-    -o ~/.dotfiles/vim/spell/ 
+    -s -o ~/.dotfiles/vim/spell/
 
   # Override bash_profile
   echo "[[ -f ~/.bashrc ]] && source ~/.bashrc" > ~/.bash_profile
@@ -64,15 +64,15 @@ function update() {
 
   echo "*** Updating..."
   cd ~/.dotfiles/vim/colors
-  curl https://github.com/nelstrom/vim-blackboard/raw/master/colors/blackboard.vim -Oq
-  curl https://github.com/nelstrom/vim-mac-classic-theme/raw/master/colors/mac_classic.vim -Oq
-  curl https://github.com/tpope/vim-vividchalk/raw/master/colors/vividchalk.vim -Oq
-  curl https://github.com/joshuaclayton/dotfiles/raw/master/vim/colors/customgithub.vim -Oq
-  curl http://blog.toddwerth.com/entry_files/8/ir_black.vim -Oq
+  curl https://github.com/nelstrom/vim-blackboard/raw/master/colors/blackboard.vim -Os
+  curl https://github.com/nelstrom/vim-mac-classic-theme/raw/master/colors/mac_classic.vim -Os
+  curl https://github.com/tpope/vim-vividchalk/raw/master/colors/vividchalk.vim -Os
+  curl https://github.com/joshuaclayton/dotfiles/raw/master/vim/colors/customgithub.vim -Os
+  curl http://blog.toddwerth.com/entry_files/8/ir_black.vim -Os
 
   cd ~/.dotfiles/vim/autoload
-  curl https://github.com/tpope/vim-pathogen/raw/master/autoload/pathogen.vim -Oq
-  curl https://github.com/tpope/vim-repeat/raw/master/autoload/repeat.vim -Oq
+  curl https://github.com/tpope/vim-pathogen/raw/master/autoload/pathogen.vim -Os
+  curl https://github.com/tpope/vim-repeat/raw/master/autoload/repeat.vim -Os
 }
 
 #
@@ -83,7 +83,7 @@ function install_ack() {
   # See http://petdance.com/ack/ for more information.
   if ! type -p ack &> /dev/null; then
     echo "*** Installing ack..."
-    curl --url http://betterthangrep.com/ack-standalone -q -o /usr/local/bin/ack 
+    curl --url http://betterthangrep.com/ack-standalone -s -o /usr/local/bin/ack 
     sudo chmod 0755 /usr/local/bin/ack
   fi
 }
