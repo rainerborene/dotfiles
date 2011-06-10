@@ -4,7 +4,7 @@
 # Licensed under the WTFPL License.
 
 CURRENT_DIR=$(pwd)
-DOTIGNORE=(README.md install.sh bash)
+DOTIGNORE="README.md install.sh bash"
 
 # Git must be installed on your machine.
 if ! type -p git &> /dev/null; then
@@ -16,22 +16,18 @@ fi
 # Install the dot files into user's home directory.
 #
 
-function install() {
-  # Make sure we want to proceed with installation
-  read -p "Are you sure you want to proceed [y/n]? " ANSWER
-  [[ $ANSWER == "y" ]] || exit 1
-
+function install () {
   # Clone repository and initialize modules
   echo "*** Downloading..."
   rm -Rf ~/.dotfiles \
     && git clone -q git://github.com/rainerborene/dotfiles.git ~/.dotfiles \
     && cd ~/.dotfiles \
-    && git submodule -q update --init
+    && git submodule update --init > /dev/null 2>&1
 
   # Create symbolic links
-  for name in ~/.dotfiles; do
+  for name in `ls ~/.dotfiles`; do
     if [ -z "$(echo $DOTIGNORE | grep $name)" ]; then
-      rm -Rf ~/.$name && ln -s ~/.dotfiles/$config ~/.$config
+      rm -Rf ~/.$name && ln -s ~/.dotfiles/$name ~/.$name
     fi
   done
 
@@ -47,7 +43,7 @@ function install() {
 
   # Compile command-t extension
   echo "*** Compiling extensions..."
-  rake -f ~/.dotfiles/vim/bundle/command-t/Rakefile -q make
+  cd ~/.dotfiles/vim/bundle/command-t && rake make > /dev/null 2>&1
 
   # Done
   echo "*** Installed"
@@ -90,10 +86,9 @@ function install_ack() {
 
 # Parse arguments
 case $1 in
-  install) install; exit ;;
-  update) update; exit ;;
   ack) install_ack; exit ;;
-  *) install; exit ;;
+  update) update; exit ;;
+  install|*) install; exit ;;
 esac
 
 # Back to where we was before.
