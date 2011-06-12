@@ -65,7 +65,7 @@ set t_Co=256
 
 "solarized colorscheme
 set background=dark
-colorscheme solarized
+colorscheme tir_black
 
 if has("gui_running")
   set guioptions-=T "don't show toolbar in the GUI

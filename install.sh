@@ -15,7 +15,7 @@ fi
 # Install the dot files into user's home directory.
 #
 
-function install () {
+function install() {
   # Clone repository and initialize modules
   echo "*** Downloading..."
   rm -Rf ~/.dotfiles \
@@ -35,7 +35,7 @@ function install () {
 
   # Download portuguese spell file for Vim
   curl --url http://stoa.usp.br/vim/files/-1/7458/pt.utf-8.spl \
-    -s -o ~/.dotfiles/vim/spell/
+    -s -o ~/.dotfiles/vim/spell/pt.utf-8.spl
 
   # Override bash_profile
   echo "[[ -f ~/.bashrc ]] && source ~/.bashrc" > ~/.bash_profile
@@ -78,7 +78,7 @@ function install_ack() {
   # See http://petdance.com/ack/ for more information.
   if ! type -p ack &> /dev/null; then
     echo "*** Installing ack..."
-    curl --url http://betterthangrep.com/ack-standalone -s -o /usr/local/bin/ack 
+    sudo curl --url http://betterthangrep.com/ack-standalone -s -o /usr/local/bin/ack 
     sudo chmod 0755 /usr/local/bin/ack
   fi
 }

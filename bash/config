@@ -12,8 +12,9 @@ set -o notify
 # history stuff
 export IGNOREEOF=1
 export HISTCONTROL=erasedups
+export HISTIGNORE="&:ls:bf[g]:exit"
 export HISTSIZE=10000
-export PROMPT_COMMAND='history -a'
+export PROMPT_COMMAND="history -a"
 
 # shell options
 shopt -s autocd >/dev/null 2>&1
@@ -45,7 +46,7 @@ function prompt_compact() {
 }
 
 function prompt_expanded() {
-  export PS1="\n\u:\w ${EBLACK}\$(__git_ps1 '[%s]')${NO_COLOR} \n→ "
+  export PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR} \n→ "
 }
 
 if [ "$UNAME" == "Darwin" ]; then
