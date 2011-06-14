@@ -9,8 +9,11 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
 # basic commands
+alias c='clear'
+alias tlf='tail -f'
 alias fn='find . -name'
 alias hi='history | tail -20'
+alias goodbye='shutdown -P now'
 
 # git
 alias g='git'
@@ -24,19 +27,26 @@ alias gcm='git commit -m'
 alias gd='git diff --color'
 alias gdc='git diff --cached --color'
 alias gl='git log --oneline --color'
+alias gp='git push'
+alias gu='git pull'
 alias gsm='git submodule'
-alias gps='git push'
-alias gpl='git pull'
 
 # commit pending changes and quote all args as message
 function gg() {
   git commit -v -a -m "$*"
 }
 
-# ruby related things
-alias r='rake'
+# ruby on rails
+alias rtu='rake test:units'
+alias rtf='rake test:functionals'
+alias rti='rake test:integration'
+alias rmg='rake db:migrate'
+alias rms='rake db:migrate:status'
+alias rmd='rake db:migrate:down VERSION='
 alias b='bundle'
 alias be='bundle exec'
+
+# rubygems
 alias gems='gem search -b'
 alias geml='gem list -l'
 alias gemi='gem install'

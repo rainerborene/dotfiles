@@ -2,10 +2,16 @@
 # 
 # ~rainerborene dotfiles
 # Licensed under the WTFPL License.
+#
+# Thanks to all folks on GitHub for sharing their dotfiles.
+#
 
 DOTIGNORE="README.md install.sh bash"
 
+#
 # Git must be installed on your machine.
+#
+
 if ! type -p git &> /dev/null; then
   echo "What? You don't have Git installed."
   exit 1
@@ -80,6 +86,7 @@ function install_ack() {
     echo "*** Installing ack..."
     sudo curl --url http://betterthangrep.com/ack-standalone -s -o /usr/local/bin/ack 
     sudo chmod 0755 /usr/local/bin/ack
+    echo "*** Installed"
   fi
 }
 
