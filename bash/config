@@ -1,5 +1,4 @@
 # vim:set ft=sh:
-UNAME=$(uname)
 
 # set the TERM correctly for gnome terminal
 if [ "$COLORTERM" == "gnome-terminal" ]; then
