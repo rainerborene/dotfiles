@@ -77,22 +77,27 @@ function update() {
 }
 
 #
-# Install ack.
+# Install dependencies (these are optionals).
 #
 
-function install_ack() {
-  # See http://petdance.com/ack/ for more information.
+function dependencies() {
   if ! type -p ack &> /dev/null; then
+    # See http://petdance.com/ack/ for more information.
     echo "*** Installing ack..."
     sudo curl --url http://betterthangrep.com/ack-standalone -s -o /usr/local/bin/ack 
     sudo chmod 0755 /usr/local/bin/ack
     echo "*** Installed"
   fi
+
+  echo 
+  echo "*** Installing gem..."
+  sudo gem install -q wirble awesome_print
+  echo "*** Installed"
 }
 
 # Parse arguments
 case $1 in
-  ack) install_ack; exit ;;
   update) update; exit ;;
+  dependencies) dependencies; exit ;;
   install|*) install; exit ;;
 esac
