@@ -87,9 +87,9 @@ function dependencies() {
     sudo curl --url http://betterthangrep.com/ack-standalone -s -o /usr/local/bin/ack 
     sudo chmod 0755 /usr/local/bin/ack
     echo "*** Installed"
+    echo 
   fi
 
-  echo 
   echo "*** Installing gem..."
   sudo gem install -q wirble awesome_print
   echo "*** Installed"
