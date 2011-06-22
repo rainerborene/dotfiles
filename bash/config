@@ -30,11 +30,6 @@ umask 0022
 export GREP_OPTIONS="--color=auto"
 export CLICOLOR="auto"
 
-# enable color support of ls
-[[ -p dircolors && -e "$HOME/.dircolors" ]] && {
-  eval "$(dircolors -b ~/.dircolors)" 
-}
-
 # prompt
 NO_COLOR='\[\e[0m\]'
 EBLACK='\[\e[1;30m\]'
