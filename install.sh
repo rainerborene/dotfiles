@@ -74,6 +74,9 @@ function update() {
   cd ~/.dotfiles/vim/autoload
   curl https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim -Os
   curl https://raw.github.com/tpope/vim-repeat/master/autoload/repeat.vim -Os
+
+  cd ~/.dotfiles/bash/bash_completion.d
+  curl https://raw.github.com/jweslley/rails_completion/master/rails.bash -Os
 }
 
 #
@@ -90,7 +93,7 @@ function dependencies() {
     echo 
   fi
 
-  echo "*** Installing gem..."
+  echo "*** Installing gems..."
   sudo gem install -q wirble awesome_print
   echo "*** Installed"
 }

@@ -12,7 +12,6 @@ alias c='clear'
 alias tlf='tail -f'
 alias fn='find . -name'
 alias hi='history | tail -20'
-alias goodbye='sudo shutdown -P now'
 
 # git
 alias g='git'
