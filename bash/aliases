@@ -30,7 +30,7 @@ alias gu='git pull'
 alias gsm='git submodule'
 
 # commit pending changes and quote all args as message
-function gg() {
+gg() {
   git commit -v -a -m "$*"
 }
 

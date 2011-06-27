@@ -1,5 +1,8 @@
 .DS_Store
 .netrwhist
 *.swp
-vim/tmp/
-vim/spell/
+.rake_tasks~
+.rails_generators~
+vim/tmp
+vim/spell
+Thumbs.db

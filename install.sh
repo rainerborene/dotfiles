@@ -21,7 +21,7 @@ fi
 # Install the dot files into user's home directory.
 #
 
-function install() {
+install() {
   # Clone repository and initialize modules
   echo "*** Downloading..."
   rm -Rf ~/.dotfiles \
@@ -29,8 +29,11 @@ function install() {
     && cd ~/.dotfiles \
     && git submodule update --init > /dev/null 2>&1
 
+  # Global gitignore
+  git config --global core.excludesfile ~/.dotfiles/.gitignore
+
   # Create symbolic links
-  for name in `ls ~/.dotfiles`; do
+  for name in $(ls ~/.dotfiles); do
     if [ -z "$(echo $DOTIGNORE | grep $name)" ]; then
       rm -Rf ~/.$name && ln -s ~/.dotfiles/$name ~/.$name
     fi
@@ -58,44 +61,45 @@ function install() {
 # Update themes and other files.
 #
 
-function update() {
+update() {
+  local github="https://raw.github.com"
+
   cd ~/.dotfiles \
     && git submodule -q foreach git clean -q -f \
     && git submodule -q foreach git pull -q origin master
 
   echo "*** Updating..."
   cd ~/.dotfiles/vim/colors
-  curl https://raw.github.com/nelstrom/vim-blackboard/master/colors/blackboard.vim -Os
-  curl https://raw.github.com/nelstrom/vim-mac-classic-theme/master/colors/mac_classic.vim -Os
-  curl https://raw.github.com/tpope/vim-vividchalk/master/colors/vividchalk.vim -Os
-  curl https://raw.github.com/joshuaclayton/dotfiles/master/vim/colors/customgithub.vim -Os
+  curl $github/nelstrom/vim-blackboard/master/colors/blackboard.vim -Os
+  curl $github/nelstrom/vim-mac-classic-theme/master/colors/mac_classic.vim -Os
+  curl $github/tpope/vim-vividchalk/master/colors/vividchalk.vim -Os
+  curl $github/joshuaclayton/dotfiles/master/vim/colors/customgithub.vim -Os
   curl http://blog.toddwerth.com/entry_files/8/ir_black.vim -Os
 
   cd ~/.dotfiles/vim/autoload
-  curl https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim -Os
-  curl https://raw.github.com/tpope/vim-repeat/master/autoload/repeat.vim -Os
+  curl $github/tpope/vim-pathogen/master/autoload/pathogen.vim -Os
+  curl $github/tpope/vim-repeat/master/autoload/repeat.vim -Os
 
   cd ~/.dotfiles/bash/bash_completion.d
-  curl https://raw.github.com/jweslley/rails_completion/master/rails.bash -Os
+  curl $github/jweslley/rails_completion/master/rails.bash -Os
 }
 
 #
 # Install dependencies (these are optionals).
 #
 
-function dependencies() {
+dependencies() {
   if ! type -p ack &> /dev/null; then
     # See http://petdance.com/ack/ for more information.
     echo "*** Installing ack..."
     sudo curl --url http://betterthangrep.com/ack-standalone -s -o /usr/local/bin/ack 
     sudo chmod 0755 /usr/local/bin/ack
-    echo "*** Installed"
-    echo 
   fi
 
   echo "*** Installing gems..."
   sudo gem install -q wirble awesome_print
-  echo "*** Installed"
+
+  echo "*** Done"
 }
 
 # Parse arguments
