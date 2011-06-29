@@ -1,76 +1,43 @@
-"necessary on some Linux distros for pathogen to properly load bundles
-filetype off
+" ---------------------------------------------------------------------------
+" General
+" ---------------------------------------------------------------------------
 
-"load pathogen managed plugins
+filetype off        " necessary on some Linux distros for pathogen to properly load bundles
+set nocompatible    " use Vim settings, rather then Vi settings (much better!)
+set history=1000    " store lots of :cmdline history
+set autoread        " reload files (local changes only)
+set hidden          " hide buffers when not displayed
+set spelllang=pt,en " spell checking languages
+
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 
-"Use Vim settings, rather then Vi settings (much better!).
-"This must be first, because it changes other options as a side effect.
-set nocompatible
+filetype plugin on
+filetype indent on
 
-"allow backspacing over everything in insert mode
-set backspace=indent,eol,start
+" ---------------------------------------------------------------------------
+" UI
+" ---------------------------------------------------------------------------
 
-"case insensitive searches become sensitive with capitals
-set ignorecase
-set smartcase
-
-"store lots of :cmdline history
-set history=1000
-
-set showcmd  "show incomplete cmds down the bottom
-set showmode "show current mode down the bottom
-
-set incsearch "find the next match as we type the search
-set hlsearch  "highlight searches by default
-
-set number "add line numbers
+syntax on                           " turn on syntax highlighting
+set cursorline                      " highlight current line
+set backspace=indent,eol,start      " allow backspacing over everything in insert mode
+set showcmd                         " show incomplete cmds down the bottom
+set showmode                        " show current mode down the bottom
+set wildmenu                        " turn on wild menu
+set wildmode=list:longest           " make cmdline tab completion similar to bash
+set wildignore+=.git,*.pyc,*~       " stuff to ignore when searching and tab completing
+set t_Co=256                        " tell the term has 256 colors
+set number 
 set numberwidth=5
 set showbreak=...
-set wrap linebreak nolist
-set listchars=tab:▸\ ,eol:¬
-set textwidth=79 
-set formatoptions=qrn1
-
-"disable visual bell
-set visualbell t_vb=
-
-"always show status line
-set laststatus=2
-
-"useful status information at bottom of screen
-set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
-
-"indent settings
-set autoindent
-set smartindent
-set tabstop=4
-set shiftwidth=2
-set softtabstop=2
-set expandtab
-set nosmarttab
-
-"hide buffers when not displayed
-set hidden
-
-"add some line space for easy reading
-set linespace=4
-
-"spell checking languages
-set spelllang=pt,en
-
-"tell the term has 256 colors
-set t_Co=256      
-
-"solarized colorscheme
-set background=dark
+set background=dark 
 colorscheme tir_black
 
 if has("gui_running")
-  set guioptions-=T "don't show toolbar in the GUI
-  set guioptions-=r "turn off right scroll bar
-  set guioptions-=L "turn off left scroll bar
+  set guioptions-=T                 " don't show toolbar in the GUI
+  set guioptions-=r                 " turn off right scroll bar
+  set guioptions-=L                 " turn off left scroll bar
   set lines=999 columns=999 
 
   if has("mac")
@@ -80,100 +47,92 @@ if has("gui_running")
   endif
 endif
 
-"turn on syntax highlighting
-syntax on
+" ---------------------------------------------------------------------------
+" Backups
+" ---------------------------------------------------------------------------
 
-"highlight current line
-set cursorline
+set backupdir=$HOME/.dotfiles/vim/tmp
+set directory=$HOME/.dotfiles/vim/tmp
 
-"vertical/horizontal scroll off settings
+" ---------------------------------------------------------------------------
+" Visual Cues
+" ---------------------------------------------------------------------------
+
+set visualbell t_vb=                " disable visual bell
+set ignorecase                      " case insensitive
+set smartcase                       " sensitive with capitals
+set foldmethod=indent               " fold based on indent
+set foldnestmax=3                   " deepest fold is 3 levels
+set nofoldenable                    " dont fold by default
+set laststatus=2                    " always show status line
+set incsearch                       " find the next match as we type the search
+set hlsearch                        " highlight searches by default
+set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 set scrolloff=3
 set sidescrolloff=7
 set sidescroll=1
+set listchars=tab:▸\ ,eol:¬
 
-"load ftplugins and indent files
-filetype plugin on
-filetype indent on
+" ---------------------------------------------------------------------------
+" Text Formatting
+" ---------------------------------------------------------------------------
 
-"handful abbreveations
-cab W  w
-cab Wq wq
-cab wQ wq
-cab WQ wq
-cab Q  q
+set autoindent
+set smartindent
+set tabstop=4
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set nosmarttab
+set textwidth=79 
+set formatoptions=qrn1
+set linespace=4
+set wrap linebreak nolist
 
-"because escape is too far away
-imap jj <ESC>
+" ---------------------------------------------------------------------------
+" Auto Commands
+" ---------------------------------------------------------------------------
 
-"key mapping for tab navigation
-nmap <Tab> gt
-nmap <S-Tab> gT
+autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType php,apache,sql setlocal ts=4 sts=4 sw=4 noexpandtab
+autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
+autocmd FileType markdown setlocal wrap linebreak nolist 
+autocmd FileType gitcommit setlocal spell
+autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
 
-"folding settings
-set foldmethod=indent   "fold based on indent
-set foldnestmax=3       "deepest fold is 3 levels
-set nofoldenable        "dont fold by default
+autocmd BufNewFile,BufRead Rakefile,Capfile,Gemfile,config.ru setfiletype ruby
+autocmd BufReadPost fugitive://* set bufhidden=delete
+autocmd BufWritePost .vimrc source $MYVIMRC
 
-"vimgrep navigation
-map <F3> :cnext<CR>
-map <F4> :cc<CR>
-map <F5> :cprev<CR>
+" ---------------------------------------------------------------------------
+" Mappings
+" ---------------------------------------------------------------------------
 
-map \\ <Plug>NERDCommenterInvert
-
-let g:NERDCreateDefaultMappings = 0 "disable default mappings
-let g:NERDSpaceDelims = 1           "extra space after and before delimiter
-
-"using another leader mapping
+" using another leader mapping
 let mapleader = ","
 
-"clear search highlight
-nmap <silent> <leader>n :silent :nohlsearch<CR>
-
-"map to bufexplorer
-map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar>buffers<Bar>endif<CR>
-
-"ack searching
-nmap <Leader>a <Esc>:Ack
-
-"open directory dirname of current file
-map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
-
-"map to CommandT TextMate style finder
-nnoremap <leader>t :CommandT<CR>
-
-"gundo
-map <Leader>u :GundoToggle<CR>
-
-"nerdtree
-silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
-
-"Command-T configuration
-let g:CommandTMaxHeight=10
-let g:CommandTMatchWindowAtTop=1
-
-"delete a buffer without closing the window
+" delete a buffer without closing the window
 nmap <leader>q <Plug>Kwbd
 
-"wipe all buffers which are not active
+" wipe all buffers which are not active
 nmap <leader>hq <Plug>CloseHiddenBuffers
 
-"markdown to html
+" markdown to html
 nmap <leader>md :%!Markdown.pl --html4tags <cr>
 
-" Don't use Ex mode; use Q for formatting
+" don't use Ex mode; use Q for formatting
 map Q gqj
 
-"make Y consistent with C and D
-nnoremap Y y$
+" make Y consistent with C and D
+nnoremap Y y$ 
 
-"speed up buffer switching
+" speed up buffer switching
 map <C-k> <C-W>k
 map <C-j> <C-W>j
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
-"sane movement with wrap turned on
+" sane movement with wrap turned on
 nnoremap j gj
 nnoremap k gk
 vnoremap j gj
@@ -185,37 +144,57 @@ vnoremap <Down> gj
 inoremap <Up> <C-o>gk
 inoremap <Down> <C-o>gj
 
-if has("autocmd")
-  autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
-  autocmd FileType php,apache,sql setlocal ts=4 sts=4 sw=4 noexpandtab
-  autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
-  autocmd FileType markdown setlocal wrap linebreak nolist 
-  autocmd FileType gitcommit setlocal spell
-  autocmd BufNewFile,BufRead Rakefile,Capfile,Gemfile,config.ru setfiletype ruby
-  autocmd BufReadPost fugitive://* set bufhidden=delete
+" handful abbreveations
+cab W  w
+cab Wq wq
+cab wQ wq
+cab WQ wq
+cab Q  q
 
-  "apply any changes on .vimrc automatically
-  autocmd BufWritePost .vimrc source $MYVIMRC
+" because escape is too far away
+imap jj <ESC>
 
-  "remove trailing whitespaces
-  autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
-endif
+" key mapping for tab navigation
+nmap <Tab> gt
+nmap <S-Tab> gT
 
-set wildmenu                  "turn on wild menu
-set wildmode=list:longest     "make cmdline tab completion similar to bash
-set wildignore+=.git,*.pyc,*~ "stuff to ignore when searching and tab completing
+" vimgrep navigation
+map <F3> :cnext<CR>
+map <F4> :cc<CR>
+map <F5> :cprev<CR>
 
-let g:netrw_list_hide='^\.,.\(pyc\|pyo\)$'
+map \\ <Plug>NERDCommenterInvert
 
-"keep swap files in one location
-set backupdir=$HOME/.dotfiles/vim/tmp
-set directory=$HOME/.dotfiles/vim/tmp
+" clear search highlight
+nmap <silent> <leader>h :silent :nohlsearch<CR>
 
+" map to bufexplorer
+map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar>buffers<Bar>endif<CR>
+
+" ack searching
+map <Leader>a <Esc>:Ack
+
+" open directory dirname of current file
+map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
+
+" map to CommandT TextMate style finder
+nnoremap <leader>t :CommandT<CR>
+
+" some toggle commands
+map <Leader>u :GundoToggle<CR>
+map <silent> <Leader>n :NERDTreeToggle<CR>
+
+" ---------------------------------------------------------------------------
+" Global Variables
+" ---------------------------------------------------------------------------
+
+let g:CommandTMaxHeight=10
+let g:CommandTMatchWindowAtTop=0
+let g:NERDCreateDefaultMappings = 0 
+let g:NERDSpaceDelims = 1           
+let g:Gitv_WipeAllOnClose = 1
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 
-let g:Gitv_WipeAllOnClose = 1
-
-"use local vimrc if available
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
