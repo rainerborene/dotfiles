@@ -35,11 +35,11 @@ NO_COLOR='\[\e[0m\]'
 EBLACK='\[\e[1;30m\]'
 GREEN='\[\033[0;32m\]'
 
-function prompt_compact() {
+prompt_compact() {
   export PS1="λ \w${GREEN}\$(__git_ps1 ' %s')${NO_COLOR} "
 }
 
-function prompt_expanded() {
+prompt_expanded() {
   export PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR} \n→ "
 }
 

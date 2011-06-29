@@ -142,6 +142,12 @@ map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 "map to CommandT TextMate style finder
 nnoremap <leader>t :CommandT<CR>
 
+"gundo
+map <Leader>u :GundoToggle<CR>
+
+"nerdtree
+silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
+
 "Command-T configuration
 let g:CommandTMaxHeight=10
 let g:CommandTMatchWindowAtTop=1
