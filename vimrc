@@ -27,6 +27,7 @@ set showmode                        " show current mode down the bottom
 set wildmenu                        " turn on wild menu
 set wildmode=list:longest           " make cmdline tab completion similar to bash
 set wildignore+=.git,*.pyc,*~       " stuff to ignore when searching and tab completing
+set wildignore+=*.png,*.gif,*.jpg   " normal people don't edit images using a text editor
 set t_Co=256                        " tell the term has 256 colors
 set number 
 set numberwidth=5
