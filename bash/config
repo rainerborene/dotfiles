@@ -34,13 +34,14 @@ export CLICOLOR="auto"
 NO_COLOR='\[\e[0m\]'
 EBLACK='\[\e[1;30m\]'
 GREEN='\[\033[0;32m\]'
+RED='\[\033[0;31m\]'
 
 prompt_compact() {
   export PS1="λ \w${GREEN}\$(__git_ps1 ' %s')${NO_COLOR} "
 }
 
 prompt_expanded() {
-  export PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR} \n→ "
+  export PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR} ${RED}\$($HOME/.rvm/bin/rvm-prompt i v)${NO_COLOR}\n→ "
 }
 
 if [ "$UNAME" == "Darwin" ]; then
