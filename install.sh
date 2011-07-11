@@ -31,6 +31,7 @@ install() {
 
   # Global gitignore
   git config --global core.excludesfile ~/.dotfiles/.gitignore
+  git config --global color.ui always
 
   # Create symbolic links
   for name in $(ls ~/.dotfiles); do

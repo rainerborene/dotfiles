@@ -40,6 +40,7 @@ if has("gui_running")
   set guioptions-=r                 " turn off right scroll bar
   set guioptions-=L                 " turn off left scroll bar
   set lines=999 columns=999 
+  colorscheme ir_black
 
   if has("mac")
     set guifont=Monaco:h14
@@ -191,9 +192,9 @@ map <silent> <Leader>n :NERDTreeToggle<CR>
 
 let g:CommandTMaxHeight=10
 let g:CommandTMatchWindowAtTop=0
-let g:NERDCreateDefaultMappings = 0 
-let g:NERDSpaceDelims = 1           
-let g:Gitv_WipeAllOnClose = 1
+let g:NERDCreateDefaultMappings=0
+let g:NERDSpaceDelims=1
+let g:Gitv_WipeAllOnClose=1
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 
 if filereadable(expand("~/.vimrc.local"))
