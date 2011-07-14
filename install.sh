@@ -6,7 +6,7 @@
 # Thanks to all folks on GitHub for sharing their dotfiles.
 #
 
-DOTIGNORE="README.md install.sh bash"
+DOTIGNORE="README.md install.sh bash bin"
 
 #
 # Git must be installed on your machine.
