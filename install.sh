@@ -31,7 +31,6 @@ install() {
 
   # Global gitignore
   git config --global core.excludesfile ~/.dotfiles/.gitignore
-  git config --global color.ui always
 
   # Create symbolic links
   for name in $(ls ~/.dotfiles); do
@@ -73,6 +72,9 @@ update() {
 
   read -p "Submodules was successfully updated. Are you sure you want to continue [y/n]? " ANSWER
   [[ $ANSWER == "n" || $ANSWER == "N" ]] && exit
+
+  cd ~/.dotfiles/bin
+  curl $github/rupa/z/master/z.sh -Os
 
   cd ~/.dotfiles/vim/colors
   curl $github/nelstrom/vim-blackboard/master/colors/blackboard.vim -Os
