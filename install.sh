@@ -99,8 +99,10 @@ dependencies() {
   if ! type -p ack &> /dev/null; then
     # See http://petdance.com/ack/ for more information.
     echo "*** Installing ack..."
-    sudo curl --url http://betterthangrep.com/ack-standalone -s -o /usr/local/bin/ack 
-    sudo chmod 0755 /usr/local/bin/ack
+
+    curl --url http://betterthangrep.com/ack-standalone -s -o /tmp/ack \
+      && chmod 0755 /tmp/ack \
+      && sudo mv /tmp/ack /usr/local/bin/ack
   fi
 
   echo "*** Installing gems..."
