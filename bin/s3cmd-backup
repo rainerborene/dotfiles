@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+
+S3CMD_BACKUP=$HOME/.backups
+TIMESTAMP=$(date "+%Y-%m-%d")
+UNAME=$(uname)
+
+#
+# Common functions.
+#
+
+err_exit() {
+  echo "Error: $1" 
+  exit 1
+}
+
+require() {
+  which $1 > /dev/null || err_exit "$0 requires '$1'"
+}
+
+#
+# Usage information.
+#
+
+usage() {
+  cat <<-EOF
+
+  Usage: s3cmd-backup [options]
+  
+  Options:
+
+  -u, --username <username>     mysql user name to use when connection to the server
+  -p, --password <password>     mysql user password to use when connection to the server
+  -d, --database <database>     selected database name to dump (considering all tables)
+  -a, --assets <directory>      absolute path to the assets directory
+  -b, --bucket <bucket>         amazon s3 bucket name
+  -h, --help                    output help information
+
+  Notes:
+  
+  ○ Be sure you have installed and configured s3cmd before running this fancy script.
+  ○ Never forget to use 'hardlink -u' or 'umount' to unlink the assets directory.
+
+  Hope you liked, $USER!
+
+EOF
+}
+
+dump() {
+  require mysqldump
+  local credentials="-u $USERNAME"
+  [[ -n $PASSWORD ]] && credentials="$credentials -p$PASSWORD"
+  mysqldump $credentials $DATABASE > $S3CMD_BACKUP/$BUCKET/$BUCKET.sql || exit 1
+}
+
+commit() {
+  cd $S3CMD_BACKUP/$BUCKET
+  git add .
+  git commit -a -m "Daily update executed on $TIMESTAMP"
+}
+
+sync() {
+  require s3cmd
+  s3cmd -v --no-preserve sync $S3CMD_BACKUP/$BUCKET/.git s3://$BUCKET
+}
+
+run() {
+  local target=$S3CMD_BACKUP/$BUCKET
+  local log=$S3CMD_BACKUP/logs/$BUCKET-$TIMESTAMP.log
+
+  if [ ! -d $target ]; then
+    mkdir -p $target
+
+    # Creates an empty git repository
+    git init $target >> $log 2>&1
+
+    # Git doesn't follow symlinks
+    if [ -n $ASSETS ]; then
+      case $UNAME in
+        Darwin) hardlink $ASSETS $target/assets > /dev/null 2>&1 ;; 
+        Linux) mkdir -p $target/assets && mount --bind $ASSETS $target/assets ;;
+      esac
+    fi
+  fi
+  
+  echo "-----> Dumping database, and uploading assets to Amazon S3."
+  (dump && commit && sync) >> $log 2>&1
+  echo "Go to http://console.aws.amazon.com/s3 and make sure everything is okay."
+}
+
+# parse arguments
+while test $# -ne 0; do
+  arg=$1; shift
+  case $arg in
+    -h|--help) usage; exit ;;
+    -u|--username) USERNAME=$1; shift ;;
+    -p|--password) PASSWORD=$1; shift ;;
+    -d|--database) DATABASE=$1; shift ;;
+    -a|--assets) ASSETS=$1; shift ;;
+    -b|--bucket) BUCKET=$1; shift ;;
+  esac
+done
+
+# arguments validation
+[[ -n "$USERNAME" ]] || err_exit "mysql username required"
+[[ -n "$DATABASE" ]] || err_exit "mysql database required"
+[[ -n "$BUCKET" ]] || err_exit "amazon bucket name required"
+
+# create logs directory
+mkdir -p $S3CMD_BACKUP/logs
+
+# run!
+run
