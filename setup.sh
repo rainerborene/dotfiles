@@ -58,6 +58,27 @@ install() {
 }
 
 #
+# Probably used when I quit a job or from preventing lammers to use it.
+#
+
+uninstall() {
+  echo "*** Hahaha, classic!"
+
+  for name in $(ls ~/.dotfiles); do
+    if [ -z "$(echo $DOTIGNORE | grep $name)" ]; then
+      rm -Rf ~/.$name
+    fi
+  done
+
+  type -p fortune &> /dev/null && {
+    echo ""
+    fortune
+  }
+
+  rm -Rf ~/.dotfiles
+}
+
+#
 # Update themes and other files.
 #
 
@@ -115,5 +136,6 @@ dependencies() {
 case $1 in
   update) update; exit ;;
   dependencies) dependencies; exit ;;
+  uninstall) unistall; exit ;;
   install|*) install; exit ;;
 esac
