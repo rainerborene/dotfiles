@@ -136,6 +136,6 @@ dependencies() {
 case $1 in
   update) update; exit ;;
   dependencies) dependencies; exit ;;
-  uninstall) unistall; exit ;;
+  uninstall) uninstall; exit ;;
   install|*) install; exit ;;
 esac
