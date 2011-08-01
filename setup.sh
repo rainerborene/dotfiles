@@ -65,17 +65,12 @@ uninstall() {
   echo "*** Hahaha, classic!"
 
   for name in $(ls ~/.dotfiles); do
-    if [ -z "$(echo $DOTIGNORE | grep $name)" ]; then
-      rm -Rf ~/.$name
-    fi
+    [[ -z "$(echo $DOTIGNORE | grep $name)" ]] && rm -Rf ~/.$name
   done
 
-  type -p fortune &> /dev/null && {
-    echo ""
-    fortune
-  }
+  cd ~ && rm -Rf ~/.dotfiles
 
-  rm -Rf ~/.dotfiles
+  type -p fortune &> /dev/null && echo "" && fortune
 }
 
 #
