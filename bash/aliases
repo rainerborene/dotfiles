@@ -24,9 +24,10 @@ alias gc='git commit -v'
 alias gcm='git commit -m'
 alias gd='git diff --color'
 alias gdc='git diff --cached --color'
-alias gl='git log --oneline --color'
+alias gl='git log --oneline --color --abbrev-commit --max-count=15'
 alias gp='git push'
 alias gu='git pull'
+alias gt='git tag'
 alias gsm='git submodule'
 
 # commit pending changes and quote all args as message
@@ -54,7 +55,7 @@ alias gemu='gem uninstall'
 
 # linux specific aliases
 if [ "$UNAME" == "Linux" ]; then
-  alias ls='ls --color'
+  alias ls='ls --color -h'
   alias lc='ls --color -1'
   alias ll='ls --color -laGh'
   alias pbcopy='xclip -selection clipboard'
@@ -64,6 +65,7 @@ fi
 
 # mac osx compatible aliases
 if [ "$UNAME" == "Darwin" ]; then
+  alias ls='ls -h'
   alias lc='ls -1'
   alias ll='ls -lhoGa'
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'

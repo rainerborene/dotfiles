@@ -1,3 +1,4 @@
 export UNAME=$(uname)
 export EDITOR=vim
+export LESS="-R"
 export PATH="$HOME/.dotfiles/bin:$PATH"

@@ -16,7 +16,7 @@ filetype plugin on
 filetype indent on
 
 " ---------------------------------------------------------------------------
-" UI
+" User Interface
 " ---------------------------------------------------------------------------
 
 syntax on                           " turn on syntax highlighting
@@ -43,7 +43,7 @@ if has("gui_running")
   colorscheme ir_black
 
   if has("mac")
-    set guifont=Monaco:h14
+    set guifont=Menlo:h14
   elseif has("unix")
     set guifont=bitstream\ vera\ sans\ mono\ 11
   endif
@@ -193,6 +193,7 @@ map <silent> <Leader>n :NERDTreeToggle<CR>
 let g:CommandTMaxHeight=10
 let g:CommandTMatchWindowAtTop=0
 let g:NERDCreateDefaultMappings=0
+let g:NERDTreeDirArrows=1
 let g:NERDSpaceDelims=1
 let g:Gitv_WipeAllOnClose=1
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
