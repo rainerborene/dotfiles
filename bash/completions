@@ -1,7 +1,10 @@
 source ~/.dotfiles/bash/bash_completion.d/git.bash
+source ~/.dotfiles/bash/bash_completion.d/git-flow.bash
 source ~/.dotfiles/bash/bash_completion.d/rake.bash
 source ~/.dotfiles/bash/bash_completion.d/django.bash
 source ~/.dotfiles/bash/bash_completion.d/rails.bash
+source ~/.dotfiles/bash/bash_completion.d/gem.bash
+source ~/.dotfiles/bash/bash_completion.d/brew.bash
 
 [[ -r $rvm_path/scripts/completion ]] && source $rvm_path/scripts/completion
 [[ -r /etc/bash_completion ]] && source /etc/bash_completion
