@@ -41,11 +41,12 @@ prompt_compact() {
 }
 
 prompt_expanded() {
-  export PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR} ${RED}\$($HOME/.rvm/bin/rvm-prompt i v)${NO_COLOR}\n→ "
+  PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR}"
+  PS1="$PS1 ${RED}\$($HOME/.rvm/bin/rvm-prompt i v 2> /dev/null)${NO_COLOR} \n→ "
+  export PS1
 }
 
-if [ "$UNAME" == "Darwin" ]; then
-  prompt_expanded
-else
-  prompt_compact
-fi
+case $UNAME in
+  Darwin) prompt_expanded ;;
+  Linux) prompt_compact ;;
+esac
