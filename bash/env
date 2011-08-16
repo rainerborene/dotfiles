@@ -1,4 +1,6 @@
 export UNAME=$(uname)
 export EDITOR=vim
 export LESS="-R"
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='1;33'
 export PATH="$HOME/.dotfiles/bin:$PATH"

@@ -69,7 +69,7 @@ set nofoldenable                    " dont fold by default
 set laststatus=2                    " always show status line
 set incsearch                       " find the next match as we type the search
 set hlsearch                        " highlight searches by default
-set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
+set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%=%-16(\ %l,%c-%v\ %)%P
 set scrolloff=3
 set sidescrolloff=7
 set sidescroll=1
@@ -159,11 +159,6 @@ imap jj <ESC>
 " key mapping for tab navigation
 nmap <Tab> gt
 nmap <S-Tab> gT
-
-" vimgrep navigation
-map <F3> :cnext<CR>
-map <F4> :cc<CR>
-map <F5> :cprev<CR>
 
 map \\ <Plug>NERDCommenterInvert
 

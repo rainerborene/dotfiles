@@ -1,5 +1,8 @@
 # vim:set ft=sh:
 
+# Don't check mail when opening terminal.
+unset MAILCHECK
+
 # set the TERM correctly for gnome terminal
 if [ "$COLORTERM" == "gnome-terminal" ]; then
   export TERM="gnome-256color"

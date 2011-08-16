@@ -104,6 +104,7 @@ update() {
   curl $github/tpope/vim-repeat/master/autoload/repeat.vim -Os
 
   cd ~/.dotfiles/bash/bash_completion.d
+  curl $github/revans/bash-it/master/completion/available/git_flow.completion.bash -s -o git-flow.bash
   curl $github/jweslley/rails_completion/master/rails.bash -Os
 }
 
