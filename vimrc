@@ -160,8 +160,6 @@ imap jj <ESC>
 nmap <Tab> gt
 nmap <S-Tab> gT
 
-map \\ <Plug>NERDCommenterInvert
-
 " clear search highlight
 nmap <silent> <leader>h :silent :nohlsearch<CR>
 
