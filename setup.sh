@@ -63,13 +63,10 @@ install() {
 
 uninstall() {
   echo "*** Hahaha, classic!"
-
   for name in $(ls ~/.dotfiles); do
     [[ -z "$(echo $DOTIGNORE | grep $name)" ]] && rm -Rf ~/.$name
   done
-
   cd ~ && rm -Rf ~/.dotfiles
-
   type -p fortune &> /dev/null && echo "" && fortune
 }
 
@@ -103,7 +100,7 @@ update() {
   curl $github/tpope/vim-pathogen/master/autoload/pathogen.vim -Os
   curl $github/tpope/vim-repeat/master/autoload/repeat.vim -Os
 
-  cd ~/.dotfiles/bash/bash_completion.d
+  cd ~/.dotfiles/bash/completions
   curl $github/revans/bash-it/master/completion/available/git_flow.completion.bash -s -o git-flow.bash
   curl $github/jweslley/rails_completion/master/rails.bash -Os
 }
