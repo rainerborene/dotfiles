@@ -102,6 +102,7 @@ autocmd FileType markdown setlocal wrap linebreak nolist
 autocmd FileType gitcommit setlocal spell
 autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
 
+autocmd BufNewFile,BufRead *.json set ft=javascript
 autocmd BufNewFile,BufRead Rakefile,Capfile,Gemfile,config.ru setfiletype ruby
 autocmd BufReadPost fugitive://* set bufhidden=delete
 autocmd BufWritePost .vimrc source $MYVIMRC
