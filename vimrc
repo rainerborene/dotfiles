@@ -101,6 +101,8 @@ autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
 autocmd FileType markdown setlocal wrap linebreak nolist 
 autocmd FileType gitcommit setlocal spell
 autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
+autocmd FileType java silent! compiler javac | setlocal makeprg=javac\ %
+autocmd FileType ruby silent! compiler ruby
 
 autocmd BufNewFile,BufRead *.json set ft=javascript
 autocmd BufNewFile,BufRead Rakefile,Capfile,Gemfile,config.ru setfiletype ruby
