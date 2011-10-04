@@ -1,0 +1,10 @@
+--follow
+--sort-files
+--smart-case
+--type-set=rb=.rb
+--type-set=erb=.erb
+--type-set=txt=.txt
+--type-set=haml=.haml
+--type-set=csv=.txt,.csv,.tsv
+--type-set=sass=.sass,.scss
+--ignore-dir=vendor/assets/javascripts/ckeditor
