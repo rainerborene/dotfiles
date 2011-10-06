@@ -39,15 +39,6 @@ EBLACK='\[\e[1;30m\]'
 GREEN='\[\033[0;32m\]'
 RED='\[\033[0;31m\]'
 
-prompt_compact() {
-  export PS1="λ \w${GREEN}\$(__git_ps1 ' %s')${NO_COLOR} "
-}
-
-prompt_expanded() {
-  export PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR} \n→ "
-}
-
-case $UNAME in
-  Darwin) prompt_expanded ;;
-  Linux) prompt_compact ;;
-esac
+PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR}"
+PS1="$PS1 ${RED}\$(rbenv local 2>/dev/null)${NO_COLOR} \n→ "  
+export PS1
