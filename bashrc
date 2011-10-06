@@ -6,8 +6,8 @@ source ~/.dotfiles/bash/completion
 # load functions
 source ~/.dotfiles/bash/functions/z.sh
 
-# this loads rvm into a shell session.
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# enable rbenv shims and autocompletion
+eval "$(rbenv init -)"
 
 # use .localrc for settings specific to one system
 [[ -f ~/.localrc ]] && source ~/.localrc

@@ -6,5 +6,4 @@ source ~/.dotfiles/bash/completions/rails.bash
 source ~/.dotfiles/bash/completions/gem.bash
 source ~/.dotfiles/bash/completions/brew.bash
 
-[[ -r $rvm_path/scripts/completion ]] && source $rvm_path/scripts/completion
 [[ -r /etc/bash_completion ]] && source /etc/bash_completion

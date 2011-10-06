@@ -44,9 +44,7 @@ prompt_compact() {
 }
 
 prompt_expanded() {
-  PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR}"
-  PS1="$PS1 ${RED}\$($HOME/.rvm/bin/rvm-prompt i v 2> /dev/null)${NO_COLOR} \n→ "
-  export PS1
+  export PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR} \n→ "
 }
 
 case $UNAME in
