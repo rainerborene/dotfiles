@@ -9,6 +9,6 @@ home directory. After some time you might want to keep updated with the main
 repository, you could run the following command inside the dotfiles directory
 to sync:
 
-    $ git pull origin master
+    $ git pull origin master 
 
 Have fun.

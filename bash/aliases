@@ -1,18 +1,18 @@
 # vim:set ft=sh:
 
-# dir aliases
+# dir navigation
 alias cdd='cd -'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
-# basic commands
+# general
 alias c='clear'
-alias tlf='tail -f'
 alias fn='find . -name'
 alias hi='history | tail -20'
 alias pp='python -mjson.tool'
+alias tailf='tail -f'
 
 # git
 alias g='git'
@@ -26,7 +26,7 @@ alias gc='git commit -v'
 alias gcm='git commit -m'
 alias gd='git diff --color'
 alias gdc='git diff --cached --color'
-alias gl='git log --oneline --color --abbrev-commit --max-count=15 --decorate'
+alias gl='git log --oneline --color --max-count=15 --decorate'
 alias gup='git fetch && git rebase'
 alias gp='git push'
 alias gu='git pull'
@@ -39,7 +39,6 @@ gg() {
 }
 
 # ruby on rails
-alias r='rake'
 alias rs='rails s'
 alias rc='rails c'
 alias rtu='rake test:units'
@@ -50,6 +49,16 @@ alias rdbs='rake db:migrate:status'
 alias b='bundle'
 alias be='bundle exec'
 alias rst='touch tmp/restart.txt'
+
+# run rake without worring about
+# bundler wrapper.
+rake() {
+  if [ -e Gemfile ]; then
+    bundle exec rake $@
+  else
+    `which rake` $@
+  fi
+}
 
 # rubygems
 alias gems='gem search -b'

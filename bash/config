@@ -3,42 +3,98 @@
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
-# set the TERM correctly for gnome terminal
-if [ "$COLORTERM" == "gnome-terminal" ]; then
-  export TERM="gnome-256color"
-fi
-
 # notify of bg job completion immediately
 set -o notify
-
-# history stuff
-export IGNOREEOF=1
-export HISTCONTROL=erasedups
-export HISTIGNORE="&:ls:bf[g]:exit"
-export HISTSIZE=10000
-export PROMPT_COMMAND="history -a"
 
 # shell options
 shopt -s autocd >/dev/null 2>&1
 shopt -s cdspell >/dev/null 2>&1
+shopt -s dotglob >/dev/null 2>&1 
 shopt -s extglob >/dev/null 2>&1
 shopt -s histappend >/dev/null 2>&1
 shopt -s hostcomplete >/dev/null 2>&1
 shopt -s no_empty_cmd_completion >/dev/null 2>&1
+shopt -s progcomp >/dev/null 2>&1
 
 # default umask
 umask 0022
 
-# color options
-export GREP_OPTIONS="--color=auto"
-export CLICOLOR="auto"
+# fnando's prompt with few adjusments
+custom_prompt () {
+  history -a
+  history -c
+  history -r
 
-# prompt
-NO_COLOR='\[\e[0m\]'
-EBLACK='\[\e[1;30m\]'
-GREEN='\[\033[0;32m\]'
-RED='\[\033[0;31m\]'
+  local BRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
 
-PS1="\n\u:\w ${GREEN}\$(__git_ps1 '[%s]')${NO_COLOR}"
-PS1="$PS1 ${RED}\$(rbenv local 2>/dev/null)${NO_COLOR} \n→ "  
-export PS1
+  if [[ "$BRANCH" = "" ]]; then
+    BRANCH=`git status 2> /dev/null | grep "On branch" | sed 's/# On branch //'`
+  fi
+
+  local RUBY_VERSION=`ruby -e "puts RUBY_VERSION"`
+
+  if [ -f Gemfile.lock ]; then
+    local RAILS_VERSION=`cat Gemfile.lock | grep -E " +rails \([0-9]+" | sed 's/ *rails (\(.*\))/\1/'`
+  fi
+
+  local RUBY_PROMPT=""
+  local STATUS=`git status 2>/dev/null`
+  local PROMPT_COLOR=$GREEN
+  local STATE=" "
+  local NOTHING_TO_COMMIT="# Initial commit"
+  local BEHIND="# Your branch is behind"
+  local AHEAD="# Your branch is ahead"
+  local UNTRACKED="# Untracked files"
+  local DIVERGED="have diverged"
+  local CHANGED="# Changed but not updated"
+  local TO_BE_COMMITED="# Changes to be committed"
+  local CHANGES_NOT_STAGED="# Changes not staged for commit"
+  local LOG=`git log -1 2> /dev/null`
+
+  if [[ "$RAILS_VERSION" ]]; then
+    local RAILS_PROMPT="${RAILS_VERSION}#"
+  fi
+
+  RUBY_PROMPT="${GRAY}[${RAILS_PROMPT}${RUBY_VERSION}]${NO_COLOR} "
+
+  if [ "$STATUS" != "" ]; then
+    if [[ "$STATUS" =~ "$CHANGES_NOT_STAGED" ]]; then
+      PROMPT_COLOR=$RED
+      STATE=""
+    elif [[ "$STATUS" =~ "$NOTHING_TO_COMMIT" ]]; then
+      PROMPT_COLOR=$RED
+      STATE=""
+    elif [[ "$STATUS" =~ "$DIVERGED" ]]; then
+      PROMPT_COLOR=$RED
+      STATE="${STATE}${RED}↕${NO_COLOR}"
+    elif [[ "$STATUS" =~ "$BEHIND" ]]; then
+      PROMPT_COLOR=$RED
+      STATE="${STATE}${RED}↓${NO_COLOR}"
+    elif [[ "$STATUS" =~ "$AHEAD" ]]; then
+      PROMPT_COLOR=$RED
+      STATE="${STATE}${RED}↑${NO_COLOR}"
+    elif [[ "$STATUS" =~ "$CHANGED" ]]; then
+      PROMPT_COLOR=$RED
+      STATE=""
+    elif [[ "$STATUS" =~ "$TO_BE_COMMITED" ]]; then
+      PROMPT_COLOR=$RED
+      STATE=""
+    else
+      PROMPT_COLOR=$GREEN
+      STATE=""
+    fi
+
+    if [[ "$STATUS" =~ "$UNTRACKED" ]]; then
+      STATE="${STATE}${YELLOW}*${NO_COLOR}"
+    fi
+
+    PS1="\n${RUBY_PROMPT}${YELLOW}\w${NO_COLOR} ${PROMPT_COLOR}[${BRANCH}]${NO_COLOR}${STATE}${NO_COLOR}\n\$ "
+  else
+    PS1="\n${RUBY_PROMPT}${YELLOW}\w${NO_COLOR}\n\$ "
+  fi
+
+  # for debugging purpose
+  PS4='+${BASH_SOURCE}:${LINENO}:${FUNCNAME[0]-}: '
+}
+
+PROMPT_COMMAND=custom_prompt

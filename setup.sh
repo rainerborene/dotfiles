@@ -58,7 +58,7 @@ install() {
 }
 
 #
-# Probably used when I quit a job or from preventing lammers to use it.
+# Remove dot files directory and config files.
 #
 
 uninstall() {
@@ -67,7 +67,7 @@ uninstall() {
     [[ -z "$(echo $DOTIGNORE | grep $name)" ]] && rm -Rf ~/.$name
   done
   cd ~ && rm -Rf ~/.dotfiles
-  type -p fortune &> /dev/null && echo "" && fortune
+  type -p fortune &> /dev/null && echo "\n$(fortune)"
 }
 
 #
@@ -90,7 +90,6 @@ update() {
   curl $github/rupa/z/master/z.sh -Os
 
   cd ~/.dotfiles/vim/colors
-  curl $github/nelstrom/vim-blackboard/master/colors/blackboard.vim -Os
   curl $github/nelstrom/vim-mac-classic-theme/master/colors/mac_classic.vim -Os
   curl $github/tpope/vim-vividchalk/master/colors/vividchalk.vim -Os
   curl $github/joshuaclayton/dotfiles/master/vim/colors/customgithub.vim -Os
