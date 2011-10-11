@@ -7,4 +7,7 @@
 --type-set=haml=.haml
 --type-set=csv=.txt,.csv,.tsv
 --type-set=sass=.sass,.scss
+--type-set=coffeescript=.coffee
 --ignore-dir=vendor/assets/javascripts/ckeditor
+--ignore-dir=node_modules
+--ignore-dir=.bundle
