@@ -105,7 +105,7 @@ autocmd FileType java silent! compiler javac | setlocal makeprg=javac\ %
 autocmd FileType ruby silent! compiler ruby
 
 autocmd BufNewFile,BufRead *.json set ft=javascript
-autocmd BufNewFile,BufRead Rakefile,Capfile,Gemfile,config.ru setfiletype ruby
+autocmd BufNewFile,BufRead {Rakefile,Guardfile,Capfile,Thorfile,Gemfile,config.ru} setfiletype ruby
 autocmd BufReadPost fugitive://* set bufhidden=delete
 autocmd BufWritePost .vimrc source $MYVIMRC
 
@@ -186,7 +186,7 @@ map <silent> <Leader>n :NERDTreeToggle<CR>
 " Global Variables
 " ---------------------------------------------------------------------------
 
-let g:CommandTMaxHeight=10
+let g:CommandTMaxHeight=20
 let g:CommandTMatchWindowAtTop=0
 let g:NERDCreateDefaultMappings=0
 let g:NERDTreeDirArrows=1
