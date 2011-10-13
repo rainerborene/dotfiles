@@ -31,8 +31,7 @@ set t_Co=256                        " tell the term has 256 colors
 set number 
 set numberwidth=5
 set showbreak=...
-set background=dark 
-colorscheme tir_black
+set background=dark
 
 if has("gui_running")
   set guioptions-=T                 " don't show toolbar in the GUI
@@ -42,11 +41,13 @@ if has("gui_running")
   colorscheme ir_black
 
   if has("mac")
-    set guifont=Menlo:h14
+    set guifont=Menlo:h12
   elseif has("unix")
     set guifont=bitstream\ vera\ sans\ mono\ 11
   endif
-endif
+else
+  colorscheme tir_black
+end
 
 " ---------------------------------------------------------------------------
 " Backups
