@@ -76,3 +76,6 @@
 [submodule "vim/bundle/rooter"]
 	path = vim/bundle/rooter
 	url = git://github.com/airblade/vim-rooter.git
+[submodule "vim/bundle/vimroom"]
+	path = vim/bundle/vimroom
+	url = git://github.com/mikewest/vimroom.git
