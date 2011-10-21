@@ -89,7 +89,12 @@ set nosmarttab
 set textwidth=79 
 set formatoptions=qrn1
 set linespace=4
+set nojoinspaces
 set wrap linebreak nolist
+
+if executable("par")
+  set formatprg=par\ -w80
+endif
 
 " ---------------------------------------------------------------------------
 " Auto Commands
@@ -104,7 +109,8 @@ autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call setline(
 autocmd FileType java silent! compiler javac | setlocal makeprg=javac\ %
 autocmd FileType ruby silent! compiler ruby
 
-autocmd BufNewFile,BufRead *.json set ft=javascript
+autocmd BufNewFile,BufRead *.rss setfiletype xml
+autocmd BufNewFile,BufRead *.json setfiletype javascript
 autocmd BufNewFile,BufRead {Rakefile,Guardfile,Capfile,Thorfile,Gemfile,config.ru} setfiletype ruby
 autocmd BufReadPost fugitive://* set bufhidden=delete
 autocmd BufWritePost .vimrc source $MYVIMRC
