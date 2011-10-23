@@ -13,6 +13,13 @@ alias fn='find . -name'
 alias hi='history | tail -20'
 alias pp='python -mjson.tool'
 alias tailf='tail -f'
+alias lsd='ls -l | grep "^d"'
+alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
+
+# Create a new directory and enter it
+md() {
+  mkdir -p "$@" && cd "$@"
+}
 
 # git
 alias g='git'

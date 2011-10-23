@@ -8,6 +8,8 @@ set history=1000    " store lots of :cmdline history
 set autoread        " reload files (local changes only)
 set hidden          " hide buffers when not displayed
 set spelllang=pt,en " spell checking languages
+set encoding=utf-8  " default encoding
+set nobomb
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -16,7 +18,7 @@ filetype plugin on
 filetype indent on
 
 " ---------------------------------------------------------------------------
-" User Interface
+" UI
 " ---------------------------------------------------------------------------
 
 syntax on                           " turn on syntax highlighting
@@ -28,7 +30,7 @@ set wildmenu                        " turn on wild menu
 set wildmode=list:longest           " make cmdline tab completion similar to bash
 set wildignore+=.git,*.pyc,*~       " stuff to ignore when searching and tab completing
 set t_Co=256                        " tell the term has 256 colors
-set number 
+set number
 set numberwidth=5
 set showbreak=...
 set background=dark
@@ -37,7 +39,7 @@ if has("gui_running")
   set guioptions-=T                 " don't show toolbar in the GUI
   set guioptions-=r                 " turn off right scroll bar
   set guioptions-=L                 " turn off left scroll bar
-  set lines=999 columns=999 
+  set lines=999 columns=999
   colorscheme ir_black
 
   if has("mac")
@@ -69,6 +71,7 @@ set nofoldenable                    " dont fold by default
 set laststatus=2                    " always show status line
 set incsearch                       " find the next match as we type the search
 set hlsearch                        " highlight searches by default
+set nostartofline                   " don't reset cursor to start of line when moving around
 set scrolloff=3
 set sidescrolloff=7
 set sidescroll=1
@@ -86,7 +89,7 @@ set shiftwidth=2
 set softtabstop=2
 set expandtab
 set nosmarttab
-set textwidth=79 
+set textwidth=80
 set formatoptions=qrn1
 set linespace=4
 set nojoinspaces
@@ -103,9 +106,9 @@ endif
 autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType php,apache,sql setlocal ts=4 sts=4 sw=4 noexpandtab
 autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
-autocmd FileType markdown setlocal wrap linebreak nolist 
+autocmd FileType markdown setlocal wrap linebreak nolist
 autocmd FileType gitcommit setlocal spell
-autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
+autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()<CR>
 autocmd FileType java silent! compiler javac | setlocal makeprg=javac\ %
 autocmd FileType ruby silent! compiler ruby
 
@@ -135,7 +138,7 @@ nmap <leader>md :%!Markdown.pl --html4tags <cr>
 map Q gqj
 
 " make Y consistent with C and D
-nnoremap Y y$ 
+nnoremap Y y$
 
 " speed up buffer switching
 map <C-k> <C-W>k
@@ -187,6 +190,17 @@ nnoremap <leader>t :CommandT<CR>
 " some toggle commands
 map <Leader>u :GundoToggle<CR>
 map <silent> <Leader>n :NERDTreeToggle<CR>
+
+" strip trailing whitespace
+function! StripWhitespace()
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  :%s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
+endfunction
+
+noremap <leader>ss :call StripWhitespace()<CR>
 
 " ---------------------------------------------------------------------------
 " Global Variables
