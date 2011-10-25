@@ -30,6 +30,7 @@ set wildmenu                        " turn on wild menu
 set wildmode=list:longest           " make cmdline tab completion similar to bash
 set wildignore+=.git,*.pyc,*~       " stuff to ignore when searching and tab completing
 set t_Co=256                        " tell the term has 256 colors
+set title                           " show the filename in the window titlebar
 set number
 set numberwidth=5
 set showbreak=...
@@ -179,7 +180,7 @@ nmap <silent> <leader>h :silent :nohlsearch<CR>
 map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar>buffers<Bar>endif<CR>
 
 " ack searching
-map <Leader>a <Esc>:Ack
+map <Leader>a <Esc>:Ack <cword><CR>
 
 " open directory dirname of current file
 map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
@@ -206,7 +207,7 @@ noremap <leader>ss :call StripWhitespace()<CR>
 " Global Variables
 " ---------------------------------------------------------------------------
 
-let g:CommandTMaxHeight=20
+let g:CommandTMaxHeight=10
 let g:CommandTMatchWindowAtTop=0
 let g:NERDCreateDefaultMappings=0
 let g:NERDTreeDirArrows=1
