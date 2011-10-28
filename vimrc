@@ -28,13 +28,17 @@ set showcmd                         " show incomplete cmds down the bottom
 set showmode                        " show current mode down the bottom
 set wildmenu                        " turn on wild menu
 set wildmode=list:longest           " make cmdline tab completion similar to bash
-set wildignore+=.git,*.pyc,*~       " stuff to ignore when searching and tab completing
+set wildignore+=*~,.git,*.pyc,tags  " stuff to ignore when searching and tab completing
 set t_Co=256                        " tell the term has 256 colors
 set title                           " show the filename in the window titlebar
 set number
 set numberwidth=5
 set showbreak=...
 set background=dark
+
+if has('mouse')
+  set mouse=a
+endif
 
 if has("gui_running")
   set guioptions-=T                 " don't show toolbar in the GUI
@@ -141,6 +145,9 @@ map Q gqj
 " make Y consistent with C and D
 nnoremap Y y$
 
+" for saving files that requires root privileges
+cmap w!! w !sudo tee % >/dev/null
+
 " speed up buffer switching
 map <C-k> <C-W>k
 map <C-j> <C-W>j
@@ -174,7 +181,7 @@ nmap <Tab> gt
 nmap <S-Tab> gT
 
 " clear search highlight
-nmap <silent> <leader>h :silent :nohlsearch<CR>
+nmap <silent> <leader>/ :silent :nohlsearch<CR>
 
 " map to bufexplorer
 map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar>buffers<Bar>endif<CR>
