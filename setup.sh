@@ -119,7 +119,7 @@ dependencies() {
   fi
 
   echo "*** Installing gems..."
-  sudo gem install -q wirble awesome_print
+  sudo gem install -q wirble awesome_print interactive_editor
 
   echo "*** Done"
 }

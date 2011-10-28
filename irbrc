@@ -2,7 +2,8 @@ require 'rubygems' unless defined? Gem # rubygems is only needed in 1.8
 
 begin
   require 'wirble' 
-  require 'ap'
+  require 'interactive_editor'
+  require 'awesome_print'
 
   # start wirble (with color)
   Wirble.init

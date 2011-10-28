@@ -123,6 +123,12 @@ autocmd BufNewFile,BufRead {Rakefile,Guardfile,Capfile,Thorfile,Gemfile,config.r
 autocmd BufReadPost fugitive://* set bufhidden=delete
 autocmd BufWritePost .vimrc source $MYVIMRC
 
+" Restore cursor position
+autocmd BufReadPost *
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif"
+
 " ---------------------------------------------------------------------------
 " Mappings
 " ---------------------------------------------------------------------------
