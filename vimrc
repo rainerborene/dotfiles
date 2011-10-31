@@ -205,6 +205,12 @@ nnoremap <leader>t :CommandT<CR>
 map <Leader>u :GundoToggle<CR>
 map <silent> <Leader>n :NERDTreeToggle<CR>
 
+" tabularize mappings
+nmap <Leader>a= :Tabularize /=<CR>
+vmap <Leader>a= :Tabularize /=<CR>
+nmap <Leader>a: :Tabularize /:\zs<CR>
+vmap <Leader>a: :Tabularize /:\zs<CR>
+
 " strip trailing whitespace
 function! StripWhitespace()
   let save_cursor = getpos(".")

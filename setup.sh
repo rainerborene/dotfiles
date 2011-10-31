@@ -86,13 +86,14 @@ update() {
   read -p "Submodules was successfully updated. Are you sure you want to continue [y/n]? " ANSWER
   [[ $ANSWER == "n" || $ANSWER == "N" ]] && exit
 
-  cd ~/.dotfiles/bin
+  cd ~/.dotfiles/bash/functions
   curl $github/rupa/z/master/z.sh -Os
 
   cd ~/.dotfiles/vim/colors
+  curl $github/oguzbilgic/sexy-railscasts-theme/master/colors/sexy-railscasts.vim -Os
   curl $github/nelstrom/vim-mac-classic-theme/master/colors/mac_classic.vim -Os
-  curl $github/tpope/vim-vividchalk/master/colors/vividchalk.vim -Os
   curl $github/joshuaclayton/dotfiles/master/vim/colors/customgithub.vim -Os
+  curl $github/tpope/vim-vividchalk/master/colors/vividchalk.vim -Os
   curl http://blog.toddwerth.com/entry_files/8/ir_black.vim -Os
 
   cd ~/.dotfiles/vim/autoload
