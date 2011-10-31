@@ -22,18 +22,20 @@ filetype indent on
 " ---------------------------------------------------------------------------
 
 syntax on                           " turn on syntax highlighting
+set t_Co=256                        " tell the term has 256 colors
+set title                           " show the filename in the window titlebar
 set cursorline                      " highlight current line
 set backspace=indent,eol,start      " allow backspacing over everything in insert mode
 set showcmd                         " show incomplete cmds down the bottom
 set showmode                        " show current mode down the bottom
 set wildmenu                        " turn on wild menu
 set wildmode=list:longest           " make cmdline tab completion similar to bash
-set wildignore+=*~,.git,*.pyc,tags  " stuff to ignore when searching and tab completing
-set t_Co=256                        " tell the term has 256 colors
-set title                           " show the filename in the window titlebar
+set wildignore+=*~,.git,*.pyc,tags
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
+set wildignore+=*.DS_Store?
 set number
 set numberwidth=5
-set showbreak=...
+set showbreak=↪
 set background=dark
 
 if has('mouse')
@@ -119,7 +121,7 @@ autocmd FileType ruby silent! compiler ruby
 
 autocmd BufNewFile,BufRead *.rss setfiletype xml
 autocmd BufNewFile,BufRead *.json setfiletype javascript
-autocmd BufNewFile,BufRead {Rakefile,Guardfile,Capfile,Thorfile,Gemfile,config.ru} setfiletype ruby
+autocmd BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,config.ru} setfiletype ruby
 autocmd BufReadPost fugitive://* set bufhidden=delete
 autocmd BufWritePost .vimrc source $MYVIMRC
 
@@ -210,6 +212,14 @@ nmap <Leader>a= :Tabularize /=<CR>
 vmap <Leader>a= :Tabularize /=<CR>
 nmap <Leader>a: :Tabularize /:\zs<CR>
 vmap <Leader>a: :Tabularize /:\zs<CR>
+
+" align text
+nnoremap <leader>Al :left<cr>
+nnoremap <leader>Ac :center<cr>
+nnoremap <leader>Ar :right<cr>
+vnoremap <leader>Al :left<cr>
+vnoremap <leader>Ac :center<cr>
+vnoremap <leader>Ar :right<cr>
 
 " strip trailing whitespace
 function! StripWhitespace()
