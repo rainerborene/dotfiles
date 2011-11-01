@@ -115,7 +115,7 @@ autocmd FileType php,apache,sql setlocal ts=4 sts=4 sw=4 noexpandtab
 autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
 autocmd FileType markdown setlocal wrap linebreak nolist
 autocmd FileType gitcommit setlocal spell
-autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()<CR>
+autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()
 autocmd FileType java silent! compiler javac | setlocal makeprg=javac\ %
 autocmd FileType ruby silent! compiler ruby
 
@@ -129,7 +129,7 @@ autocmd BufWritePost .vimrc source $MYVIMRC
 autocmd BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") |
   \   exe "normal! g`\"" |
-  \ endif"
+  \ endif
 
 " ---------------------------------------------------------------------------
 " Mappings
