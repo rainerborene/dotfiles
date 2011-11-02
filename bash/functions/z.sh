@@ -5,6 +5,7 @@
 # INSTALL:
 #   * optionally:
 #     set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
+#     set $_Z_DATA in .bashrc/.zshrc to change the datafile (default ~/.z).
 #   * put something like this in your .bashrc:
 #     . /path/to/z.sh
 #   * put something like this in your .zshrc:
@@ -24,7 +25,7 @@
 
 _z() {
 
- local datafile="$HOME/.z"
+ local datafile="${_Z_DATA:-$HOME/.z}"
 
  # bail out if we don't own ~/.z (we're another user but our ENV is still set)
  [ -f "$datafile" -a ! -O "$datafile" ] && return
@@ -77,11 +78,10 @@ _z() {
     if( system("test -d \"" $1 "\"") ) next
     if( nocase ) {
      for( i in fnd ) tolower($1) !~ tolower(fnd[i]) && $1 = ""
-     if( $1 ) print $1
     } else {
      for( i in fnd ) $1 !~ fnd[i] && $1 = ""
-     if( $1 ) print $1
     }
+    if( $1 ) print $1
    }
   ' "$datafile" 2>/dev/null
 
@@ -98,15 +98,16 @@ _z() {
   [ "$fnd" ] || local list=1
 
   # if we hit enter on a completion just go there
-  [ -d "$last" ] && cd "$last" && return
+  case "$last" in
+   # completions will always start with /
+   /*) [ -z "$list" -a -d "$last" ] && cd "$last" && return;;
+  esac
 
   # no file yet
   [ -f "$datafile" ] || return
 
-  local tempfile
-  tempfile="$(mktemp $datafile.XXXXXX)" || return
   local cd
-  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -v tmpfl="$tempfile" -F"|" '
+  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
    function frecent(rank, time) {
     dx = t-time
     if( dx < 3600 ) return rank*4
@@ -126,22 +127,19 @@ _z() {
      print toopen
     }
    }
-   function common(matches, fnd, nc) {
+   function common(matches) {
+    # shortest match
     for( i in matches ) {
      if( matches[i] && (!short || length(i) < length(short)) ) short = i
     }
     if( short == "/" ) return
-    for( i in matches ) if( matches[i] && i !~ short ) x = 1
-    if( x ) return
-    if( nc ) {
-     for( i in fnd ) if( tolower(short) !~ tolower(fnd[i]) ) x = 1
-    } else for( i in fnd ) if( short !~ fnd[i] ) x = 1
-    if( !x ) return short
+    # shortest match must be common to each match
+    for( i in matches ) if( matches[i] && i !~ short ) return
+    return short
    }
    BEGIN { split(q, a, " ") }
    {
     if( system("test -d \"" $1 "\"") ) next
-    print $0 >> tmpfl
     if( typ == "rank" ) {
      f = $2
     } else if( typ == "recent" ) {
@@ -162,33 +160,29 @@ _z() {
    }
    END {
     if( cx ) {
-     output(wcase, cx, common(wcase, a, 0))
-    } else if( ncx ) output(nocase, ncx, common(nocase, a, 1))
+     output(wcase, cx, common(wcase))
+    } else if( ncx ) output(nocase, ncx, common(nocase))
    }
   ' "$datafile")"
-  if [ $? -gt 0 ]; then
-   env rm -f "$tempfile"
-  else
-   env mv -f "$tempfile" "$datafile"
-   [ "$cd" ] && cd "$cd"
-  fi
+  [ $? -gt 0 ] && return
+  [ "$cd" ] && cd "$cd"
  fi
 }
 
 alias ${_Z_CMD:-z}='_z 2>&1'
 
 if complete &> /dev/null; then
-  # bash tab completion
-  complete -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
-  # populate directory list. avoid clobbering other PROMPT_COMMANDs.
-  echo $PROMPT_COMMAND | grep -q "_z --add"
-  [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
+ # bash tab completion
+ complete -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
+ # populate directory list. avoid clobbering other PROMPT_COMMANDs.
+ echo $PROMPT_COMMAND | grep -q "_z --add"
+ [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
 elif compctl &> /dev/null; then
-  # zsh tab completion
-  _z_zsh_tab_completion() {
-    local compl
-    read -l compl
-    reply=(${(f)"$(_z --complete "$compl")"})
-  }
-  compctl -U -K _z_zsh_tab_completion ${_Z_CMD:-z}
+ # zsh tab completion
+ _z_zsh_tab_completion() {
+  local compl
+  read -l compl
+  reply=(${(f)"$(_z --complete "$compl")"})
+ }
+ compctl -U -K _z_zsh_tab_completion _z
 fi

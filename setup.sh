@@ -92,7 +92,7 @@ update() {
   cd ~/.dotfiles/vim/colors
   curl $github/oguzbilgic/sexy-railscasts-theme/master/colors/sexy-railscasts.vim -Os
   curl $github/nelstrom/vim-mac-classic-theme/master/colors/mac_classic.vim -Os
-  curl $github/joshuaclayton/dotfiles/master/vim/colors/customgithub.vim -Os
+  curl $github/joshuaclayton/dotfiles/master/vim/colors/github.vim -Os
   curl $github/tpope/vim-vividchalk/master/colors/vividchalk.vim -Os
   curl http://blog.toddwerth.com/entry_files/8/ir_black.vim -Os
 
