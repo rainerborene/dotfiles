@@ -238,7 +238,6 @@ noremap <leader>ss :call StripWhitespace()<CR>
 " Global Variables
 " ---------------------------------------------------------------------------
 
-let NERDTreeIgnore=['\.vim$', '\~$']
 let g:CommandTMaxHeight=20
 let g:CommandTMatchWindowAtTop=1
 let g:NERDCreateDefaultMappings=0
