@@ -153,7 +153,7 @@ map Q gqj
 " make Y consistent with C and D
 nnoremap Y y$
 
-" for saving files that requires root privileges
+" save a file as root.
 cmap w!! w !sudo tee % >/dev/null
 
 " speed up buffer switching
@@ -202,10 +202,12 @@ map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
 " map to CommandT TextMate style finder
 nnoremap <leader>t :CommandT<CR>
+nnoremap <leader>T :CommandTFlush<CR>
 
 " some toggle commands
 map <Leader>u :GundoToggle<CR>
 map <silent> <Leader>n :NERDTreeToggle<CR>
+map <silent> <leader>N :NERDTreeFind<CR>
 
 " tabularize mappings
 nmap <Leader>a= :Tabularize /=<CR>
@@ -236,8 +238,9 @@ noremap <leader>ss :call StripWhitespace()<CR>
 " Global Variables
 " ---------------------------------------------------------------------------
 
-let g:CommandTMaxHeight=10
-let g:CommandTMatchWindowAtTop=0
+let NERDTreeIgnore=['\.vim$', '\~$']
+let g:CommandTMaxHeight=20
+let g:CommandTMatchWindowAtTop=1
 let g:NERDCreateDefaultMappings=0
 let g:NERDTreeDirArrows=1
 let g:NERDSpaceDelims=1
