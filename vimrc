@@ -36,6 +36,7 @@ set wildignore+=*.DS_Store?
 set number
 set numberwidth=5
 set showbreak=↪
+set pastetoggle=<F8>
 set background=dark
 
 if has('mouse')
@@ -43,9 +44,13 @@ if has('mouse')
 endif
 
 if has("gui_running")
-  set guioptions-=T                 " don't show toolbar in the GUI
-  set guioptions-=r                 " turn off right scroll bar
-  set guioptions-=L                 " turn off left scroll bar
+  " Remove all the UI cruft
+  set go-=T
+  set go-=l
+  set go-=L
+  set go-=r
+  set go-=R
+
   set lines=999 columns=999
   colorscheme ir_black
 
@@ -102,10 +107,6 @@ set linespace=4
 set nojoinspaces
 set wrap linebreak nolist
 
-if executable("par")
-  set formatprg=par\ -w80
-endif
-
 " ---------------------------------------------------------------------------
 " Auto Commands
 " ---------------------------------------------------------------------------
@@ -125,6 +126,9 @@ autocmd BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemf
 autocmd BufReadPost fugitive://* set bufhidden=delete
 autocmd BufWritePost .vimrc source $MYVIMRC
 
+" Resize splits when the window is resized
+autocmd VimResized * exe "normal! \<c-w>="
+
 " Restore cursor position
 autocmd BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") |
@@ -138,6 +142,10 @@ autocmd BufReadPost *
 " using another leader mapping
 let mapleader = ","
 
+" use sane regexes.
+nnoremap / /\v
+vnoremap / /\v
+
 " delete a buffer without closing the window
 nmap <leader>q <Plug>Kwbd
 
@@ -147,8 +155,8 @@ nmap <leader>hq <Plug>CloseHiddenBuffers
 " markdown to html
 nmap <leader>md :%!Markdown.pl --html4tags <cr>
 
-" don't use Ex mode; use Q for formatting
-map Q gqj
+" Formatting, TextMate-style
+nnoremap Q gqip
 
 " make Y consistent with C and D
 nnoremap Y y$
@@ -181,6 +189,16 @@ cab wQ wq
 cab WQ wq
 cab Q  q
 
+" Diffoff
+nnoremap <leader>D :diffoff!<cr>
+
+" calculator
+inoremap <C-B> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
+
+" emacs bindings in command line mode
+cnoremap <c-a> <home>
+cnoremap <c-e> <end>
+
 " because escape is too far away
 imap jj <ESC>
 
@@ -194,9 +212,6 @@ nmap <silent> <leader>/ :silent :nohlsearch<CR>
 " map to bufexplorer
 map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar>buffers<Bar>endif<CR>
 
-" ack searching
-map <Leader>a <Esc>:Ack <cword><CR>
-
 " open directory dirname of current file
 map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
@@ -209,11 +224,8 @@ map <Leader>u :GundoToggle<CR>
 map <silent> <Leader>n :NERDTreeToggle<CR>
 map <silent> <leader>N :NERDTreeFind<CR>
 
-" tabularize mappings
-nmap <Leader>a= :Tabularize /=<CR>
-vmap <Leader>a= :Tabularize /=<CR>
-nmap <Leader>a: :Tabularize /:\zs<CR>
-vmap <Leader>a: :Tabularize /:\zs<CR>
+" ack searching
+map <leader>a :Ack! 
 
 " align text
 nnoremap <leader>Al :left<cr>
@@ -222,6 +234,17 @@ nnoremap <leader>Ar :right<cr>
 vnoremap <leader>Al :left<cr>
 vnoremap <leader>Ac :center<cr>
 vnoremap <leader>Ar :right<cr>
+
+" fugitive
+nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gw :Gwrite<cr>
+nnoremap <leader>ga :Gadd<cr>
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gco :Gcheckout<cr>
+nnoremap <leader>gci :Gcommit<cr>
+nnoremap <leader>gm :Gmove<cr>
+nnoremap <leader>gr :Gremove<cr>
 
 " strip trailing whitespace
 function! StripWhitespace()
@@ -240,6 +263,8 @@ noremap <leader>ss :call StripWhitespace()<CR>
 
 let g:CommandTMaxHeight=20
 let g:CommandTMatchWindowAtTop=1
+let g:NERDTreeHighlightCursorline=1
+let g:NERDTreeMinimalUI = 1
 let g:NERDCreateDefaultMappings=0
 let g:NERDTreeDirArrows=1
 let g:NERDSpaceDelims=1
