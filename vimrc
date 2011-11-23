@@ -264,7 +264,7 @@ noremap <leader>ss :call StripWhitespace()<CR>
 let g:CommandTMaxHeight=20
 let g:CommandTMatchWindowAtTop=1
 let g:NERDTreeHighlightCursorline=1
-let g:NERDTreeMinimalUI = 1
+let g:NERDTreeMinimalUI=1
 let g:NERDCreateDefaultMappings=0
 let g:NERDTreeDirArrows=1
 let g:NERDSpaceDelims=1
