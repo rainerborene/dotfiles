@@ -5,6 +5,7 @@ source ~/.dotfiles/bash/completion
 
 # load functions
 source ~/.dotfiles/bash/functions/z.sh
+source ~/.dotfiles/bash/functions/tat.sh
 
 # enable rbenv shims and autocompletion
 eval "$(rbenv init -)"
