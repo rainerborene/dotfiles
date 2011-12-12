@@ -1,10 +1,10 @@
 Pry.config.editor = "vim"
 
 Pry.config.prompt = proc do |obj, level, _|
-  prompt = ""
+  prompt = "\e[1;30m"
   prompt << "#{Rails.version}@" if defined?(Rails)
   prompt << "#{RUBY_VERSION}"
-  "#{prompt} (#{obj})> "
+  "#{prompt} (#{obj})>\e[0m "
 end
 
 Pry.config.exception_handler = proc do |output, exception, _|
