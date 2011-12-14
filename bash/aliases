@@ -46,7 +46,7 @@ gg() {
 }
 
 # ruby on rails
-alias rs='rails s'
+alias rs='rails s thin'
 alias rc='rails c'
 alias rtu='rake test:units'
 alias rtf='rake test:functionals'

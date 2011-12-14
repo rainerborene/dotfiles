@@ -7,4 +7,4 @@ command! -nargs=0 RSschema :1RSdb/schema.rb
 command! -nargs=0 Rconfig :1R application.rb
 command! -nargs=0 RSconfig :1RS application.rb
 
-Rnavcommand sass public/stylesheets/sass -suffix=.sass
+Rnavcommand admin app/admin -suffix=.rb

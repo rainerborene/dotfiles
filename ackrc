@@ -8,6 +8,7 @@
 --type-set=rb=.rb
 --type-set=erb=.erb
 --type-set=haml=.haml
+--type-set=slim=.slim
 --ignore-dir=tmp
 --ignore-dir=vendor/assets/javascripts/ckeditor
 --ignore-dir=node_modules

@@ -88,3 +88,9 @@
 [submodule "vim/bundle/greplace"]
 	path = vim/bundle/greplace
 	url = git://github.com/vim-scripts/greplace.vim.git
+[submodule "vim/snippets"]
+	path = vim/snippets
+	url = git://github.com/akitaonrails/snipmate-snippets.git
+[submodule "vim/bundle/snipmate"]
+	path = vim/bundle/snipmate
+	url = git://github.com/akitaonrails/snipmate.vim.git
