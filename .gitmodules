@@ -85,9 +85,6 @@
 [submodule "vim/bundle/slim"]
 	path = vim/bundle/slim
 	url = https://github.com/bbommarito/vim-slim
-[submodule "vim/bundle/greplace"]
-	path = vim/bundle/greplace
-	url = git://github.com/vim-scripts/greplace.vim.git
 [submodule "vim/snippets"]
 	path = vim/snippets
 	url = git://github.com/akitaonrails/snipmate-snippets.git
