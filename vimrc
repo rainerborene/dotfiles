@@ -61,6 +61,12 @@ if has("gui_running")
   endif
 else
   colorscheme tir_black
+  
+  " default vimdiff color schemes are bad!
+  highlight DiffAdd cterm=none ctermfg=bg ctermbg=Green gui=none guifg=bg guibg=Green 
+  highlight DiffDelete cterm=none ctermfg=bg ctermbg=Red gui=none guifg=bg guibg=Red 
+  highlight DiffChange cterm=none ctermfg=bg ctermbg=Yellow gui=none guifg=bg guibg=Yellow 
+  highlight DiffText cterm=none ctermfg=bg ctermbg=Magenta gui=none guifg=bg guibg=Magenta 
 end
 
 " ---------------------------------------------------------------------------
@@ -160,6 +166,9 @@ nnoremap Q gqip
 
 " make Y consistent with C and D
 nnoremap Y y$
+
+" shortcuts for visual selections
+nmap gV `[v`]`
 
 " save a file as root.
 cmap w!! w !sudo tee % >/dev/null
