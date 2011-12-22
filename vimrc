@@ -57,7 +57,7 @@ if has("gui_running")
   if has("mac")
     set guifont=Menlo:h12
   elseif has("unix")
-    set guifont=bitstream\ vera\ sans\ mono\ 11
+    set guifont=bitstream\ vera\ sans\ mono\ 9
   endif
 else
   colorscheme tir_black
