@@ -7,4 +7,5 @@
 .rails_generators~
 vim/tmp
 vim/spell
+bin/brainwash
 Thumbs.db
