@@ -179,6 +179,11 @@ map <C-j> <C-W>j
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" omnicompletion
+inoremap <leader>, <C-x><C-o>
+inoremap <leader>: <C-x><C-f>
+inoremap <leader>= <C-x><C-l>
+
 " sane movement with wrap turned on
 nnoremap j gj
 nnoremap k gk
@@ -279,6 +284,7 @@ let g:NERDTreeDirArrows=1
 let g:NERDSpaceDelims=1
 let g:Gitv_WipeAllOnClose=1
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+let g:sparkupNextMapping = '<c-f>'
 
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
