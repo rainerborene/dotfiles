@@ -285,6 +285,7 @@ let g:NERDSpaceDelims=1
 let g:Gitv_WipeAllOnClose=1
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 let g:sparkupNextMapping = '<c-f>'
+let g:SuperTabDefaultCompletionType = "context"
 let g:slime_target = "tmux"
 
 if filereadable(expand("~/.vimrc.local"))
