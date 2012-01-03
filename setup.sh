@@ -6,7 +6,7 @@
 # Thanks to all folks on GitHub for sharing their dotfiles.
 #
 
-DOTIGNORE="README.md install.sh bash bin"
+DOTIGNORE="README.md install.sh bash bin sshconfig"
 
 #
 # Git must be installed on your machine.
@@ -48,6 +48,10 @@ install() {
 
   # Override bash_profile
   echo "[[ -f ~/.bashrc ]] && source ~/.bashrc" > ~/.bash_profile
+
+  # Copy sshconfig to ssh directory
+  mkdir -p ~/.ssh
+  ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
 
   # Compile command-t extension
   echo "*** Compiling extensions..."
