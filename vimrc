@@ -30,7 +30,7 @@ set showcmd                         " show incomplete cmds down the bottom
 set showmode                        " show current mode down the bottom
 set wildmenu                        " turn on wild menu
 set wildmode=list:longest           " make cmdline tab completion similar to bash
-set wildignore+=*~,.git,*.pyc,tags
+set wildignore+=*~,.git,*.pyc,*.o,tags
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.DS_Store?
 set number
@@ -284,9 +284,9 @@ let g:NERDTreeDirArrows=1
 let g:NERDSpaceDelims=1
 let g:Gitv_WipeAllOnClose=1
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
-let g:sparkupNextMapping = '<c-f>'
-let g:SuperTabDefaultCompletionType = "context"
-let g:slime_target = "tmux"
+let g:sparkupNextMapping='<c-f>'
+let g:SuperTabDefaultCompletionType="context"
+let g:slime_target="tmux"
 
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
