@@ -1,6 +1,3 @@
-[submodule "vim/bundle/command-t"]
-    path = vim/bundle/command-t
-    url = git://github.com/wincent/Command-T.git
 [submodule "vim/bundle/autoclose"]
     path = vim/bundle/autoclose
     url = git://github.com/Townk/vim-autoclose.git
@@ -91,3 +88,6 @@
 [submodule "vim/bundle/slime"]
 	path = vim/bundle/slime
 	url = git://github.com/jpalardy/vim-slime.git
+[submodule "vim/bundle/ctrlp"]
+	path = vim/bundle/ctrlp
+	url = git://github.com/kien/ctrlp.vim.git

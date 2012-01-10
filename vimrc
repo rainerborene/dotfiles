@@ -229,10 +229,6 @@ map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar
 " open directory dirname of current file
 map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
-" map to CommandT TextMate style finder
-nnoremap <leader>t :CommandT<CR>
-nnoremap <leader>T :CommandTFlush<CR>
-
 " some toggle commands
 map <Leader>u :GundoToggle<CR>
 map <silent> <Leader>n :NERDTreeToggle<CR>
@@ -275,8 +271,6 @@ noremap <leader>ss :call StripWhitespace()<CR>
 " Global Variables
 " ---------------------------------------------------------------------------
 
-let g:CommandTMaxHeight=20
-let g:CommandTMatchWindowAtTop=1
 let g:NERDTreeHighlightCursorline=1
 let g:NERDTreeMinimalUI=1
 let g:NERDCreateDefaultMappings=0
