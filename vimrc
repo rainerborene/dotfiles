@@ -223,11 +223,11 @@ nmap <S-Tab> gT
 " clear search highlight
 nmap <silent> <leader>/ :silent :nohlsearch<CR>
 
-" map to bufexplorer
-map <silent> <F11> :if exists(":BufExplorer")<Bar>exe "BufExplorer"<Bar>else<Bar>buffers<Bar>endif<CR>
-
 " open directory dirname of current file
 map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
+
+" open ctrlp in buffer mode
+map <Leader>b :CtrlPBuffer<CR>
 
 " some toggle commands
 map <Leader>u :GundoToggle<CR>
@@ -281,6 +281,7 @@ let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 let g:sparkupNextMapping='<c-f>'
 let g:SuperTabDefaultCompletionType="context"
 let g:slime_target="tmux"
+let g:ctrlp_working_path_mode=0
 
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
