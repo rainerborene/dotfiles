@@ -53,10 +53,6 @@ install() {
   mkdir -p ~/.ssh
   ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
 
-  # Compile command-t extension
-  echo "*** Compiling extensions..."
-  cd ~/.dotfiles/vim/bundle/command-t && rake make > /dev/null 2>&1
-
   # Done
   echo "*** Installed"
 }

@@ -227,6 +227,10 @@ nmap <silent> <leader>/ :silent :nohlsearch<CR>
 " open directory dirname of current file
 map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
+" quickly edit/reload the vimrc file
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
+
 " open ctrlp in buffer mode
 map <Leader>b :CtrlPBuffer<CR>
 
