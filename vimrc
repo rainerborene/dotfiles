@@ -38,6 +38,7 @@ set numberwidth=5
 set showbreak=↪
 set pastetoggle=<F8>
 set background=dark
+set lazyredraw
 
 if has('mouse')
   set mouse=a
@@ -255,6 +256,7 @@ nnoremap <leader>gco :Gcheckout<cr>
 nnoremap <leader>gci :Gcommit<cr>
 nnoremap <leader>gm :Gmove<cr>
 nnoremap <leader>gr :Gremove<cr>
+nnoremap <leader>gv :Gitv --all<cr>
 
 " strip trailing whitespace
 function! StripWhitespace()
@@ -277,6 +279,7 @@ let g:NERDCreateDefaultMappings=0
 let g:NERDTreeDirArrows=1
 let g:NERDSpaceDelims=1
 let g:Gitv_WipeAllOnClose=1
+let g:Gitv_OpenHorizontal=1
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 let g:sparkupNextMapping='<c-f>'
 let g:SuperTabDefaultCompletionType="context"
