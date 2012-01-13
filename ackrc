@@ -5,6 +5,7 @@
 --type-set=csv=.txt,.csv,.tsv
 --type-set=sass=.sass,.scss
 --type-set=coffeescript=.coffee
+--type-set=snippet=.snippet
 --type-set=rb=.rb
 --type-set=erb=.erb
 --type-set=haml=.haml
