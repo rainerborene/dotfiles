@@ -95,7 +95,6 @@ set scrolloff=3
 set sidescrolloff=7
 set sidescroll=1
 set listchars=tab:▸\ ,eol:¬
-set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%=%-16(\ %l,%c-%v\ %)%P
 
 " ---------------------------------------------------------------------------
 " Text Formatting
@@ -161,6 +160,9 @@ nmap <leader>hq <Plug>CloseHiddenBuffers
 
 " markdown to html
 nmap <leader>md :%!Markdown.pl --html4tags <cr>
+
+" toggle paste mode
+nnoremap <leader>p :set invpaste <CR>
 
 " Formatting, TextMate-style
 nnoremap Q gqip
@@ -236,7 +238,7 @@ map <Leader>b :CtrlPBuffer<CR>
 
 " some toggle commands
 map <Leader>u :GundoToggle<CR>
-map <silent> <Leader>n :NERDTreeToggle<CR>
+map <silent> <Leader>n :NERDTree<CR>
 map <silent> <leader>N :NERDTreeFind<CR>
 
 " ack searching
@@ -277,18 +279,19 @@ noremap <leader>ss :call StripWhitespace()<CR>
 " Global Variables
 " ---------------------------------------------------------------------------
 
-let g:NERDTreeHighlightCursorline=1
-let g:NERDTreeMinimalUI=1
-let g:NERDCreateDefaultMappings=0
-let g:NERDTreeDirArrows=1
-let g:NERDSpaceDelims=1
-let g:Gitv_WipeAllOnClose=1
-let g:Gitv_OpenHorizontal=1
-let g:ackprg="ack-grep -H --nocolor --nogroup --column"
-let g:sparkupNextMapping='<c-f>'
-let g:SuperTabDefaultCompletionType="context"
-let g:slime_target="tmux"
-let g:ctrlp_working_path_mode=0
+let g:NERDTreeHighlightCursorline = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDCreateDefaultMappings = 0
+let g:NERDTreeDirArrows = 1
+let g:NERDSpaceDelims = 1
+let g:Gitv_WipeAllOnClose = 1
+let g:Gitv_OpenHorizontal = 1
+let g:ackprg = "ack-grep -H --nocolor --nogroup --column"
+let g:sparkupNextMapping = '<c-f>'
+let g:SuperTabDefaultCompletionType = "context"
+let g:slime_target = "tmux"
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_clear_cache_on_exit  =  1
 
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
