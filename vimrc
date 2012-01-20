@@ -205,6 +205,7 @@ cab Wq wq
 cab wQ wq
 cab WQ wq
 cab Q  q
+cab git Git
 
 " Diffoff
 nnoremap <leader>D :diffoff!<cr>
@@ -263,6 +264,7 @@ nnoremap <leader>gci :Gcommit<cr>
 nnoremap <leader>gm :Gmove<cr>
 nnoremap <leader>gr :Gremove<cr>
 nnoremap <leader>gv :Gitv --all<cr>
+nnoremap <leader>gV :Gitv! --all<cr>
 
 " strip trailing whitespace
 function! StripWhitespace()
@@ -292,6 +294,10 @@ let g:SuperTabDefaultCompletionType = "context"
 let g:slime_target = "tmux"
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_clear_cache_on_exit  =  1
+let g:Powerline_symbols = "fancy"
+let g:syntastic_enable_signs = 1
+let g:syntastic_quiet_warnings = 0
+let g:syntastic_auto_loc_list = 2
 
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
