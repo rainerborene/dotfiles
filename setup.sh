@@ -86,6 +86,9 @@ update() {
   read -p "Submodules was successfully updated. Are you sure you want to continue [y/n]? " ANSWER
   [[ $ANSWER == "n" || $ANSWER == "N" ]] && exit
 
+  cd ~/.dotfiles/bin
+  curl $github/aashay/CloudApp/master/cloudapp -Os
+
   cd ~/.dotfiles/bash/functions
   curl $github/rupa/z/master/z.sh -Os
   curl $github/ryandotsmith/tat/master/tat.sh -Os

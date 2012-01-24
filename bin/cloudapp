@@ -1,0 +1,106 @@
+#!/usr/bin/env ruby
+#
+# cloudapp
+# Hacked together with duct tape, hopes, and dreams by Aashay Desai / @aashay
+# Original by Zach Holman / @holman
+#
+# Uploads a file from the command line to CloudApp, drops it into your clipboard
+#
+# Example:
+#
+#   cloudapp drunk-blake.png
+#
+# This requires Aaron Russell's cloudapp_api gem:
+#
+#   gem install cloudapp_api
+#
+# Requires you set your CloudApp credentials in ~/.cloudapp as a simple file of:
+#
+#   email
+#   password
+
+require 'rubygems'
+begin
+  require 'cloudapp_api'
+rescue LoadError
+  puts "You need to install cloudapp_api: gem install cloudapp_api"
+  exit!(1)
+end
+
+config_file = "#{ENV['HOME']}/.cloudapp"
+unless File.exist?(config_file)
+  puts "You need to type your email and password (one per line) into "+
+       "`~/.cloudapp`"
+  exit!(1)
+end
+
+email,password = File.read(config_file).split("\n")
+
+class HTTParty::Response
+  # Apparently HTTPOK.ok? IS NOT OKAY WTFFFFFFFFFFUUUUUUUUUUUUUU
+  # LETS MONKEY PATCH IT I FEEL OKAY ABOUT IT
+  def ok? ; true end
+end
+
+if ARGV[0].nil?
+   puts "You need to specify a file to upload."
+   exit!(1)
+end
+  
+class Copier
+    class << self
+      # Public: tests if currently running on darwin.
+      #
+      # Returns true if running on darwin (MacOS X), else false
+      def darwin?
+        !!(RUBY_PLATFORM =~ /darwin/)
+      end
+
+      # Public: tests if currently running on windows.
+      #
+      # Apparently Windows RUBY_PLATFORM can be 'win32' or 'mingw32'
+      #
+      # Returns true if running on windows (win32/mingw32), else false
+      def windows?
+        !!(RUBY_PLATFORM =~ /win|mingw/)
+      end
+
+      # Public: returns the command used to copy a url to the
+      # clipboard for the current platform.
+      #
+      # Returns a String with the bin
+      def copy_command
+        if darwin?
+          'pbcopy'
+        elsif windows?
+          'clip'
+        else
+          'xclip -selection clipboard'
+        end
+      end
+          
+      # Public: copies a given url to the clipboard. 
+      # This _should_ work in any POSIX environment and also windows,
+      # since they both have echo commands.  I think.  Maybe? I dunno.
+      #
+      # Returns nothing.
+      def copy(url)    
+          system("echo #{url} | #{copy_command}")
+      end
+    end
+end
+
+puts "Connecting to CloudApp..."
+
+CloudApp.authenticate(email,password)
+url = CloudApp::Item.create(:upload, {:file => ARGV[0]}).url
+
+# Say it for good measure.
+puts "Uploaded to #{url}..."
+
+# Get the embed link.
+url = "#{url}/#{ARGV[0].split('/').last}"
+
+# Copy it to your clipboard.
+Copier::copy(url)
+puts "Copied #{url} to clipboard! ENJOY!"
