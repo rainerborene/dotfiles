@@ -19,7 +19,7 @@
 #
 #  http://github.com/jweslley/rails_completion
 #
-#  VERSION: 0.1.8
+#  VERSION: 0.1.9
 
 
 RAILSCOMP_FILE=".rails_generators~"
@@ -48,7 +48,7 @@ __rails_env(){
 #
 # @param $1 Field's name
 __rails_types(){
-  __railscomp "${1%:*}:{string,text,integer,float,decimal,datetime,timestamp,date,time,binary,boolean,references}"
+  __railscomp "${1%:*}:{string,text,integer,float,decimal,datetime,timestamp,date,time,binary,boolean,references,index,uniq}"
 }
 
 # Generators -------------------------------------------------------------------
@@ -266,7 +266,7 @@ _rails(){
 
   options="--help --version"
   if [[ -f "script/rails" ]]; then
-    commands="s server c console g generate destroy profiler plugin runner benchmarker db dbconsole"
+    commands="s server c console g generate d destroy profiler plugin runner benchmarker db dbconsole"
   else
     commands="new"
   fi
@@ -286,7 +286,7 @@ _rails(){
     s|server)     _rails_server ;;
     c|console)    _rails_console ;;
     g|generate)   _rails_generate ;;
-    destroy)      _rails_destroy ;;
+    d|destroy)    _rails_destroy ;;
     profiler)     _rails_profiler ;;
     plugin)       _rails_plugin ;;
     runner)       _rails_runner ;;
