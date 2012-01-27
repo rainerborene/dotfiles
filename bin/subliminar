@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
+require "rubygems"
 require "colorize"
 
-file = File.expand_path "~/sentences.txt"
+file = File.expand_path "~/.sentences.txt"
 
 if File.exists? file
-  sentences = File.open(file).read
+  sentences = File.open(file).read.split("\n")
   puts sentences.sample.colorize(:red)
   puts sentences.sample.colorize(:red)
 end

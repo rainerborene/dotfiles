@@ -61,7 +61,7 @@ if has("gui_running")
     set guifont=bitstream\ vera\ sans\ mono\ 9
   endif
 else
-  colorscheme github
+  colorscheme tir_black
   
   " default vimdiff color schemes are bad!
   highlight DiffAdd cterm=none ctermfg=bg ctermbg=Green gui=none guifg=bg guibg=Green 
