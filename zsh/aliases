@@ -74,7 +74,7 @@ alias gemi='gem install'
 alias gemu='gem uninstall'
 
 # linux specific aliases
-if [ "$UNAME" == "Linux" ]; then
+if [[ "$UNAME" == "Linux" ]]; then
   alias ls='ls --color -h'
   alias lc='ls --color -1'
   alias ll='ls --color -laGh'
@@ -84,7 +84,7 @@ if [ "$UNAME" == "Linux" ]; then
 fi
 
 # mac osx compatible aliases
-if [ "$UNAME" == "Darwin" ]; then
+if [[ "$UNAME" == "Darwin" ]]; then
   alias ls='ls -h'
   alias lc='ls -1'
   alias ll='ls -lhoGa'
@@ -92,4 +92,4 @@ if [ "$UNAME" == "Darwin" ]; then
 fi
 
 # source dotfiles
-alias reload='source ~/.bashrc'
+alias reload='source ~/.zshrc'

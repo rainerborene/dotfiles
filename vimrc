@@ -61,7 +61,7 @@ if has("gui_running")
     set guifont=bitstream\ vera\ sans\ mono\ 9
   endif
 else
-  colorscheme tir_black
+  colorscheme github
   
   " default vimdiff color schemes are bad!
   highlight DiffAdd cterm=none ctermfg=bg ctermbg=Green gui=none guifg=bg guibg=Green 
@@ -278,7 +278,7 @@ endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
 
 " ---------------------------------------------------------------------------
-" Global Variables
+" Global Options
 " ---------------------------------------------------------------------------
 
 let g:NERDTreeHighlightCursorline = 1

@@ -1,0 +1,60 @@
+# vim:set ft=sh:
+
+# Don't check mail when opening terminal.
+unset MAILCHECK
+
+# notify of bg job completion immediately
+set -o notify
+
+# default umask
+umask 0022
+
+# shell options
+setopt auto_cd
+setopt no_bg_nice # don't nice background tasks
+setopt no_hup
+setopt no_list_beep
+setopt local_options # allow functions to have local options
+setopt local_traps # allow functions to have local traps
+setopt hist_verify
+setopt share_history # share history between sessions ???
+setopt extended_history # add timestamps to history
+setopt prompt_subst
+setopt correct
+setopt complete_in_word
+setopt completealiases
+setopt ignore_eof
+
+setopt append_history # adds history
+setopt inc_append_history share_history  # adds history incrementally and share it across sessions
+setopt hist_ignore_all_dups  # don't record dupes in history
+setopt hist_reduce_blanks
+
+# Try to correct command line spelling
+setopt correct correct_all
+
+# Enable extended globbing
+setopt extended_glob
+
+# makes color constants available
+autoload -U colors
+colors
+
+# adds the current branch name in green
+git_prompt_info() {
+  ref=$(git symbolic-ref HEAD 2> /dev/null)
+  if [[ -n $ref ]]; then
+    echo "%{$fg_bold[green]%}${ref#refs/heads/}%{$reset_color%}"
+  fi
+}
+
+ruby_prompt_info() {
+  local RUBY_VERSION=`rbenv version | sed -e "s/-.*$//"`
+  if [[ -f Gemfile.lock ]]; then
+    local RAILS_VERSION=$(cat Gemfile.lock | grep -E " +rails \([0-9]+" | sed 's/ *rails (\(.*\))/\1/')
+    local RAILS_VERSION="#${RAILS_VERSION}"
+  fi
+  echo "%{$fg_bold[black]%}[${RUBY_VERSION}${RAILS_VERSION}]%{$reset_color%}"
+}
+
+PROMPT=$'$(ruby_prompt_info) $(git_prompt_info)%{$reset_color%} \n%3~%# '

@@ -2,7 +2,7 @@
 
 ## Installation
 
-    $ curl -s https://raw.github.com/rainerborene/dotfiles/master/setup.sh | bash
+    $ bash <(curl -# https://raw.github.com/rainerborene/dotfiles/master/setup.sh) install
 
 This will clone this repository and create symlinks for all config files in your 
 home directory. After some time you might want to keep updated with the main

@@ -6,7 +6,7 @@
 # Thanks to all folks on GitHub for sharing their dotfiles.
 #
 
-DOTIGNORE="README.md install.sh bash bin sshconfig"
+DOTIGNORE="README.md install.sh zsh bin sshconfig"
 
 #
 # Git must be installed on your machine.
@@ -45,9 +45,6 @@ install() {
   # Download portuguese spell file for Vim
   curl --url http://stoa.usp.br/vim/files/-1/7458/pt.utf-8.spl \
     -s -o ~/.dotfiles/vim/spell/pt.utf-8.spl
-
-  # Override bash_profile
-  echo "[[ -f ~/.bashrc ]] && source ~/.bashrc" > ~/.bash_profile
 
   # Copy sshconfig to ssh directory
   mkdir -p ~/.ssh
@@ -89,9 +86,9 @@ update() {
   cd ~/.dotfiles/bin
   curl $github/aashay/CloudApp/master/cloudapp -Os
 
-  cd ~/.dotfiles/bash/functions
-  curl $github/rupa/z/master/z.sh -Os
-  curl $github/ryandotsmith/tat/master/tat.sh -Os
+  cd ~/.dotfiles/zsh/functions
+  curl $github/rupa/z/master/z.sh -so _z
+  curl $github/ryandotsmith/tat/master/tat.sh -so _tat
 
   cd ~/.dotfiles/vim/colors
   curl $github/oguzbilgic/sexy-railscasts-theme/master/colors/sexy-railscasts.vim -Os
@@ -103,10 +100,6 @@ update() {
   cd ~/.dotfiles/vim/autoload
   curl $github/tpope/vim-pathogen/master/autoload/pathogen.vim -Os
   curl $github/tpope/vim-repeat/master/autoload/repeat.vim -Os
-
-  cd ~/.dotfiles/bash/completions
-  curl $github/revans/bash-it/master/completion/available/git_flow.completion.bash -s -o git-flow.bash
-  curl $github/jweslley/rails_completion/master/rails.bash -Os
 }
 
 #
@@ -134,5 +127,5 @@ case $1 in
   update) update; exit ;;
   dependencies) dependencies; exit ;;
   uninstall) uninstall; exit ;;
-  install|*) install; exit ;;
+  install) install; exit ;;
 esac

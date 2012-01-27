@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+require "colorize"
+
+file = File.expand_path "~/sentences.txt"
+
+if File.exists? file
+  sentences = File.open(file).read
+  puts sentences.sample.colorize(:red)
+  puts sentences.sample.colorize(:red)
+end
