@@ -33,15 +33,15 @@ setopt no_hup
 setopt no_list_beep
 setopt local_options # allow functions to have local options
 setopt local_traps # allow functions to have local traps
-setopt hist_verify
-setopt share_history # share history between sessions ???
-setopt extended_history # add timestamps to history
 setopt prompt_subst
 setopt correct
 setopt complete_in_word
 setopt completealiases
 setopt ignore_eof
 
+setopt hist_verify
+setopt share_history # share history between sessions
+setopt extended_history # add timestamps to history
 setopt append_history # adds history
 setopt inc_append_history share_history  # adds history incrementally and share it across sessions
 setopt hist_ignore_all_dups  # don't record dupes in history
