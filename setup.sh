@@ -88,7 +88,6 @@ update() {
 
   cd ~/.dotfiles/zsh/functions
   curl $github/rupa/z/master/z.sh -so _z
-  curl $github/ryandotsmith/tat/master/tat.sh -so _tat
 
   cd ~/.dotfiles/vim/colors
   curl $github/oguzbilgic/sexy-railscasts-theme/master/colors/sexy-railscasts.vim -Os

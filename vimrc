@@ -99,8 +99,6 @@ set scrolloff=3
 set sidescrolloff=7
 set sidescroll=1
 set listchars=tab:▸\ ,eol:¬
-set splitright
-set splitbelow
 
 " ---------------------------------------------------------------------------
 " Text Formatting
@@ -166,9 +164,6 @@ nmap <leader>hq <Plug>CloseHiddenBuffers
 
 " markdown to html
 nmap <leader>md :%!Markdown.pl --html4tags <cr>
-
-" toggle paste mode
-nnoremap <leader>p :set invpaste <CR>
 
 " Formatting, TextMate-style
 nnoremap Q gqip
@@ -252,9 +247,11 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 map <Leader>b :CtrlPBuffer<CR>
 
 " some toggle commands
-map <Leader>u :GundoToggle<CR>
-map <silent> <Leader>n :NERDTree<CR>
-map <silent> <leader>N :NERDTreeFind<CR>
+nmap <Leader>u :GundoToggle<CR>
+nmap <silent> <Leader>n :NERDTree<CR>
+nmap <silent> <leader>N :NERDTreeFind<CR>
+nmap <silent> <buffer> <leader>s :set spell!<CR>
+nmap <leader>p :set invpaste <CR>
 
 " ack searching
 map <leader>a :Ack! 
