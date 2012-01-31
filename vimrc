@@ -10,6 +10,8 @@ set hidden          " hide buffers when not displayed
 set spelllang=pt,en " spell checking languages
 set encoding=utf-8  " default encoding
 set nobomb
+set undoreload=10000
+set undofile
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -74,6 +76,7 @@ end
 " Backups
 " ---------------------------------------------------------------------------
 
+set undodir=$HOME/.dotfiles/vim/tmp
 set backupdir=$HOME/.dotfiles/vim/tmp
 set directory=$HOME/.dotfiles/vim/tmp
 
@@ -91,10 +94,13 @@ set laststatus=2                    " always show status line
 set incsearch                       " find the next match as we type the search
 set hlsearch                        " highlight searches by default
 set nostartofline                   " don't reset cursor to start of line when moving around
+set gdefault
 set scrolloff=3
 set sidescrolloff=7
 set sidescroll=1
 set listchars=tab:▸\ ,eol:¬
+set splitright
+set splitbelow
 
 " ---------------------------------------------------------------------------
 " Text Formatting
@@ -166,6 +172,7 @@ nnoremap <leader>p :set invpaste <CR>
 
 " Formatting, TextMate-style
 nnoremap Q gqip
+vnoremap Q gq
 
 " make Y consistent with C and D
 nnoremap Y y$
@@ -183,9 +190,8 @@ map <C-h> <C-W>h
 map <C-l> <C-W>l
 
 " omnicompletion
-inoremap <leader>, <C-x><C-o>
-inoremap <leader>: <C-x><C-f>
-inoremap <leader>= <C-x><C-l>
+inoremap <c-l> <c-x><c-l>
+inoremap <c-f> <c-x><c-f>
 
 " sane movement with wrap turned on
 nnoremap j gj
@@ -223,6 +229,14 @@ imap jj <ESC>
 " key mapping for tab navigation
 nmap <Tab> gt
 nmap <S-Tab> gT
+
+" Space to toggle folds.
+nnoremap <Space> za
+vnoremap <Space> za
+
+" Make zO recursively open whatever top level fold we're in, no matter where the
+" cursor happens to be.
+nnoremap zO zCzO
 
 " clear search highlight
 nmap <silent> <leader>/ :silent :nohlsearch<CR>
@@ -289,15 +303,17 @@ let g:NERDSpaceDelims = 1
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
 let g:ackprg = "ack-grep -H --nocolor --nogroup --column"
-let g:sparkupNextMapping = '<c-f>'
-let g:SuperTabDefaultCompletionType = "context"
+let g:sparkupNextMapping = '<c-s>'
 let g:slime_target = "tmux"
+let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_clear_cache_on_exit  =  1
 let g:Powerline_symbols = "fancy"
 let g:syntastic_enable_signs = 1
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
+let g:SuperTabDefaultCompletionType = "<c-n>"
+let g:SuperTabLongestHighlight = 1
 
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
