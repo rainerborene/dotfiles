@@ -175,6 +175,11 @@ nmap <leader>md :%!Markdown.pl --html4tags <cr>
 nnoremap Q gqip
 vnoremap Q gq
 
+" Keep search matches in the middle of the window and pulse the line when moving
+" to them.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
 " make Y consistent with C and D
 nnoremap Y y$
 
