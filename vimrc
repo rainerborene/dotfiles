@@ -64,12 +64,12 @@ if has("gui_running")
   endif
 else
   colorscheme tir_black
-  
+
   " default vimdiff color schemes are bad!
-  highlight DiffAdd cterm=none ctermfg=bg ctermbg=Green gui=none guifg=bg guibg=Green 
-  highlight DiffDelete cterm=none ctermfg=bg ctermbg=Red gui=none guifg=bg guibg=Red 
-  highlight DiffChange cterm=none ctermfg=bg ctermbg=Yellow gui=none guifg=bg guibg=Yellow 
-  highlight DiffText cterm=none ctermfg=bg ctermbg=Magenta gui=none guifg=bg guibg=Magenta 
+  highlight DiffAdd cterm=none ctermfg=bg ctermbg=Green gui=none guifg=bg guibg=Green
+  highlight DiffDelete cterm=none ctermfg=bg ctermbg=Red gui=none guifg=bg guibg=Red
+  highlight DiffChange cterm=none ctermfg=bg ctermbg=Yellow gui=none guifg=bg guibg=Yellow
+  highlight DiffText cterm=none ctermfg=bg ctermbg=Magenta gui=none guifg=bg guibg=Magenta
 end
 
 " ---------------------------------------------------------------------------
@@ -136,6 +136,11 @@ autocmd BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemf
 autocmd BufReadPost fugitive://* set bufhidden=delete
 autocmd BufWritePost .vimrc source $MYVIMRC
 
+" use <localleader>1/2/3 to add headings.
+au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=
+au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-
+au Filetype markdown nnoremap <buffer> <localleader>3 I### <ESC>
+
 " Resize splits when the window is resized
 autocmd VimResized * exe "normal! \<c-w>="
 
@@ -149,8 +154,9 @@ autocmd BufReadPost *
 " Mappings
 " ---------------------------------------------------------------------------
 
-" using another leader mapping
+" leader keys
 let mapleader = ","
+let maplocalleader = "\\"
 
 " use sane regexes.
 nnoremap / /\v
@@ -250,11 +256,11 @@ map <Leader>b :CtrlPBuffer<CR>
 nmap <Leader>u :GundoToggle<CR>
 nmap <silent> <Leader>n :NERDTree<CR>
 nmap <silent> <leader>N :NERDTreeFind<CR>
-nmap <silent> <buffer> <leader>s :set spell!<CR>
+nmap <silent> <buffer> <leader>l :set spell!<CR>
 nmap <leader>p :set invpaste <CR>
 
 " ack searching
-map <leader>a :Ack! 
+map <leader>a :Ack!
 
 " align text
 nnoremap <leader>Al :left<cr>
