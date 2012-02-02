@@ -66,11 +66,17 @@ git_prompt_info() {
 }
 
 ruby_prompt_info() {
-  local RUBY_VERSION=`rbenv version | sed -e "s/-.*$//"`
+  local RUBY_VERSION=`rbenv version | sed -ne "s/-.*$//"`
+
+  if [[ -z $RUBY_VERSION ]]; then
+    local RUBY_VERSION=`ruby -v | grep -oP "\d+\.\d+\.\d+"`
+  fi
+
   if [[ -f Gemfile.lock ]]; then
     local RAILS_VERSION=$(cat Gemfile.lock | grep -E " +rails \([0-9]+" | sed 's/ *rails (\(.*\))/\1/')
     local RAILS_VERSION="#${RAILS_VERSION}"
   fi
+
   echo "%{$fg_bold[black]%}[${RUBY_VERSION}${RAILS_VERSION}]%{$reset_color%}"
 }
 

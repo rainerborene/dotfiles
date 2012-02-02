@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
-require "rubygems"
-require "colorize"
+begin
+  require "rubygems"
+  require "colorize"
+rescue LoadError => ex
+  exit
+end
 
 file = File.expand_path "~/.sentences.txt"
 
