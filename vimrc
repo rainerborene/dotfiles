@@ -303,6 +303,7 @@ noremap <leader>ss :call StripWhitespace()<CR>
 " Global Options
 " ---------------------------------------------------------------------------
 
+let g:ruby_path=$RUBY_BIN
 let g:NERDTreeHighlightCursorline = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDCreateDefaultMappings = 0

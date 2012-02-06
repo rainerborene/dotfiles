@@ -69,7 +69,7 @@ ruby_prompt_info() {
   local RUBY_VERSION=`rbenv version | sed -ne "s/-.*$//"`
 
   if [[ -z $RUBY_VERSION ]]; then
-    local RUBY_VERSION=`ruby -v | grep -oP "\d+\.\d+\.\d+"`
+    local RUBY_VERSION=`ruby -v | grep -Po "ruby \d\.\d\.\d" | cut -c 6-10`
   fi
 
   if [[ -f Gemfile.lock ]]; then
