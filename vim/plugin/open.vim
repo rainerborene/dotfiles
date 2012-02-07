@@ -2,9 +2,9 @@ function! OpenURL(url)
   if has("win32")
     exe "!start cmd /cstart /b ".a:url.""
   elseif $DISPLAY !~ '^\w'
-    exe "silent !sensible-browser \"".a:url."\""
+    exe "silent !sensible-browser \"".a:url."\" > /dev/null 2>&1"
   else
-    exe "silent !sensible-browser -T \"".a:url."\""
+    exe "silent !sensible-browser -T \"".a:url."\" > /dev/null 2>&1"
   endif
   redraw!
 endfunction
