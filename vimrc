@@ -6,12 +6,16 @@ filetype off        " necessary on some Linux distros for pathogen to properly l
 set nocompatible    " use Vim settings, rather then Vi settings (much better!)
 set history=1000    " store lots of :cmdline history
 set autoread        " reload files (local changes only)
+set autowrite       " write the contents of the file
 set hidden          " hide buffers when not displayed
 set spelllang=pt,en " spell checking languages
 set encoding=utf-8  " default encoding
 set nobomb
 set undoreload=10000
 set undofile
+set ttimeout
+set notimeout
+set nottimeout
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -76,9 +80,11 @@ end
 " Backups
 " ---------------------------------------------------------------------------
 
-set undodir=$HOME/.dotfiles/vim/tmp
-set backupdir=$HOME/.dotfiles/vim/tmp
-set directory=$HOME/.dotfiles/vim/tmp
+set undodir=$HOME/.dotfiles/vim/tmp/undo
+set backupdir=$HOME/.dotfiles/vim/tmp/backup
+set directory=$HOME/.dotfiles/vim/tmp/swap
+set noswapfile
+set backup
 
 " ---------------------------------------------------------------------------
 " Visual Cues

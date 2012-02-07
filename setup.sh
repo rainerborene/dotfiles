@@ -41,6 +41,7 @@ install() {
 
   # Create tmp and spell directories
   mkdir ~/.dotfiles/vim/{tmp,spell}
+  mkdir ~/.dotfiles/vim/tmp/{swap,undo,backup}
 
   # Download portuguese spell file for Vim
   curl --url http://stoa.usp.br/vim/files/-1/7458/pt.utf-8.spl \
