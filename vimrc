@@ -174,9 +174,6 @@ nmap <leader>q <Plug>Kwbd
 " wipe all buffers which are not active
 nmap <leader>hq <Plug>CloseHiddenBuffers
 
-" markdown to html
-nmap <leader>md :%!Markdown.pl --html4tags <cr>
-
 " Formatting, TextMate-style
 nnoremap Q gqip
 vnoremap Q gq
@@ -234,6 +231,13 @@ inoremap <C-B> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 " emacs bindings in command line mode
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
+
+" emacs-like beginning and end of line.
+imap <c-e> <c-o>$
+imap <c-a> <c-o>^
+
+" open a new tab
+nmap <C-t> <esc>:tabnew<CR>
 
 " because escape is too far away
 imap jj <ESC>
@@ -318,7 +322,7 @@ let g:NERDSpaceDelims = 1
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
 let g:ackprg = "ack-grep -H --nocolor --nogroup --column"
-let g:sparkupNextMapping = '<c-s>'
+let g:sparkupNextMapping = '<c-q>'
 let g:slime_target = "tmux"
 let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_working_path_mode = 0
