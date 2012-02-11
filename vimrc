@@ -16,6 +16,9 @@ set undofile
 set ttimeout
 set notimeout
 set nottimeout
+set ttyfast
+set lazyredraw
+set dictionary=/usr/share/dict/words
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -44,7 +47,6 @@ set numberwidth=5
 set showbreak=↪
 set pastetoggle=<F8>
 set background=dark
-set lazyredraw
 
 if has('mouse')
   set mouse=a
@@ -60,6 +62,8 @@ if has("gui_running")
 
   set lines=999 columns=999
   colorscheme ir_black
+
+  highlight SpellBad term=underline gui=undercurl guisp=Orange
 
   if has("mac")
     set guifont=Menlo:h12
@@ -183,6 +187,10 @@ vnoremap Q gq
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
+" Same when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
+
 " make Y consistent with C and D
 nnoremap Y y$
 
@@ -291,6 +299,7 @@ nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>ga :Gadd<cr>
 nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gh :Gbrowse<cr>
 nnoremap <leader>gco :Gcheckout<cr>
 nnoremap <leader>gci :Gcommit<cr>
 nnoremap <leader>gm :Gmove<cr>
@@ -327,10 +336,12 @@ let g:slime_target = "tmux"
 let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_clear_cache_on_exit  =  1
+let g:ctrlp_extensions = ['tag']
 let g:Powerline_symbols = "fancy"
 let g:syntastic_enable_signs = 1
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
+let g:syntastic_disabled_filetypes = ['html']
 let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:SuperTabLongestHighlight = 1
 
