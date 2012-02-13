@@ -47,6 +47,7 @@ set numberwidth=5
 set showbreak=↪
 set pastetoggle=<F8>
 set background=dark
+set fillchars=diff:⣿,vert:│
 
 if has('mouse')
   set mouse=a
@@ -173,10 +174,10 @@ nnoremap / /\v
 vnoremap / /\v
 
 " delete a buffer without closing the window
-nmap <leader>q <Plug>Kwbd
+nnoremap <leader>q <Plug>Kwbd
 
 " wipe all buffers which are not active
-nmap <leader>hq <Plug>CloseHiddenBuffers
+nnoremap <leader>hq <Plug>CloseHiddenBuffers
 
 " Formatting, TextMate-style
 nnoremap Q gqip
@@ -195,16 +196,17 @@ nnoremap g, g,zz
 nnoremap Y y$
 
 " shortcuts for visual selections
-nmap gV `[v`]`
+nnoremap gV `[v`]`
 
 " save a file as root.
-cmap w!! w !sudo tee % >/dev/null
+cnoremap w!! w !sudo tee % >/dev/null
 
 " speed up buffer switching
-map <C-k> <C-W>k
-map <C-j> <C-W>j
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+noremap <C-k> <C-W>k
+noremap <C-j> <C-W>j
+noremap <C-h> <C-W>h
+noremap <C-l> <C-W>l
+noremap <leader>v <C-w>v
 
 " omnicompletion
 inoremap <c-l> <c-x><c-l>
@@ -230,9 +232,6 @@ cab WQ wq
 cab Q  q
 cab git Git
 
-" Diffoff
-nnoremap <leader>D :diffoff!<cr>
-
 " calculator
 inoremap <C-B> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 
@@ -241,18 +240,21 @@ cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 
 " emacs-like beginning and end of line.
-imap <c-e> <c-o>$
-imap <c-a> <c-o>^
-
-" open a new tab
-nmap <C-t> <esc>:tabnew<CR>
+inoremap <c-e> <c-o>$
+inoremap <c-a> <c-o>^
 
 " because escape is too far away
-imap jj <ESC>
+inoremap jj <ESC>
+
+" shortcut for []
+onoremap id i[
+onoremap ad a[
+vnoremap id i[
+vnoremap ad a[
 
 " key mapping for tab navigation
-nmap <Tab> gt
-nmap <S-Tab> gT
+nnoremap <Tab> gt
+nnoremap <S-Tab> gT
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -263,27 +265,28 @@ vnoremap <Space> za
 nnoremap zO zCzO
 
 " clear search highlight
-nmap <silent> <leader>/ :silent :nohlsearch<CR>
+nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
 " open directory dirname of current file
-map <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
+noremap <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
 " quickly edit/reload the vimrc file
-nmap <silent> <leader>ev :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
+nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
+nnoremap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " open ctrlp in buffer mode
-map <Leader>b :CtrlPBuffer<CR>
+nnoremap <Leader>t :CtrlPTag<CR>
+nnoremap <Leader>b :CtrlPBuffer<CR>
 
 " some toggle commands
-nmap <Leader>u :GundoToggle<CR>
-nmap <silent> <Leader>n :NERDTree<CR>
-nmap <silent> <leader>N :NERDTreeFind<CR>
-nmap <silent> <buffer> <leader>l :set spell!<CR>
-nmap <leader>p :set invpaste <CR>
+nnoremap <Leader>u :GundoToggle<CR>
+nnoremap <silent> <Leader>n :NERDTree<CR>
+nnoremap <silent> <leader>N :NERDTreeFind<CR>
+nnoremap <silent> <buffer> <leader>l :set spell!<CR>
+nnoremap <leader>p :set invpaste <CR>
 
 " ack searching
-map <leader>a :Ack!
+noremap <leader>a :Ack!
 
 " align text
 nnoremap <leader>Al :left<cr>
@@ -331,7 +334,7 @@ let g:NERDSpaceDelims = 1
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
 let g:ackprg = "ack-grep -H --nocolor --nogroup --column"
-let g:sparkupNextMapping = '<c-q>'
+let g:sparkupNextMapping = '<c-s>'
 let g:slime_target = "tmux"
 let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_working_path_mode = 0
