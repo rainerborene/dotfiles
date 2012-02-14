@@ -1,0 +1,25 @@
+[user]
+	name = Rainer Borene
+	email = rainerborene@gmail.com
+
+[core]
+	excludesfile = ~/.dotfiles/.gitignore
+	editor = vim
+
+[color]
+	ui = auto
+
+[alias]
+	d = diff
+	di = diff --cached
+	co = checkout
+	ci = commit
+	uns = reset HEAD
+	unstage = reset HEAD
+	po = push origin
+	lo = pull origin
+	st = status
+	stat = status
+
+[push]
+	default = current

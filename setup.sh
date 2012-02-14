@@ -29,8 +29,7 @@ install() {
     && cd ~/.dotfiles \
     && git submodule update --init > /dev/null 2>&1
 
-  # Global gitignore
-  git config --global core.excludesfile ~/.dotfiles/.gitignore
+  ln -nfs ~/.dotfiles/.gitconfig ~/.gitconfig
 
   # Create symbolic links
   for name in $(ls ~/.dotfiles); do
@@ -45,11 +44,10 @@ install() {
 
   # Download portuguese spell file for Vim
   curl --url http://stoa.usp.br/vim/files/-1/7458/pt.utf-8.spl \
-    -s -o ~/.dotfiles/vim/spell/pt.utf-8.spl
+    -so ~/.dotfiles/vim/spell/pt.utf-8.spl
 
   # Copy sshconfig to ssh directory
-  mkdir -p ~/.ssh
-  ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
+  mkdir -p ~/.ssh && ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
 
   # Done
   echo "*** Installed"
