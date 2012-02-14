@@ -94,6 +94,7 @@ update() {
   curl $github/joshuaclayton/dotfiles/master/vim/colors/github.vim -Os
   curl $github/tpope/vim-vividchalk/master/colors/vividchalk.vim -Os
   curl $github/sjl/badwolf/master/colors/badwolf.vim -Os
+  curl $github/tomasr/molokai/master/colors/molokai.vim -Os
   curl http://blog.toddwerth.com/entry_files/8/ir_black.vim -Os
 
   cd ~/.dotfiles/vim/autoload
