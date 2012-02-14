@@ -1,6 +1,4 @@
-" ---------------------------------------------------------------------------
-" General
-" ---------------------------------------------------------------------------
+" General {{{
 
 filetype off        " necessary on some Linux distros for pathogen to properly load bundles
 set nocompatible    " use Vim settings, rather then Vi settings (much better!)
@@ -26,9 +24,8 @@ call pathogen#helptags()
 filetype plugin on
 filetype indent on
 
-" ---------------------------------------------------------------------------
-" UI
-" ---------------------------------------------------------------------------
+" }}}
+" User Interface {{{
 
 syntax on                           " turn on syntax highlighting
 set t_Co=256                        " tell the term has 256 colors
@@ -80,9 +77,8 @@ else
   highlight DiffText cterm=none ctermfg=black ctermbg=Magenta gui=none guifg=black guibg=Magenta
 end
 
-" ---------------------------------------------------------------------------
-" Backups
-" ---------------------------------------------------------------------------
+" }}}
+" Backups {{{
 
 set undodir=$HOME/.dotfiles/vim/tmp/undo
 set backupdir=$HOME/.dotfiles/vim/tmp/backup
@@ -90,9 +86,8 @@ set directory=$HOME/.dotfiles/vim/tmp/swap
 set noswapfile
 set backup
 
-" ---------------------------------------------------------------------------
-" Visual Cues
-" ---------------------------------------------------------------------------
+" }}}
+" Visual Cues {{{
 
 set visualbell t_vb=                " disable visual bell
 set ignorecase                      " case insensitive
@@ -110,9 +105,8 @@ set sidescrolloff=7
 set sidescroll=1
 set listchars=tab:▸\ ,eol:¬
 
-" ---------------------------------------------------------------------------
-" Text Formatting
-" ---------------------------------------------------------------------------
+" }}}
+" Text Formatting {{{
 
 set autoindent
 set smartindent
@@ -127,18 +121,17 @@ set linespace=4
 set nojoinspaces
 set wrap linebreak nolist
 
-" ---------------------------------------------------------------------------
-" Auto Commands
-" ---------------------------------------------------------------------------
+" }}}
+" Auto Commands {{{
 
 autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
-autocmd FileType php,apache,sql setlocal ts=4 sts=4 sw=4 noexpandtab
+autocmd FileType php,apache,sql,xslt setlocal ts=4 sts=4 sw=4 noexpandtab
 autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
 autocmd FileType markdown setlocal wrap linebreak nolist
 autocmd FileType gitcommit setlocal spell
 autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()
 autocmd FileType java silent! compiler javac | setlocal makeprg=javac\ %
-autocmd FileType ruby silent! compiler ruby
+autocmd FileType ruby silent! compiler ruby | setlocal foldmethod=syntax
 
 autocmd BufNewFile,BufRead *.rss setfiletype xml
 autocmd BufNewFile,BufRead *.json setfiletype javascript
@@ -147,9 +140,18 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 autocmd BufWritePost .vimrc source $MYVIMRC
 
 " use <localleader>1/2/3 to add headings.
-au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=
-au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-
-au Filetype markdown nnoremap <buffer> <localleader>3 I### <ESC>
+autocmd Filetype markdown nnoremap <buffer> <localleader>1 yypVr=
+autocmd Filetype markdown nnoremap <buffer> <localleader>2 yypVr-
+autocmd Filetype markdown nnoremap <buffer> <localleader>3 I### <ESC>
+
+autocmd FileType vim setlocal foldmethod=marker
+autocmd FileType help setlocal textwidth=78
+autocmd BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+
+autocmd FileType javascript setlocal foldmethod=marker
+autocmd FileType javascript setlocal foldmarker={,}
+
+autocmd FileType nginx setlocal foldmethod=marker foldmarker={,}
 
 " Resize splits when the window is resized
 autocmd VimResized * exe "normal! \<c-w>="
@@ -160,9 +162,8 @@ autocmd BufReadPost *
   \   exe "normal! g`\"" |
   \ endif
 
-" ---------------------------------------------------------------------------
-" Mappings
-" ---------------------------------------------------------------------------
+" }}}
+" Mappings {{{
 
 " leader keys
 let mapleader = ","
@@ -173,10 +174,10 @@ nnoremap / /\v
 vnoremap / /\v
 
 " delete a buffer without closing the window
-nnoremap <leader>q <Plug>Kwbd
+nmap <leader>q <Plug>Kwbd
 
 " wipe all buffers which are not active
-nnoremap <leader>hq <Plug>CloseHiddenBuffers
+nmap <leader>hq <Plug>CloseHiddenBuffers
 
 " Formatting, TextMate-style
 nnoremap Q gqip
@@ -306,6 +307,7 @@ nnoremap <leader>gco :Gcheckout<cr>
 nnoremap <leader>gci :Gcommit<cr>
 nnoremap <leader>gm :Gmove<cr>
 nnoremap <leader>gr :Gremove<cr>
+nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gv :Gitv --all<cr>
 nnoremap <leader>gV :Gitv! --all<cr>
 
@@ -320,9 +322,8 @@ endfunction
 
 noremap <leader>ss :call StripWhitespace()<CR>
 
-" ---------------------------------------------------------------------------
-" Global Options
-" ---------------------------------------------------------------------------
+" }}}
+" Global Options {{{
 
 let g:ruby_path=$RUBY_BIN
 let g:NERDTreeHighlightCursorline = 1
@@ -350,3 +351,5 @@ let g:SuperTabLongestHighlight = 1
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
+
+" }}}

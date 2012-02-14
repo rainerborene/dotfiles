@@ -19,7 +19,7 @@ alias tailf='tail -f'
 alias lsd='ls -l | grep "^d"'
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias serve_this='python -m SimpleHTTPServer'
-alias l='tree -CL 1 -h'
+alias l='tree -hCL 1'
 
 # Create a new directory and enter it
 md() {
