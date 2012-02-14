@@ -47,9 +47,9 @@ set numberwidth=5
 set showbreak=↪
 set pastetoggle=<F8>
 set background=dark
-set fillchars=diff:⣿,vert:│
+set fillchars=vert:\│
 
-if has('mouse')
+if has("mouse")
   set mouse=a
 endif
 
@@ -61,25 +61,24 @@ if has("gui_running")
   set go-=r
   set go-=R
 
-  set lines=999 columns=999
   colorscheme ir_black
 
   highlight SpellBad term=underline gui=undercurl guisp=Orange
 
   if has("mac")
     set guifont=Menlo:h12
+    set fuoptions=maxvert,maxhorz
   elseif has("unix")
     set guifont=bitstream\ vera\ sans\ mono\ 9
+    set lines=999 columns=999
   endif
 else
   colorscheme tir_black
+  highlight DiffAdd cterm=none ctermfg=black ctermbg=Green gui=none guifg=black guibg=Green
+  highlight DiffDelete cterm=none ctermfg=black ctermbg=Red gui=none guifg=black guibg=Red
+  highlight DiffChange cterm=none ctermfg=black ctermbg=Yellow gui=none guifg=black guibg=Yellow
+  highlight DiffText cterm=none ctermfg=black ctermbg=Magenta gui=none guifg=black guibg=Magenta
 end
-
-" default vimdiff color schemes are bad!
-highlight DiffAdd cterm=none ctermfg=black ctermbg=Green gui=none guifg=black guibg=Green
-highlight DiffDelete cterm=none ctermfg=black ctermbg=Red gui=none guifg=black guibg=Red
-highlight DiffChange cterm=none ctermfg=black ctermbg=Yellow gui=none guifg=black guibg=Yellow
-highlight DiffText cterm=none ctermfg=black ctermbg=Magenta gui=none guifg=black guibg=Magenta
 
 " ---------------------------------------------------------------------------
 " Backups
