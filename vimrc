@@ -243,6 +243,9 @@ cnoremap <c-e> <end>
 inoremap <c-e> <c-o>$
 inoremap <c-a> <c-o>^
 
+" substitute
+nnoremap <leader>s :%s//<left>
+
 " because escape is too far away
 inoremap jj <ESC>
 
@@ -272,7 +275,7 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
 " quickly edit/reload the vimrc file
 nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
-nnoremap <silent> <leader>sv :so $MYVIMRC<CR>
+nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 
 " open ctrlp in buffer mode
 nnoremap <Leader>t :CtrlPTag<CR>
@@ -320,7 +323,7 @@ function! StripWhitespace()
   call setreg('/', old_query)
 endfunction
 
-noremap <leader>ss :call StripWhitespace()<CR>
+noremap <leader>w :call StripWhitespace()<CR>
 
 " }}}
 " Global Options {{{
@@ -336,6 +339,7 @@ let g:Gitv_OpenHorizontal = 1
 let g:ackprg = "ack-grep -H --nocolor --nogroup --column"
 let g:sparkupNextMapping = '<c-s>'
 let g:slime_target = "tmux"
+let g:gundo_preview_bottom = 1
 let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_clear_cache_on_exit  =  1
