@@ -15,6 +15,8 @@ set ttimeout
 set notimeout
 set nottimeout
 set ttyfast
+set splitbelow
+set splitright
 set lazyredraw
 set dictionary=/usr/share/dict/words
 
@@ -128,10 +130,11 @@ autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 s
 autocmd FileType php,apache,sql,xslt setlocal ts=4 sts=4 sw=4 noexpandtab
 autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
 autocmd FileType markdown setlocal wrap linebreak nolist
-autocmd FileType gitcommit setlocal spell
+autocmd FileType gitcommit setlocal spell | wincmd K
 autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()
 autocmd FileType java silent! compiler javac | setlocal makeprg=javac\ %
 autocmd FileType ruby silent! compiler ruby | setlocal foldmethod=syntax
+autocmd FileType c setlocal foldmethod=syntax
 
 autocmd BufNewFile,BufRead *.rss setfiletype xml
 autocmd BufNewFile,BufRead *.json setfiletype javascript
@@ -245,6 +248,9 @@ inoremap <c-a> <c-o>^
 
 " substitute
 nnoremap <leader>s :%s//<left>
+
+" generate ctags
+nnoremap <leader>ct :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
 " because escape is too far away
 inoremap jj <ESC>
