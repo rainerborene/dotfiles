@@ -1,4 +1,4 @@
-" General {{{
+" Basic configuration {{{
 
 filetype off        " necessary on some Linux distros for pathogen to properly load bundles
 set nocompatible    " use Vim settings, rather then Vi settings (much better!)
@@ -37,12 +37,15 @@ set backspace=indent,eol,start      " allow backspacing over everything in inser
 set showcmd                         " show incomplete cmds down the bottom
 set showmode                        " show current mode down the bottom
 set wildmenu                        " turn on wild menu
-set wildmode=list:longest           " make cmdline tab completion similar to bash
+set wildmode=list:longest,full      " make cmdline tab completion similar to bash
 set wildignore+=*~,.git,*.pyc,*.o,tags
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.DS_Store?
+set noshowmode
 set number
 set numberwidth=5
+set pumheight=10
+set report=0
 set showbreak=↪
 set pastetoggle=<F8>
 set background=dark
@@ -105,7 +108,7 @@ set gdefault
 set scrolloff=3
 set sidescrolloff=7
 set sidescroll=1
-set listchars=tab:▸\ ,eol:¬
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 
 " }}}
 " Text Formatting {{{
@@ -138,7 +141,7 @@ autocmd FileType c setlocal foldmethod=syntax
 
 autocmd BufNewFile,BufRead *.rss setfiletype xml
 autocmd BufNewFile,BufRead *.json setfiletype javascript
-autocmd BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,config.ru} setfiletype ruby
+autocmd BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,config.ru,pryrc} setfiletype ruby
 autocmd BufReadPost fugitive://* set bufhidden=delete
 autocmd BufWritePost .vimrc source $MYVIMRC
 

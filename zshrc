@@ -5,6 +5,7 @@
 
 # load functions
 source ~/.dotfiles/zsh/functions/_z
+source ~/.dotfiles/zsh/functions/_chpwd
 
 # enable rbenv shims and autocompletion
 eval "$(rbenv init -)"
