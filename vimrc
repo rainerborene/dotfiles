@@ -49,7 +49,8 @@ set report=0
 set showbreak=↪
 set pastetoggle=<F8>
 set background=dark
-set fillchars=vert:\│
+set virtualedit+=block
+set completeopt=longest,menuone,preview
 
 if has("mouse")
   set mouse=a
@@ -106,8 +107,9 @@ set hlsearch                        " highlight searches by default
 set nostartofline                   " don't reset cursor to start of line when moving around
 set gdefault
 set scrolloff=3
-set sidescrolloff=7
 set sidescroll=1
+set sidescrolloff=10
+set fillchars=vert:\│
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 
 " }}}
@@ -159,6 +161,9 @@ autocmd FileType javascript setlocal foldmarker={,}
 
 autocmd FileType nginx setlocal foldmethod=marker foldmarker={,}
 
+" Save when losing focus
+autocmd FocusLost * :wa
+
 " Resize splits when the window is resized
 autocmd VimResized * exe "normal! \<c-w>="
 
@@ -175,15 +180,18 @@ autocmd BufReadPost *
 let mapleader = ","
 let maplocalleader = "\\"
 
-" use sane regexes.
-nnoremap / /\v
-vnoremap / /\v
+" easier bracket matching
+map <Tab> %
 
 " delete a buffer without closing the window
 nmap <leader>q <Plug>Kwbd
 
 " wipe all buffers which are not active
 nmap <leader>hq <Plug>CloseHiddenBuffers
+
+" use sane regexes.
+nnoremap / /\v
+vnoremap / /\v
 
 " Formatting, TextMate-style
 nnoremap Q gqip
@@ -207,12 +215,14 @@ nnoremap gV `[v`]`
 " save a file as root.
 cnoremap w!! w !sudo tee % >/dev/null
 
+" enter command mode quickly
+nnoremap ; :
+
 " speed up buffer switching
 noremap <C-k> <C-W>k
 noremap <C-j> <C-W>j
 noremap <C-h> <C-W>h
 noremap <C-l> <C-W>l
-noremap <leader>v <C-w>v
 
 " omnicompletion
 inoremap <c-l> <c-x><c-l>
@@ -252,6 +262,10 @@ inoremap <c-a> <c-o>^
 " substitute
 nnoremap <leader>s :%s//<left>
 
+" source
+vnoremap <leader>S y:execute @@<cr>
+nnoremap <leader>S ^vg_y:execute @@<cr>
+
 " generate ctags
 nnoremap <leader>ct :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
@@ -263,10 +277,6 @@ onoremap id i[
 onoremap ad a[
 vnoremap id i[
 vnoremap ad a[
-
-" key mapping for tab navigation
-nnoremap <Tab> gt
-nnoremap <S-Tab> gT
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -287,7 +297,6 @@ nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
 nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 
 " open ctrlp in buffer mode
-nnoremap <Leader>t :CtrlPTag<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
 
 " some toggle commands
@@ -295,7 +304,7 @@ nnoremap <Leader>u :GundoToggle<CR>
 nnoremap <silent> <Leader>n :NERDTree<CR>
 nnoremap <silent> <leader>N :NERDTreeFind<CR>
 nnoremap <silent> <buffer> <leader>l :set spell!<CR>
-nnoremap <leader>p :set invpaste <CR>
+nnoremap <leader>p :set invpaste<CR>
 
 " ack searching
 noremap <leader>a :Ack!
@@ -331,7 +340,6 @@ function! StripWhitespace()
   call setpos('.', save_cursor)
   call setreg('/', old_query)
 endfunction
-
 noremap <leader>w :call StripWhitespace()<CR>
 
 " }}}
