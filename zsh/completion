@@ -1,9 +1,0 @@
-# load our own completion functions
-fpath=(~/.zsh/completion $fpath)
-
-autoload -U compinit
-compinit
-
-unsetopt menu_complete # do not autoselect the first completion entry
-
-zstyle ':completion:*' menu select

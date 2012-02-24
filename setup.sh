@@ -82,11 +82,8 @@ update() {
   read -p "Submodules was successfully updated. Are you sure you want to continue [y/n]? " ANSWER
   [[ $ANSWER == "n" || $ANSWER == "N" ]] && exit
 
-  cd ~/.dotfiles/bin
-  curl $github/aashay/CloudApp/master/cloudapp -Os
-
-  cd ~/.dotfiles/zsh/functions
-  curl $github/rupa/z/master/z.sh -so _z
+  cd ~/.dotfiles/zsh
+  curl $github/rupa/z/master/z.sh -Os
 
   cd ~/.dotfiles/vim/colors
   curl $github/oguzbilgic/sexy-railscasts-theme/master/colors/sexy-railscasts.vim -Os
@@ -107,18 +104,8 @@ update() {
 #
 
 dependencies() {
-  if ! type -p ack &> /dev/null; then
-    # See http://petdance.com/ack/ for more information.
-    echo "*** Installing ack..."
-
-    curl --url http://betterthangrep.com/ack-standalone -s -o /tmp/ack \
-      && chmod 0755 /tmp/ack \
-      && sudo mv /tmp/ack /usr/local/bin/ack
-  fi
-
   echo "*** Installing gems..."
   sudo gem install -q wirble awesome_print interactive_editor
-
   echo "*** Done"
 }
 

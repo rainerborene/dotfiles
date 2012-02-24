@@ -267,7 +267,7 @@ vnoremap <leader>S y:execute @@<cr>
 nnoremap <leader>S ^vg_y:execute @@<cr>
 
 " generate ctags
-nnoremap <leader>ct :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
+nnoremap <leader>rt :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
 " because escape is too far away
 inoremap jj <ESC>
@@ -296,7 +296,8 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
 nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 
-" open ctrlp in buffer mode
+" open ctrlp in buffer and tag mode
+nnoremap <Leader>t :CtrlPTag<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
 
 " some toggle commands

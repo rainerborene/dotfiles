@@ -1,14 +1,31 @@
-. ~/.dotfiles/zsh/env
-. ~/.dotfiles/zsh/config
-. ~/.dotfiles/zsh/aliases
-. ~/.dotfiles/zsh/completion
+ZSH=$HOME/.oh-my-zsh
+ZSH_THEME="josh"
+plugins=(git ruby rails3 vi-mode bundle rbenv cloudapp)
 
-# load functions
-source ~/.dotfiles/zsh/functions/_z
-source ~/.dotfiles/zsh/functions/_chpwd
+source $ZSH/oh-my-zsh.sh
 
-# enable rbenv shims and autocompletion
-eval "$(rbenv init -)"
+# Extra aliases
+source $HOME/.dotfiles/zsh/aliases.zsh
 
-# use .localrc for settings specific to one system
-[[ -f ~/.localrc ]] && . ~/.localrc
+# Environment variables
+export UNAME=`uname`
+export EDITOR='vim'
+export LESS="-R"
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='1;33'
+export PATH="$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH"
+export CLICOLOR="auto"
+export RUBY_BIN=`which ruby | sed 's/ruby$//'`
+
+if [[ "$COLORTERM" == "gnome-terminal" ]]; then
+  export TERM="gnome-256color"
+fi
+
+# Z command
+source $HOME/.dotfiles/zsh/z.sh
+precmd() {
+  _z --add "$(pwd -P)"
+}
+
+# Welcome message
+ruby $HOME/.dotfiles/bin/subliminar

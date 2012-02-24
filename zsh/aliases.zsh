@@ -26,11 +26,6 @@ md() {
   mkdir -p "$@" && cd "$@"
 }
 
-# Pre-prompt command
-precmd() {
-  _z --add "$(pwd -P)"
-}
-
 # git
 alias g='git'
 alias ga='git add'
