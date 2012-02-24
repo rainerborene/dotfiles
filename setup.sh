@@ -99,20 +99,9 @@ update() {
   curl $github/tpope/vim-repeat/master/autoload/repeat.vim -Os
 }
 
-#
-# Install dependencies (these are optionals).
-#
-
-dependencies() {
-  echo "*** Installing gems..."
-  sudo gem install -q wirble awesome_print interactive_editor
-  echo "*** Done"
-}
-
 # Parse arguments
 case $1 in
   update) update; exit ;;
-  dependencies) dependencies; exit ;;
   uninstall) uninstall; exit ;;
   install) install; exit ;;
 esac

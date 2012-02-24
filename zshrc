@@ -4,7 +4,13 @@ plugins=(git ruby rails3 vi-mode bundle rbenv cloudapp)
 
 source $ZSH/oh-my-zsh.sh
 
-# Extra aliases
+# Custom options
+unsetopt promptcr
+
+# Userful aliases
+alias zshconfig='vim ~/.zshrc'
+alias ohmyzsh='vim ~/.oh-my-zsh'
+
 source $HOME/.dotfiles/zsh/aliases.zsh
 
 # Environment variables

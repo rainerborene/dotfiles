@@ -45,7 +45,6 @@ set noshowmode
 set number
 set numberwidth=5
 set pumheight=10
-set report=0
 set showbreak=↪
 set pastetoggle=<F8>
 set background=dark
@@ -292,10 +291,6 @@ nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 " open directory dirname of current file
 noremap <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
-" quickly edit/reload the vimrc file
-nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
-nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
-
 " open ctrlp in buffer and tag mode
 nnoremap <Leader>t :CtrlPTag<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
@@ -342,6 +337,14 @@ function! StripWhitespace()
   call setreg('/', old_query)
 endfunction
 noremap <leader>w :call StripWhitespace()<CR>
+
+" }}}
+" Quick editing {{{
+
+nnoremap <silent> <leader>ez :e ~/.zshrc<CR>
+nnoremap <silent> <leader>es :e ~/.vim/snippets/<CR>
+nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
+nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 
 " }}}
 " Global Options {{{
