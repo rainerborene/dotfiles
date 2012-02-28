@@ -21,11 +21,6 @@ alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias serve_this='python -m SimpleHTTPServer'
 alias l='tree -hCL 1'
 
-# Create a new directory and enter it
-md() {
-  mkdir -p "$@" && cd "$@"
-}
-
 # git
 alias g='git'
 alias ga='git add'

@@ -79,9 +79,6 @@
 [submodule "vim/bundle/snipmate"]
 	path = vim/bundle/snipmate
 	url = git://github.com/akitaonrails/snipmate.vim.git
-[submodule "vim/bundle/slime"]
-	path = vim/bundle/slime
-	url = git://github.com/jpalardy/vim-slime.git
 [submodule "vim/bundle/ctrlp"]
 	path = vim/bundle/ctrlp
 	url = git://github.com/kien/ctrlp.vim.git
@@ -106,3 +103,6 @@
 [submodule "oh-my-zsh"]
 	path = oh-my-zsh
 	url = git://github.com/robbyrussell/oh-my-zsh.git
+[submodule "vim/bundle/tslime"]
+	path = vim/bundle/tslime
+	url = git://github.com/samstokes/tslime.vim.git

@@ -146,7 +146,7 @@ autocmd BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemf
 autocmd BufReadPost fugitive://* set bufhidden=delete
 autocmd BufWritePost .vimrc source $MYVIMRC
 
-" use <localleader>1/2/3 to add headings.
+" Use <localleader>1/2/3 to add headings.
 autocmd Filetype markdown nnoremap <buffer> <localleader>1 yypVr=
 autocmd Filetype markdown nnoremap <buffer> <localleader>2 yypVr-
 autocmd Filetype markdown nnoremap <buffer> <localleader>3 I### <ESC>
@@ -175,20 +175,20 @@ autocmd BufReadPost *
 " }}}
 " Mappings {{{
 
-" leader keys
+" Leader keys
 let mapleader = ","
 let maplocalleader = "\\"
 
-" easier bracket matching
+" Easier bracket matching
 map <Tab> %
 
-" delete a buffer without closing the window
+" Delete a buffer without closing the window
 nmap <leader>q <Plug>Kwbd
 
-" wipe all buffers which are not active
+" Wipe all buffers which are not active
 nmap <leader>hq <Plug>CloseHiddenBuffers
 
-" use sane regexes.
+" Use sane regexes.
 nnoremap / /\v
 vnoremap / /\v
 
@@ -197,7 +197,7 @@ nnoremap Q gqip
 vnoremap Q gq
 
 " Keep search matches in the middle of the window and pulse the line when moving
-" to them.
+" To them.
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
@@ -205,29 +205,29 @@ nnoremap N Nzzzv
 nnoremap g; g;zz
 nnoremap g, g,zz
 
-" make Y consistent with C and D
+" Make Y consistent with C and D
 nnoremap Y y$
 
-" shortcuts for visual selections
+" Shortcuts for visual selections
 nnoremap gV `[v`]`
 
-" save a file as root.
+" Save a file as root.
 cnoremap w!! w !sudo tee % >/dev/null
 
-" enter command mode quickly
+" Enter command mode quickly
 nnoremap ; :
 
-" speed up buffer switching
+" Speed up buffer switching
 noremap <C-k> <C-W>k
 noremap <C-j> <C-W>j
 noremap <C-h> <C-W>h
 noremap <C-l> <C-W>l
 
-" omnicompletion
+" Omnicompletion
 inoremap <c-l> <c-x><c-l>
 inoremap <c-f> <c-x><c-f>
 
-" sane movement with wrap turned on
+" Sane movement with wrap turned on
 nnoremap j gj
 nnoremap k gk
 vnoremap j gj
@@ -239,7 +239,7 @@ vnoremap <Down> gj
 inoremap <Up> <C-o>gk
 inoremap <Down> <C-o>gj
 
-" handful abbreveations
+" Handful abbreveations
 cab W  w
 cab Wq wq
 cab wQ wq
@@ -247,31 +247,31 @@ cab WQ wq
 cab Q  q
 cab git Git
 
-" calculator
+" Calculator
 inoremap <C-B> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 
-" emacs bindings in command line mode
+" Emacs bindings in command line mode
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 
-" emacs-like beginning and end of line.
+" Emacs-like beginning and end of line.
 inoremap <c-e> <c-o>$
 inoremap <c-a> <c-o>^
 
-" substitute
+" Substitute
 nnoremap <leader>s :%s//<left>
 
-" source
+" Source
 vnoremap <leader>S y:execute @@<cr>
 nnoremap <leader>S ^vg_y:execute @@<cr>
 
-" generate ctags
+" Generate ctags
 nnoremap <leader>rt :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
-" because escape is too far away
+" Because escape is too far away
 inoremap jj <ESC>
 
-" shortcut for []
+" Shortcut for []
 onoremap id i[
 onoremap ad a[
 vnoremap id i[
@@ -282,30 +282,31 @@ nnoremap <Space> za
 vnoremap <Space> za
 
 " Make zO recursively open whatever top level fold we're in, no matter where the
-" cursor happens to be.
+" Cursor happens to be.
 nnoremap zO zCzO
 
-" clear search highlight
+" Clear search highlight
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
-" open directory dirname of current file
+" Open directory dirname of current file
 noremap <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
-" open ctrlp in buffer and tag mode
+" Open ctrlp in buffer and tag mode
 nnoremap <Leader>t :CtrlPTag<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
 
-" some toggle commands
-nnoremap <Leader>u :GundoToggle<CR>
-nnoremap <silent> <Leader>n :NERDTree<CR>
+" Toggle commands
+nnoremap <leader>I :set list!<CR>
+nnoremap <leader>p :set invpaste<CR>
+nnoremap <leader>u :GundoToggle<CR>
+nnoremap <silent> <leader>n :NERDTree<CR>
 nnoremap <silent> <leader>N :NERDTreeFind<CR>
 nnoremap <silent> <buffer> <leader>l :set spell!<CR>
-nnoremap <leader>p :set invpaste<CR>
 
-" ack searching
+" Ack searching
 noremap <leader>a :Ack!
 
-" align text
+" Align text
 nnoremap <leader>Al :left<cr>
 nnoremap <leader>Ac :center<cr>
 nnoremap <leader>Ar :right<cr>
@@ -313,7 +314,7 @@ vnoremap <leader>Al :left<cr>
 vnoremap <leader>Ac :center<cr>
 vnoremap <leader>Ar :right<cr>
 
-" fugitive
+" Fugitive
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
@@ -328,7 +329,7 @@ nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gv :Gitv --all<cr>
 nnoremap <leader>gV :Gitv! --all<cr>
 
-" strip trailing whitespace
+" Strip trailing whitespace
 function! StripWhitespace()
   let save_cursor = getpos(".")
   let old_query = getreg('/')
@@ -359,7 +360,6 @@ let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
 let g:ackprg = "ack-grep -H --nocolor --nogroup --column"
 let g:sparkupNextMapping = '<c-s>'
-let g:slime_target = "tmux"
 let g:gundo_preview_bottom = 1
 let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_working_path_mode = 0
