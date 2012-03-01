@@ -161,7 +161,7 @@ autocmd FileType javascript setlocal foldmarker={,}
 autocmd FileType nginx setlocal foldmethod=marker foldmarker={,}
 
 " Save when losing focus
-autocmd FocusLost * :wa
+autocmd FocusLost * :silent! wa!
 
 " Resize splits when the window is resized
 autocmd VimResized * exe "normal! \<c-w>="
@@ -265,7 +265,7 @@ nnoremap <leader>s :%s//<left>
 vnoremap <leader>S y:execute @@<cr>
 nnoremap <leader>S ^vg_y:execute @@<cr>
 
-" Generate ctags
+" Regenerate ctags
 nnoremap <leader>rt :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
 " Because escape is too far away
