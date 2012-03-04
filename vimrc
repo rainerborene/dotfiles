@@ -168,6 +168,10 @@ autocmd FocusLost * :silent! wa!
 " Resize splits when the window is resized
 autocmd VimResized * exe "normal! \<c-w>="
 
+" Only show cursorline in the current window
+autocmd WinLeave * set nocursorline
+autocmd WinEnter * set cursorline
+
 " Restore cursor position
 autocmd BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") |
@@ -248,6 +252,9 @@ cab wQ wq
 cab WQ wq
 cab Q  q
 cab git Git
+
+iabbrev me@ me@rainerborene.com
+iabbrev #e # encoding: utf-8
 
 " Calculator
 inoremap <C-B> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
