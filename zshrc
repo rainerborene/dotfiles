@@ -11,8 +11,6 @@ unsetopt promptcr
 alias zshconfig='vim ~/.zshrc'
 alias ohmyzsh='vim ~/.oh-my-zsh'
 
-source $HOME/.dotfiles/zsh/aliases.zsh
-
 # Environment variables
 export UNAME=`uname`
 export EDITOR='vim'
@@ -26,6 +24,8 @@ export RUBY_BIN=`which ruby | sed 's/ruby$//'`
 if [[ "$COLORTERM" == "gnome-terminal" ]]; then
   export TERM="gnome-256color"
 fi
+
+source $HOME/.dotfiles/zsh/aliases.zsh
 
 # Z command
 source $HOME/.dotfiles/zsh/z.sh

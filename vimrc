@@ -11,6 +11,7 @@ set encoding=utf-8  " default encoding
 set nobomb
 set undoreload=10000
 set undofile
+set clipboard=unnamed
 set ttimeout
 set notimeout
 set nottimeout
@@ -49,7 +50,8 @@ set showbreak=↪
 set pastetoggle=<F8>
 set background=dark
 set virtualedit+=block
-set completeopt=longest,menuone,preview
+set shortmess=atI
+set mousemodel=popup
 
 if has("mouse")
   set mouse=a
@@ -284,6 +286,10 @@ vnoremap <Space> za
 " Make zO recursively open whatever top level fold we're in, no matter where the
 " Cursor happens to be.
 nnoremap zO zCzO
+
+" Duplication
+nnoremap <leader>d mz"dyy"dp`z
+vnoremap <leader>d "dymz"dP`z``
 
 " Clear search highlight
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
