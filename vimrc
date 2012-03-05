@@ -223,6 +223,9 @@ cnoremap w!! w !sudo tee % >/dev/null
 " Enter command mode quickly
 nnoremap ; :
 
+" Fuck you too, manual key.
+nnoremap K <nop>
+
 " Speed up buffer switching
 noremap <C-k> <C-W>k
 noremap <C-j> <C-W>j
@@ -351,6 +354,16 @@ function! StripWhitespace()
   call setreg('/', old_query)
 endfunction
 noremap <leader>w :call StripWhitespace()<CR>
+
+" Visual search mappings
+function! s:VSetSearch()
+    let temp = @@
+    norm! gvy
+    let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+    let @@ = temp
+endfunction
+vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
+vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 " }}}
 " Quick editing {{{
