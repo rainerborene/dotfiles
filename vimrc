@@ -13,7 +13,6 @@ set undoreload=10000
 set undofile
 set clipboard=unnamed
 set ttimeout
-set notimeout
 set nottimeout
 set ttyfast
 set splitbelow
@@ -47,7 +46,7 @@ set number
 set numberwidth=5
 set pumheight=10
 set showbreak=↪
-set pastetoggle=<F8>
+set pastetoggle=<F6>
 set background=dark
 set virtualedit+=block
 set shortmess=atI
@@ -65,9 +64,7 @@ if has("gui_running")
   set go-=r
   set go-=R
 
-  colorscheme ir_black
-
-  highlight SpellBad term=underline gui=undercurl guisp=Orange
+  colorscheme badwolf
 
   if has("mac")
     set guifont=Menlo:h12
@@ -265,10 +262,6 @@ inoremap <C-B> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 " Emacs bindings in command line mode
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
-
-" Emacs-like beginning and end of line.
-inoremap <c-e> <c-o>$
-inoremap <c-a> <c-o>^
 
 " Substitute
 nnoremap <leader>s :%s//<left>

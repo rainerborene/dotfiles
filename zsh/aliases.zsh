@@ -57,16 +57,6 @@ alias b='bundle'
 alias be='bundle exec'
 alias rst='touch tmp/restart.txt'
 
-# run rake without worring about
-# bundler wrapper.
-rake() {
-  if [ -e Gemfile ]; then
-    bundle exec rake $@
-  else
-    `which rake` $@
-  fi
-}
-
 # rubygems
 alias gems='gem search -b'
 alias geml='gem list -l'

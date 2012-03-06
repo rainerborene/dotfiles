@@ -1,5 +1,5 @@
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="josh"
+ZSH_THEME="gozilla"
 plugins=(git ruby rails3 vi-mode bundle rbenv cloudapp)
 
 source $ZSH/oh-my-zsh.sh
@@ -15,10 +15,8 @@ alias ohmyzsh='vim ~/.oh-my-zsh'
 export UNAME=`uname`
 export EDITOR='vim'
 export LESS="-R"
-export GREP_OPTIONS='--color=auto'
-export GREP_COLOR='1;33'
-export PATH="$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH"
 export CLICOLOR="auto"
+export PATH="$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH"
 export RUBY_BIN=`which ruby | sed 's/ruby$//'`
 
 if [[ "$COLORTERM" == "gnome-terminal" ]]; then
