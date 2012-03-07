@@ -160,7 +160,7 @@ autocmd FileType javascript setlocal foldmarker={,}
 autocmd FileType nginx setlocal foldmethod=marker foldmarker={,}
 
 " Save when losing focus
-autocmd FocusLost * :silent! wa!
+autocmd FocusLost * :silent! wall
 
 " Resize splits when the window is resized
 autocmd VimResized * exe "normal! \<c-w>="
@@ -220,14 +220,22 @@ cnoremap w!! w !sudo tee % >/dev/null
 " Enter command mode quickly
 nnoremap ; :
 
+" Fuck you, help key.
+noremap <F1> :set invfullscreen<CR>
+inoremap <F1> <ESC>:set invfullscreen<CR>a
+
 " Fuck you too, manual key.
 nnoremap K <nop>
+
+" Kill window
+nnoremap K :q<cr>
 
 " Speed up buffer switching
 noremap <C-k> <C-W>k
 noremap <C-j> <C-W>j
 noremap <C-h> <C-W>h
 noremap <C-l> <C-W>l
+noremap <leader>v <C-w>v
 
 " Omnicompletion
 inoremap <c-l> <c-x><c-l>
