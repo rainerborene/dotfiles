@@ -53,6 +53,7 @@ set background=dark
 set virtualedit+=block
 set shortmess=atI
 set mousemodel=popup
+set completeopt=longest,menuone,preview
 
 if has("mouse")
   set mouse=a
@@ -67,6 +68,8 @@ if has("gui_running")
   set go-=R
 
   colorscheme badwolf
+
+  highlight SpellBad term=underline gui=undercurl guisp=Orange
 
   if has("mac")
     set guifont=Menlo:h12
@@ -131,48 +134,55 @@ set wrap linebreak nolist
 " }}}
 " Auto Commands {{{
 
-autocmd FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
-autocmd FileType php,apache,sql,xslt setlocal ts=4 sts=4 sw=4 noexpandtab
-autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
-autocmd FileType markdown setlocal wrap linebreak nolist
-autocmd FileType gitcommit setlocal spell | wincmd K
-autocmd FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()
-autocmd FileType java silent! compiler javac | setlocal makeprg=javac\ %
-autocmd FileType ruby silent! compiler ruby | setlocal foldmethod=syntax
-autocmd FileType c setlocal foldmethod=syntax
+au FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
+au FileType php,apache,sql,xslt setlocal ts=4 sts=4 sw=4 noexpandtab
+au FileType python setlocal ts=4 sts=4 sw=4 expandtab
+au FileType markdown setlocal wrap linebreak nolist
+au FileType gitcommit setlocal spell | wincmd K
+au FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()
+au FileType java silent! compiler javac | setlocal makeprg=javac\ %
+au FileType ruby silent! compiler ruby | setlocal foldmethod=syntax
+au FileType c setlocal foldmethod=syntax
 
-autocmd BufNewFile,BufRead *.rss setfiletype xml
-autocmd BufNewFile,BufRead *.json setfiletype javascript
-autocmd BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,config.ru,pryrc} setfiletype ruby
-autocmd BufReadPost fugitive://* set bufhidden=delete
-autocmd BufWritePost .vimrc source $MYVIMRC
+au BufNewFile,BufRead *.rss setfiletype xml
+au BufNewFile,BufRead *.json setfiletype javascript
+au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,config.ru,pryrc} setfiletype ruby
+au BufReadPost fugitive://* set bufhidden=delete
+au BufWritePost .vimrc source $MYVIMRC
 
-" Use <localleader>1/2/3 to add headings.
-autocmd Filetype markdown nnoremap <buffer> <localleader>1 yypVr=
-autocmd Filetype markdown nnoremap <buffer> <localleader>2 yypVr-
-autocmd Filetype markdown nnoremap <buffer> <localleader>3 I### <ESC>
+augroup ft_markdown
+  au!
+  au BufNewFile,BufRead *.m*down setlocal filetype=markdown
+  au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=
+  au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-
+  au Filetype markdown nnoremap <buffer> <localleader>3 I### <ESC>
+augroup END
 
-autocmd FileType vim setlocal foldmethod=marker
-autocmd FileType help setlocal textwidth=78
-autocmd BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+augroup ft_vim
+  au FileType vim setlocal foldmethod=marker
+  au FileType help setlocal textwidth=78
+  au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+augroup END
 
-autocmd FileType javascript setlocal foldmethod=marker
-autocmd FileType javascript setlocal foldmarker={,}
-
-autocmd FileType nginx setlocal foldmethod=marker foldmarker={,}
-
-" Save when losing focus
-autocmd FocusLost * :silent! wall
-
-" Resize splits when the window is resized
-autocmd VimResized * exe "normal! \<c-w>="
+augroup ft_javascript
+  au FileType javascript setlocal foldmethod=marker
+  au FileType javascript setlocal foldmarker={,}
+augroup END
 
 " Only show cursorline in the current window
-autocmd WinLeave * set nocursorline
-autocmd WinEnter * set cursorline
+augroup cline
+  au WinLeave * set nocursorline
+  au WinEnter * set cursorline
+augroup END
+
+" Save when losing focus
+au FocusLost * :silent! wall
+
+" Resize splits when the window is resized
+au VimResized * exe "normal! \<c-w>="
 
 " Restore cursor position
-autocmd BufReadPost *
+au BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") |
   \   exe "normal! g`\"" |
   \ endif
@@ -238,6 +248,10 @@ noremap <C-j> <C-W>j
 noremap <C-h> <C-W>h
 noremap <C-l> <C-W>l
 noremap <leader>v <C-w>v
+
+" Easy filetype switching
+nnoremap _ss :set ft=sass<CR>
+nnoremap _ht :set ft=html<CR>
 
 " Omnicompletion
 inoremap <c-l> <c-x><c-l>
@@ -315,7 +329,7 @@ nnoremap <Leader>t :CtrlPTag<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
 
 " Toggle commands
-nnoremap <leader>I :set list!<CR>
+nnoremap <leader>i :set list!<CR>
 nnoremap <leader>p :set invpaste<CR>
 nnoremap <leader>u :GundoToggle<CR>
 nnoremap <silent> <leader>n :NERDTree<CR>
