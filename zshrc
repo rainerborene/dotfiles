@@ -17,7 +17,6 @@ export EDITOR='vim'
 export LESS="-R"
 export CLICOLOR="auto"
 export PATH="$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH"
-export RUBY_BIN=`which ruby | sed 's/ruby$//'`
 
 if [[ "$COLORTERM" == "gnome-terminal" ]]; then
   export TERM="gnome-256color"

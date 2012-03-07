@@ -1,4 +1,4 @@
-" Basic configuration {{{
+" Basic settings {{{
 
 filetype off        " necessary on some Linux distros for pathogen to properly load bundles
 set nocompatible    " use Vim settings, rather then Vi settings (much better!)
@@ -9,6 +9,7 @@ set hidden          " hide buffers when not displayed
 set spelllang=pt,en " spell checking languages
 set encoding=utf-8  " default encoding
 set nobomb
+set shell=/bin/sh
 set undoreload=10000
 set undofile
 set clipboard=unnamed
@@ -40,7 +41,8 @@ set wildmenu                        " turn on wild menu
 set wildmode=list:longest,full      " make cmdline tab completion similar to bash
 set wildignore+=*~,.git,*.pyc,*.o,tags
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
-set wildignore+=*.DS_Store?
+set wildignore+=*.DS_Store
+set wildignore+=.sass-cache
 set noshowmode
 set number
 set numberwidth=5
@@ -377,7 +379,6 @@ nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 " }}}
 " Global Options {{{
 
-let g:ruby_path=$RUBY_BIN
 let g:NERDTreeHighlightCursorline = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDCreateDefaultMappings = 0
