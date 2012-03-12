@@ -66,8 +66,8 @@ if has("gui_running")
   set go-=r
   set go-=R
 
+  let g:badwolf_html_link_underline = 0
   colorscheme badwolf
-
   highlight SpellBad term=underline gui=undercurl guisp=Orange
 
   if has("mac")
@@ -380,6 +380,15 @@ vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 " }}}
+" Synstack {{{
+
+" Show highlighting groups for current word
+function! SynStack()
+  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), " > ")
+endfunc
+nnoremap <F7> :call SynStack()<CR>
+
+" }}}
 " Quick editing {{{
 
 nnoremap <silent> <leader>ez :e ~/.zshrc<CR>
@@ -412,7 +421,6 @@ let g:syntastic_auto_loc_list = 2
 let g:syntastic_disabled_filetypes = ['html']
 let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:SuperTabLongestHighlight = 1
-let g:badwolf_html_link_underline = 0
 
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
