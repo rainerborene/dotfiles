@@ -9,7 +9,6 @@ set hidden          " hide buffers when not displayed
 set spelllang=pt,en " spell checking languages
 set encoding=utf-8  " default encoding
 set nobomb
-set shell=/bin/sh
 set undoreload=10000
 set undofile
 set clipboard=unnamed
@@ -80,10 +79,6 @@ if has("gui_running")
   endif
 else
   colorscheme tir_black
-  highlight DiffAdd cterm=none ctermfg=black ctermbg=Green gui=none guifg=black guibg=Green
-  highlight DiffDelete cterm=none ctermfg=black ctermbg=Red gui=none guifg=black guibg=Red
-  highlight DiffChange cterm=none ctermfg=black ctermbg=Yellow gui=none guifg=black guibg=Yellow
-  highlight DiffText cterm=none ctermfg=black ctermbg=Magenta gui=none guifg=black guibg=Magenta
 end
 
 " }}}
@@ -159,18 +154,21 @@ augroup ft_markdown
 augroup END
 
 augroup ft_vim
+  au!
   au FileType vim setlocal foldmethod=marker
   au FileType help setlocal textwidth=78
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
 augroup END
 
 augroup ft_javascript
+  au!
   au FileType javascript setlocal foldmethod=marker
   au FileType javascript setlocal foldmarker={,}
 augroup END
 
 " Only show cursorline in the current window
 augroup cline
+  au!
   au WinLeave * set nocursorline
   au WinEnter * set cursorline
 augroup END
@@ -211,8 +209,7 @@ vnoremap / /\v
 nnoremap Q gqip
 vnoremap Q gq
 
-" Keep search matches in the middle of the window and pulse the line when moving
-" To them.
+" Keep search matches in the middle of the window.
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
@@ -337,7 +334,7 @@ nnoremap <silent> <leader>N :NERDTreeFind<CR>
 nnoremap <silent> <buffer> <leader>l :set spell!<CR>
 
 " Ack searching
-noremap <leader>a :Ack!
+noremap <leader>a :Ack!<space>
 
 " Align text
 nnoremap <leader>Al :left<cr>
@@ -387,6 +384,7 @@ vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 nnoremap <silent> <leader>ez :e ~/.zshrc<CR>
 nnoremap <silent> <leader>es :e ~/.vim/snippets/<CR>
+nnoremap <silent> <leader>et :e ~/.tmux.conf<CR>
 nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
 nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 
@@ -414,6 +412,7 @@ let g:syntastic_auto_loc_list = 2
 let g:syntastic_disabled_filetypes = ['html']
 let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:SuperTabLongestHighlight = 1
+let g:badwolf_html_link_underline = 0
 
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
