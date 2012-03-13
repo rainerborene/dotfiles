@@ -109,3 +109,6 @@
 [submodule "vim/bundle/rake"]
 	path = vim/bundle/rake
 	url = git://github.com/tpope/vim-rake.git
+[submodule "vim/bundle/scratch"]
+	path = vim/bundle/scratch
+	url = git://github.com/duff/vim-scratch.git

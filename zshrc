@@ -1,11 +1,20 @@
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="gozilla"
-plugins=(git ruby rails3 vi-mode bundle rbenv cloudapp)
+plugins=(git ruby rails3 vi-mode brew bundler rbenv cloudapp)
 
 source $ZSH/oh-my-zsh.sh
 
 # Custom options
 unsetopt promptcr
+
+# Custom theme
+ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[magenta]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[green]%}!"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
+ZSH_THEME_GIT_PROMPT_CLEAN=""
+PROMPT='
+%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)
+$ '
 
 # Userful aliases
 alias zshconfig='vim ~/.zshrc'
@@ -17,15 +26,10 @@ export EDITOR='vim'
 export LESS="-R"
 export CLICOLOR="auto"
 export PATH="$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH"
-
-if [[ "$COLORTERM" == "gnome-terminal" ]]; then
-  export TERM="gnome-256color"
-fi
-
 source $HOME/.dotfiles/zsh/aliases.zsh
+source $HOME/.dotfiles/bin/z.sh
 
 # Z command
-source $HOME/.dotfiles/zsh/z.sh
 precmd() {
   _z --add "$(pwd -P)"
 }

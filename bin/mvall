@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-if [[ $1 && $2 ]]; then
-  for filename in $(find * -name "*$1*"); do
-    mv -v $filename $(echo $filename | sed "s/$1/$2/")
-  done
-else
-  echo "Error: missing arguments."
-fi

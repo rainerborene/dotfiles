@@ -1,7 +1,4 @@
-# vim:set ft=sh:
-
 # dir navigation
-alias cdd='cd -'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -20,22 +17,13 @@ alias lsd='ls -l | grep "^d"'
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias serve_this='python -m SimpleHTTPServer'
 alias l='tree -hCL 1'
+alias reload='source ~/.zshrc'
 
 # git
-alias g='git'
-alias ga='git add'
-alias gb='git branch'
-alias gba='git branch -a'
-alias gco='git checkout'
 alias gs='git status'
-alias gss='git status -sb'
-alias gc='git commit -v'
-alias gcm='git commit -m'
 alias gd='git diff --color'
 alias gdc='git diff --cached --color'
 alias gl='git log --oneline --color --max-count=15 --decorate'
-alias gup='git fetch && git rebase'
-alias gp='git push'
 alias gu='git pull'
 alias gt='git tag'
 alias gsm='git submodule'
@@ -46,15 +34,9 @@ gg() {
 }
 
 # ruby on rails
-alias rs='rails s thin'
-alias rc='rails c'
-alias rtu='rake test:units'
-alias rtf='rake test:functionals'
-alias rti='rake test:integration'
-alias rdbm='rake db:migrate'
-alias rdbs='rake db:migrate:status'
 alias b='bundle'
-alias be='bundle exec'
+alias rs='rails s thin'
+alias rdbs='rake db:migrate:status'
 alias rst='touch tmp/restart.txt'
 
 # rubygems
@@ -81,5 +63,12 @@ if [[ "$UNAME" == "Darwin" ]]; then
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
 fi
 
-# source dotfiles
-alias reload='source ~/.zshrc'
+mvall() {
+  if [[ (-n $1 && -n $2) ]]; then
+    for filename in $(find * -name "*$1*"); do
+      mv -v $filename $(echo $filename | sed "s/$1/$2/")
+    done
+  else
+    echo "Error: missing arguments."
+  fi
+}

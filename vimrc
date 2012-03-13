@@ -130,7 +130,7 @@ set wrap linebreak nolist
 " Auto Commands {{{
 
 au FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
-au FileType php,apache,sql,xslt setlocal ts=4 sts=4 sw=4 noexpandtab
+au FileType php,apache,sql,xslt,gitconfig setlocal ts=4 sts=4 sw=4 noexpandtab
 au FileType python setlocal ts=4 sts=4 sw=4 expandtab
 au FileType markdown setlocal wrap linebreak nolist
 au FileType gitcommit setlocal spell | wincmd K
@@ -141,7 +141,7 @@ au FileType c setlocal foldmethod=syntax
 
 au BufNewFile,BufRead *.rss setfiletype xml
 au BufNewFile,BufRead *.json setfiletype javascript
-au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,config.ru,pryrc} setfiletype ruby
+au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,pryrc,config.ru} setfiletype ruby
 au BufReadPost fugitive://* set bufhidden=delete
 au BufWritePost .vimrc source $MYVIMRC
 
@@ -389,11 +389,27 @@ endfunc
 nnoremap <F7> :call SynStack()<CR>
 
 " }}}
+" Scratch {{{
+
+function! ScratchToggle()
+  if exists("w:is_scratch_window")
+    unlet w:is_scratch_window
+    exec "q"
+  else
+    exec "normal! :Sscratch\<cr>\<C-W>J:resize 13\<cr>"
+    let w:is_scratch_window = 1
+  endif
+endfunction
+command! ScratchToggle call ScratchToggle()
+nnoremap <silent> <leader><tab> :ScratchToggle<cr>
+
+" }}}
 " Quick editing {{{
 
+nnoremap <silent> <leader>et :e ~/tasks.txt<CR>
 nnoremap <silent> <leader>ez :e ~/.zshrc<CR>
+nnoremap <silent> <leader>ex :e ~/.tmux.conf<CR>
 nnoremap <silent> <leader>es :e ~/.vim/snippets/<CR>
-nnoremap <silent> <leader>et :e ~/.tmux.conf<CR>
 nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
 nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 
