@@ -148,9 +148,9 @@ au BufWritePost .vimrc source $MYVIMRC
 augroup ft_markdown
   au!
   au BufNewFile,BufRead *.m*down setlocal filetype=markdown
-  au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=
-  au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-
-  au Filetype markdown nnoremap <buffer> <localleader>3 I### <ESC>
+  au Filetype markdown nnoremap <buffer> <leader>m1 yypVr=
+  au Filetype markdown nnoremap <buffer> <leader>m2 yypVr-
+  au Filetype markdown nnoremap <buffer> <leader>m3 I### <ESC>
 augroup END
 
 augroup ft_vim
@@ -179,6 +179,9 @@ au FocusLost * :silent! wall
 " Resize splits when the window is resized
 au VimResized * exe "normal! \<c-w>="
 
+" Make terminal Vim trigger autoread more often.
+au WinEnter,BufWinEnter,CursorHold * checktime
+
 " Restore cursor position
 au BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") |
@@ -204,6 +207,8 @@ nmap <leader>hq <Plug>CloseHiddenBuffers
 " Use sane regexes.
 nnoremap / /\v
 vnoremap / /\v
+nnoremap ? ?\v
+vnoremap ? ?\v
 
 " Formatting, TextMate-style
 nnoremap Q gqip
@@ -249,10 +254,12 @@ noremap <leader>v <C-w>v
 " Easy filetype switching
 nnoremap _ss :set ft=sass<CR>
 nnoremap _ht :set ft=html<CR>
+nnoremap _vm :set ft=vim<CR>
 
-" Omnicompletion
+" Omni completion
 inoremap <c-l> <c-x><c-l>
 inoremap <c-f> <c-x><c-f>
+inoremap <c-]> <c-x><c-]>
 
 " Sane movement with wrap turned on
 nnoremap j gj
@@ -327,11 +334,14 @@ nnoremap <Leader>b :CtrlPBuffer<CR>
 
 " Toggle commands
 nnoremap <leader>i :set list!<CR>
-nnoremap <leader>p :set invpaste<CR>
 nnoremap <leader>u :GundoToggle<CR>
 nnoremap <silent> <leader>n :NERDTree<CR>
 nnoremap <silent> <leader>N :NERDTreeFind<CR>
 nnoremap <silent> <buffer> <leader>l :set spell!<CR>
+
+" Paste from OS X pasteboard without messing up indent.
+noremap <leader>p :set paste<CR>"*p<CR>:set nopaste<CR>
+noremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
 
 " Ack searching
 noremap <leader>a :Ack!<space>
@@ -371,10 +381,10 @@ noremap <leader>w :call StripWhitespace()<CR>
 
 " Visual search mappings
 function! s:VSetSearch()
-    let temp = @@
-    norm! gvy
-    let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-    let @@ = temp
+  let temp = @@
+  norm! gvy
+  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+  let @@ = temp
 endfunction
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
