@@ -18,6 +18,7 @@ set ttyfast
 set splitbelow
 set splitright
 set lazyredraw
+set matchtime=3
 set dictionary=/usr/share/dict/words
 
 call pathogen#runtime_append_all_bundles()
@@ -84,9 +85,9 @@ end
 " }}}
 " Backups {{{
 
-set undodir=$HOME/.dotfiles/vim/tmp/undo
-set backupdir=$HOME/.dotfiles/vim/tmp/backup
-set directory=$HOME/.dotfiles/vim/tmp/swap
+set undodir=$HOME/.dotfiles/vim/tmp/undo//
+set backupdir=$HOME/.dotfiles/vim/tmp/backup//
+set directory=$HOME/.dotfiles/vim/tmp/swap//
 set noswapfile
 set backup
 
@@ -148,9 +149,9 @@ au BufWritePost .vimrc source $MYVIMRC
 augroup ft_markdown
   au!
   au BufNewFile,BufRead *.m*down setlocal filetype=markdown
-  au Filetype markdown nnoremap <buffer> <leader>m1 yypVr=
-  au Filetype markdown nnoremap <buffer> <leader>m2 yypVr-
-  au Filetype markdown nnoremap <buffer> <leader>m3 I### <ESC>
+  au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=
+  au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-
+  au Filetype markdown nnoremap <buffer> <localleader>3 I### <ESC>
 augroup END
 
 augroup ft_vim
@@ -171,6 +172,8 @@ augroup cline
   au!
   au WinLeave * set nocursorline
   au WinEnter * set cursorline
+  au InsertEnter * set colorcolumn=80
+  au InsertLeave * set colorcolumn&
 augroup END
 
 " Save when losing focus
@@ -184,9 +187,9 @@ au WinEnter,BufWinEnter,CursorHold * checktime
 
 " Restore cursor position
 au BufReadPost *
-  \ if line("'\"") > 1 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
+      \ if line("'\"") > 1 && line("'\"") <= line("$") |
+      \   exe "normal! g`\"" |
+      \ endif
 
 " }}}
 " Mappings {{{
@@ -244,6 +247,9 @@ nnoremap K <nop>
 " Kill window
 nnoremap K :q<cr>
 
+" I hate when the rendering occasionally gets messed up.
+nnoremap <leader>rr :redraw!<cr>
+
 " Speed up buffer switching
 noremap <C-k> <C-W>k
 noremap <C-j> <C-W>j
@@ -298,6 +304,9 @@ nnoremap <leader>s :%s//<left>
 vnoremap <leader>S y:execute @@<cr>
 nnoremap <leader>S ^vg_y:execute @@<cr>
 
+" Jump to line and column
+noremap ' `
+
 " Regenerate ctags
 nnoremap <leader>rt :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
@@ -326,7 +335,7 @@ vnoremap <leader>d "dymz"dP`z``
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
 " Open directory dirname of current file
-noremap <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
+nnoremap <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
 
 " Open ctrlp in buffer and tag mode
 nnoremap <Leader>t :CtrlPTag<CR>

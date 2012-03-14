@@ -12,6 +12,7 @@ alias c='clear'
 alias fn='find . -name'
 alias hi='history | tail -20'
 alias pp='python -mjson.tool'
+alias tmux='tmux -u2'
 alias tailf='tail -f'
 alias lsd='ls -l | grep "^d"'
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"

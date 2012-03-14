@@ -1,4 +1,5 @@
-ZSH=$HOME/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
+export DISABLE_AUTO_TITLE="true"
 plugins=(git ruby rails3 vi-mode brew bundler rbenv cloudapp)
 
 source $ZSH/oh-my-zsh.sh
