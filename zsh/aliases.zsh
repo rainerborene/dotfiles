@@ -6,7 +6,7 @@ alias .....='cd ../../../..'
 
 # general
 alias j='z'
-alias e='vim .'
+alias e='vim +:CtrlP'
 alias m='mvim .'
 alias c='clear'
 alias fn='find . -name'
@@ -17,7 +17,7 @@ alias tailf='tail -f'
 alias lsd='ls -l | grep "^d"'
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias serve_this='python -m SimpleHTTPServer'
-alias l='tree -hCL 1'
+alias l='tree -htCL 1 --dirsfirst'
 alias reload='source ~/.zshrc'
 
 # git

@@ -260,7 +260,10 @@ noremap <leader>v <C-w>v
 " Easy filetype switching
 nnoremap _ss :set ft=sass<CR>
 nnoremap _ht :set ft=html<CR>
-nnoremap _vm :set ft=vim<CR>
+nnoremap _vi :set ft=vim<CR>
+
+" View full list of vim's syntax groups
+nnoremap <leader>hi :source $VIMRUNTIME/syntax/hitest.vim<CR>
 
 " Omni completion
 inoremap <c-l> <c-x><c-l>
@@ -331,6 +334,9 @@ nnoremap zO zCzO
 nnoremap <leader>d mz"dyy"dp`z
 vnoremap <leader>d "dymz"dP`z``
 
+" Diffoff
+nnoremap <leader>D :diffoff!<cr>
+
 " Clear search highlight
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
@@ -367,12 +373,11 @@ vnoremap <leader>Ar :right<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
-nnoremap <leader>ga :Gadd<cr>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gh :Gbrowse<cr>
-nnoremap <leader>gco :Gcheckout<cr>
+nnoremap <leader>gco :Gread<cr>
 nnoremap <leader>gci :Gcommit<cr>
-nnoremap <leader>gm :Gmove<cr>
+nnoremap <leader>gm :Gmove<space>
 nnoremap <leader>gr :Gremove<cr>
 nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gv :Gitv --all<cr>
