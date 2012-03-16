@@ -11,7 +11,7 @@ set encoding=utf-8  " default encoding
 set nobomb
 set undoreload=10000
 set undofile
-set clipboard=unnamed
+set shiftround
 set ttimeout
 set nottimeout
 set ttyfast
@@ -229,7 +229,7 @@ nnoremap g, g,zz
 nnoremap Y y$
 
 " Shortcuts for visual selections
-nnoremap gV `[v`]`
+nnoremap gV `[v`]
 
 " Save a file as root.
 cnoremap w!! w !sudo tee % >/dev/null
@@ -258,9 +258,9 @@ noremap <C-l> <C-W>l
 noremap <leader>v <C-w>v
 
 " Easy filetype switching
-nnoremap _ss :set ft=sass<CR>
-nnoremap _ht :set ft=html<CR>
-nnoremap _vi :set ft=vim<CR>
+nnoremap _ss :setf sass<CR>
+nnoremap _ht :setf html<CR>
+nnoremap _vi :setf vim<CR>
 
 " View full list of vim's syntax groups
 nnoremap <leader>hi :source $VIMRUNTIME/syntax/hitest.vim<CR>
@@ -330,6 +330,9 @@ vnoremap <Space> za
 " Cursor happens to be.
 nnoremap zO zCzO
 
+" Focus the current fold by folding all the others
+nnoremap <leader>z zMzvzz
+
 " Duplication
 nnoremap <leader>d mz"dyy"dp`z
 vnoremap <leader>d "dymz"dP`z``
@@ -353,6 +356,9 @@ nnoremap <leader>u :GundoToggle<CR>
 nnoremap <silent> <leader>n :NERDTree<CR>
 nnoremap <silent> <leader>N :NERDTreeFind<CR>
 nnoremap <silent> <buffer> <leader>l :set spell!<CR>
+
+" Yank to OS X pasteboard.
+noremap <leader>y "*y
 
 " Paste from OS X pasteboard without messing up indent.
 noremap <leader>p :set paste<CR>"*p<CR>:set nopaste<CR>

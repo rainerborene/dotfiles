@@ -6,7 +6,7 @@ alias .....='cd ../../../..'
 
 # general
 alias j='z'
-alias e='vim +:CtrlP'
+alias e='vim -c CtrlP'
 alias m='mvim .'
 alias c='clear'
 alias fn='find . -name'
