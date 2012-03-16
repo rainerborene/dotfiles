@@ -36,14 +36,13 @@ set title                           " show the filename in the window titlebar
 set cursorline                      " highlight current line
 set backspace=indent,eol,start      " allow backspacing over everything in insert mode
 set showcmd                         " show incomplete cmds down the bottom
-set showmode                        " show current mode down the bottom
+set noshowmode                      " hide current mode down the bottom
 set wildmenu                        " turn on wild menu
 set wildmode=list:longest,full      " make cmdline tab completion similar to bash
 set wildignore+=*~,.git,*.pyc,*.o,tags
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
-set noshowmode
 set number
 set numberwidth=5
 set pumheight=10
