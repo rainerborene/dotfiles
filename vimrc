@@ -78,6 +78,7 @@ if has("gui_running")
     set lines=999 columns=999
   endif
 else
+  set clipboard=unnamed
   colorscheme tir_black
 end
 
@@ -306,6 +307,9 @@ nnoremap <leader>s :%s//<left>
 vnoremap <leader>S y:execute @@<cr>
 nnoremap <leader>S ^vg_y:execute @@<cr>
 
+" Send visual selection to sprunge.us
+vnoremap <leader>C :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| pbcopy<cr>
+
 " Jump to line and column
 noremap ' `
 
@@ -315,11 +319,15 @@ nnoremap <leader>rt :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 " Because escape is too far away
 inoremap jj <ESC>
 
-" Shortcut for []
+" Shortcut for [] and quotes
 onoremap id i[
 onoremap ad a[
 vnoremap id i[
 vnoremap ad a[
+onoremap iq i"
+onoremap aq a"
+vnoremap iq i"
+vnoremap aq a"
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -354,7 +362,7 @@ nnoremap <leader>i :set list!<CR>
 nnoremap <leader>u :GundoToggle<CR>
 nnoremap <silent> <leader>n :NERDTree<CR>
 nnoremap <silent> <leader>N :NERDTreeFind<CR>
-nnoremap <silent> <buffer> <leader>l :set spell!<CR>
+nnoremap <silent> <leader>l :set spell!<CR>
 
 " Yank to OS X pasteboard.
 noremap <leader>y "*y
@@ -457,7 +465,7 @@ let g:sparkupNextMapping = '<c-s>'
 let g:gundo_preview_bottom = 1
 let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_clear_cache_on_exit  =  1
+let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_extensions = ['tag']
 let g:Powerline_symbols = "fancy"
 let g:syntastic_enable_signs = 1
