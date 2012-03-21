@@ -1,6 +1,6 @@
 export ZSH=$HOME/.oh-my-zsh
 export DISABLE_AUTO_TITLE="true"
-plugins=(git ruby rails3 vi-mode brew bundler rbenv cloudapp)
+plugins=(git ruby rails3 vi-mode node brew bundler rbenv cloudapp heroku)
 
 source $ZSH/oh-my-zsh.sh
 
