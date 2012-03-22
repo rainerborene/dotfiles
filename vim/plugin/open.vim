@@ -14,4 +14,4 @@ nnoremap gb :OpenURL <cfile><CR>
 nnoremap gA :OpenURL http://www.answers.com/<cword><CR>
 nnoremap gG :OpenURL http://www.google.com/search?q=<cword><CR>
 nnoremap gW :OpenURL http://en.wikipedia.org/wiki/Special:Search?search=<cword><CR>
-nnoremap gC :execute "OpenURL " . expand("%:d")<CR>
+nnoremap gC :OpenURL <C-R>=expand("%:d")<CR><CR>
