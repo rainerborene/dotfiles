@@ -261,6 +261,7 @@ noremap <leader>v <C-w>v
 nnoremap _ss :setf sass<CR>
 nnoremap _ht :setf html<CR>
 nnoremap _vi :setf vim<CR>
+nnoremap _rb :setf ruby<CR>
 
 " View full list of vim's syntax groups
 nnoremap <leader>hi :source $VIMRUNTIME/syntax/hitest.vim<CR>
@@ -319,7 +320,7 @@ nnoremap <leader>rt :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 " Because escape is too far away
 inoremap jj <ESC>
 
-" Shortcut for [] and quotes
+" Shortcut for [] and double quotes
 onoremap id i[
 onoremap ad a[
 vnoremap id i[
