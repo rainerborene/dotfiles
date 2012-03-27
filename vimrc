@@ -217,6 +217,9 @@ vnoremap ? ?\v
 nnoremap Q gqip
 vnoremap Q gq
 
+" Keep the cursor in place while joining limes
+nnoremap J mzJ`z
+
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
 nnoremap N Nzzzv
@@ -236,6 +239,10 @@ cnoremap w!! w !sudo tee % >/dev/null
 
 " Enter command mode quickly
 nnoremap ; :
+
+" Cmdheight switching
+nnoremap <leader>1 :set cmdheight=1<cr>
+nnoremap <leader>2 :set cmdheight=2<cr>
 
 " Fuck you, help key.
 noremap <F1> :set invfullscreen<CR>
@@ -309,13 +316,13 @@ vnoremap <leader>S y:execute @@<cr>
 nnoremap <leader>S ^vg_y:execute @@<cr>
 
 " Send visual selection to sprunge.us
-vnoremap <leader>C :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| pbcopy<cr>
+vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| pbcopy<cr>
 
 " Jump to line and column
 noremap ' `
 
 " Regenerate ctags
-nnoremap <leader>rt :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
+nnoremap <leader>rt :silent !/usr/local/bin/ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
 " Because escape is too far away
 inoremap jj <ESC>

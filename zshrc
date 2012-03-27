@@ -26,7 +26,7 @@ export UNAME=`uname`
 export EDITOR='vim'
 export LESS="-R"
 export CLICOLOR="auto"
-export PATH="$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/.dotfiles/bin:$PATH"
 source $HOME/.dotfiles/zsh/aliases.zsh
 source $HOME/.dotfiles/bin/z.sh
 
