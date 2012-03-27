@@ -24,12 +24,9 @@ endfunction
 
 function! s:RailsMore()
   command! -nargs=? -complete=customlist,s:migrationList -bar Rredo call s:migrationRedo('<args>')
+  Rnavcommand admin app/admin -suffix=.rb -default=dashboards
 endfunction
 
 " }}}
-" Initialization {{{
 
 autocmd User BufEnterRails call s:RailsMore()
-Rnavcommand admin app/admin -suffix=.rb -default=dashboards
-
-" }}}
