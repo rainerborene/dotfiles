@@ -1,6 +1,3 @@
-[submodule "vim/bundle/autoclose"]
-	path = vim/bundle/autoclose
-	url = git://github.com/Townk/vim-autoclose.git
 [submodule "vim/bundle/fugitive"]
 	path = vim/bundle/fugitive
 	url = git://github.com/tpope/vim-fugitive.git
@@ -118,3 +115,6 @@
 [submodule "vim/bundle/jquery"]
 	path = vim/bundle/jquery
 	url = git://github.com/itspriddle/vim-jquery.git
+[submodule "vim/bundle/smartinput"]
+	path = vim/bundle/smartinput
+	url = git://github.com/kana/vim-smartinput.git

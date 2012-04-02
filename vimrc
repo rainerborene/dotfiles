@@ -28,7 +28,7 @@ filetype plugin on
 filetype indent on
 
 " }}}
-" User Interface {{{
+" Appearance {{{
 
 syntax on                           " turn on syntax highlighting
 set t_Co=256                        " tell the term has 256 colors
