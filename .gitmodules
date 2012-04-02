@@ -112,3 +112,9 @@
 [submodule "vim/bundle/scratch"]
 	path = vim/bundle/scratch
 	url = git://github.com/duff/vim-scratch.git
+[submodule "vim/bundle/html5"]
+	path = vim/bundle/html5
+	url = git://github.com/othree/html5.vim.git
+[submodule "vim/bundle/jquery"]
+	path = vim/bundle/jquery
+	url = git://github.com/itspriddle/vim-jquery.git

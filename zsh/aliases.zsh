@@ -1,4 +1,5 @@
 # dir navigation
+alias cdd='cd -'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -65,6 +66,12 @@ if [[ "$UNAME" == "Darwin" ]]; then
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
 fi
 
+# output man pages as plain text with col
+pman() {
+  man $1 | col -b | expand
+}
+
+# substitute file names
 mvall() {
   if [[ (-n $1 && -n $2) ]]; then
     for filename in $(find * -name "*$1*"); do

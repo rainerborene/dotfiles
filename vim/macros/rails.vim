@@ -1,7 +1,5 @@
-" plugin/railsmore.vim
+" macros/rails.vim
 " Author: Rainer Borene
-"
-" Extension for vim-rails plugin from Tim Pope.
 
 " Migrations {{{
 
@@ -22,11 +20,7 @@ function! s:migrationRedo(name)
   end
 endfunction
 
-function! s:RailsMore()
-  command! -nargs=? -complete=customlist,s:migrationList -bar Rredo call s:migrationRedo('<args>')
-  Rnavcommand admin app/admin -suffix=.rb -default=dashboards
-endfunction
-
 " }}}
 
-autocmd User BufEnterRails call s:RailsMore()
+command! -nargs=? -complete=customlist,s:migrationList -bar Rredo call s:migrationRedo('<args>')
+Rnavcommand admin app/admin -suffix=.rb -default=dashboards
