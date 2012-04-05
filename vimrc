@@ -123,7 +123,7 @@ set expandtab
 set nosmarttab
 set textwidth=80
 set formatoptions=qrn1
-set linespace=4
+set linespace=1
 set nojoinspaces
 set wrap linebreak nolist
 

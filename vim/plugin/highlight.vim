@@ -1,8 +1,8 @@
-"gvim plugin for highlighting hex codes to help with tweaking colors
-"Last Change: 2010 Jan 21
-"Maintainer: Yuri Feldman <feldman.yuri1@gmail.com>
-"License: WTFPL - Do What The Fuck You Want To Public License.
-"Email me if you'd like.
+" gvim plugin for highlighting hex codes to help with tweaking colors
+" Last Change: 2010 Jan 21
+" Maintainer: Yuri Feldman <feldman.yuri1@gmail.com>
+" License: WTFPL - Do What The Fuck You Want To Public License.
+" Email me if you'd like.
 let s:HexColored = 0
 let s:HexColors = []
 
