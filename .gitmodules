@@ -118,3 +118,6 @@
 [submodule "vim/bundle/smartinput"]
 	path = vim/bundle/smartinput
 	url = git://github.com/kana/vim-smartinput.git
+[submodule "vim/bundle/ruby-sinatra"]
+	path = vim/bundle/ruby-sinatra
+	url = git://github.com/hallison/vim-ruby-sinatra.git

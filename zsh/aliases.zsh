@@ -81,3 +81,10 @@ mvall() {
     echo "Error: missing arguments."
   fi
 }
+
+# encodes to utf-8
+utf8_encode() {
+  local encoding=$(file -I $1 | cut -d '=' -f 2)
+  iconv -f $encoding -t utf-8 $1 > $1.utf8
+  rm -v $1 && mv -v $1.utf8 $1
+}
