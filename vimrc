@@ -146,12 +146,18 @@ au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,p
 au BufReadPost fugitive://* set bufhidden=delete
 au BufWritePost .vimrc source $MYVIMRC
 
+augroup ft_org
+  au!
+  au FileType org normal! zM
+  au FileType org setlocal formatoptions+=t
+augroup END
+
 augroup ft_markdown
   au!
   au BufNewFile,BufRead *.m*down setlocal filetype=markdown
-  au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=
-  au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-
-  au Filetype markdown nnoremap <buffer> <localleader>3 I### <ESC>
+  au FileType markdown nnoremap <buffer> <localleader>1 yypVr=
+  au FileType markdown nnoremap <buffer> <localleader>2 yypVr-
+  au FileType markdown nnoremap <buffer> <localleader>3 I### <ESC>
 augroup END
 
 augroup ft_vim
@@ -451,11 +457,11 @@ nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 " }}}
 " Quick editing {{{
 
-nnoremap <silent> <leader>et :e ~/tasks.txt<CR>
-nnoremap <silent> <leader>ez :e ~/.zshrc<CR>
-nnoremap <silent> <leader>ex :e ~/.tmux.conf<CR>
-nnoremap <silent> <leader>es :e ~/.vim/snippets/<CR>
-nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
+nnoremap <silent> <leader>ez :vsplit ~/.zshrc<CR>
+nnoremap <silent> <leader>ex :vsplit ~/.tmux.conf<CR>
+nnoremap <silent> <leader>es :vsplit ~/.vim/snippets/<CR>
+nnoremap <silent> <leader>eo :vsplit ~/Dropbox/outline.org<CR>
+nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 
 " }}}
@@ -486,6 +492,7 @@ let g:syntastic_auto_loc_list = 2
 let g:syntastic_disabled_filetypes = ['html']
 let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:SuperTabLongestHighlight = 1
+let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo', 'Date', 'Misc']
 
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local

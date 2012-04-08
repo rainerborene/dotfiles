@@ -121,3 +121,9 @@
 [submodule "vim/bundle/ruby-sinatra"]
 	path = vim/bundle/ruby-sinatra
 	url = git://github.com/hallison/vim-ruby-sinatra.git
+[submodule "vim/bundle/orgmode"]
+	path = vim/bundle/orgmode
+	url = git://github.com/jceb/vim-orgmode.git
+[submodule "vim/bundle/speeddating"]
+	path = vim/bundle/speeddating
+	url = git://github.com/tpope/vim-speeddating.git
