@@ -496,7 +496,8 @@ let g:syntastic_auto_loc_list = 2
 let g:syntastic_disabled_filetypes = ['html']
 let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:SuperTabLongestHighlight = 1
-let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo', 'Date', 'Misc']
+let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo', 'Date', 'Agenda', 'Misc']
+let g:org_agenda_files = ['~/Dropbox/outline.org']
 
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
