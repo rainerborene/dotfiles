@@ -16,4 +16,9 @@ so with the following command.
 
     chsh -s /bin/zsh
 
+Now set up your credentials.
+
+    git config --global user.name "Jonh Doe"
+    git config --global user.email jonh@doe.com
+
 Have fun.

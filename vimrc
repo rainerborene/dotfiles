@@ -261,7 +261,7 @@ nnoremap K <nop>
 nnoremap K :q<cr>
 
 " I hate when the rendering occasionally gets messed up.
-nnoremap <leader>rr :redraw!<cr>
+nnoremap <leader>rr :syntax sync fromstart<cr>:redraw!<cr>
 
 " Speed up buffer switching
 noremap <C-k> <C-W>k
@@ -296,16 +296,20 @@ vnoremap <Down> gj
 inoremap <Up> <C-o>gk
 inoremap <Down> <C-o>gj
 
-" Handful abbreveations
-cab W  w
-cab Wq wq
-cab wQ wq
-cab WQ wq
-cab Q  q
-cab git Git
+" Typos
+command! -bang E e<bang>
+command! -bang Q q<bang>
+command! -bang W w<bang>
+command! -bang QA qa<bang>
+command! -bang Qa qa<bang>
+command! -bang Wa wa<bang>
+command! -bang WA wa<bang>
+command! -bang Wq wq<bang>
+command! -bang WQ wq<bang>
 
+" Handful abbreveations
 iabbrev me@ me@rainerborene.com
-iabbrev #e # encoding: utf-8
+iabbrev enc # encoding: utf-8
 
 " Calculator
 inoremap <C-B> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
