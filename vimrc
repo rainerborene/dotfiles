@@ -43,7 +43,8 @@ set wildignore+=*~,.git,*.pyc,*.o,tags
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
-set number
+set nonumber
+set norelativenumber
 set numberwidth=5
 set pumheight=10
 set showbreak=↪
@@ -71,9 +72,11 @@ if has("gui_running")
   highlight SpellBad term=underline gui=undercurl guisp=Orange
 
   if has("mac")
+    set linespace=1
     set guifont=Menlo:h12
     set fuoptions=maxvert,maxhorz
   elseif has("unix")
+    set linespace=0
     set guifont=bitstream\ vera\ sans\ mono\ 9
     set lines=999 columns=999
   endif
@@ -123,7 +126,6 @@ set expandtab
 set nosmarttab
 set textwidth=80
 set formatoptions=qrn1
-set linespace=1
 set nojoinspaces
 set wrap linebreak nolist
 
@@ -145,6 +147,12 @@ au BufNewFile,BufRead *.json setfiletype javascript
 au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,pryrc,config.ru} setfiletype ruby
 au BufReadPost fugitive://* set bufhidden=delete
 au BufWritePost .vimrc source $MYVIMRC
+
+augroup ps_nerdtree
+  au!
+  au FileType nerdtree map <silent> <buffer> <Tab> <cr>
+  au Filetype nerdtree nnoremap <buffer> K :q<cr>
+augroup END
 
 augroup ft_org
   au!
@@ -173,7 +181,6 @@ augroup ft_javascript
   au FileType javascript setlocal foldmarker={,}
 augroup END
 
-" Only show cursorline in the current window
 augroup cline
   au!
   au WinLeave * set nocursorline
@@ -322,8 +329,8 @@ cnoremap <c-e> <end>
 nnoremap <leader>s :%s//<left>
 
 " Source
-vnoremap <leader>S y:execute @@<cr>
-nnoremap <leader>S ^vg_y:execute @@<cr>
+vnoremap <leader>S y:execute @@<cr>:echo 'Sourced selection.'<cr>
+nnoremap <leader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
 
 " Send visual selection to sprunge.us
 vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy<cr>
