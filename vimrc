@@ -133,7 +133,7 @@ set wrap linebreak nolist
 " Auto Commands {{{
 
 au FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
-au FileType php,apache,sql,xslt,gitconfig setlocal ts=4 sts=4 sw=4 noexpandtab
+au FileType php,apache,sql,xslt,gitconfig,objc setlocal ts=4 sts=4 sw=4 noexpandtab
 au FileType python setlocal ts=4 sts=4 sw=4 expandtab
 au FileType markdown setlocal wrap linebreak nolist
 au FileType gitcommit setlocal spell | wincmd K
@@ -151,7 +151,6 @@ au BufWritePost .vimrc source $MYVIMRC
 augroup ps_nerdtree
   au!
   au FileType nerdtree map <silent> <buffer> <Tab> <cr>
-  au Filetype nerdtree nnoremap <buffer> K :q<cr>
 augroup END
 
 augroup ft_org
@@ -282,6 +281,7 @@ nnoremap _ss :setf sass<CR>
 nnoremap _ht :setf html<CR>
 nnoremap _vi :setf vim<CR>
 nnoremap _rb :setf ruby<CR>
+nnoremap _ob :setf objc<CR>
 
 " View full list of vim's syntax groups
 nnoremap <leader>hi :source $VIMRUNTIME/syntax/hitest.vim<CR>
