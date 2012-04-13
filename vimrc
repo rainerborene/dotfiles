@@ -12,6 +12,7 @@ set nobomb
 set undoreload=10000
 set undofile
 set shiftround
+set updatecount=20
 set ttimeout
 set nottimeout
 set ttyfast
@@ -20,6 +21,7 @@ set splitright
 set lazyredraw
 set matchtime=3
 set dictionary=/usr/share/dict/words
+set colorcolumn=+1
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -150,13 +152,14 @@ au BufWritePost .vimrc source $MYVIMRC
 
 augroup ps_nerdtree
   au!
+  au FileType nerdtree setlocal colorcolumn&
   au FileType nerdtree map <silent> <buffer> <Tab> <cr>
 augroup END
 
 augroup ft_org
   au!
   au FileType org normal! zM
-  au FileType org setlocal formatoptions+=t
+  au FileType org setlocal formatoptions+=t colorcolumn&
 augroup END
 
 augroup ft_markdown
@@ -184,8 +187,8 @@ augroup cline
   au!
   au WinLeave * set nocursorline
   au WinEnter * set cursorline
-  au InsertEnter * set colorcolumn=80
-  au InsertLeave * set colorcolumn&
+  au InsertEnter * set nocursorline
+  au InsertLeave * set cursorline
 augroup END
 
 " Save when losing focus
@@ -243,7 +246,7 @@ nnoremap g, g,zz
 " Make Y consistent with C and D
 nnoremap Y y$
 
-" Shortcuts for visual selections
+" Select just-pasted text.
 nnoremap gV `[v`]
 
 " Save a file as root.
@@ -333,7 +336,11 @@ vnoremap <leader>S y:execute @@<cr>:echo 'Sourced selection.'<cr>
 nnoremap <leader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
 
 " Send visual selection to sprunge.us
-vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy<cr>
+vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy && open `pbpaste`<cr>
+
+" Clam
+nnoremap ! :Clam<space>
+vnoremap ! :ClamVisual<space>
 
 " Jump to line and column
 noremap ' `
@@ -486,11 +493,14 @@ let g:NERDTreeHighlightCursorline = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDCreateDefaultMappings = 0
 let g:NERDTreeDirArrows = 1
+let g:NERDTreeShowHidden = 1
 let g:NERDSpaceDelims = 1
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
+let g:Gitv_DoNotMapCtrlKey = 1
 let g:ackprg = "ack-grep -H --nocolor --nogroup --column"
 let g:sparkupNextMapping = '<c-s>'
+let g:gundo_help = 0
 let g:gundo_preview_bottom = 1
 let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_working_path_mode = 0

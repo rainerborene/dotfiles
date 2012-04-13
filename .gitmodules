@@ -127,3 +127,6 @@
 [submodule "vim/bundle/speeddating"]
 	path = vim/bundle/speeddating
 	url = git://github.com/tpope/vim-speeddating.git
+[submodule "vim/bundle/clam"]
+	path = vim/bundle/clam
+	url = git://github.com/sjl/clam.vim.git
