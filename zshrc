@@ -1,10 +1,8 @@
-export ZSH=$HOME/.oh-my-zsh
-export DISABLE_AUTO_TITLE="true"
 plugins=(git ruby rails3 vi-mode node brew bundler rbenv cloudapp heroku)
 
+export ZSH=$HOME/.oh-my-zsh
+export DISABLE_AUTO_TITLE="true"
 source $ZSH/oh-my-zsh.sh
-
-# Custom options
 unsetopt promptcr
 
 # Custom theme
@@ -17,17 +15,19 @@ PROMPT='
 %{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)
 $ '
 
-# Userful aliases
-alias zshconfig='vim ~/.zshrc'
-alias ohmyzsh='vim ~/.oh-my-zsh'
+# Useful aliases
+source $HOME/.dotfiles/zsh/ruby.zsh
+source $HOME/.dotfiles/zsh/misc.zsh
+source $HOME/.dotfiles/zsh/git.zsh
 
 # Environment variables
 export UNAME=`uname`
-export EDITOR='vim'
+export EDITOR="vim"
 export LESS="-R"
 export CLICOLOR="auto"
 export PATH="$HOME/.dotfiles/bin:$PATH"
-source $HOME/.dotfiles/zsh/aliases.zsh
+
+# Dependencies
 source $HOME/.dotfiles/bin/z.sh
 
 # Z command
@@ -35,5 +35,5 @@ precmd() {
   _z --add "$(pwd -P)"
 }
 
-# Welcome message
+# Login message
 ruby $HOME/.dotfiles/bin/subliminar

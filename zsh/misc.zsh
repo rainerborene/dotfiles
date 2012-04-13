@@ -19,34 +19,9 @@ alias lsd='ls -l | grep "^d"'
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias serve_this='python -m SimpleHTTPServer'
 alias l='tree -htCL 1 --dirsfirst'
+alias zshconfig="vim ~/.zshrc"
+alias ohmyzsh="vim ~/.oh-my-zsh"
 alias reload='source ~/.zshrc'
-
-# git
-alias gs='git status'
-alias gd='git diff --color'
-alias gdc='git diff --cached --color'
-alias gl='git log --oneline --color --max-count=15 --decorate'
-alias gu='git pull'
-alias gt='git tag'
-alias gsm='git submodule'
-alias gitv='vim .git/index -c "Gitv --all" -c "tabonly"'
-
-# commit pending changes and quote all args as message
-gg() {
-  git commit -v -a -m "$*"
-}
-
-# ruby on rails
-alias b='bundle'
-alias rs='rails s thin'
-alias rdbs='rake db:migrate:status'
-alias rst='touch tmp/restart.txt'
-
-# rubygems
-alias gems='gem search -b'
-alias geml='gem list -l'
-alias gemi='gem install'
-alias gemu='gem uninstall'
 
 # linux specific aliases
 if [[ "$UNAME" == "Linux" ]]; then
