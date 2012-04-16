@@ -74,15 +74,14 @@ if has("gui_running")
   highlight SpellBad term=underline gui=undercurl guisp=Orange
 
   if has("mac")
-    set linespace=1
     set guifont=Menlo:h12
     set fuoptions=maxvert,maxhorz
   elseif has("unix")
-    set linespace=0
     set guifont=bitstream\ vera\ sans\ mono\ 9
     set lines=999 columns=999
   endif
 else
+  set cmdheight=2
   set clipboard=unnamed
   colorscheme tir_black
 end
@@ -351,6 +350,9 @@ nnoremap <leader>rt :silent !/usr/local/bin/ctags -R . 2>/dev/null &<CR><CR>:red
 " Because escape is too far away
 inoremap jj <ESC>
 
+" Toggle 'keep current line in the center of the screen' mode
+nnoremap <leader>C :let &scrolloff=999-&scrolloff<cr>
+
 " Shortcut for [] and double quotes
 onoremap id i[
 onoremap ad a[
@@ -382,19 +384,16 @@ nnoremap <leader>D :diffoff!<cr>
 " Clear search highlight
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
-" Open directory dirname of current file
-nnoremap <Leader>e :e <C-R>=expand("%:p:h") . '/' <CR>
+" Open CtrlP on diffent modes
+nnoremap <leader>t :CtrlPTag<CR>
+nnoremap <leader>b :CtrlPBuffer<CR>
+nnoremap <leader>l :CtrlPLine<CR>
 
-" Open ctrlp in buffer and tag mode
-nnoremap <Leader>t :CtrlPTag<CR>
-nnoremap <Leader>b :CtrlPBuffer<CR>
-
-" Toggle commands
+" Some toggle commands
 nnoremap <leader>i :set list!<CR>
 nnoremap <leader>u :GundoToggle<CR>
-nnoremap <silent> <leader>n :NERDTree<CR>
-nnoremap <silent> <leader>N :NERDTreeFind<CR>
-nnoremap <silent> <leader>l :set spell!<CR>
+nnoremap <leader>n :NERDTree<CR>
+nnoremap <leader>N :NERDTreeFind<CR>
 
 " Yank to OS X pasteboard.
 noremap <leader>y "*y
@@ -494,6 +493,7 @@ let g:NERDTreeMinimalUI = 1
 let g:NERDCreateDefaultMappings = 0
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeShowHidden = 1
+let g:NERDTreeQuitOnOpen = 1
 let g:NERDSpaceDelims = 1
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1

@@ -130,3 +130,6 @@
 [submodule "vim/bundle/clam"]
 	path = vim/bundle/clam
 	url = git://github.com/sjl/clam.vim.git
+[submodule "vim/bundle/textobj-indent"]
+	path = vim/bundle/textobj-indent
+	url = git://github.com/kana/vim-textobj-indent.git
