@@ -28,7 +28,7 @@ export CLICOLOR="auto"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 
 # Dependencies
-source $HOME/.dotfiles/bin/z.sh
+source $HOME/.dotfiles/lib/z.sh
 
 # Z command
 precmd() {
@@ -36,4 +36,4 @@ precmd() {
 }
 
 # Login message
-ruby $HOME/.dotfiles/bin/subliminar
+login_message

@@ -45,6 +45,7 @@ set wildignore+=*~,.git,*.pyc,*.o,tags
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
+set ruler
 set nonumber
 set norelativenumber
 set numberwidth=5
@@ -56,10 +57,6 @@ set virtualedit+=block
 set shortmess=atI
 set mousemodel=popup
 set completeopt=longest,menuone,preview
-
-if has("mouse")
-  set mouse=a
-endif
 
 if has("gui_running")
   " Remove all the UI cruft
@@ -81,6 +78,7 @@ if has("gui_running")
     set lines=999 columns=999
   endif
 else
+  set mouse=a
   set cmdheight=2
   set clipboard=unnamed
   colorscheme tir_black
@@ -101,9 +99,7 @@ set backup
 set visualbell t_vb=                " disable visual bell
 set ignorecase                      " case insensitive
 set smartcase                       " sensitive with capitals
-set foldmethod=indent               " fold based on indent
-set foldnestmax=3                   " deepest fold is 3 levels
-set nofoldenable                    " dont fold by default
+set foldlevelstart=0                " start editing with all folds closed
 set laststatus=2                    " always show status line
 set incsearch                       " find the next match as we type the search
 set hlsearch                        " highlight searches by default
@@ -155,10 +151,19 @@ augroup ps_nerdtree
   au FileType nerdtree map <silent> <buffer> <Tab> <cr>
 augroup END
 
+augroup ft_quickfix
+  au!
+  au Filetype qf setlocal colorcolumn=0 nolist nocursorline nowrap tw=0
+augroup END
+
 augroup ft_org
   au!
-  au FileType org normal! zM
   au FileType org setlocal formatoptions+=t colorcolumn&
+augroup END
+
+augroup ft_html
+  au!
+  au FileType html setlocal foldmethod=manual
 augroup END
 
 augroup ft_markdown
@@ -320,9 +325,6 @@ command! -bang WQ wq<bang>
 iabbrev me@ me@rainerborene.com
 iabbrev enc # encoding: utf-8
 
-" Calculator
-inoremap <C-B> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
-
 " Emacs bindings in command line mode
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
@@ -392,7 +394,7 @@ nnoremap <leader>l :CtrlPLine<CR>
 " Some toggle commands
 nnoremap <leader>i :set list!<CR>
 nnoremap <leader>u :GundoToggle<CR>
-nnoremap <leader>n :NERDTree<CR>
+nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>N :NERDTreeFind<CR>
 
 " Yank to OS X pasteboard.
@@ -427,7 +429,9 @@ nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gv :Gitv --all<cr>
 nnoremap <leader>gV :Gitv! --all<cr>
 
-" Strip trailing whitespace
+" }}}
+" Strip trailing whitespace {{{
+
 function! StripWhitespace()
   let save_cursor = getpos(".")
   let old_query = getreg('/')
@@ -437,7 +441,9 @@ function! StripWhitespace()
 endfunction
 noremap <leader>w :call StripWhitespace()<CR>
 
-" Visual search mappings
+" }}}
+" Visual search mappings {{{
+
 function! s:VSetSearch()
   let temp = @@
   norm! gvy
@@ -472,6 +478,26 @@ command! ScratchToggle call ScratchToggle()
 nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 " }}}
+" Folding {{{
+
+function! MyFoldText()
+  let line = getline(v:foldstart)
+
+  let nucolwidth = &fdc + &number * &numberwidth
+  let windowwidth = winwidth(0) - nucolwidth - 3
+  let foldedlinecount = v:foldend - v:foldstart
+
+  " expand tabs into spaces
+  let onetab = strpart('          ', 0, &tabstop)
+  let line = substitute(line, '\t', onetab, 'g')
+
+  let line = strpart(line, 0, windowwidth - 2 -len(foldedlinecount))
+  let fillcharcount = windowwidth - len(line) - len(foldedlinecount)
+  return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
+endfunction
+set foldtext=MyFoldText()
+
+" }}}
 " Quick editing {{{
 
 nnoremap <silent> <leader>ez :vsplit ~/.zshrc<CR>
@@ -493,7 +519,6 @@ let g:NERDTreeMinimalUI = 1
 let g:NERDCreateDefaultMappings = 0
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeShowHidden = 1
-let g:NERDTreeQuitOnOpen = 1
 let g:NERDSpaceDelims = 1
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1

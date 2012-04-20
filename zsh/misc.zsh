@@ -63,3 +63,12 @@ utf8_encode() {
   iconv -f $encoding -t utf-8 $1 > $1.utf8
   rm -v $1 && mv -v $1.utf8 $1
 }
+
+login_message() {
+  local sentences="~/.sentences.txt"
+  if [ -e $sentences ]; then
+    cat $sentences | sort --random-sort | head -n 1
+  else
+    fortune
+  fi
+}
