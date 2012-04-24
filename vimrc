@@ -162,7 +162,7 @@ augroup END
 
 augroup ft_quickfix
   au!
-  au Filetype qf setlocal colorcolumn=0 nolist nocursorline nowrap tw=0
+  au FileType qf setlocal colorcolumn=0 nolist nocursorline nowrap tw=0
 augroup END
 
 augroup ps_nerdtree
