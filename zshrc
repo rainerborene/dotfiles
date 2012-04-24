@@ -1,9 +1,14 @@
-plugins=(git ruby rails3 vi-mode node brew bundler rbenv cloudapp heroku)
+plugins=(git ruby lol extract rails3 vi-mode node npm brew bundler rbenv cloudapp heroku)
 
 export ZSH=$HOME/.oh-my-zsh
+export UNAME=`uname`
+export EDITOR="vim"
+export LESS="-R"
+export CLICOLOR="auto"
 export DISABLE_AUTO_TITLE="true"
-source $ZSH/oh-my-zsh.sh
 unsetopt promptcr
+
+source $ZSH/oh-my-zsh.sh
 
 # Custom theme
 ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[magenta]%}"
@@ -19,13 +24,6 @@ $ '
 source $HOME/.dotfiles/zsh/ruby.zsh
 source $HOME/.dotfiles/zsh/misc.zsh
 source $HOME/.dotfiles/zsh/git.zsh
-
-# Environment variables
-export UNAME=`uname`
-export EDITOR="vim"
-export LESS="-R"
-export CLICOLOR="auto"
-export PATH="$HOME/.dotfiles/bin:$PATH"
 
 # Dependencies
 source $HOME/.dotfiles/lib/z.sh
