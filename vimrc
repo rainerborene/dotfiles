@@ -145,10 +145,19 @@ au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,p
 au BufReadPost fugitive://* set bufhidden=delete
 au BufWritePost .vimrc source $MYVIMRC
 
-augroup ps_nerdtree
+augroup ft_org
   au!
-  au FileType nerdtree setlocal colorcolumn&
-  au FileType nerdtree map <silent> <buffer> <Tab> <cr>
+  au FileType org setlocal formatoptions+=t colorcolumn&
+augroup END
+
+augroup ft_git
+  au!
+  au FileType git,gitv setlocal colorcolumn&
+augroup END
+
+augroup ft_html
+  au!
+  au FileType html setlocal foldmethod=manual
 augroup END
 
 augroup ft_quickfix
@@ -156,14 +165,10 @@ augroup ft_quickfix
   au Filetype qf setlocal colorcolumn=0 nolist nocursorline nowrap tw=0
 augroup END
 
-augroup ft_org
+augroup ps_nerdtree
   au!
-  au FileType org setlocal formatoptions+=t colorcolumn&
-augroup END
-
-augroup ft_html
-  au!
-  au FileType html setlocal foldmethod=manual
+  au FileType nerdtree setlocal colorcolumn&
+  au FileType nerdtree map <silent> <buffer> <Tab> <cr>
 augroup END
 
 augroup ft_markdown
