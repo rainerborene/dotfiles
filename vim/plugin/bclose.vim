@@ -1,4 +1,9 @@
 function s:Kwbd(kwbdStage)
+  if exists("t:NERDTreeBufName")
+    if bufwinnr(t:NERDTreeBufName) == winnr()
+      return
+    endif
+  endif
   if(a:kwbdStage == 1)
     if(!buflisted(winbufnr(0)))
       bd!
