@@ -57,6 +57,7 @@ set virtualedit+=block
 set shortmess=atI
 set mousemodel=popup
 set completeopt=longest,menuone,preview
+set mouse=a
 
 if has("gui_running")
   " Remove all the UI cruft
@@ -78,10 +79,8 @@ if has("gui_running")
     set lines=999 columns=999
   endif
 else
-  set mouse=a
-  set cmdheight=2
   set clipboard=unnamed
-  colorscheme tir_black
+  colorscheme grb256
 end
 
 " }}}
