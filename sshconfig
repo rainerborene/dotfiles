@@ -1,3 +1,17 @@
 Host webby6522
     Hostname 173.246.40.50
     User git
+
+Host mm
+    HostName 173.246.40.124
+    User git
+
+Host vagrant
+    HostName 127.0.0.1
+    User vagrant
+    Port 2222
+    UserKnownHostsFile /dev/null
+    StrictHostKeyChecking no
+    PasswordAuthentication no
+    IdentityFile /Users/rainerborene/.vagrant.d/insecure_private_key
+    IdentitiesOnly yes

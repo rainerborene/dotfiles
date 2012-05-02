@@ -1,4 +1,4 @@
-plugins=(git ruby lol extract rails3 vi-mode node npm brew bundler rbenv cloudapp heroku)
+plugins=(git lol ruby vagrant extract rails3 vi-mode node npm brew bundler rbenv cloudapp heroku)
 
 export ZSH=$HOME/.oh-my-zsh
 export UNAME=`uname`

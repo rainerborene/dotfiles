@@ -133,3 +133,6 @@
 [submodule "vim/bundle/textobj-indent"]
 	path = vim/bundle/textobj-indent
 	url = git://github.com/kana/vim-textobj-indent.git
+[submodule "vim/bundle/puppet"]
+	path = vim/bundle/puppet
+	url = git://github.com/puppetlabs/puppet-syntax-vim.git

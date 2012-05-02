@@ -52,12 +52,15 @@ set numberwidth=5
 set pumheight=10
 set showbreak=↪
 set pastetoggle=<F6>
-set background=dark
 set virtualedit+=block
 set shortmess=atI
 set mousemodel=popup
 set completeopt=longest,menuone,preview
 set mouse=a
+set background=dark
+
+let g:badwolf_html_link_underline = 0
+colorscheme badwolf
 
 if has("gui_running")
   " Remove all the UI cruft
@@ -67,8 +70,6 @@ if has("gui_running")
   set go-=r
   set go-=R
 
-  let g:badwolf_html_link_underline = 0
-  colorscheme badwolf
   highlight SpellBad term=underline gui=undercurl guisp=Orange
 
   if has("mac")
@@ -78,9 +79,6 @@ if has("gui_running")
     set guifont=bitstream\ vera\ sans\ mono\ 9
     set lines=999 columns=999
   endif
-else
-  set clipboard=unnamed
-  colorscheme grb256
 end
 
 " }}}
