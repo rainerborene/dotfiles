@@ -107,6 +107,7 @@ set sidescroll=1
 set sidescrolloff=10
 set fillchars=vert:\│
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+set list
 
 " }}}
 " Text Formatting {{{
@@ -121,7 +122,7 @@ set nosmarttab
 set textwidth=80
 set formatoptions=qrn1
 set nojoinspaces
-set wrap linebreak nolist
+set wrap linebreak
 
 " }}}
 " Auto Commands {{{
@@ -189,12 +190,20 @@ augroup ft_javascript
   au FileType javascript setlocal foldmarker={,}
 augroup END
 
+" Only show cursorline in the current window and in normal mode.
 augroup cline
   au!
   au WinLeave * set nocursorline
   au WinEnter * set cursorline
   au InsertEnter * set nocursorline
   au InsertLeave * set cursorline
+augroup END
+
+" Only shown when not in insert mode so I don't go insane.
+augroup trailing
+    au!
+    au InsertEnter * :set listchars-=trail:⌴
+    au InsertLeave * :set listchars+=trail:⌴
 augroup END
 
 " Save when losing focus
@@ -357,15 +366,11 @@ inoremap jj <ESC>
 " Toggle 'keep current line in the center of the screen' mode
 nnoremap <leader>C :let &scrolloff=999-&scrolloff<cr>
 
-" Shortcut for [] and double quotes
+" Shortcut for []
 onoremap id i[
 onoremap ad a[
 vnoremap id i[
 vnoremap ad a[
-onoremap iq i"
-onoremap aq a"
-vnoremap iq i"
-vnoremap aq a"
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -484,7 +489,6 @@ nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 function! MyFoldText()
   let line = getline(v:foldstart)
-
   let nucolwidth = &fdc + &number * &numberwidth
   let windowwidth = winwidth(0) - nucolwidth - 3
   let foldedlinecount = v:foldend - v:foldstart
