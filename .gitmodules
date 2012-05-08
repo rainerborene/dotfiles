@@ -102,7 +102,7 @@
 	url = git://github.com/robbyrussell/oh-my-zsh.git
 [submodule "vim/bundle/tslime"]
 	path = vim/bundle/tslime
-	url = git://github.com/samstokes/tslime.vim.git
+	url = git://github.com/sjl/tslime.vim.git
 [submodule "vim/bundle/rake"]
 	path = vim/bundle/rake
 	url = git://github.com/tpope/vim-rake.git

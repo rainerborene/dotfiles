@@ -516,6 +516,10 @@ nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 " }}}
 " Global Options {{{
 
+let g:tslime_ensure_trailing_newlines = 1
+let g:tslime_normal_mapping = '<localleader>t'
+let g:tslime_visual_mapping = '<localleader>t'
+let g:tslime_vars_mapping = '<localleader>T'
 let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
