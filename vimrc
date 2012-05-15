@@ -261,8 +261,11 @@ nnoremap g, g,zz
 " Make Y consistent with C and D
 nnoremap Y y$
 
-" Select just-pasted text.
+" Select just-pasted text
 nnoremap gV `[v`]
+
+" Move to last change
+nnoremap gI `.
 
 " Save a file as root.
 cnoremap w!! w !sudo tee % >/dev/null

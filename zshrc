@@ -6,6 +6,7 @@ export EDITOR="vim"
 export LESS="-R"
 export CLICOLOR="auto"
 export DISABLE_AUTO_TITLE="true"
+export PATH=/usr/local/mysql/bin:$PATH
 unsetopt promptcr
 
 source $ZSH/oh-my-zsh.sh
