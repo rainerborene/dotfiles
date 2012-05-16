@@ -390,6 +390,9 @@ nnoremap <leader>z zMzvzz
 nnoremap <leader>d mz"dyy"dp`z
 vnoremap <leader>d "dymz"dP`z``
 
+" The black hole register
+noremap x "_x
+
 " Diffoff
 nnoremap <leader>D :diffoff!<cr>
 
