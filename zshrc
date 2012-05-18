@@ -5,6 +5,8 @@ export UNAME=`uname`
 export EDITOR="vim"
 export LESS="-R"
 export CLICOLOR="auto"
+export PORT="5000"
+export RACK_ENV="development"
 export DISABLE_AUTO_TITLE="true"
 export PATH=/usr/local/mysql/bin:$PATH
 unsetopt promptcr
