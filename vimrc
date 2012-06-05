@@ -137,6 +137,7 @@ au FileType java silent! compiler javac | setlocal makeprg=javac\ %
 au FileType ruby silent! compiler ruby | setlocal foldmethod=syntax
 au FileType c setlocal foldmethod=syntax
 
+au BufNewFile,BufRead *.ejs setfiletype html | :SyntasticToggleMode
 au BufNewFile,BufRead *.rss setfiletype xml
 au BufNewFile,BufRead *.json setfiletype javascript
 au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,pryrc,config.ru} setfiletype ruby
