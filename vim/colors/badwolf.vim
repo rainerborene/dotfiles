@@ -47,6 +47,10 @@ if !exists("g:badwolf_html_link_underline") " {{{
     let g:badwolf_html_link_underline = 1
 endif " }}}
 
+if !exists("g:badwolf_css_props_highlight") " {{{
+    let g:badwolf_css_props_highlight = 0
+endif " }}}
+
 " }}}
 " Palette {{{
 
@@ -397,11 +401,19 @@ call s:HL('clojureAnonArg', 'snow', '', 'bold')
 " }}}
 " CSS {{{
 
-call s:HL('cssColorProp', 'fg', '', 'none')
-call s:HL('cssBoxProp', 'fg', '', 'none')
-call s:HL('cssTextProp', 'fg', '', 'none')
-call s:HL('cssRenderProp', 'fg', '', 'none')
-call s:HL('cssGeneratedContentProp', 'fg', '', 'none')
+if g:badwolf_css_props_highlight
+    call s:HL('cssColorProp', 'dirtyblonde', '', 'none')
+    call s:HL('cssBoxProp', 'dirtyblonde', '', 'none')
+    call s:HL('cssTextProp', 'dirtyblonde', '', 'none')
+    call s:HL('cssRenderProp', 'dirtyblonde', '', 'none')
+    call s:HL('cssGeneratedContentProp', 'dirtyblonde', '', 'none')
+else
+    call s:HL('cssColorProp', 'fg', '', 'none')
+    call s:HL('cssBoxProp', 'fg', '', 'none')
+    call s:HL('cssTextProp', 'fg', '', 'none')
+    call s:HL('cssRenderProp', 'fg', '', 'none')
+    call s:HL('cssGeneratedContentProp', 'fg', '', 'none')
+end
 
 call s:HL('cssValueLength', 'toffee', '', 'bold')
 call s:HL('cssColor', 'toffee', '', 'bold')
@@ -441,6 +453,7 @@ call s:HL('htmlEndTag', 'darkroast', 'bg', 'none')
 " Tag names
 call s:HL('htmlTagName',        'coffee', '', 'bold')
 call s:HL('htmlSpecialTagName', 'coffee', '', 'bold')
+call s:HL('htmlSpecialChar',    'lime',   '', 'none')
 
 " Attributes
 call s:HL('htmlArg', 'coffee', '', 'none')
@@ -510,17 +523,24 @@ call s:HL('markdownCode', 'dirtyblonde', '', 'none')
 call s:HL('markdownCodeBlock', 'dirtyblonde', '', 'none')
 
 " }}}
+" MySQL {{{
+
+call s:HL('mysqlSpecial', 'dress', '', 'bold')
+
+" }}}
 " Python {{{
 
 hi def link pythonOperator Operator
-call s:HL('pythonBuiltin',    'dress')
-call s:HL('pythonBuiltinObj', 'dress')
+call s:HL('pythonBuiltin',     'dress')
+call s:HL('pythonBuiltinObj',  'dress')
 call s:HL('pythonBuiltinFunc', 'dress')
-call s:HL('pythonEscape',     'dress')
-call s:HL('pythonException',  'lime', '', 'bold')
-call s:HL('pythonExceptions', 'lime', '', 'none')
-call s:HL('pythonPrecondit', 'lime', '', 'none')
-call s:HL('pythonDecorator',  'taffy', '', 'none')
+call s:HL('pythonEscape',      'dress')
+call s:HL('pythonException',   'lime', '', 'bold')
+call s:HL('pythonExceptions',  'lime', '', 'none')
+call s:HL('pythonPrecondit',   'lime', '', 'none')
+call s:HL('pythonDecorator',   'taffy', '', 'none')
+call s:HL('pythonRun',         'gravel', '', 'bold')
+call s:HL('pythonCoding',      'gravel', '', 'bold')
 
 " }}}
 " SLIMV {{{
