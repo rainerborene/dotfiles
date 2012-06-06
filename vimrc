@@ -41,7 +41,7 @@ set showcmd                         " show incomplete cmds down the bottom
 set noshowmode                      " hide current mode down the bottom
 set wildmenu                        " turn on wild menu
 set wildmode=list:longest,full      " make cmdline tab completion similar to bash
-set wildignore+=*~,.git,*.pyc,*.o,tags
+set wildignore+=*~,.git,*.pyc,*.o,tags,tmp
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
@@ -58,6 +58,7 @@ set mousemodel=popup
 set completeopt=longest,menuone,preview
 set mouse=a
 set background=dark
+set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 
 let g:badwolf_html_link_underline = 0
 colorscheme badwolf
