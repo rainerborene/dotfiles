@@ -21,7 +21,6 @@ set splitright
 set lazyredraw
 set matchtime=3
 set dictionary=/usr/share/dict/words
-set colorcolumn=+1
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -59,6 +58,8 @@ set completeopt=longest,menuone,preview
 set mouse=a
 set background=dark
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
+set colorcolumn=+1
+set synmaxcol=500
 
 let g:badwolf_html_link_underline = 0
 colorscheme badwolf
@@ -138,7 +139,7 @@ au FileType java silent! compiler javac | setlocal makeprg=javac\ %
 au FileType ruby silent! compiler ruby | setlocal foldmethod=syntax
 au FileType c setlocal foldmethod=syntax
 
-au BufNewFile,BufRead *.ejs setfiletype html | :SyntasticToggleMode
+au BufNewFile,BufRead *.ejs setfiletype html
 au BufNewFile,BufRead *.rss setfiletype xml
 au BufNewFile,BufRead *.json setfiletype javascript
 au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,pryrc,config.ru} setfiletype ruby
@@ -553,7 +554,7 @@ let g:Powerline_symbols = "fancy"
 let g:syntastic_enable_signs = 1
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
-let g:syntastic_disabled_filetypes = ['html']
+let g:syntastic_mode_map['passtive_filetypes'] = ['html']
 let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:SuperTabLongestHighlight = 1
 let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo', 'Date', 'Agenda', 'Misc']
