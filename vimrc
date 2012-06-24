@@ -132,11 +132,8 @@ set wrap linebreak
 au FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
 au FileType php,apache,sql,xslt,gitconfig,objc setlocal ts=4 sts=4 sw=4 noexpandtab
 au FileType python setlocal ts=4 sts=4 sw=4 expandtab
-au FileType markdown setlocal wrap linebreak nolist
-au FileType gitcommit setlocal spell | wincmd K
 au FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()
 au FileType java silent! compiler javac | setlocal makeprg=javac\ %
-au FileType ruby silent! compiler ruby | setlocal foldmethod=syntax
 au FileType c setlocal foldmethod=syntax
 
 au BufNewFile,BufRead *.ejs setfiletype html
@@ -154,6 +151,14 @@ augroup END
 augroup ft_git
   au!
   au FileType git,gitv setlocal colorcolumn&
+  au FileType gitcommit setlocal spell | wincmd K
+augroup END
+
+augroup ft_ruby
+  au!
+  au FileType ruby nnoremap <buffer> <localleader>gem 0igem "ea",f(r"a~> f)r"
+  au FileType ruby silent! setlocal foldmethod=syntax
+  au FileType ruby silent! compiler ruby
 augroup END
 
 augroup ft_html
@@ -178,6 +183,7 @@ augroup ft_markdown
   au FileType markdown nnoremap <buffer> <localleader>1 yypVr=
   au FileType markdown nnoremap <buffer> <localleader>2 yypVr-
   au FileType markdown nnoremap <buffer> <localleader>3 I### <ESC>
+  au FileType markdown setlocal wrap linebreak nolist
 augroup END
 
 augroup ft_vim
@@ -468,6 +474,23 @@ function! s:VSetSearch()
 endfunction
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
+
+" }}}
+" Get image dimensions {{{
+
+function! s:GetImages(ArgLead, CmdLine, CursorPos)
+  return system("find * -name '*.png' -or -name '*.jpg'")
+endfunction
+
+function! s:GetImageDimensions(image)
+  let output = system("sips -g pixelWidth -g pixelHeight " . a:image)
+  let width = matchlist(output, '\vpixelWidth: (\d+)')[1]
+  let height = matchlist(output, '\vpixelHeight: (\d+)')[1]
+  let @z = join([width, height], ", ")
+  normal! "zp
+endfunction
+command! -complete=custom,s:GetImages -nargs=1 GetImageDimensions call s:GetImageDimensions(<f-args>)
+nnoremap <leader>o :GetImageDimensions<Space>
 
 " }}}
 " Synstack {{{
