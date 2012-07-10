@@ -30,3 +30,5 @@
 
 [web]
 	browser = open
+[github]
+	user = rainerborene
