@@ -19,8 +19,9 @@ function! s:migrationRedo(name)
     echohl None
   end
 endfunction
+command! -nargs=? -complete=customlist,s:migrationList -bar Rredo call s:migrationRedo('<args>')
 
 " }}}
 
-command! -nargs=? -complete=customlist,s:migrationList -bar Rredo call s:migrationRedo('<args>')
 Rnavcommand admin app/admin -suffix=.rb -default=dashboards
+Rnavcommand job app/jobs -suffix=.rb

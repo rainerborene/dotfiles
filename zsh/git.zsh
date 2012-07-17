@@ -1,9 +1,10 @@
 # git
-alias gd="git diff | mate"
+alias gd="git diff"
+alias gdc="git diff --cached"
 alias ga="git add"
 alias gbd="git branch -D"
-alias gs="git status -s"
-alias gst="git status"
+alias gs="git status"
+alias gst="git status -s"
 alias gca="git commit -a -m"
 alias gm="git merge --no-ff"
 alias gpt="git push --tags"

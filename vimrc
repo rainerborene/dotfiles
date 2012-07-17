@@ -412,9 +412,9 @@ nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 nnoremap <leader>t :CtrlPTag<CR>
 nnoremap <leader>b :CtrlPBuffer<CR>
 nnoremap <leader>l :CtrlPLine<CR>
+nnoremap <leader>i :CtrlPRegister<CR>
 
 " Some toggle commands
-nnoremap <leader>i :set list!<CR>
 nnoremap <leader>u :GundoToggle<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>N :NERDTreeFind<CR>
@@ -490,7 +490,6 @@ function! s:GetImageDimensions(image)
   normal! "zp
 endfunction
 command! -complete=custom,s:GetImages -nargs=1 GetImageDimensions call s:GetImageDimensions(<f-args>)
-nnoremap <leader>o :GetImageDimensions<Space>
 
 " }}}
 " Synstack {{{

@@ -127,9 +127,6 @@
 [submodule "vim/bundle/textobj-indent"]
 	path = vim/bundle/textobj-indent
 	url = git://github.com/kana/vim-textobj-indent.git
-[submodule "vim/bundle/puppet"]
-	path = vim/bundle/puppet
-	url = git://github.com/puppetlabs/puppet-syntax-vim.git
 [submodule "vim/bundle/ruby"]
 	path = vim/bundle/ruby
 	url = git://github.com/vim-ruby/vim-ruby.git
@@ -142,3 +139,6 @@
 [submodule "vim/bundle/NrrwRgn"]
 	path = vim/bundle/NrrwRgn
 	url = git://github.com/chrisbra/NrrwRgn.git
+[submodule "vim/bundle/ctrlp-register"]
+	path = vim/bundle/ctrlp-register
+	url = git://github.com/mattn/ctrlp-register.git
