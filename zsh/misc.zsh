@@ -22,6 +22,7 @@ alias l='tree -htCL 1 --dirsfirst'
 alias zshconfig="vim ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"
 alias reload='source ~/.zshrc'
+alias z='nocorrect _z 2>&1'
 
 # linux specific aliases
 if [[ "$UNAME" == "Linux" ]]; then
@@ -64,7 +65,7 @@ utf8_encode() {
   rm -v $1 && mv -v $1.utf8 $1
 }
 
-login_message() {
+_welcome() {
   local sentences="~/.sentences.txt"
   if [ -e $sentences ]; then
     cat $sentences | sort --random-sort | head -n 1

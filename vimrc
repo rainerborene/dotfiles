@@ -156,7 +156,7 @@ augroup END
 
 augroup ft_ruby
   au!
-  au FileType ruby nnoremap <buffer> <localleader>gem 0igem "ea",f(r"a~> f)r"
+  au FileType ruby nnoremap <buffer> <localleader>gem ^igem "Whha",f(r"a~> f)r"
   au FileType ruby silent! setlocal foldmethod=syntax
   au FileType ruby silent! compiler ruby
 augroup END
@@ -297,7 +297,7 @@ nnoremap K <nop>
 nnoremap K :q<cr>
 
 " I hate when the rendering occasionally gets messed up.
-nnoremap <leader>rr :syntax sync fromstart<cr>:redraw!<cr>
+nnoremap <leader>U :syntax sync fromstart<cr>:redraw!<cr>
 
 " Speed up buffer switching
 noremap <C-k> <C-W>k
@@ -310,8 +310,9 @@ noremap <leader>v <C-w>v
 nnoremap _ss :setf sass<CR>
 nnoremap _ht :setf html<CR>
 nnoremap _vi :setf vim<CR>
-nnoremap _rb :setf ruby<CR>
 nnoremap _ob :setf objc<CR>
+nnoremap _rb :setf ruby<CR>
+nnoremap _js :setf javascript<CR>
 
 " View full list of vim's syntax groups
 nnoremap <leader>hi :source $VIMRUNTIME/syntax/hitest.vim<CR>
@@ -451,6 +452,10 @@ nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gv :Gitv --all<cr>
 nnoremap <leader>gV :Gitv! --all<cr>
 
+" Vroom
+nnoremap <leader>rr :VroomRunTestFile<CR>
+nnoremap <leader>R :VroomRunNearestTest<CR>
+
 " }}}
 " Strip trailing whitespace {{{
 
@@ -547,6 +552,11 @@ nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 " }}}
 " Global Options {{{
 
+let g:vroom_map_keys = 0
+let g:nrrw_rgn_vert = 1
+let g:nrrw_rgn_wdth = 80
+let g:nrrw_rgn_hl = 'Folded'
+let g:nrrw_topbot_leftright = 'botright'
 let g:gist_show_privates = 1
 let g:gist_post_private = 1
 let g:gist_detect_filetype = 1
@@ -565,7 +575,7 @@ let g:NERDTreeHighlightCursorline = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDCreateDefaultMappings = 0
 let g:NERDTreeDirArrows = 1
-let g:NERDTreeShowHidden = 1
+let g:NERDTreeShowHidden = 0
 let g:NERDSpaceDelims = 1
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1

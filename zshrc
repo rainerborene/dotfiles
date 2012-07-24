@@ -23,13 +23,13 @@ PROMPT='
 %{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)
 $ '
 
-# Useful aliases
-source $HOME/.dotfiles/zsh/ruby.zsh
-source $HOME/.dotfiles/zsh/misc.zsh
-source $HOME/.dotfiles/zsh/git.zsh
-
 # Dependencies
 source $HOME/.dotfiles/lib/z.sh
+
+# Useful aliases
+source $HOME/.dotfiles/zsh/misc.zsh
+source $HOME/.dotfiles/zsh/ruby.zsh
+source $HOME/.dotfiles/zsh/git.zsh
 
 # Z command
 precmd() {
@@ -37,4 +37,4 @@ precmd() {
 }
 
 # Login message
-login_message
+_welcome

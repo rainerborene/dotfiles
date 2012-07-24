@@ -30,5 +30,15 @@
 
 [web]
 	browser = open
+
 [github]
 	user = rainerborene
+
+[url "git://github.com/"]
+	insteadOf = gh:
+
+[url "git@github.com:"]
+	insteadOf = wgh:
+
+[url "git@heroku.com:"]
+	insteadOf = heroku:
