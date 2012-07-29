@@ -41,7 +41,6 @@ set noshowmode                      " hide current mode down the bottom
 set wildmenu                        " turn on wild menu
 set wildmode=list:longest,full      " make cmdline tab completion similar to bash
 set wildignore+=*~,.git,*.pyc,*.o,tags,tmp
-set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
 set ruler
@@ -259,6 +258,16 @@ vnoremap Q gq
 " Keep the cursor in place while joining limes
 nnoremap J mzJ`z
 
+" Split line (sister to [J]oin lines)
+" The normal use of S is covered by cc, so don't worry about shadowing it.
+nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
+
+" Don't move on *
+nnoremap * *<c-o>
+
+" Use c-\ to do c-] but open it in a new split.
+nnoremap <c-\> <c-w>v<c-]>zvzz
+
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
 nnoremap N Nzzzv
@@ -371,7 +380,7 @@ vnoremap ! :ClamVisual<space>
 noremap ' `
 
 " Regenerate ctags
-nnoremap <leader>rt :silent !/usr/local/bin/ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
+nnoremap <leader><cr> :silent !/usr/local/bin/ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
 " Because escape is too far away
 inoremap jj <ESC>
@@ -413,9 +422,9 @@ nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 nnoremap <leader>t :CtrlPTag<CR>
 nnoremap <leader>b :CtrlPBuffer<CR>
 nnoremap <leader>l :CtrlPLine<CR>
-nnoremap <leader>i :CtrlPRegister<CR>
 
 " Some toggle commands
+nnoremap <leader>i :set list!<CR>
 nnoremap <leader>u :GundoToggle<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>N :NERDTreeFind<CR>
@@ -550,7 +559,7 @@ nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 
 " }}}
-" Global Options {{{
+" Plugin settings {{{
 
 let g:vroom_map_keys = 0
 let g:nrrw_rgn_vert = 1
@@ -588,6 +597,7 @@ let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_extensions = ['tag']
+let g:ctrlp_custom_ignore = '\.jpg$\|\.bmp$\|\.gif$\|\.png$\|\.jpeg$'
 let g:Powerline_symbols = "fancy"
 let g:syntastic_enable_signs = 1
 let g:syntastic_quiet_warnings = 0
