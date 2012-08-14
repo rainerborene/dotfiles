@@ -18,6 +18,7 @@ set nottimeout
 set ttyfast
 set splitbelow
 set splitright
+set shell=/bin/bash
 set lazyredraw
 set matchtime=3
 set dictionary=/usr/share/dict/words
@@ -142,9 +143,20 @@ au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,p
 au BufReadPost fugitive://* set bufhidden=delete
 au BufWritePost .vimrc source $MYVIMRC
 
+augroup plugin_commentary
+  au!
+  au FileType fish setlocal commentstring=#\ %s
+augroup END
+
 augroup ft_org
   au!
   au FileType org setlocal formatoptions+=t colorcolumn&
+augroup END
+
+augroup ft_fish
+  au!
+  au BufNewFile,BufRead *.fish setlocal filetype=fish
+  au FileType fish setlocal foldmethod=marker foldmarker={{{,}}}
 augroup END
 
 augroup ft_git
@@ -308,6 +320,10 @@ nnoremap K :q<cr>
 " I hate when the rendering occasionally gets messed up.
 nnoremap <leader>U :syntax sync fromstart<cr>:redraw!<cr>
 
+" Tabs
+nnoremap <leader>( :tabprev<cr>
+nnoremap <leader>) :tabnext<cr>
+
 " Speed up buffer switching
 noremap <C-k> <C-W>k
 noremap <C-j> <C-W>j
@@ -447,6 +463,10 @@ vnoremap <leader>Al :left<cr>
 vnoremap <leader>Ac :center<cr>
 vnoremap <leader>Ar :right<cr>
 
+" Turbux
+map <leader>rr <Plug>SendTestToTmux
+map <leader>R <Plug>SendFocusedTestToTmux
+
 " Fugitive
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
@@ -460,10 +480,6 @@ nnoremap <leader>gr :Gremove<cr>
 nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gv :Gitv --all<cr>
 nnoremap <leader>gV :Gitv! --all<cr>
-
-" Vroom
-nnoremap <leader>rr :VroomRunTestFile<CR>
-nnoremap <leader>R :VroomRunNearestTest<CR>
 
 " }}}
 " Strip trailing whitespace {{{
@@ -552,16 +568,15 @@ set foldtext=MyFoldText()
 " Quick editing {{{
 
 nnoremap <silent> <leader>ez :vsplit ~/.zshrc<CR>
+nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
 nnoremap <silent> <leader>ex :vsplit ~/.tmux.conf<CR>
-nnoremap <silent> <leader>es :vsplit ~/.vim/snippets/<CR>
 nnoremap <silent> <leader>eo :vsplit ~/Dropbox/outline.org<CR>
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
-nnoremap <silent> <leader>rv :so $MYVIMRC<CR>
 
 " }}}
 " Plugin settings {{{
 
-let g:vroom_map_keys = 0
+let g:no_turbux_mappings = 1
 let g:nrrw_rgn_vert = 1
 let g:nrrw_rgn_wdth = 80
 let g:nrrw_rgn_hl = 'Folded'
@@ -580,11 +595,11 @@ let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
 let g:html5_aria_attributes_complete = 0
+let g:NERDCreateDefaultMappings = 0
+let g:NERDTreeChDirMode = 1
 let g:NERDTreeHighlightCursorline = 1
 let g:NERDTreeMinimalUI = 1
-let g:NERDCreateDefaultMappings = 0
 let g:NERDTreeDirArrows = 1
-let g:NERDTreeShowHidden = 0
 let g:NERDSpaceDelims = 1
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1

@@ -1,4 +1,4 @@
-KeepAlive yes
+ServerAliveInterval 10
 
 Host mm
     HostName 173.246.40.124
