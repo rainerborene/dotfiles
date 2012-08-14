@@ -94,9 +94,6 @@
 [submodule "vim/bundle/less"]
 	path = vim/bundle/less
 	url = git://github.com/groenewege/vim-less.git
-[submodule "oh-my-zsh"]
-	path = oh-my-zsh
-	url = git://github.com/robbyrussell/oh-my-zsh.git
 [submodule "vim/bundle/tslime"]
 	path = vim/bundle/tslime
 	url = git://github.com/sjl/tslime.vim.git
@@ -142,3 +139,6 @@
 [submodule "vim/bundle/vroom"]
 	path = vim/bundle/vroom
 	url = git://github.com/skalnik/vim-vroom.git
+[submodule "vim/bundle/fish"]
+	path = vim/bundle/fish
+	url = git://github.com/vim-scripts/fish.vim.git

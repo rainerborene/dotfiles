@@ -6,7 +6,7 @@
 # Thanks to all folks on GitHub for sharing their dotfiles.
 #
 
-DOTIGNORE="README.md install.sh zsh lib sshconfig"
+DOTIGNORE="README.md install.sh fish lib sshconfig"
 
 #
 # Git must be installed on your machine.
@@ -81,9 +81,6 @@ update() {
 
   read -p "Submodules was successfully updated. Are you sure you want to continue [y/n]? " ANSWER
   [[ $ANSWER == "n" || $ANSWER == "N" ]] && exit
-
-  cd ~/.dotfiles/lib
-  curl $github/rupa/z/master/z.sh -Os
 
   cd ~/.dotfiles/vim/colors
   curl $github/nelstrom/vim-mac-classic-theme/master/colors/mac_classic.vim -Os

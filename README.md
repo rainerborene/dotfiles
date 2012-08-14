@@ -11,10 +11,10 @@ to sync:
 
     git pull origin master 
 
-If you'd like to switch your shell from the default `bash` to `zsh`, you can do
+If you'd like to switch your shell from the default `bash` to `fish`, you can do
 so with the following command.
 
-    chsh -s /bin/zsh
+    chsh -s /usr/local/bin/fish
 
 Now set up your credentials.
 
