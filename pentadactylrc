@@ -1,0 +1,15 @@
+"1.0
+
+loadplugins '\.(js|penta)$'
+group user
+
+set showtabline=multitab
+set showstatuslinks=command
+set hlfind
+
+nmap -builtin <bs> <nop>
+nmap -builtin j 3j
+nmap -builtin k 3k
+nmap -builtin ; :
+
+" vim: set ft=pentadactyl:

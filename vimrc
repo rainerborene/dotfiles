@@ -464,7 +464,7 @@ vnoremap <leader>Ac :center<cr>
 vnoremap <leader>Ar :right<cr>
 
 " Turbux
-map <leader>rr <Plug>SendTestToTmux
+map <leader>r <Plug>SendTestToTmux
 map <leader>R <Plug>SendFocusedTestToTmux
 
 " Fugitive
@@ -577,6 +577,7 @@ nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 " Plugin settings {{{
 
 let g:no_turbux_mappings = 1
+let g:turbux_command_prefix = 'bundle exec'
 let g:nrrw_rgn_vert = 1
 let g:nrrw_rgn_wdth = 80
 let g:nrrw_rgn_hl = 'Folded'

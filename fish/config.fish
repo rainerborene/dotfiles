@@ -11,7 +11,6 @@ alias V 'vim .'
 alias m 'mvim .'
 alias tm 'tmux -u2'
 alias md 'mkdir -p'
-alias hi 'history | tail -20'
 alias pp 'python -mjson.tool'
 alias serve_this 'python -m SimpleHTTPServer'
 
@@ -60,7 +59,6 @@ function utf8_encode
   rm -v $argv; and mv -v $argv.utf8 $argv
 end
 
-
 # }}}
 # Directories {{{
 
@@ -90,13 +88,11 @@ set green (set_color green)
 set gray (set_color -o black)
 
 function git_prompt
-    if git root >/dev/null 2>&1
+    if git rev-parse --git-dir >/dev/null 2>&1
         set_color normal
         printf ' on '
         set_color magenta
-        printf '%s' (git currentbranch ^/dev/null)
-        set_color green
-        git_prompt_status
+        printf '%s' (git symbolic-ref HEAD 2>/dev/null| cut -d / -f 3)
         set_color normal
     end
 end
@@ -130,3 +126,7 @@ function fish_prompt
 end
 
 # }}}
+
+if status --is-interactive
+    command fortune -s | cowsay -g
+end

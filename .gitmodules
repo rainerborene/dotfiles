@@ -136,9 +136,6 @@
 [submodule "vim/bundle/NrrwRgn"]
 	path = vim/bundle/NrrwRgn
 	url = git://github.com/chrisbra/NrrwRgn.git
-[submodule "vim/bundle/fish"]
-	path = vim/bundle/fish
-	url = git://github.com/vim-scripts/fish.vim.git
 [submodule "vim/bundle/turbux"]
 	path = vim/bundle/turbux
 	url = git://github.com/jgdavey/vim-turbux.git
