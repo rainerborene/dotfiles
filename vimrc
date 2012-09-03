@@ -567,11 +567,11 @@ set foldtext=MyFoldText()
 " }}}
 " Quick editing {{{
 
-nnoremap <silent> <leader>ez :vsplit ~/.zshrc<CR>
-nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
-nnoremap <silent> <leader>ex :vsplit ~/.tmux.conf<CR>
-nnoremap <silent> <leader>eo :vsplit ~/Dropbox/outline.org<CR>
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <silent> <leader>eo :vsplit ~/Dropbox/outline.org<CR>
+nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
+nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
+nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
 
 " }}}
 " Plugin settings {{{
