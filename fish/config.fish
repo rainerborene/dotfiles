@@ -13,6 +13,7 @@ alias tm 'tmux -u2'
 alias md 'mkdir -p'
 alias pp 'python -mjson.tool'
 alias serve_this 'python -m SimpleHTTPServer'
+alias tailf 'tail -f'
 
 alias g 'git'
 alias gd 'git diff'
