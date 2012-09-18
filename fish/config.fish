@@ -13,6 +13,7 @@ alias tm 'tmux -u2'
 alias md 'mkdir -p'
 alias pp 'python -mjson.tool'
 alias serve_this 'python -m SimpleHTTPServer'
+alias reload '. ~/.config/fish/config.fish'
 alias tailf 'tail -f'
 
 alias g 'git'
@@ -82,12 +83,6 @@ set PATH /usr/local/mysql/bin $PATH
 # }}}
 # Prompt {{{
 
-set normal (set_color normal)
-set magenta (set_color magenta)
-set yellow (set_color yellow)
-set green (set_color green)
-set gray (set_color -o black)
-
 function git_prompt
     if git rev-parse --git-dir >/dev/null 2>&1
         set_color normal
@@ -102,18 +97,7 @@ function fish_prompt
     z --add "$PWD"
 
     echo
-
-    set_color magenta
-    printf '%s' (whoami)
-    set_color normal
-    printf ' at '
-
-    set_color yellow
-    printf '%s' (hostname|cut -d . -f 1)
-    set_color normal
-    printf ' in '
-
-    set_color $fish_color_cwd
+    set_color cyan
     printf '%s' (prompt_pwd)
     set_color normal
 
@@ -121,7 +105,7 @@ function fish_prompt
 
     echo
     set_color white -o
-    printf '><((°> '
+    printf '➜ '
 
     set_color normal
 end
@@ -129,5 +113,5 @@ end
 # }}}
 
 if status --is-interactive
-    command fortune -s | cowsay -g
+    command fortune -s | cowsay -f tux -g
 end

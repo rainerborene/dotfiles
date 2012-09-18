@@ -139,3 +139,9 @@
 [submodule "vim/bundle/turbux"]
 	path = vim/bundle/turbux
 	url = git://github.com/jgdavey/vim-turbux.git
+[submodule "vim/bundle/eunuch"]
+	path = vim/bundle/eunuch
+	url = git://github.com/tpope/vim-eunuch.git
+[submodule "vim/bundle/vitality"]
+	path = vim/bundle/vitality
+	url = git://github.com/sjl/vitality.vim.git

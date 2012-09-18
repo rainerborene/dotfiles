@@ -577,7 +577,7 @@ nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
 " Plugin settings {{{
 
 let g:no_turbux_mappings = 1
-let g:turbux_command_prefix = 'bundle exec'
+let g:turbux_command_prefix = 'zeus'
 let g:nrrw_rgn_vert = 1
 let g:nrrw_rgn_wdth = 80
 let g:nrrw_rgn_hl = 'Folded'
