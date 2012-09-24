@@ -277,6 +277,9 @@ nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
 " Don't move on *
 nnoremap * *<c-o>
 
+" Switch segments of text with predefined replacements
+nnoremap - :Switch<cr>
+
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-\> <c-w>v<c-]>zvzz
 
@@ -296,9 +299,6 @@ nnoremap gV `[v`]
 
 " Move to last change
 nnoremap gI `.
-
-" Save a file as root.
-cnoremap w!! w !sudo tee % >/dev/null
 
 " Enter command mode quickly
 nnoremap ; :
@@ -370,8 +370,7 @@ command! -bang WA wa<bang>
 command! -bang Wq wq<bang>
 command! -bang WQ wq<bang>
 
-" Handful abbreveations
-iabbrev me@ me@rainerborene.com
+" Abbreveations
 iabbrev enc # encoding: utf-8
 
 " Emacs bindings in command line mode
@@ -605,7 +604,7 @@ let g:NERDSpaceDelims = 1
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
 let g:Gitv_DoNotMapCtrlKey = 1
-let g:ackprg = "ack-grep -H --nocolor --nogroup --column"
+let g:ackprg = 'ack-grep -H --nocolor --nogroup --column'
 let g:sparkupNextMapping = '<c-s>'
 let g:gundo_help = 0
 let g:gundo_preview_bottom = 1
@@ -614,17 +613,17 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_extensions = ['tag']
 let g:ctrlp_custom_ignore = '\.jpg$\|\.bmp$\|\.gif$\|\.png$\|\.jpeg$'
-let g:Powerline_symbols = "fancy"
+let g:Powerline_symbols = 'fancy'
 let g:syntastic_enable_signs = 1
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html'] }
-let g:SuperTabDefaultCompletionType = "<c-n>"
+let g:SuperTabDefaultCompletionType = '<c-n>'
 let g:SuperTabLongestHighlight = 1
 let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo', 'Date', 'Agenda', 'Misc']
 let g:org_agenda_files = ['~/Dropbox/outline.org']
 
-if filereadable(expand("~/.vimrc.local"))
+if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
 

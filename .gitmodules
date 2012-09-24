@@ -145,3 +145,6 @@
 [submodule "vim/bundle/vitality"]
 	path = vim/bundle/vitality
 	url = git://github.com/sjl/vitality.vim.git
+[submodule "vim/bundle/switch"]
+	path = vim/bundle/switch
+	url = git://github.com/AndrewRadev/switch.vim.git
