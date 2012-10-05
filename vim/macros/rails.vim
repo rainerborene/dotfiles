@@ -8,20 +8,7 @@ function! s:migrationList(ArgLead, CmdLine, CursorPos)
   return map(migrations,'s:sub(v:val,"^[0-9]*_","")')
 endfunction
 
-function! s:migrationRedo(name)
-  let l:buffer_name = a:name ? a:name : expand("%:d")
-  let l:migration = matchstr(l:buffer_name, '\c\v\d+')
-  if l:migration
-    exec printf("Rake db:migrate:redo VERSION=%s db:test:clone", l:migration)
-  else
-    echohl ErrorMsg
-    echomsg "Open a migration in the current buffer to redo."
-    echohl None
-  end
-endfunction
-command! -nargs=? -complete=customlist,s:migrationList -bar Rredo call s:migrationRedo('<args>')
-
 " }}}
 
-Rnavcommand admin app/admin -suffix=.rb -default=dashboards
+Rnavcommand admin app/admin -suffix=.rb -default=dashboard
 Rnavcommand job app/jobs -suffix=.rb

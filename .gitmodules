@@ -148,3 +148,6 @@
 [submodule "vim/bundle/switch"]
 	path = vim/bundle/switch
 	url = git://github.com/AndrewRadev/switch.vim.git
+[submodule "vim/bundle/dwm"]
+	path = vim/bundle/dwm
+	url = git://github.com/spolu/dwm.vim.git

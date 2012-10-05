@@ -54,8 +54,10 @@ set pastetoggle=<F6>
 set virtualedit+=block
 set shortmess=atI
 set mousemodel=popup
+set complete=.,w,b,u,t
 set completeopt=longest,menuone,preview
 set mouse=a
+set ttymouse=xterm2
 set background=dark
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set colorcolumn=+1
@@ -167,8 +169,8 @@ augroup END
 
 augroup ft_ruby
   au!
-  au FileType ruby nnoremap <buffer> <localleader>gem ^igem "Whha",f(r"a~> f)r"
-  au FileType ruby silent! setlocal foldmethod=syntax
+  au FileType ruby nnoremap <buffer> <localleader>gem ^igem 'Whha',f(r'a~> f)r'
+  au FileType ruby silent! setlocal foldmethod=indent
   au FileType ruby silent! compiler ruby
 augroup END
 
@@ -318,18 +320,24 @@ nnoremap K <nop>
 nnoremap K :q<cr>
 
 " I hate when the rendering occasionally gets messed up.
-nnoremap <leader>U :syntax sync fromstart<cr>:redraw!<cr>
+nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
 
 " Tabs
 nnoremap <leader>( :tabprev<cr>
 nnoremap <leader>) :tabnext<cr>
 
 " Speed up buffer switching
-noremap <C-k> <C-W>k
-noremap <C-j> <C-W>j
-noremap <C-h> <C-W>h
-noremap <C-l> <C-W>l
-noremap <leader>v <C-w>v
+nnoremap <C-h> <C-W>h
+nnoremap <C-j> <C-W>w
+nnoremap <C-k> <C-W>W
+nnoremap <C-l> <C-W>l
+nnoremap <leader>v <C-w>v
+
+" Dwm
+nmap <C-N> <Plug>DWMNew
+nmap <C-C> <Plug>DWMClose
+nmap <C-@> <Plug>DWMFocus
+nmap <C-Space> <Plug>DWMFocus
 
 " Easy filetype switching
 nnoremap _ss :setf sass<CR>
@@ -545,6 +553,40 @@ command! ScratchToggle call ScratchToggle()
 nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 " }}}
+" Tab title {{{
+
+set guitablabel=%t
+set tabline=%!MyTabLine()
+
+hi TabLine cterm=none
+
+function! MyTabLine()
+  let s = ''
+  for i in range(tabpagenr('$'))
+    " select the highlighting
+    if i + 1 == tabpagenr()
+      let s .= '%#TabLineSel#'
+    else
+      let s .= '%#TabLine#'
+    endif
+    " set the tab page number (for mouse clicks)
+    let s .= '%' . (i + 1) . 'T'
+    " the label is made by MyTabLabel()
+    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
+  endfor
+  " after the last tab fill with TabLineFill and reset tab page nr
+  let s .= '%#TabLineFill#%T'
+  return s
+endfunction
+
+function! MyTabLabel(n)
+  let buflist = tabpagebuflist(a:n)
+  let winnr = tabpagewinnr(a:n)
+  let label = bufname(buflist[winnr - 1])
+  return fnamemodify(label == '' ? "untitled" : label, ":t")
+endfunction
+
+" }}}
 " Folding {{{
 
 function! MyFoldText()
@@ -575,8 +617,9 @@ nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
 " }}}
 " Plugin settings {{{
 
+let g:dwm_map_keys = 0
 let g:no_turbux_mappings = 1
-let g:turbux_command_prefix = 'zeus'
+let g:turbux_command_prefix = 'bundle exec'
 let g:nrrw_rgn_vert = 1
 let g:nrrw_rgn_wdth = 80
 let g:nrrw_rgn_hl = 'Folded'
