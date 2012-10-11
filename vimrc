@@ -333,7 +333,7 @@ nnoremap <C-k> <C-W>W
 nnoremap <C-l> <C-W>l
 nnoremap <leader>v <C-w>v
 
-" Dwm
+" Tiled Window Management
 nmap <C-N> <Plug>DWMNew
 nmap <C-C> <Plug>DWMClose
 nmap <C-@> <Plug>DWMFocus
