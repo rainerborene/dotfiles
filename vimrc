@@ -88,11 +88,22 @@ end
 " }}}
 " Backups {{{
 
-set undodir=$HOME/.dotfiles/vim/tmp/undo//
-set backupdir=$HOME/.dotfiles/vim/tmp/backup//
-set directory=$HOME/.dotfiles/vim/tmp/swap//
-set noswapfile
 set backup
+set noswapfile
+set undodir=~/.vim/tmp/undo//
+set backupdir=~/.vim/tmp/backup//
+set directory=~/.vim/tmp/swap//
+
+" Make those folders automatically if they don't already exist.
+if !isdirectory(expand(&undodir))
+  call mkdir(expand(&undodir), "p")
+endif
+if !isdirectory(expand(&backupdir))
+  call mkdir(expand(&backupdir), "p")
+endif
+if !isdirectory(expand(&directory))
+  call mkdir(expand(&directory), "p")
+endif
 
 " }}}
 " Visual Cues {{{
@@ -169,7 +180,7 @@ augroup END
 
 augroup ft_ruby
   au!
-  au FileType ruby nnoremap <buffer> <localleader>gem ^igem 'Whha',f(r'a~> f)r'
+  au FileType ruby nnoremap <buffer> <localleader>gem ^igem 'Whha',f(r'a~> f)r'U
   au FileType ruby silent! setlocal foldmethod=indent
   au FileType ruby silent! compiler ruby
 augroup END
@@ -442,7 +453,6 @@ nnoremap <leader>D :diffoff!<cr>
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
 " Open CtrlP on diffent modes
-nnoremap <leader>t :CtrlPTag<CR>
 nnoremap <leader>b :CtrlPBuffer<CR>
 nnoremap <leader>l :CtrlPLine<CR>
 
@@ -451,6 +461,7 @@ nnoremap <leader>i :set list!<CR>
 nnoremap <leader>u :GundoToggle<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>N :NERDTreeFind<CR>
+nnoremap <leader>t :TagbarToggle<CR>
 
 " Yank to OS X pasteboard.
 noremap <leader>y "*y
@@ -545,7 +556,7 @@ function! ScratchToggle()
     unlet w:is_scratch_window
     exec "q"
   else
-    exec "normal! :Sscratch\<cr>\<C-W>J:resize 13\<cr>"
+    exec "normal! :Sscratch\<cr>\<C-W>L"
     let w:is_scratch_window = 1
   endif
 endfunction
@@ -657,6 +668,8 @@ let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_extensions = ['tag']
 let g:ctrlp_custom_ignore = '\.jpg$\|\.bmp$\|\.gif$\|\.png$\|\.jpeg$'
 let g:Powerline_symbols = 'fancy'
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_signs = 1
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
