@@ -85,9 +85,6 @@
 [submodule "vim/bundle/powerline"]
 	path = vim/bundle/powerline
 	url = git://github.com/Lokaltog/vim-powerline.git
-[submodule "vim/bundle/easymotion"]
-	path = vim/bundle/easymotion
-	url = git://github.com/Lokaltog/vim-easymotion.git
 [submodule "vim/bundle/syntastic"]
 	path = vim/bundle/syntastic
 	url = git://github.com/scrooloose/syntastic.git
@@ -154,6 +151,13 @@
 [submodule "vim/bundle/textobj-word-column"]
 	path = vim/bundle/textobj-word-column
 	url = git://github.com/coderifous/textobj-word-column.vim.git
+	ignore = dirty
 [submodule "vim/bundle/tagbar"]
 	path = vim/bundle/tagbar
 	url = git://github.com/majutsushi/tagbar.git
+[submodule "vim/bundle/splice"]
+	path = vim/bundle/splice
+	url = git://github.com/sjl/splice.vim.git
+[submodule "vim/bundle/repeat"]
+	path = vim/bundle/repeat
+	url = git://github.com/tpope/vim-repeat.git

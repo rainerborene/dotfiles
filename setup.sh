@@ -91,7 +91,6 @@ update() {
 
   cd ~/.dotfiles/vim/autoload
   curl $github/tpope/vim-pathogen/master/autoload/pathogen.vim -Os
-  curl $github/tpope/vim-repeat/master/autoload/repeat.vim -Os
 }
 
 # Parse arguments

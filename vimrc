@@ -64,6 +64,7 @@ set colorcolumn=+1
 set synmaxcol=500
 
 let g:badwolf_html_link_underline = 0
+let g:badwolf_css_props_highlight = 1
 colorscheme badwolf
 
 if has("gui_running")
@@ -396,9 +397,6 @@ iabbrev enc # encoding: utf-8
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 
-" Substitute
-nnoremap <leader>s :%s//<left>
-
 " Source
 vnoremap <leader>S y:execute @@<cr>:echo 'Sourced selection.'<cr>
 nnoremap <leader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
@@ -447,21 +445,22 @@ vnoremap <leader>d "dymz"dP`z``
 noremap x "_x
 
 " Diffoff
-nnoremap <leader>D :diffoff!<cr>
+nnoremap <silent> <leader>D :diffoff!<cr>
 
 " Clear search highlight
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
-" Open CtrlP on diffent modes
-nnoremap <leader>b :CtrlPBuffer<CR>
-nnoremap <leader>l :CtrlPLine<CR>
+" Open CtrlP on different modes
+nnoremap <silent> <leader>b :CtrlPBuffer<CR>
+nnoremap <silent> <leader>l :CtrlPLine<CR>
 
 " Some toggle commands
-nnoremap <leader>i :set list!<CR>
-nnoremap <leader>u :GundoToggle<CR>
-nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>N :NERDTreeFind<CR>
-nnoremap <leader>t :TagbarToggle<CR>
+nnoremap <silent> <leader>s :set spell!<CR>
+nnoremap <silent> <leader>i :set list!<CR>
+nnoremap <silent> <leader>u :GundoToggle<CR>
+nnoremap <silent> <leader>n :NERDTreeToggle<CR>
+nnoremap <silent> <leader>N :NERDTreeFind<CR>
+nnoremap <silent> <leader>t :TagbarToggle<CR>
 
 " Yank to OS X pasteboard.
 noremap <leader>y "*y
@@ -568,8 +567,6 @@ nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 set guitablabel=%t
 set tabline=%!MyTabLine()
-
-hi TabLine cterm=none
 
 function! MyTabLine()
   let s = ''

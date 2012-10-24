@@ -9,6 +9,13 @@
 [color]
 	ui = auto
 
+[merge]
+	tool = splice
+
+[mergetool "splice"]
+	cmd = "mvim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
+	trustExitCode = true
+
 [alias]
 	d       = diff
 	di      = diff --cached

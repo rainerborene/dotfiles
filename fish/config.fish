@@ -34,7 +34,7 @@ alias gba 'git branch -a'
 alias gcp 'git cherry-pick'
 alias gl 'git log --pretty="format:%Cgreen%h%Creset %an - %s" --graph'
 alias gpom 'git pull --rebase origin master'
-alias gcd 'cd "`git rev-parse --show-toplevel`"'
+alias gcd 'cd (git rev-parse --show-toplevel)'
 alias gitv 'vim .git/index -c "Gitv --all" -c "tabonly"'
 
 alias o 'open'
@@ -97,13 +97,24 @@ function fish_prompt
     z --add "$PWD"
 
     echo
-    set_color cyan
+
+    set_color magenta
+    printf '%s' (whoami)
+    set_color normal
+    printf ' at '
+
+    set_color yellow
+    printf '%s' (hostname|cut -d . -f 1)
+    set_color normal
+    printf ' in '
+
+    set_color $fish_color_cwd
     printf '%s' (prompt_pwd)
     set_color normal
 
     git_prompt
-
     echo
+
     set_color white -o
     printf '➜ '
 
