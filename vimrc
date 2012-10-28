@@ -152,7 +152,6 @@ au FileType c setlocal foldmethod=syntax
 
 au BufNewFile,BufRead *.ejs setfiletype html
 au BufNewFile,BufRead *.rss setfiletype xml
-au BufNewFile,BufRead *.json setfiletype javascript
 au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,pryrc,config.ru} setfiletype ruby
 au BufReadPost fugitive://* set bufhidden=delete
 au BufWritePost .vimrc source $MYVIMRC
@@ -179,16 +178,30 @@ augroup ft_git
   au FileType gitcommit setlocal spell | wincmd K
 augroup END
 
+augroup ft_mongo
+  au!
+  au BufNewFile,BufReadPost *.mql setlocal filetype=mongoql
+  au FileType mongoql let b:vimpipe_command="mongo"
+  au FileType mongoql let b:vimpipe_filetype="json"
+augroup END
+
 augroup ft_ruby
   au!
   au FileType ruby nnoremap <buffer> <localleader>gem ^igem 'Whha',f(r'a~> f)r'U
   au FileType ruby silent! setlocal foldmethod=indent
   au FileType ruby silent! compiler ruby
+  au FileType ruby let b:vimpipe_command='ruby <(cat)'
+augroup END
+
+augroup ft_json
+  au!
+  au FileType json let b:vimpipe_command="python -m json.tool"
 augroup END
 
 augroup ft_html
   au!
   au FileType html setlocal foldmethod=manual
+  au FileType html let b:vimpipe_command="lynx -dump -stdin"
 augroup END
 
 augroup ft_quickfix
@@ -209,6 +222,8 @@ augroup ft_markdown
   au FileType markdown nnoremap <buffer> <localleader>2 yypVr-
   au FileType markdown nnoremap <buffer> <localleader>3 I### <ESC>
   au FileType markdown setlocal wrap linebreak nolist
+  au FileType markdown let b:vimpipe_command="multimarkdown"
+  au FileType markdown let b:vimpipe_filetype="html"
 augroup END
 
 augroup ft_vim
@@ -358,6 +373,7 @@ nnoremap _vi :setf vim<CR>
 nnoremap _ob :setf objc<CR>
 nnoremap _rb :setf ruby<CR>
 nnoremap _js :setf javascript<CR>
+nnoremap _sql :setf sql<CR>
 
 " View full list of vim's syntax groups
 nnoremap <leader>hi :source $VIMRUNTIME/syntax/hitest.vim<CR>
@@ -451,6 +467,7 @@ nnoremap <silent> <leader>D :diffoff!<cr>
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
 " Open CtrlP on different modes
+nnoremap <silent> <leader>t :CtrlPTag<CR>
 nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 nnoremap <silent> <leader>l :CtrlPLine<CR>
 
@@ -460,7 +477,6 @@ nnoremap <silent> <leader>i :set list!<CR>
 nnoremap <silent> <leader>u :GundoToggle<CR>
 nnoremap <silent> <leader>n :NERDTreeToggle<CR>
 nnoremap <silent> <leader>N :NERDTreeFind<CR>
-nnoremap <silent> <leader>t :TagbarToggle<CR>
 
 " Yank to OS X pasteboard.
 noremap <leader>y "*y
@@ -533,7 +549,7 @@ function! s:GetImageDimensions(image)
   let output = system("sips -g pixelWidth -g pixelHeight " . a:image)
   let width = matchlist(output, '\vpixelWidth: (\d+)')[1]
   let height = matchlist(output, '\vpixelHeight: (\d+)')[1]
-  let @z = join([width, height], ", ")
+  let @z = join(["width: ".width."px", "height: ".height."px"], "\n")
   normal! "zp
 endfunction
 command! -complete=custom,s:GetImages -nargs=1 GetImageDimensions call s:GetImageDimensions(<f-args>)
@@ -561,6 +577,22 @@ function! ScratchToggle()
 endfunction
 command! ScratchToggle call ScratchToggle()
 nnoremap <silent> <leader><tab> :ScratchToggle<cr>
+
+" }}}
+" Twiddle case {{{
+
+" http://vim.wikia.com/wiki/Switching_case_of_characters
+function! TwiddleCase(str)
+  if a:str ==# toupper(a:str)
+    let result = tolower(a:str)
+  elseif a:str ==# tolower(a:str)
+    let result = substitute(a:str,'\(\<\w\+\>\)', '\u\1', 'g')
+  else
+    let result = toupper(a:str)
+  endif
+  return result
+endfunction
+vnoremap ~ ygv"=TwiddleCase(@")<CR>Pgv
 
 " }}}
 " Tab title {{{

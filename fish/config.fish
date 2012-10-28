@@ -79,6 +79,7 @@ set PORT '5000'
 set PATH $HOME/.rbenv/bin $PATH
 set PATH $HOME/.rbenv/shims $PATH
 set PATH /usr/local/mysql/bin $PATH
+set PATH /usr/local/share/npm/bin $PATH
 
 # }}}
 # Prompt {{{

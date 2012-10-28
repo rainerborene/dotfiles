@@ -5,7 +5,7 @@
 --regex-markdown=/^###[ \t]+(.*)/\1/h,heading3/
 
 --langdef=scss
---langmap=scss:.scss
+--langmap=scss:.scss.sass
 --regex-scss=/^[ \t]*@mixin ([A-Za-z0-9_-]+)/\1/m,mixin,mixins/
 --regex-scss=/^[ \t]*\$([A-Za-z0-9_-]+)/\1/m,variable,variables/
 --regex-scss=/^[ \t]*\.([A-Za-z0-9_-]+)/.\1/c,class,classes/
