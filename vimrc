@@ -1,4 +1,4 @@
-" Basic settings {{{
+" Basic settings ----------------------------------------------------------- {{{
 
 filetype off        " necessary on some Linux distros for pathogen to properly load bundles
 set nocompatible    " use Vim settings, rather then Vi settings (much better!)
@@ -23,14 +23,13 @@ set lazyredraw
 set matchtime=3
 set dictionary=/usr/share/dict/words
 
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-
+runtime bundle/pathogen/autoload/pathogen.vim
+silent! call pathogen#infect()
 filetype plugin on
 filetype indent on
 
 " }}}
-" Appearance {{{
+" Appearance --------------------------------------------------------------- {{{
 
 syntax on                           " turn on syntax highlighting
 set t_Co=256                        " tell the term has 256 colors
@@ -50,7 +49,6 @@ set norelativenumber
 set numberwidth=5
 set pumheight=10
 set showbreak=↪
-set pastetoggle=<F6>
 set virtualedit+=block
 set shortmess=atI
 set mousemodel=popup
@@ -87,7 +85,7 @@ if has("gui_running")
 end
 
 " }}}
-" Backups {{{
+" Backups ------------------------------------------------------------------ {{{
 
 set backup
 set noswapfile
@@ -107,7 +105,7 @@ if !isdirectory(expand(&directory))
 endif
 
 " }}}
-" Visual Cues {{{
+" Visual Cues -------------------------------------------------------------- {{{
 
 set visualbell t_vb=                " disable visual bell
 set ignorecase                      " case insensitive
@@ -126,7 +124,7 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set list
 
 " }}}
-" Text Formatting {{{
+" Text Formatting ---------------------------------------------------------- {{{
 
 set autoindent
 set smartindent
@@ -141,7 +139,7 @@ set nojoinspaces
 set wrap linebreak
 
 " }}}
-" Auto Commands {{{
+" Auto Commands ------------------------------------------------------------ {{{
 
 au FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
 au FileType php,apache,sql,xslt,gitconfig,objc setlocal ts=4 sts=4 sw=4 noexpandtab
@@ -150,6 +148,7 @@ au FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespa
 au FileType java silent! compiler javac | setlocal makeprg=javac\ %
 au FileType c setlocal foldmethod=syntax
 
+au BufRead,BufNewFile *.tumblr.html setfiletype tumblr
 au BufNewFile,BufRead *.ejs setfiletype html
 au BufNewFile,BufRead *.rss setfiletype xml
 au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,pryrc,config.ru} setfiletype ruby
@@ -250,9 +249,9 @@ augroup END
 
 " Only shown when not in insert mode so I don't go insane.
 augroup trailing
-    au!
-    au InsertEnter * :set listchars-=trail:⌴
-    au InsertLeave * :set listchars+=trail:⌴
+  au!
+  au InsertEnter * :set listchars-=trail:⌴
+  au InsertLeave * :set listchars+=trail:⌴
 augroup END
 
 " Save when losing focus
@@ -271,7 +270,7 @@ au BufReadPost *
       \ endif
 
 " }}}
-" Mappings {{{
+" Mappings ----------------------------------------------------------------- {{{
 
 " Leader keys
 let mapleader = ","
@@ -308,6 +307,10 @@ nnoremap * *<c-o>
 
 " Switch segments of text with predefined replacements
 nnoremap - :Switch<cr>
+
+" For some reason pastetoggle doesn't redraw the screen (thus the status bar
+" doesn't change) while :set paste! does, so I use that instead.
+nnoremap <silent> <F6> :set paste!<CR>
 
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-\> <c-w>v<c-]>zvzz
@@ -349,9 +352,9 @@ nnoremap K :q<cr>
 " I hate when the rendering occasionally gets messed up.
 nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
 
-" Tabs
-nnoremap <leader>( :tabprev<cr>
-nnoremap <leader>) :tabnext<cr>
+" Sort lines
+nnoremap <leader>s vip:!sort<cr>
+vnoremap <leader>s :!sort<cr>
 
 " Speed up buffer switching
 nnoremap <C-h> <C-W>h
@@ -372,6 +375,7 @@ nnoremap _ht :setf html<CR>
 nnoremap _vi :setf vim<CR>
 nnoremap _ob :setf objc<CR>
 nnoremap _rb :setf ruby<CR>
+nnoremap _tu :setf tumblr<CR>
 nnoremap _js :setf javascript<CR>
 nnoremap _sql :setf sql<CR>
 
@@ -515,7 +519,7 @@ nnoremap <leader>gv :Gitv --all<cr>
 nnoremap <leader>gV :Gitv! --all<cr>
 
 " }}}
-" Strip trailing whitespace {{{
+" Trailing whitespace ------------------------------------------------------ {{{
 
 function! StripWhitespace()
   let save_cursor = getpos(".")
@@ -527,7 +531,7 @@ endfunction
 noremap <leader>w :call StripWhitespace()<CR>
 
 " }}}
-" Visual search mappings {{{
+" Visual Mode */# from Scrooloose ------------------------------------------ {{{
 
 function! s:VSetSearch()
   let temp = @@
@@ -539,7 +543,7 @@ vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 " }}}
-" Get image dimensions {{{
+" Image dimensions --------------------------------------------------------- {{{
 
 function! s:GetImages(ArgLead, CmdLine, CursorPos)
   return system("find * -name '*.png' -or -name '*.jpg'")
@@ -549,13 +553,13 @@ function! s:GetImageDimensions(image)
   let output = system("sips -g pixelWidth -g pixelHeight " . a:image)
   let width = matchlist(output, '\vpixelWidth: (\d+)')[1]
   let height = matchlist(output, '\vpixelHeight: (\d+)')[1]
-  let @z = join(["width: ".width."px", "height: ".height."px"], "\n")
+  let @z = join(["  width: ".width."px", "  height: ".height."px"], "\n")
   normal! "zp
 endfunction
 command! -complete=custom,s:GetImages -nargs=1 GetImageDimensions call s:GetImageDimensions(<f-args>)
 
 " }}}
-" Synstack {{{
+" Synstack ----------------------------------------------------------------- {{{
 
 " Show highlighting groups for current word
 function! SynStack()
@@ -564,7 +568,7 @@ endfunc
 nnoremap <F7> :call SynStack()<CR>
 
 " }}}
-" Scratch {{{
+" Scratch ------------------------------------------------------------------ {{{
 
 function! ScratchToggle()
   if exists("w:is_scratch_window")
@@ -579,7 +583,7 @@ command! ScratchToggle call ScratchToggle()
 nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 " }}}
-" Twiddle case {{{
+" Twiddle case ------------------------------------------------------------- {{{
 
 " http://vim.wikia.com/wiki/Switching_case_of_characters
 function! TwiddleCase(str)
@@ -595,10 +599,7 @@ endfunction
 vnoremap ~ ygv"=TwiddleCase(@")<CR>Pgv
 
 " }}}
-" Tab title {{{
-
-set guitablabel=%t
-set tabline=%!MyTabLine()
+" Tab title ---------------------------------------------------------------- {{{
 
 function! MyTabLine()
   let s = ''
@@ -626,8 +627,28 @@ function! MyTabLabel(n)
   return fnamemodify(label == '' ? "untitled" : label, ":t")
 endfunction
 
+set guitablabel=%t
+set tabline=%!MyTabLine()
+
+
 " }}}
-" Folding {{{
+" Tabularize --------------------------------------------------------------- {{{
+
+function! CustomTabularPatterns()
+  if exists('g:tabular_loaded')
+    AddTabularPattern! symbols         / :/l0
+    AddTabularPattern! hash            /^[^>]*\zs=>/
+    AddTabularPattern! chunks          / \S\+/l0
+    AddTabularPattern! assignment      / = /l0
+    AddTabularPattern! comma           /^[^,]*,/l1
+    AddTabularPattern! colon           /:\zs /l0
+    AddTabularPattern! options_hashes  /:\w\+ =>/
+  endif
+endfunction
+autocmd VimEnter * call CustomTabularPatterns()
+
+" }}}
+" Folding ------------------------------------------------------------------ {{{
 
 function! MyFoldText()
   let line = getline(v:foldstart)
@@ -646,7 +667,7 @@ endfunction
 set foldtext=MyFoldText()
 
 " }}}
-" Quick editing {{{
+" Quick editing ------------------------------------------------------------ {{{
 
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <silent> <leader>eo :vsplit ~/Dropbox/outline.org<CR>
@@ -655,7 +676,7 @@ nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
 nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
 
 " }}}
-" Plugin settings {{{
+" Plugin settings ---------------------------------------------------------- {{{
 
 let g:dwm_map_keys = 0
 let g:no_turbux_mappings = 1
@@ -697,19 +718,26 @@ let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_extensions = ['tag']
 let g:ctrlp_custom_ignore = '\.jpg$\|\.bmp$\|\.gif$\|\.png$\|\.jpeg$'
 let g:Powerline_symbols = 'fancy'
+let g:Powerline_colorscheme = 'badwolf'
+let g:SuperTabDefaultCompletionType = '<c-n>'
+let g:SuperTabLongestHighlight = 1
+let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo', 'Date', 'Agenda', 'Misc']
+let g:org_agenda_files = ['~/Dropbox/outline.org']
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_signs = 1
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html'] }
-let g:SuperTabDefaultCompletionType = '<c-n>'
-let g:SuperTabLongestHighlight = 1
-let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo', 'Date', 'Agenda', 'Misc']
-let g:org_agenda_files = ['~/Dropbox/outline.org']
+let g:surround_indent = 1
+let g:surround_{char2nr('-')} = "<% \r %>"
+let g:surround_{char2nr('=')} = "<%= \r %>"
+let g:surround_{char2nr('8')} = "/* \r */"
+let g:surround_{char2nr('s')} = " \r"
+let g:surround_{char2nr('^')} = "/^\r$/"
+
+" }}}
 
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
-
-" }}}

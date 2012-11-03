@@ -3,8 +3,6 @@
 # ~rainerborene dotfiles
 # Licensed under the WTFPL License.
 #
-# Thanks to all folks on GitHub for sharing their dotfiles.
-#
 
 DOTIGNORE="README.md install.sh fish lib sshconfig"
 
@@ -58,7 +56,6 @@ install() {
 #
 
 uninstall() {
-  echo "*** Hahaha, classic!"
   for name in $(ls ~/.dotfiles); do
     [[ -z "$(echo $DOTIGNORE | grep $name)" ]] && rm -Rf ~/.$name
   done
@@ -87,9 +84,6 @@ update() {
   curl $github/joshuaclayton/dotfiles/master/vim/colors/github.vim -Os
   curl $github/tomasr/molokai/master/colors/molokai.vim -Os
   curl http://blog.toddwerth.com/entry_files/8/ir_black.vim -Os
-
-  cd ~/.dotfiles/vim/autoload
-  curl $github/tpope/vim-pathogen/master/autoload/pathogen.vim -Os
 }
 
 # Parse arguments
