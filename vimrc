@@ -155,11 +155,6 @@ au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,p
 au BufReadPost fugitive://* set bufhidden=delete
 au BufWritePost .vimrc source $MYVIMRC
 
-augroup plugin_commentary
-  au!
-  au FileType fish setlocal commentstring=#\ %s
-augroup END
-
 augroup ft_org
   au!
   au FileType org setlocal formatoptions+=t colorcolumn&
@@ -169,6 +164,7 @@ augroup ft_fish
   au!
   au BufNewFile,BufRead *.fish setlocal filetype=fish
   au FileType fish setlocal foldmethod=marker foldmarker={{{,}}}
+  au FileType fish setlocal commentstring=#\ %s
 augroup END
 
 augroup ft_git
@@ -681,6 +677,7 @@ nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
 let g:dwm_map_keys = 0
 let g:no_turbux_mappings = 1
 let g:turbux_command_prefix = 'bundle exec'
+let g:acp_behaviorSnipmateLength = 1
 let g:nrrw_rgn_vert = 1
 let g:nrrw_rgn_wdth = 80
 let g:nrrw_rgn_hl = 'Folded'
@@ -721,7 +718,7 @@ let g:Powerline_symbols = 'fancy'
 let g:Powerline_colorscheme = 'badwolf'
 let g:SuperTabDefaultCompletionType = '<c-n>'
 let g:SuperTabLongestHighlight = 1
-let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo', 'Date', 'Agenda', 'Misc']
+let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo']
 let g:org_agenda_files = ['~/Dropbox/outline.org']
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'

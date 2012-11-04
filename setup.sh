@@ -76,9 +76,6 @@ update() {
     && git submodule -q foreach git clean -q -f \
     && git submodule -q foreach git pull -q origin master
 
-  read -p "Submodules was successfully updated. Are you sure you want to continue [y/n]? " ANSWER
-  [[ $ANSWER == "n" || $ANSWER == "N" ]] && exit
-
   cd ~/.dotfiles/vim/colors
   curl $github/nelstrom/vim-mac-classic-theme/master/colors/mac_classic.vim -Os
   curl $github/joshuaclayton/dotfiles/master/vim/colors/github.vim -Os
