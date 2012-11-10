@@ -96,7 +96,7 @@
 	ignore = dirty
 [submodule "vim/bundle/snipmate"]
 	path = vim/bundle/snipmate
-	url = git://github.com/akitaonrails/snipmate.vim.git
+	url = git://github.com/garbas/vim-snipmate.git
 	ignore = dirty
 [submodule "vim/bundle/ctrlp"]
 	path = vim/bundle/ctrlp
@@ -238,7 +238,11 @@
 	path = vim/bundle/matchtag
 	url = git://github.com/gregsexton/MatchTag.git
 	ignore = dirty
-[submodule "vim/bundle/autocomplpop"]
-	path = vim/bundle/autocomplpop
-	url = git://github.com/vim-scripts/AutoComplPop.git
+[submodule "vim/bundle/addon-mw-utils"]
+	path = vim/bundle/addon-mw-utils
+	url = git://github.com/MarcWeber/vim-addon-mw-utils.git
+	ignore = dirty
+[submodule "vim/bundle/tlib"]
+	path = vim/bundle/tlib
+	url = git://github.com/tomtom/tlib_vim.git
 	ignore = dirty

@@ -1,13 +1,20 @@
+" Essentials --------------------------------------------------------------- {{{
+
+filetype off
+runtime bundle/pathogen/autoload/pathogen.vim
+call pathogen#infect()
+filetype plugin indent on
+
+" }}}
 " Basic settings ----------------------------------------------------------- {{{
 
-filetype off        " necessary on some Linux distros for pathogen to properly load bundles
-set nocompatible    " use Vim settings, rather then Vi settings (much better!)
-set history=1000    " store lots of :cmdline history
-set autoread        " reload files (local changes only)
-set autowrite       " write the contents of the file
-set hidden          " hide buffers when not displayed
-set spelllang=pt,en " spell checking languages
-set encoding=utf-8  " default encoding
+set nocompatible
+set history=1000
+set autoread
+set autowrite
+set hidden
+set spelllang=pt,en
+set encoding=utf-8
 set nobomb
 set undoreload=10000
 set undofile
@@ -23,23 +30,18 @@ set lazyredraw
 set matchtime=3
 set dictionary=/usr/share/dict/words
 
-runtime bundle/pathogen/autoload/pathogen.vim
-silent! call pathogen#infect()
-filetype plugin on
-filetype indent on
-
 " }}}
 " Appearance --------------------------------------------------------------- {{{
 
-syntax on                           " turn on syntax highlighting
-set t_Co=256                        " tell the term has 256 colors
-set title                           " show the filename in the window titlebar
-set cursorline                      " highlight current line
-set backspace=indent,eol,start      " allow backspacing over everything in insert mode
-set showcmd                         " show incomplete cmds down the bottom
-set noshowmode                      " hide current mode down the bottom
-set wildmenu                        " turn on wild menu
-set wildmode=list:longest,full      " make cmdline tab completion similar to bash
+syntax on
+set t_Co=256
+set title
+set cursorline
+set backspace=indent,eol,start
+set showcmd
+set noshowmode
+set wildmenu
+set wildmode=list:longest,full
 set wildignore+=*~,.git,*.pyc,*.o,tags,tmp
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
@@ -61,6 +63,7 @@ set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set colorcolumn=+1
 set synmaxcol=500
 
+let g:badwolf_tabline = 2
 let g:badwolf_html_link_underline = 0
 let g:badwolf_css_props_highlight = 1
 colorscheme badwolf
@@ -107,14 +110,14 @@ endif
 " }}}
 " Visual Cues -------------------------------------------------------------- {{{
 
-set visualbell t_vb=                " disable visual bell
-set ignorecase                      " case insensitive
-set smartcase                       " sensitive with capitals
-set foldlevelstart=0                " start editing with all folds closed
-set laststatus=2                    " always show status line
-set incsearch                       " find the next match as we type the search
-set hlsearch                        " highlight searches by default
-set nostartofline                   " don't reset cursor to start of line when moving around
+set visualbell t_vb=
+set ignorecase
+set smartcase
+set foldlevelstart=0
+set laststatus=2
+set incsearch
+set hlsearch
+set nostartofline
 set gdefault
 set scrolloff=3
 set sidescroll=1
@@ -137,9 +140,10 @@ set textwidth=80
 set formatoptions=qrn1
 set nojoinspaces
 set wrap linebreak
+set nrformats=
 
 " }}}
-" Auto Commands ------------------------------------------------------------ {{{
+" Filetype-specific -------------------------------------------------------- {{{
 
 au FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
 au FileType php,apache,sql,xslt,gitconfig,objc setlocal ts=4 sts=4 sw=4 noexpandtab
@@ -165,6 +169,7 @@ augroup ft_fish
   au BufNewFile,BufRead *.fish setlocal filetype=fish
   au FileType fish setlocal foldmethod=marker foldmarker={{{,}}}
   au FileType fish setlocal commentstring=#\ %s
+  au FileType fish let b:vimpipe_command="fish <(cat)"
 augroup END
 
 augroup ft_git
@@ -291,8 +296,8 @@ vnoremap ? ?\v
 nnoremap Q gqip
 vnoremap Q gq
 
-" Keep the cursor in place while joining limes
-nnoremap J mzJ`z
+" Keep the cursor in place while joining lines
+nnoremap J mzgJ`z
 
 " Split line (sister to [J]oin lines)
 " The normal use of S is covered by cc, so don't worry about shadowing it.
@@ -366,6 +371,7 @@ nmap <C-@> <Plug>DWMFocus
 nmap <C-Space> <Plug>DWMFocus
 
 " Easy filetype switching
+nnoremap _fs :setf fish<CR>
 nnoremap _ss :setf sass<CR>
 nnoremap _ht :setf html<CR>
 nnoremap _vi :setf vim<CR>
@@ -677,7 +683,6 @@ nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
 let g:dwm_map_keys = 0
 let g:no_turbux_mappings = 1
 let g:turbux_command_prefix = 'bundle exec'
-let g:acp_behaviorSnipmateLength = 1
 let g:nrrw_rgn_vert = 1
 let g:nrrw_rgn_wdth = 80
 let g:nrrw_rgn_hl = 'Folded'
@@ -720,6 +725,7 @@ let g:SuperTabDefaultCompletionType = '<c-n>'
 let g:SuperTabLongestHighlight = 1
 let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo']
 let g:org_agenda_files = ['~/Dropbox/outline.org']
+let g:syntastic_javascript_jsl_conf = '-ambiguous_newline'
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_signs = 1
