@@ -90,13 +90,13 @@
 	path = vim/bundle/slim
 	url = https://github.com/bbommarito/vim-slim
 	ignore = dirty
+[submodule "vim/bundle/snipmate"]
+	path = vim/bundle/snipmate
+	url = git://github.com/akitaonrails/snipmate.vim.git
+	ignore = dirty
 [submodule "vim/snippets"]
 	path = vim/snippets
 	url = git://github.com/akitaonrails/snipmate-snippets.git
-	ignore = dirty
-[submodule "vim/bundle/snipmate"]
-	path = vim/bundle/snipmate
-	url = git://github.com/garbas/vim-snipmate.git
 	ignore = dirty
 [submodule "vim/bundle/ctrlp"]
 	path = vim/bundle/ctrlp
@@ -238,11 +238,11 @@
 	path = vim/bundle/matchtag
 	url = git://github.com/gregsexton/MatchTag.git
 	ignore = dirty
-[submodule "vim/bundle/addon-mw-utils"]
-	path = vim/bundle/addon-mw-utils
-	url = git://github.com/MarcWeber/vim-addon-mw-utils.git
+[submodule "vim/bundle/qargs"]
+	path = vim/bundle/qargs
+	url = git://github.com/nelstrom/vim-qargs.git
 	ignore = dirty
-[submodule "vim/bundle/tlib"]
-	path = vim/bundle/tlib
-	url = git://github.com/tomtom/tlib_vim.git
+[submodule "vim/bundle/markdown-folding"]
+	path = vim/bundle/markdown-folding
+	url = git://github.com/nelstrom/vim-markdown-folding.git
 	ignore = dirty

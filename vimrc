@@ -198,6 +198,12 @@ augroup ft_json
   au FileType json let b:vimpipe_command="python -m json.tool"
 augroup END
 
+augroup ft_css
+  au!
+  au FileType css setlocal foldmethod=marker foldmarker={,}
+  au FileType css nnoremap <localleader>s vi{:!sort<CR>
+augroup END
+
 augroup ft_html
   au!
   au FileType html setlocal foldmethod=manual
@@ -206,13 +212,12 @@ augroup END
 
 augroup ft_quickfix
   au!
-  au FileType qf setlocal colorcolumn=0 nolist nocursorline nowrap tw=0
+  au FileType qf setlocal colorcolumn& nolist nocursorline nowrap tw=0
 augroup END
 
 augroup ps_nerdtree
   au!
   au FileType nerdtree setlocal colorcolumn&
-  au FileType nerdtree map <silent> <buffer> <Tab> <cr>
 augroup END
 
 augroup ft_markdown
@@ -297,11 +302,14 @@ nnoremap Q gqip
 vnoremap Q gq
 
 " Keep the cursor in place while joining lines
-nnoremap J mzgJ`z
+nnoremap J mzJ`z
 
 " Split line (sister to [J]oin lines)
 " The normal use of S is covered by cc, so don't worry about shadowing it.
 nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
+
+" Use the old surround.vim key.  I can't deal with the new one.
+vmap s S
 
 " Don't move on *
 nnoremap * *<c-o>
@@ -354,7 +362,6 @@ nnoremap K :q<cr>
 nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
 
 " Sort lines
-nnoremap <leader>s vip:!sort<cr>
 vnoremap <leader>s :!sort<cr>
 
 " Speed up buffer switching
@@ -494,14 +501,6 @@ noremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
 " Ack searching
 noremap <leader>a :Ack!<space>
 
-" Align text
-nnoremap <leader>Al :left<cr>
-nnoremap <leader>Ac :center<cr>
-nnoremap <leader>Ar :right<cr>
-vnoremap <leader>Al :left<cr>
-vnoremap <leader>Ac :center<cr>
-vnoremap <leader>Ar :right<cr>
-
 " Turbux
 map <leader>r <Plug>SendTestToTmux
 map <leader>R <Plug>SendFocusedTestToTmux
@@ -547,18 +546,18 @@ vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 " }}}
 " Image dimensions --------------------------------------------------------- {{{
 
-function! s:GetImages(ArgLead, CmdLine, CursorPos)
+function! s:FindImages(ArgLead, CmdLine, CursorPos)
   return system("find * -name '*.png' -or -name '*.jpg'")
 endfunction
 
-function! s:GetImageDimensions(image)
+function! s:Dimensions(image)
   let output = system("sips -g pixelWidth -g pixelHeight " . a:image)
   let width = matchlist(output, '\vpixelWidth: (\d+)')[1]
   let height = matchlist(output, '\vpixelHeight: (\d+)')[1]
-  let @z = join(["  width: ".width."px", "  height: ".height."px"], "\n")
-  normal! "zp
+  let @z = join(["  width: ".width."px;", "  height: ".height."px;"], "\n")
+  silent normal! mz"zpvis=`z
 endfunction
-command! -complete=custom,s:GetImages -nargs=1 GetImageDimensions call s:GetImageDimensions(<f-args>)
+command! -complete=custom,s:FindImages -nargs=1 Dimensions call s:Dimensions(<f-args>)
 
 " }}}
 " Synstack ----------------------------------------------------------------- {{{
@@ -711,7 +710,7 @@ let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
 let g:Gitv_DoNotMapCtrlKey = 1
 let g:ackprg = 'ack-grep -H --nocolor --nogroup --column'
-let g:sparkupNextMapping = '<c-s>'
+let g:sparkupNextMapping = '<c-o>'
 let g:gundo_help = 0
 let g:gundo_preview_bottom = 1
 let g:ctrlp_dont_split = 'NERD_tree_2'
@@ -725,7 +724,6 @@ let g:SuperTabDefaultCompletionType = '<c-n>'
 let g:SuperTabLongestHighlight = 1
 let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo']
 let g:org_agenda_files = ['~/Dropbox/outline.org']
-let g:syntastic_javascript_jsl_conf = '-ambiguous_newline'
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_signs = 1
