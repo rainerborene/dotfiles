@@ -6,6 +6,6 @@
 .rake_tasks~
 .rails_generators~
 vim/tmp
-vim/spell
+vim/spell/*.spl
 Thumbs.db
 tags

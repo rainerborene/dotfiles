@@ -348,10 +348,6 @@ nnoremap ; :
 nnoremap <leader>1 :set cmdheight=1<cr>
 nnoremap <leader>2 :set cmdheight=2<cr>
 
-" Fuck you, help key.
-noremap <F1> :set invfullscreen<CR>
-inoremap <F1> <ESC>:set invfullscreen<CR>a
-
 " Fuck you too, manual key.
 nnoremap K <nop>
 
@@ -405,8 +401,6 @@ nnoremap <Up> gk
 nnoremap <Down> gj
 vnoremap <Up> gk
 vnoremap <Down> gj
-inoremap <Up> <C-o>gk
-inoremap <Down> <C-o>gj
 
 " Typos
 command! -bang E e<bang>
@@ -422,16 +416,15 @@ command! -bang WQ wq<bang>
 " Abbreveations
 iabbrev enc # encoding: utf-8
 
-" Emacs bindings in command line mode
+" Emacs bindings in command line and insert modes.
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
+inoremap <c-a> <home>
+inoremap <c-e> <end>
 
 " Source
 vnoremap <leader>S y:execute @@<cr>:echo 'Sourced selection.'<cr>
 nnoremap <leader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
-
-" Send visual selection to sprunge.us
-vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy && open `pbpaste`<cr>
 
 " Clam
 nnoremap ! :Clam<space>
@@ -445,6 +438,12 @@ nnoremap <leader><cr> :silent !/usr/local/bin/ctags -R . 2>/dev/null &<CR><CR>:r
 
 " Because escape is too far away
 inoremap jj <ESC>
+
+" Learning, the hard way.
+inoremap <Left>  <nop>
+inoremap <Right> <nop>
+inoremap <Up>    <nop>
+inoremap <Down>  <nop>
 
 " Toggle 'keep current line in the center of the screen' mode
 nnoremap <leader>C :let &scrolloff=999-&scrolloff<cr>
