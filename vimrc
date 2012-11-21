@@ -6,7 +6,7 @@ call pathogen#infect()
 filetype plugin indent on
 
 " }}}
-" Basic settings ----------------------------------------------------------- {{{
+" Basic options ------------------------------------------------------------ {{{
 
 set nocompatible
 set history=1000
@@ -29,6 +29,7 @@ set shell=/bin/bash
 set lazyredraw
 set matchtime=3
 set dictionary=/usr/share/dict/words
+set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
 
 " }}}
 " Appearance --------------------------------------------------------------- {{{
@@ -42,7 +43,7 @@ set showcmd
 set noshowmode
 set wildmenu
 set wildmode=list:longest,full
-set wildignore+=*~,.git,*.pyc,*.o,tags,tmp
+set wildignore+=*~,.git,*.pyc,*.o,tags,tmp,*.spl
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
 set ruler
@@ -59,7 +60,6 @@ set completeopt=longest,menuone,preview
 set mouse=a
 set ttymouse=xterm2
 set background=dark
-set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set colorcolumn=+1
 set synmaxcol=500
 
@@ -147,21 +147,23 @@ set nrformats=
 
 au FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
 au FileType php,apache,sql,xslt,gitconfig,objc setlocal ts=4 sts=4 sw=4 noexpandtab
-au FileType python setlocal ts=4 sts=4 sw=4 expandtab
+au FileType python,java setlocal ts=4 sts=4 sw=4 expandtab
 au FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()
-au FileType java silent! compiler javac | setlocal makeprg=javac\ %
+au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
+au FileType qf setlocal colorcolumn& nolist nocursorline nowrap tw=0
+au FileType org setlocal formatoptions+=t colorcolumn&
 au FileType c setlocal foldmethod=syntax
+au FileType nerdtree setlocal colorcolumn&
 
-au BufRead,BufNewFile *.tumblr.html setfiletype tumblr
+au BufNewFile,BufRead *.tumblr.html setfiletype tumblr
 au BufNewFile,BufRead *.ejs setfiletype html
 au BufNewFile,BufRead *.rss setfiletype xml
 au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,pryrc,config.ru} setfiletype ruby
-au BufReadPost fugitive://* set bufhidden=delete
-au BufWritePost .vimrc source $MYVIMRC
 
-augroup ft_org
+augroup ft_java
   au!
-  au FileType org setlocal formatoptions+=t colorcolumn&
+  au FileType java compiler ant | setlocal makeprg=ant\ -find\ build.xml
+  au FileType java setlocal efm=%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%#
 augroup END
 
 augroup ft_fish
@@ -176,6 +178,7 @@ augroup ft_git
   au!
   au FileType git,gitv setlocal colorcolumn&
   au FileType gitcommit setlocal spell | wincmd K
+  au BufReadPost fugitive://* set bufhidden=delete
 augroup END
 
 augroup ft_mongo
@@ -187,7 +190,7 @@ augroup END
 
 augroup ft_ruby
   au!
-  au FileType ruby nnoremap <buffer> <localleader>gem ^igem 'Whha',f(r'a~> f)r'U
+  au FileType ruby nnoremap <buffer> <localleader>g ^igem 'Whha',f(r'a~> f)r'>>U
   au FileType ruby silent! setlocal foldmethod=indent
   au FileType ruby silent! compiler ruby
   au FileType ruby let b:vimpipe_command='ruby <(cat)'
@@ -200,7 +203,6 @@ augroup END
 
 augroup ft_css
   au!
-  au FileType css setlocal foldmethod=marker foldmarker={,}
   au FileType css nnoremap <localleader>s vi{:!sort<CR>
 augroup END
 
@@ -208,16 +210,6 @@ augroup ft_html
   au!
   au FileType html setlocal foldmethod=manual
   au FileType html let b:vimpipe_command="lynx -dump -stdin"
-augroup END
-
-augroup ft_quickfix
-  au!
-  au FileType qf setlocal colorcolumn& nolist nocursorline nowrap tw=0
-augroup END
-
-augroup ps_nerdtree
-  au!
-  au FileType nerdtree setlocal colorcolumn&
 augroup END
 
 augroup ft_markdown
@@ -236,12 +228,7 @@ augroup ft_vim
   au FileType vim setlocal foldmethod=marker
   au FileType help setlocal textwidth=78
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
-augroup END
-
-augroup ft_javascript
-  au!
-  au FileType javascript setlocal foldmethod=marker
-  au FileType javascript setlocal foldmarker={,}
+  au BufWritePost .vimrc source $MYVIMRC
 augroup END
 
 " Only show cursorline in the current window and in normal mode.
@@ -583,20 +570,19 @@ command! ScratchToggle call ScratchToggle()
 nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 " }}}
-" Twiddle case ------------------------------------------------------------- {{{
+" SnipMate ----------------------------------------------------------------- {{{
 
-" http://vim.wikia.com/wiki/Switching_case_of_characters
-function! TwiddleCase(str)
-  if a:str ==# toupper(a:str)
-    let result = tolower(a:str)
-  elseif a:str ==# tolower(a:str)
-    let result = substitute(a:str,'\(\<\w\+\>\)', '\u\1', 'g')
-  else
-    let result = toupper(a:str)
+source ~/.vim/snippets/support_functions.vim
+function! s:SetupSnippets()
+  if filereadable("./config/environment.rb")
+    call ExtractSnips("~/.vim/snippets/ruby-rails", "ruby")
+    call ExtractSnips("~/.vim/snippets/eruby-rails", "eruby")
   endif
-  return result
+  call ExtractSnips("~/.vim/snippets/html", "eruby")
+  call ExtractSnips("~/.vim/snippets/html", "xhtml")
+  call ExtractSnips("~/.vim/snippets/html", "php")
 endfunction
-vnoremap ~ ygv"=TwiddleCase(@")<CR>Pgv
+autocmd VimEnter * call s:SetupSnippets()
 
 " }}}
 " Tab title ---------------------------------------------------------------- {{{
@@ -671,6 +657,7 @@ set foldtext=MyFoldText()
 
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <silent> <leader>eo :vsplit ~/Dropbox/outline.org<CR>
+nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
 nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
 nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
 nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
@@ -722,7 +709,6 @@ let g:Powerline_colorscheme = 'badwolf'
 let g:SuperTabDefaultCompletionType = '<c-n>'
 let g:SuperTabLongestHighlight = 1
 let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo']
-let g:org_agenda_files = ['~/Dropbox/outline.org']
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_signs = 1

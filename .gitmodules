@@ -246,3 +246,6 @@
 	path = vim/bundle/markdown-folding
 	url = git://github.com/nelstrom/vim-markdown-folding.git
 	ignore = dirty
+[submodule "vim/bundle/molokai"]
+	path = vim/bundle/molokai
+	url = git://github.com/tomasr/molokai.git
