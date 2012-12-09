@@ -160,6 +160,11 @@ au BufNewFile,BufRead *.ejs setfiletype html
 au BufNewFile,BufRead *.rss setfiletype xml
 au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,pryrc,config.ru} setfiletype ruby
 
+augroup ft_php
+  au!
+  au FileType php let b:vimpipe_command="php -f %"
+augroup END
+
 augroup ft_java
   au!
   au FileType java compiler ant | setlocal makeprg=ant\ -find\ build.xml
@@ -176,6 +181,7 @@ augroup END
 
 augroup ft_git
   au!
+  au FileType git setlocal foldmethod=syntax
   au FileType git,gitv setlocal colorcolumn&
   au FileType gitcommit setlocal spell | wincmd K
   au BufReadPost fugitive://* set bufhidden=delete
@@ -446,7 +452,7 @@ nnoremap <Space> za
 vnoremap <Space> za
 
 " Make zO recursively open whatever top level fold we're in, no matter where the
-" Cursor happens to be.
+" cursor happens to be.
 nnoremap zO zCzO
 
 " Focus the current fold by folding all the others
@@ -544,15 +550,6 @@ function! s:Dimensions(image)
   silent normal! mz"zpvis=`z
 endfunction
 command! -complete=custom,s:FindImages -nargs=1 Dimensions call s:Dimensions(<f-args>)
-
-" }}}
-" Synstack ----------------------------------------------------------------- {{{
-
-" Show highlighting groups for current word
-function! SynStack()
-  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), " > ")
-endfunc
-nnoremap <F7> :call SynStack()<CR>
 
 " }}}
 " Scratch ------------------------------------------------------------------ {{{
@@ -665,6 +662,7 @@ nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
 " }}}
 " Plugin settings ---------------------------------------------------------- {{{
 
+let g:php_folding = 1
 let g:dwm_map_keys = 0
 let g:no_turbux_mappings = 1
 let g:turbux_command_prefix = 'bundle exec'
@@ -695,7 +693,6 @@ let g:NERDSpaceDelims = 1
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
 let g:Gitv_DoNotMapCtrlKey = 1
-let g:ackprg = 'ack-grep -H --nocolor --nogroup --column'
 let g:sparkupNextMapping = '<c-o>'
 let g:gundo_help = 0
 let g:gundo_preview_bottom = 1

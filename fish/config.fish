@@ -76,6 +76,8 @@ set -g -x EDITOR vim
 set -g -x fish_greeting ''
 
 set PORT '5000'
+set RUBY_GC_MALLOC_LIMIT 60000000
+set RUBY_FREE_MIN 200000
 set PATH $HOME/.rbenv/bin $PATH
 set PATH $HOME/.rbenv/shims $PATH
 set PATH /usr/local/mysql/bin $PATH
