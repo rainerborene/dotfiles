@@ -43,7 +43,7 @@ set showcmd
 set noshowmode
 set wildmenu
 set wildmode=list:longest,full
-set wildignore+=*~,.git,*.pyc,*.o,tags,tmp,*.spl
+set wildignore+=*~,.git,*.pyc,*.o,*.spl
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
 set ruler
@@ -162,6 +162,7 @@ au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,p
 
 augroup ft_php
   au!
+  au FileType php setlocal foldmethod=syntax
   au FileType php let b:vimpipe_command="php -f %"
 augroup END
 
@@ -197,7 +198,7 @@ augroup END
 augroup ft_ruby
   au!
   au FileType ruby nnoremap <buffer> <localleader>g ^igem 'Whha',f(r'a~> f)r'>>U
-  au FileType ruby silent! setlocal foldmethod=indent
+  au FileType ruby setlocal foldmethod=syntax
   au FileType ruby silent! compiler ruby
   au FileType ruby let b:vimpipe_command='ruby <(cat)'
 augroup END
@@ -377,9 +378,6 @@ nnoremap _tu :setf tumblr<CR>
 nnoremap _js :setf javascript<CR>
 nnoremap _sql :setf sql<CR>
 
-" View full list of vim's syntax groups
-nnoremap <leader>hi :source $VIMRUNTIME/syntax/hitest.vim<CR>
-
 " Omni completion
 inoremap <c-l> <c-x><c-l>
 inoremap <c-f> <c-x><c-f>
@@ -408,12 +406,6 @@ command! -bang WQ wq<bang>
 
 " Abbreveations
 iabbrev enc # encoding: utf-8
-
-" Emacs bindings in command line and insert modes.
-cnoremap <c-a> <home>
-cnoremap <c-e> <end>
-inoremap <c-a> <home>
-inoremap <c-e> <end>
 
 " Source
 vnoremap <leader>S y:execute @@<cr>:echo 'Sourced selection.'<cr>
@@ -498,7 +490,7 @@ map <leader>r <Plug>SendTestToTmux
 map <leader>R <Plug>SendFocusedTestToTmux
 
 " Fugitive
-nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>gd :Gvdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gb :Gblame<cr>
@@ -539,14 +531,14 @@ vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 " Image dimensions --------------------------------------------------------- {{{
 
 function! s:FindImages(ArgLead, CmdLine, CursorPos)
-  return system("find * -name '*.png' -or -name '*.jpg'")
+  return system("find -E * -regex '.*(jpg|jpeg|gif|png)$'")
 endfunction
 
 function! s:Dimensions(image)
   let output = system("sips -g pixelWidth -g pixelHeight " . a:image)
   let width = matchlist(output, '\vpixelWidth: (\d+)')[1]
   let height = matchlist(output, '\vpixelHeight: (\d+)')[1]
-  let @z = join(["  width: ".width."px;", "  height: ".height."px;"], "\n")
+  let @z = join(["\n  width: " . width . "px", "\n  height: " . height . "px"], "\n")
   silent normal! mz"zpvis=`z
 endfunction
 command! -complete=custom,s:FindImages -nargs=1 Dimensions call s:Dimensions(<f-args>)
@@ -662,7 +654,6 @@ nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
 " }}}
 " Plugin settings ---------------------------------------------------------- {{{
 
-let g:php_folding = 1
 let g:dwm_map_keys = 0
 let g:no_turbux_mappings = 1
 let g:turbux_command_prefix = 'bundle exec'
@@ -700,7 +691,7 @@ let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_extensions = ['tag']
-let g:ctrlp_custom_ignore = '\.jpg$\|\.bmp$\|\.gif$\|\.png$\|\.jpeg$'
+let g:ctrlp_custom_ignore = '\v.(jpg|jpeg|bmp|gif|png)$|(tmp|tags)$'
 let g:Powerline_symbols = 'fancy'
 let g:Powerline_colorscheme = 'badwolf'
 let g:SuperTabDefaultCompletionType = '<c-n>'
@@ -720,7 +711,3 @@ let g:surround_{char2nr('s')} = " \r"
 let g:surround_{char2nr('^')} = "/^\r$/"
 
 " }}}
-
-if filereadable(expand('~/.vimrc.local'))
-  source ~/.vimrc.local
-endif
