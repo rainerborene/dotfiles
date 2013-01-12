@@ -50,10 +50,6 @@
 	path = vim/bundle/gundo
 	url = git://github.com/sjl/gundo.vim.git
 	ignore = dirty
-[submodule "vim/bundle/nerdtree"]
-	path = vim/bundle/nerdtree
-	url = git://github.com/scrooloose/nerdtree.git
-	ignore = dirty
 [submodule "vim/bundle/zoomwin"]
 	path = vim/bundle/zoomwin
 	url = git://github.com/vim-scripts/ZoomWin.git
@@ -84,7 +80,7 @@
 	ignore = dirty
 [submodule "vim/bundle/slim"]
 	path = vim/bundle/slim
-	url = git://github.com/bbommarito/vim-slim.git
+	url = git://github.com/slim-template/vim-slim.git
 	ignore = dirty
 [submodule "vim/bundle/snipmate"]
 	path = vim/bundle/snipmate
@@ -169,10 +165,6 @@
 [submodule "vim/bundle/webapi"]
 	path = vim/bundle/webapi
 	url = git://github.com/mattn/webapi-vim.git
-	ignore = dirty
-[submodule "vim/bundle/NrrwRgn"]
-	path = vim/bundle/NrrwRgn
-	url = git://github.com/chrisbra/NrrwRgn.git
 	ignore = dirty
 [submodule "vim/bundle/turbux"]
 	path = vim/bundle/turbux

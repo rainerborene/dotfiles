@@ -4,17 +4,21 @@
 
 alias j 'z'
 alias l 'tree --dirsfirst -ChFL 1'
+alias hl 'less -R'
 alias c 'clear'
 alias e 'vim -c CtrlP'
 alias v 'vim'
 alias V 'vim .'
 alias m 'mvim .'
 alias tm 'tmux -u2'
+alias tat 'tmux attach -t (basename $PWD)'
 alias md 'mkdir -p'
 alias pp 'python -mjson.tool'
 alias serve_this 'python -m SimpleHTTPServer'
 alias reload '. ~/.config/fish/config.fish'
 alias tailf 'tail -f'
+alias collapse "sed -e 's/  */ /g'"
+alias cuts "cut -d' '"
 
 alias g 'git'
 alias gd 'git diff'
@@ -43,22 +47,28 @@ alias pbc 'pbcopy'
 alias pbp 'pbpaste'
 alias vim '/Applications/MacVim.app/Contents/MacOS/Vim'
 
-# commit pending changes and quote all args as message
-function gg
-  git commit -v -a -m "$argv"
-end
-
 # ruby on rails
 alias b 'bundle'
 alias be 'bundle exec'
 alias rs 'rails s thin'
 alias rc 'rails console'
 
-# utilities
+function psg -d "Grep for a running process, returning its PID and full string"
+    ps auxww | grep --color=always $argv | grep -v grep | collapse | cuts -f 2,11-
+end
+
+function gg -d "Commit pending changes and quote all args as message"
+    git commit -v -a -m "$argv"
+end
+
 function utf8_encode
-  set -l encoding (file -I $argv | cut -d '=' -f 2)
-  iconv -f $encoding -t utf-8 $argv > $argv.utf8
-  rm -v $argv; and mv -v $argv.utf8 $argv
+    set -l encoding (file -I $argv | cut -d '=' -f 2)
+    iconv -f $encoding -t utf-8 $argv > $argv.utf8
+    rm -v $argv; and mv -v $argv.utf8 $argv
+end
+
+function lx
+    set -lx $args
 end
 
 # }}}
@@ -75,13 +85,24 @@ alias ..... 'cd ../../../..'
 set -g -x EDITOR vim
 set -g -x fish_greeting ''
 
-set PORT '5000'
 set RUBY_GC_MALLOC_LIMIT 60000000
 set RUBY_FREE_MIN 200000
 set PATH $HOME/.rbenv/bin $PATH
 set PATH $HOME/.rbenv/shims $PATH
 set PATH /usr/local/mysql/bin $PATH
 set PATH /usr/local/share/npm/bin $PATH
+
+# }}}
+# Bind Keys {{{
+
+function fish_user_key_bindings
+    bind \cn accept-autosuggestion
+
+    # Ignore iterm2 escape sequences.  Vim will handle them if needed.
+    bind \e\[I true
+    bind \e\[O true
+    # ]]
+end
 
 # }}}
 # Prompt {{{
@@ -91,7 +112,7 @@ function git_prompt
         set_color normal
         printf ' on '
         set_color magenta
-        printf '%s' (git symbolic-ref HEAD 2>/dev/null| cut -d / -f 3)
+        printf '%s' (git rev-parse --abbrev-ref HEAD)
         set_color normal
     end
 end

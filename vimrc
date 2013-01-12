@@ -16,8 +16,8 @@ set hidden
 set spelllang=pt,en
 set encoding=utf-8
 set nobomb
-set undoreload=10000
-set undofile
+set nobackup
+set noswapfile
 set shiftround
 set updatecount=20
 set ttimeout
@@ -88,23 +88,14 @@ if has("gui_running")
 end
 
 " }}}
-" Backups ------------------------------------------------------------------ {{{
+" Persistent undo ---------------------------------------------------------- {{{
 
-set backup
-set noswapfile
-set undodir=~/.vim/tmp/undo//
-set backupdir=~/.vim/tmp/backup//
-set directory=~/.vim/tmp/swap//
+set undofile
+set undoreload=10000
+set undodir=~/.vim/tmp/undo
 
-" Make those folders automatically if they don't already exist.
 if !isdirectory(expand(&undodir))
   call mkdir(expand(&undodir), "p")
-endif
-if !isdirectory(expand(&backupdir))
-  call mkdir(expand(&backupdir), "p")
-endif
-if !isdirectory(expand(&directory))
-  call mkdir(expand(&directory), "p")
 endif
 
 " }}}
@@ -150,10 +141,11 @@ au FileType php,apache,sql,xslt,gitconfig,objc setlocal ts=4 sts=4 sw=4 noexpand
 au FileType python,java setlocal ts=4 sts=4 sw=4 expandtab
 au FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()
 au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
-au FileType qf setlocal colorcolumn& nolist nocursorline nowrap tw=0
-au FileType org setlocal formatoptions+=t colorcolumn&
+au FileType netrw setlocal buftype=nofile bufhidden=delete
+au FileType qf,org,netrw setlocal colorcolumn&
+au FileType qf setlocal nolist nocursorline nowrap tw=0
+au FileType org setlocal formatoptions+=t
 au FileType c setlocal foldmethod=syntax
-au FileType nerdtree setlocal colorcolumn&
 
 au BufNewFile,BufRead *.tumblr.html setfiletype tumblr
 au BufNewFile,BufRead *.ejs setfiletype html
@@ -186,6 +178,10 @@ augroup ft_git
   au FileType git,gitv setlocal colorcolumn&
   au FileType gitcommit setlocal spell | wincmd K
   au BufReadPost fugitive://* set bufhidden=delete
+  au User fugitive
+    \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+    \   nnoremap <buffer> .. :edit %:h<CR> |
+    \ endif
 augroup END
 
 augroup ft_mongo
@@ -197,8 +193,8 @@ augroup END
 
 augroup ft_ruby
   au!
-  au FileType ruby nnoremap <buffer> <localleader>g ^igem 'Whha',f(r'a~> f)r'>>U
-  au FileType ruby setlocal foldmethod=syntax
+  au FileType ruby nnoremap <buffer> <localleader>g ^igem 'Whha',f(r'a~> f)r'U
+  au FileType ruby setlocal foldmethod=syntax foldlevel=1
   au FileType ruby silent! compiler ruby
   au FileType ruby let b:vimpipe_command='ruby <(cat)'
 augroup END
@@ -359,7 +355,6 @@ nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>w
 nnoremap <C-k> <C-W>W
 nnoremap <C-l> <C-W>l
-nnoremap <leader>v <C-w>v
 
 " Tiled Window Management
 nmap <C-N> <Plug>DWMNew
@@ -392,17 +387,6 @@ nnoremap <Up> gk
 nnoremap <Down> gj
 vnoremap <Up> gk
 vnoremap <Down> gj
-
-" Typos
-command! -bang E e<bang>
-command! -bang Q q<bang>
-command! -bang W w<bang>
-command! -bang QA qa<bang>
-command! -bang Qa qa<bang>
-command! -bang Wa wa<bang>
-command! -bang WA wa<bang>
-command! -bang Wq wq<bang>
-command! -bang WQ wq<bang>
 
 " Abbreveations
 iabbrev enc # encoding: utf-8
@@ -472,8 +456,6 @@ nnoremap <silent> <leader>l :CtrlPLine<CR>
 nnoremap <silent> <leader>s :set spell!<CR>
 nnoremap <silent> <leader>i :set list!<CR>
 nnoremap <silent> <leader>u :GundoToggle<CR>
-nnoremap <silent> <leader>n :NERDTreeToggle<CR>
-nnoremap <silent> <leader>N :NERDTreeFind<CR>
 
 " Yank to OS X pasteboard.
 noremap <leader>y "*y
@@ -607,22 +589,6 @@ set tabline=%!MyTabLine()
 
 
 " }}}
-" Tabularize --------------------------------------------------------------- {{{
-
-function! CustomTabularPatterns()
-  if exists('g:tabular_loaded')
-    AddTabularPattern! symbols         / :/l0
-    AddTabularPattern! hash            /^[^>]*\zs=>/
-    AddTabularPattern! chunks          / \S\+/l0
-    AddTabularPattern! assignment      / = /l0
-    AddTabularPattern! comma           /^[^,]*,/l1
-    AddTabularPattern! colon           /:\zs /l0
-    AddTabularPattern! options_hashes  /:\w\+ =>/
-  endif
-endfunction
-autocmd VimEnter * call CustomTabularPatterns()
-
-" }}}
 " Folding ------------------------------------------------------------------ {{{
 
 function! MyFoldText()
@@ -649,7 +615,8 @@ nnoremap <silent> <leader>eo :vsplit ~/Dropbox/outline.org<CR>
 nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
 nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
 nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
-nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
+cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+map <silent> <leader>ew :e %%<CR>
 
 " }}}
 " Plugin settings ---------------------------------------------------------- {{{
@@ -657,10 +624,6 @@ nnoremap <silent> <leader>ep :vsplit ~/.pentadactylrc<CR>
 let g:dwm_map_keys = 0
 let g:no_turbux_mappings = 1
 let g:turbux_command_prefix = 'bundle exec'
-let g:nrrw_rgn_vert = 1
-let g:nrrw_rgn_wdth = 80
-let g:nrrw_rgn_hl = 'Folded'
-let g:nrrw_topbot_leftright = 'botright'
 let g:gist_show_privates = 1
 let g:gist_post_private = 1
 let g:gist_detect_filetype = 1
@@ -675,23 +638,14 @@ let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
 let g:html5_aria_attributes_complete = 0
-let g:NERDCreateDefaultMappings = 0
-let g:NERDTreeChDirMode = 1
-let g:NERDTreeHighlightCursorline = 1
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeDirArrows = 1
-let g:NERDSpaceDelims = 1
+let g:netrw_banner = 0
+let g:netrw_list_hide = '^\.,\~$,^tags$'
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
 let g:Gitv_DoNotMapCtrlKey = 1
 let g:sparkupNextMapping = '<c-o>'
 let g:gundo_help = 0
 let g:gundo_preview_bottom = 1
-let g:ctrlp_dont_split = 'NERD_tree_2'
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_clear_cache_on_exit = 1
-let g:ctrlp_extensions = ['tag']
-let g:ctrlp_custom_ignore = '\v.(jpg|jpeg|bmp|gif|png)$|(tmp|tags)$'
 let g:Powerline_symbols = 'fancy'
 let g:Powerline_colorscheme = 'badwolf'
 let g:SuperTabDefaultCompletionType = '<c-n>'
@@ -709,5 +663,14 @@ let g:surround_{char2nr('=')} = "<%= \r %>"
 let g:surround_{char2nr('8')} = "/* \r */"
 let g:surround_{char2nr('s')} = " \r"
 let g:surround_{char2nr('^')} = "/^\r$/"
+let g:ctrlp_reuse_window = 'netrw|help|quickfix'
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_clear_cache_on_exit = 1
+let g:ctrlp_extensions = ['tag']
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+let g:ctrlp_custom_ignore = {
+  \ 'file': '\v\.(jpg|jpeg|bmp|gif|png)$',
+  \ 'dir': '\v[\/](tmp|tags)$'
+  \ }
 
 " }}}

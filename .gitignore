@@ -8,4 +8,4 @@
 vim/tmp
 vim/spell/*.spl
 Thumbs.db
-tags
+/tags
