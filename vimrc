@@ -43,7 +43,7 @@ set showcmd
 set noshowmode
 set wildmenu
 set wildmode=list:longest,full
-set wildignore+=*~,.git,*.pyc,*.o,*.spl
+set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
 set ruler
@@ -55,7 +55,7 @@ set showbreak=↪
 set virtualedit+=block
 set shortmess=atI
 set mousemodel=popup
-set complete=.,w,b,u,t
+set complete=.,w,b,u,U
 set completeopt=longest,menuone,preview
 set mouse=a
 set ttymouse=xterm2
@@ -104,7 +104,7 @@ endif
 set visualbell t_vb=
 set ignorecase
 set smartcase
-set foldlevelstart=0
+set foldlevelstart=99
 set laststatus=2
 set incsearch
 set hlsearch
@@ -121,36 +121,26 @@ set list
 " Text Formatting ---------------------------------------------------------- {{{
 
 set autoindent
-set smartindent
-set tabstop=4
-set shiftwidth=2
-set softtabstop=2
-set expandtab
-set nosmarttab
 set textwidth=80
 set formatoptions=qrn1
 set nojoinspaces
-set wrap linebreak
 set nrformats=
+set linebreak
+set wrap
 
 " }}}
 " Filetype-specific -------------------------------------------------------- {{{
 
-au FileType html,css,scss,ruby,pml,yaml,coffee,vim,js setlocal ts=2 sts=2 sw=2 expandtab
-au FileType php,apache,sql,xslt,gitconfig,objc setlocal ts=4 sts=4 sw=4 noexpandtab
-au FileType python,java setlocal ts=4 sts=4 sw=4 expandtab
-au FileType html,xml,js,css,php autocmd BufWritePre <buffer> :call StripWhitespace()
+au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
 au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
-au FileType netrw setlocal buftype=nofile bufhidden=delete
 au FileType qf,org,netrw setlocal colorcolumn&
-au FileType qf setlocal nolist nocursorline nowrap tw=0
+au FileType qf setlocal nolist nocursorline nowrap
 au FileType org setlocal formatoptions+=t
 au FileType c setlocal foldmethod=syntax
 
 au BufNewFile,BufRead *.tumblr.html setfiletype tumblr
 au BufNewFile,BufRead *.ejs setfiletype html
 au BufNewFile,BufRead *.rss setfiletype xml
-au BufNewFile,BufRead {Rakefile,Vagrantfile,Guardfile,Capfile,Thorfile,Gemfile,pryrc,config.ru} setfiletype ruby
 
 augroup ft_php
   au!
@@ -174,8 +164,8 @@ augroup END
 
 augroup ft_git
   au!
-  au FileType git setlocal foldmethod=syntax
-  au FileType git,gitv setlocal colorcolumn&
+  au FileType git setlocal foldmethod=syntax | normal zM
+  au FileType git,gitv,gitcommit setlocal colorcolumn& nolist
   au FileType gitcommit setlocal spell | wincmd K
   au BufReadPost fugitive://* set bufhidden=delete
   au User fugitive
@@ -193,10 +183,9 @@ augroup END
 
 augroup ft_ruby
   au!
-  au FileType ruby nnoremap <buffer> <localleader>g ^igem 'Whha',f(r'a~> f)r'U
-  au FileType ruby setlocal foldmethod=syntax foldlevel=1
-  au FileType ruby silent! compiler ruby
   au FileType ruby let b:vimpipe_command='ruby <(cat)'
+  au FileType ruby setlocal foldmethod=syntax makeprg=bundle\ exec\ rspec\ %
+  au BufNewFile,BufRead {Vagrantfile,Guardfile,Capfile,Thorfile,pryrc,config.ru} setfiletype ruby
 augroup END
 
 augroup ft_json
@@ -230,6 +219,7 @@ augroup ft_vim
   au!
   au FileType vim setlocal foldmethod=marker
   au FileType help setlocal textwidth=78
+  au BufReadPost netrw setlocal buftype=nofile bufhidden=delete nobuflisted
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
   au BufWritePost .vimrc source $MYVIMRC
 augroup END
@@ -294,9 +284,8 @@ vnoremap Q gq
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
 
-" Split line (sister to [J]oin lines)
-" The normal use of S is covered by cc, so don't worry about shadowing it.
-nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
+" Clean trailing whitespace
+nnoremap <silent> <leader>w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
 
 " Use the old surround.vim key.  I can't deal with the new one.
 vmap s S
@@ -317,6 +306,11 @@ nnoremap <c-\> <c-w>v<c-]>zvzz
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
 nnoremap N Nzzzv
+
+" Easier to type, and I never use the default behavior.
+noremap H ^
+noremap L $
+vnoremap L g_
 
 " Same when jumping around
 nnoremap g; g;zz
@@ -352,8 +346,8 @@ vnoremap <leader>s :!sort<cr>
 
 " Speed up buffer switching
 nnoremap <C-h> <C-W>h
-nnoremap <C-j> <C-W>w
-nnoremap <C-k> <C-W>W
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
 
 " Tiled Window Management
@@ -372,11 +366,6 @@ nnoremap _rb :setf ruby<CR>
 nnoremap _tu :setf tumblr<CR>
 nnoremap _js :setf javascript<CR>
 nnoremap _sql :setf sql<CR>
-
-" Omni completion
-inoremap <c-l> <c-x><c-l>
-inoremap <c-f> <c-x><c-f>
-inoremap <c-]> <c-x><c-]>
 
 " Sane movement with wrap turned on
 nnoremap j gj
@@ -407,12 +396,6 @@ nnoremap <leader><cr> :silent !/usr/local/bin/ctags -R . 2>/dev/null &<CR><CR>:r
 
 " Because escape is too far away
 inoremap jj <ESC>
-
-" Learning, the hard way.
-inoremap <Left>  <nop>
-inoremap <Right> <nop>
-inoremap <Up>    <nop>
-inoremap <Down>  <nop>
 
 " Toggle 'keep current line in the center of the screen' mode
 nnoremap <leader>C :let &scrolloff=999-&scrolloff<cr>
@@ -448,7 +431,6 @@ nnoremap <silent> <leader>D :diffoff!<cr>
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
 " Open CtrlP on different modes
-nnoremap <silent> <leader>t :CtrlPTag<CR>
 nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 nnoremap <silent> <leader>l :CtrlPLine<CR>
 
@@ -486,18 +468,6 @@ nnoremap <leader>gv :Gitv --all<cr>
 nnoremap <leader>gV :Gitv! --all<cr>
 
 " }}}
-" Trailing whitespace ------------------------------------------------------ {{{
-
-function! StripWhitespace()
-  let save_cursor = getpos(".")
-  let old_query = getreg('/')
-  :%s/\s\+$//e
-  call setpos('.', save_cursor)
-  call setreg('/', old_query)
-endfunction
-noremap <leader>w :call StripWhitespace()<CR>
-
-" }}}
 " Visual Mode */# from Scrooloose ------------------------------------------ {{{
 
 function! s:VSetSearch()
@@ -520,7 +490,7 @@ function! s:Dimensions(image)
   let output = system("sips -g pixelWidth -g pixelHeight " . a:image)
   let width = matchlist(output, '\vpixelWidth: (\d+)')[1]
   let height = matchlist(output, '\vpixelHeight: (\d+)')[1]
-  let @z = join(["\n  width: " . width . "px", "\n  height: " . height . "px"], "\n")
+  let @z = "\n  width: " . width . "px\n  height: " . height . "px"
   silent normal! mz"zpvis=`z
 endfunction
 command! -complete=custom,s:FindImages -nargs=1 Dimensions call s:Dimensions(<f-args>)
@@ -610,13 +580,13 @@ set foldtext=MyFoldText()
 " }}}
 " Quick editing ------------------------------------------------------------ {{{
 
+cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <silent> <leader>eo :vsplit ~/Dropbox/outline.org<CR>
 nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
 nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
 nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
-cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-map <silent> <leader>ew :e %%<CR>
+nnoremap <silent> <leader>ew :Explore<CR>
 
 " }}}
 " Plugin settings ---------------------------------------------------------- {{{
@@ -639,6 +609,8 @@ let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
 let g:html5_aria_attributes_complete = 0
 let g:netrw_banner = 0
+let g:netrw_dirhistmax = 0
+let g:netrw_use_errorwindow = 0
 let g:netrw_list_hide = '^\.,\~$,^tags$'
 let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
@@ -663,11 +635,9 @@ let g:surround_{char2nr('=')} = "<%= \r %>"
 let g:surround_{char2nr('8')} = "/* \r */"
 let g:surround_{char2nr('s')} = " \r"
 let g:surround_{char2nr('^')} = "/^\r$/"
-let g:ctrlp_reuse_window = 'netrw|help|quickfix'
+let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_clear_cache_on_exit = 1
-let g:ctrlp_extensions = ['tag']
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(jpg|jpeg|bmp|gif|png)$',
   \ 'dir': '\v[\/](tmp|tags)$'

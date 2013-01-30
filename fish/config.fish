@@ -19,6 +19,7 @@ alias reload '. ~/.config/fish/config.fish'
 alias tailf 'tail -f'
 alias collapse "sed -e 's/  */ /g'"
 alias cuts "cut -d' '"
+alias mysql_repair 'mysqlcheck --auto-repair --check --optimize --all-databases -u root'
 
 alias g 'git'
 alias gd 'git diff'
@@ -82,11 +83,12 @@ alias ..... 'cd ../../../..'
 # }}}
 # Environment variables {{{
 
-set -g -x EDITOR vim
-set -g -x fish_greeting ''
+set -gx fish_greeting ''
+set -gx RUBY_GC_MALLOC_LIMIT 60000000
+set -gx RUBY_FREE_MIN 200000
+set -gx PYTHONPATH /usr/local/lib/python2.7/site-packages $PYTHONPATH
+set -gx EDITOR vim
 
-set RUBY_GC_MALLOC_LIMIT 60000000
-set RUBY_FREE_MIN 200000
 set PATH $HOME/.rbenv/bin $PATH
 set PATH $HOME/.rbenv/shims $PATH
 set PATH /usr/local/mysql/bin $PATH
