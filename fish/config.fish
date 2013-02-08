@@ -68,6 +68,14 @@ function utf8_encode
     rm -v $argv; and mv -v $argv.utf8 $argv
 end
 
+function rails
+    if test -f Procfile
+        foreman run rails $argv
+    else
+        rails $argv
+    end
+end
+
 function lx
     set -lx $args
 end

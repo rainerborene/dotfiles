@@ -75,10 +75,6 @@ update() {
   cd ~/.dotfiles \
     && git submodule -q foreach git clean -q -f \
     && git submodule -q foreach git pull -q origin master
-
-  cd ~/.dotfiles/vim/colors
-  curl $github/joshuaclayton/dotfiles/master/vim/colors/github.vim -Os
-  curl http://blog.toddwerth.com/entry_files/8/ir_black.vim -Os
 }
 
 # Parse arguments

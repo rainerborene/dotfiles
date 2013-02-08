@@ -62,6 +62,7 @@ set ttymouse=xterm2
 set background=dark
 set colorcolumn=+1
 set synmaxcol=500
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 let g:badwolf_tabline = 2
 let g:badwolf_html_link_underline = 0
@@ -131,9 +132,10 @@ set wrap
 " }}}
 " Filetype-specific -------------------------------------------------------- {{{
 
+au VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
 au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
-au FileType qf,org,netrw setlocal colorcolumn&
+au FileType qf,org,netrw setlocal colorcolumn& nolist
 au FileType qf setlocal nolist nocursorline nowrap
 au FileType org setlocal formatoptions+=t
 au FileType c setlocal foldmethod=syntax
@@ -217,7 +219,7 @@ augroup END
 
 augroup ft_vim
   au!
-  au FileType vim setlocal foldmethod=marker
+  au FileType vim setlocal foldmethod=marker | normal zM
   au FileType help setlocal textwidth=78
   au BufReadPost netrw setlocal buftype=nofile bufhidden=delete nobuflisted
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
@@ -423,9 +425,7 @@ vnoremap <leader>d "dymz"dP`z``
 
 " The black hole register
 noremap x "_x
-
-" Diffoff
-nnoremap <silent> <leader>D :diffoff!<cr>
+noremap X "_X
 
 " Clear search highlight
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
@@ -592,6 +592,7 @@ nnoremap <silent> <leader>ew :Explore<CR>
 " Plugin settings ---------------------------------------------------------- {{{
 
 let g:dwm_map_keys = 0
+let g:seek_enable_jumps = 1
 let g:no_turbux_mappings = 1
 let g:turbux_command_prefix = 'bundle exec'
 let g:gist_show_privates = 1
@@ -620,15 +621,13 @@ let g:gundo_help = 0
 let g:gundo_preview_bottom = 1
 let g:Powerline_symbols = 'fancy'
 let g:Powerline_colorscheme = 'badwolf'
-let g:SuperTabDefaultCompletionType = '<c-n>'
-let g:SuperTabLongestHighlight = 1
 let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo']
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_signs = 1
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html'] }
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html', 'yaml'] }
 let g:surround_indent = 1
 let g:surround_{char2nr('-')} = "<% \r %>"
 let g:surround_{char2nr('=')} = "<%= \r %>"
