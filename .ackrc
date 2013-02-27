@@ -11,6 +11,7 @@
 --type-set=haml=.haml
 --type-set=slim=.slim
 --ignore-dir=tmp
+--ignore-dir=public/assets
 --ignore-dir=vendor/assets/javascripts/ckeditor
 --ignore-dir=node_modules
 --ignore-dir=.bundle

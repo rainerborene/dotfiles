@@ -62,7 +62,6 @@ set ttymouse=xterm2
 set background=dark
 set colorcolumn=+1
 set synmaxcol=500
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 let g:badwolf_tabline = 2
 let g:badwolf_html_link_underline = 0
@@ -116,7 +115,6 @@ set sidescroll=1
 set sidescrolloff=10
 set fillchars=vert:\│
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
-set list
 
 " }}}
 " Text Formatting ---------------------------------------------------------- {{{
@@ -132,7 +130,6 @@ set wrap
 " }}}
 " Filetype-specific -------------------------------------------------------- {{{
 
-au VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
 au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
 au FileType qf,org,netrw setlocal colorcolumn& nolist
@@ -266,6 +263,7 @@ let maplocalleader = "\\"
 
 " Easier bracket matching
 map <Tab> %
+map <C-o> <nop>
 
 " Delete a buffer without closing the window
 nmap <leader>q <Plug>Kwbd
@@ -297,6 +295,7 @@ nnoremap * *<c-o>
 
 " Switch segments of text with predefined replacements
 nnoremap - :Switch<cr>
+nnoremap + <nop>
 
 " For some reason pastetoggle doesn't redraw the screen (thus the status bar
 " doesn't change) while :set paste! does, so I use that instead.
@@ -344,6 +343,7 @@ nnoremap K :q<cr>
 nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
 
 " Sort lines
+nnoremap <leader>s vip:!sort<cr>
 vnoremap <leader>s :!sort<cr>
 
 " Speed up buffer switching
@@ -433,25 +433,28 @@ nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 " Open CtrlP on different modes
 nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 nnoremap <silent> <leader>l :CtrlPLine<CR>
+nnoremap <silent> <leader>. :CtrlPTag<CR>
 
 " Some toggle commands
-nnoremap <silent> <leader>s :set spell!<CR>
-nnoremap <silent> <leader>i :set list!<CR>
 nnoremap <silent> <leader>u :GundoToggle<CR>
 
 " Yank to OS X pasteboard.
 noremap <leader>y "*y
 
 " Paste from OS X pasteboard without messing up indent.
-noremap <leader>p :set paste<CR>"*p<CR>:set nopaste<CR>
-noremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
+nnoremap <leader>p :set paste<CR>"*p<CR>:set nopaste<CR>
+nnoremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
+
+" Send visual selection to paste.stevelosh.com
+vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy && open `pbpaste`<cr>
 
 " Ack searching
-noremap <leader>a :Ack!<space>
+nnoremap <leader>a :Ack!<space>
 
-" Turbux
-map <leader>r <Plug>SendTestToTmux
-map <leader>R <Plug>SendFocusedTestToTmux
+" Vimux as tslime replacement
+nmap <localleader>vp :VimuxPromptCommand<CR>
+vmap <localleader>vs "vy :call VimuxRunCommand(@v . "\n", 0)<CR>
+nmap <localleader>vs vip<LocalLeader>vs<CR>
 
 " Fugitive
 nnoremap <leader>gd :Gvdiff<cr>
@@ -466,6 +469,13 @@ nnoremap <leader>gr :Gremove<cr>
 nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gv :Gitv --all<cr>
 nnoremap <leader>gV :Gitv! --all<cr>
+
+ruby << EOF
+  class Object
+    def flush; end unless Object.new.respond_to?(:flush)
+  end
+EOF
+
 
 " }}}
 " Visual Mode */# from Scrooloose ------------------------------------------ {{{
@@ -494,21 +504,6 @@ function! s:Dimensions(image)
   silent normal! mz"zpvis=`z
 endfunction
 command! -complete=custom,s:FindImages -nargs=1 Dimensions call s:Dimensions(<f-args>)
-
-" }}}
-" Scratch ------------------------------------------------------------------ {{{
-
-function! ScratchToggle()
-  if exists("w:is_scratch_window")
-    unlet w:is_scratch_window
-    exec "q"
-  else
-    exec "normal! :Sscratch\<cr>\<C-W>L"
-    let w:is_scratch_window = 1
-  endif
-endfunction
-command! ScratchToggle call ScratchToggle()
-nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 " }}}
 " SnipMate ----------------------------------------------------------------- {{{
@@ -582,7 +577,7 @@ set foldtext=MyFoldText()
 
 cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
-nnoremap <silent> <leader>eo :vsplit ~/Dropbox/outline.org<CR>
+nnoremap <silent> <leader>eo :vsplit ~/Google\ Drive/outline.org<CR>
 nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
 nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
 nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
@@ -593,18 +588,11 @@ nnoremap <silent> <leader>ew :Explore<CR>
 
 let g:dwm_map_keys = 0
 let g:seek_enable_jumps = 1
-let g:no_turbux_mappings = 1
-let g:turbux_command_prefix = 'bundle exec'
-let g:gist_show_privates = 1
-let g:gist_post_private = 1
-let g:gist_detect_filetype = 1
-let g:gist_clip_command = 'pbcopy'
-let g:gist_open_browser_after_post = 1
-let g:gist_browser_command = 'open %URL% &'
-let g:tslime_ensure_trailing_newlines = 1
-let g:tslime_normal_mapping = '<localleader>t'
-let g:tslime_visual_mapping = '<localleader>t'
-let g:tslime_vars_mapping = '<localleader>T'
+let g:VimuxUseNearestPane = 1
+let g:ackprg = 'ag --nogroup --nocolor --column'
+let g:vroom_use_vimux = 1
+let g:vroom_use_bundle_exec = 0
+let g:vroom_spec_command = 'zeus rspec'
 let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
@@ -617,14 +605,15 @@ let g:Gitv_WipeAllOnClose = 1
 let g:Gitv_OpenHorizontal = 1
 let g:Gitv_DoNotMapCtrlKey = 1
 let g:sparkupNextMapping = '<c-o>'
+let g:Powerline_stl_path_style = 'filename'
+let g:Powerline_symbols = 'fancy'
 let g:gundo_help = 0
 let g:gundo_preview_bottom = 1
-let g:Powerline_symbols = 'fancy'
-let g:Powerline_colorscheme = 'badwolf'
 let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo']
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_signs = 1
+let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html', 'yaml'] }
@@ -636,9 +625,12 @@ let g:surround_{char2nr('s')} = " \r"
 let g:surround_{char2nr('^')} = "/^\r$/"
 let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_clear_cache_on_exit = 1
+let g:ctrlp_extensions = ['tag']
+let g:ctrlp_filter_greps = 'egrep -iv "\.(png|jpe?g|bmp|gif|png)"'
+let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps]
 let g:ctrlp_custom_ignore = {
-  \ 'file': '\v\.(jpg|jpeg|bmp|gif|png)$',
+  \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
   \ 'dir': '\v[\/](tmp|tags)$'
   \ }
 

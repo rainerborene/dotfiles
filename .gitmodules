@@ -102,17 +102,9 @@
 	path = vim/bundle/less
 	url = git://github.com/groenewege/vim-less.git
 	ignore = dirty
-[submodule "vim/bundle/tslime"]
-	path = vim/bundle/tslime
-	url = git://github.com/sjl/tslime.vim.git
-	ignore = dirty
 [submodule "vim/bundle/rake"]
 	path = vim/bundle/rake
 	url = git://github.com/tpope/vim-rake.git
-	ignore = dirty
-[submodule "vim/bundle/scratch"]
-	path = vim/bundle/scratch
-	url = git://github.com/duff/vim-scratch.git
 	ignore = dirty
 [submodule "vim/bundle/html5"]
 	path = vim/bundle/html5
@@ -130,10 +122,6 @@
 	path = vim/bundle/orgmode
 	url = git://github.com/jceb/vim-orgmode.git
 	ignore = dirty
-[submodule "vim/bundle/speeddating"]
-	path = vim/bundle/speeddating
-	url = git://github.com/tpope/vim-speeddating.git
-	ignore = dirty
 [submodule "vim/bundle/clam"]
 	path = vim/bundle/clam
 	url = git://github.com/sjl/clam.vim.git
@@ -146,18 +134,6 @@
 	path = vim/bundle/ruby
 	url = git://github.com/vim-ruby/vim-ruby.git
 	ignore = dirty
-[submodule "vim/bundle/gist"]
-	path = vim/bundle/gist
-	url = git://github.com/mattn/gist-vim.git
-	ignore = dirty
-[submodule "vim/bundle/webapi"]
-	path = vim/bundle/webapi
-	url = git://github.com/mattn/webapi-vim.git
-	ignore = dirty
-[submodule "vim/bundle/turbux"]
-	path = vim/bundle/turbux
-	url = git://github.com/jgdavey/vim-turbux.git
-	ignore = dirty
 [submodule "vim/bundle/eunuch"]
 	path = vim/bundle/eunuch
 	url = git://github.com/tpope/vim-eunuch.git
@@ -165,10 +141,6 @@
 [submodule "vim/bundle/vitality"]
 	path = vim/bundle/vitality
 	url = git://github.com/sjl/vitality.vim.git
-	ignore = dirty
-[submodule "vim/bundle/switch"]
-	path = vim/bundle/switch
-	url = git://github.com/AndrewRadev/switch.vim.git
 	ignore = dirty
 [submodule "vim/bundle/dwm"]
 	path = vim/bundle/dwm
@@ -238,11 +210,19 @@
 	path = vim/bundle/seek
 	url = git://github.com/goldfeld/vim-seek.git
 	ignore = dirty
-[submodule "vim/bundle/hardmode"]
-	path = vim/bundle/hardmode
-	url = git://github.com/wikitopian/hardmode.git
+[submodule "vim/bundle/switch"]
+	path = vim/bundle/switch
+	url = git://github.com/AndrewRadev/switch.vim.git
 	ignore = dirty
-[submodule "vim/bundle/solarized"]
-	path = vim/bundle/solarized
-	url = git://github.com/altercation/vim-colors-solarized.git
+[submodule "vim/bundle/vroom"]
+	path = vim/bundle/vroom
+	url = git://github.com/skalnik/vim-vroom.git
+	ignore = dirty
+[submodule "vim/bundle/vimux"]
+	path = vim/bundle/vimux
+	url = git://github.com/benmills/vimux.git
+	ignore = dirty
+[submodule "vim/bundle/powerline"]
+	path = vim/bundle/powerline
+	url = git://github.com/Lokaltog/vim-powerline.git
 	ignore = dirty

@@ -68,14 +68,6 @@ function utf8_encode
     rm -v $argv; and mv -v $argv.utf8 $argv
 end
 
-function rails
-    if test -f Procfile
-        foreman run rails $argv
-    else
-        rails $argv
-    end
-end
-
 function lx
     set -lx $args
 end
@@ -122,13 +114,19 @@ function git_prompt
         set_color normal
         printf ' on '
         set_color magenta
-        printf '%s' (git rev-parse --abbrev-ref HEAD)
+        printf '%s' (git rev-parse --abbrev-ref HEAD 2>/dev/null)
         set_color normal
     end
 end
 
 function fish_prompt
     z --add "$PWD"
+
+    if test -f .ruby-version
+        set RBENV_VERSION (rbenv local)
+    else
+        set RBENV_VERSION (rbenv global)
+    end
 
     echo
 

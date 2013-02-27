@@ -32,7 +32,7 @@ install() {
   # Create symbolic links
   for name in $(ls ~/.dotfiles); do
     if [ -z "$(echo $DOTIGNORE | grep $name)" ]; then
-      rm -Rf ~/.$name && ln -s ~/.dotfiles/$name ~/.$name
+      rm -Rf ~/.$name && ln -s ~/.dotfiles/$name ~/$name
     fi
   done
 

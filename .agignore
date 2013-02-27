@@ -1,0 +1,7 @@
+tmp
+public/assets
+vendor/assets/javascripts/ckeditor
+node_modules
+.bundle
+log
+tags
