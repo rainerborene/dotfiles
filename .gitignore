@@ -9,3 +9,5 @@ vim/tmp
 vim/spell/*.spl
 Thumbs.db
 /tags
+custom_plan.rb
+zeus.json

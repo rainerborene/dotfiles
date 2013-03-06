@@ -115,6 +115,7 @@ set sidescroll=1
 set sidescrolloff=10
 set fillchars=vert:\│
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+set list
 
 " }}}
 " Text Formatting ---------------------------------------------------------- {{{

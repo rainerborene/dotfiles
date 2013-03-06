@@ -49,3 +49,6 @@
 
 [url "git@heroku.com:"]
 	insteadOf = heroku:
+
+[pull]
+	rebase = true
