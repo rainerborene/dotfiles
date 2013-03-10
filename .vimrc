@@ -491,22 +491,6 @@ vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 " }}}
-" Image dimensions --------------------------------------------------------- {{{
-
-function! s:FindImages(ArgLead, CmdLine, CursorPos)
-  return system("find -E * -regex '.*(jpg|jpeg|gif|png)$'")
-endfunction
-
-function! s:Dimensions(image)
-  let output = system("sips -g pixelWidth -g pixelHeight " . a:image)
-  let width = matchlist(output, '\vpixelWidth: (\d+)')[1]
-  let height = matchlist(output, '\vpixelHeight: (\d+)')[1]
-  let @z = "\n  width: " . width . "px\n  height: " . height . "px"
-  silent normal! mz"zpvis=`z
-endfunction
-command! -complete=custom,s:FindImages -nargs=1 Dimensions call s:Dimensions(<f-args>)
-
-" }}}
 " SnipMate ----------------------------------------------------------------- {{{
 
 source ~/.vim/snippets/support_functions.vim

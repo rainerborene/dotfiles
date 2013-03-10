@@ -12,7 +12,6 @@ alias V 'vim .'
 alias m 'mvim .'
 alias tm 'tmux -u2'
 alias tat 'tmux attach -t (basename $PWD)'
-alias md 'mkdir -p'
 alias pp 'python -mjson.tool'
 alias serve_this 'python -m SimpleHTTPServer'
 alias reload '. ~/.config/fish/config.fish'
@@ -69,8 +68,9 @@ function utf8_encode
     rm -v $argv; and mv -v $argv.utf8 $argv
 end
 
-function lx
-    set -lx $args
+function md
+    mkdir -p $argv
+    cd $argv
 end
 
 # }}}
@@ -84,16 +84,30 @@ alias ..... 'cd ../../../..'
 # }}}
 # Environment variables {{{
 
+function prepend_to_path -d "Prepend the given dir to PATH if it exists and is not already in it"
+    if test -d $argv[1]
+        if not contains $argv[1] $PATH
+            set -gx PATH "$argv[1]" $PATH
+        end
+    end
+end
+
 set -gx fish_greeting ''
 set -gx RUBY_GC_MALLOC_LIMIT 60000000
 set -gx RUBY_FREE_MIN 200000
 set -gx PYTHONPATH /usr/local/lib/python2.7/site-packages $PYTHONPATH
 set -gx EDITOR vim
 
-set PATH $HOME/.rbenv/bin $PATH
-set PATH $HOME/.rbenv/shims $PATH
-set PATH /usr/local/mysql/bin $PATH
-set PATH /usr/local/share/npm/bin $PATH
+set -gx PATH "/usr/X11R6/bin"
+prepend_to_path "/usr/bin"
+prepend_to_path "/bin"
+prepend_to_path "/usr/sbin"
+prepend_to_path "/sbin"
+prepend_to_path "/usr/local/bin"
+prepend_to_path "$HOME/.rbenv/bin"
+prepend_to_path "$HOME/.rbenv/shims"
+prepend_to_path "/usr/local/mysql/bin"
+prepend_to_path "/usr/local/share/npm/bin"
 
 # }}}
 # Bind Keys {{{
