@@ -68,7 +68,7 @@ function utf8_encode
     rm -v $argv; and mv -v $argv.utf8 $argv
 end
 
-function md
+function mcd
     mkdir -p $argv
     cd $argv
 end
