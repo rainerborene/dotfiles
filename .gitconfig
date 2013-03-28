@@ -10,11 +10,13 @@
 	ui = auto
 
 [merge]
-	tool = splice
+	summary = true
+	verbosity = 1
+	tool = fugitive
+	prompt = false
 
-[mergetool "splice"]
-	cmd = "mvim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
-	trustExitCode = true
+[mergetool "fugitive"]
+	cmd = "mvim -f -c 'Gdiff' $MERGED"
 
 [alias]
 	d       = diff

@@ -150,10 +150,6 @@
 	path = vim/bundle/textobj-word-column
 	url = git://github.com/coderifous/textobj-word-column.vim.git
 	ignore = dirty
-[submodule "vim/bundle/splice"]
-	path = vim/bundle/splice
-	url = git://github.com/sjl/splice.vim.git
-	ignore = dirty
 [submodule "vim/bundle/repeat"]
 	path = vim/bundle/repeat
 	url = git://github.com/tpope/vim-repeat.git
@@ -225,4 +221,8 @@
 [submodule "vim/bundle/powerline"]
 	path = vim/bundle/powerline
 	url = git://github.com/Lokaltog/vim-powerline.git
+	ignore = dirty
+[submodule "vim/bundle/yankstack"]
+	path = vim/bundle/yankstack
+	url = git://github.com/maxbrunsfeld/vim-yankstack.git
 	ignore = dirty

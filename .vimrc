@@ -113,7 +113,7 @@ set gdefault
 set scrolloff=3
 set sidescroll=1
 set sidescrolloff=10
-set fillchars=vert:\│
+set fillchars=diff:⣿,vert:│
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set list
 
@@ -121,6 +121,8 @@ set list
 " Text Formatting ---------------------------------------------------------- {{{
 
 set autoindent
+set expandtab
+set shiftwidth=2
 set textwidth=80
 set formatoptions=qrn1
 set nojoinspaces
@@ -244,7 +246,7 @@ augroup END
 au FocusLost * :silent! wall
 
 " Resize splits when the window is resized
-au VimResized * exe "normal! \<c-w>="
+au VimResized * :wincmd =
 
 " Make terminal Vim trigger autoread more often.
 au WinEnter,BufWinEnter,CursorHold * checktime
@@ -303,23 +305,28 @@ nnoremap + <nop>
 nnoremap <silent> <F6> :set paste!<CR>
 
 " Use c-\ to do c-] but open it in a new split.
-nnoremap <c-\> <c-w>v<c-]>zvzz
+nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
+nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
 nnoremap N Nzzzv
-
-" Easier to type, and I never use the default behavior.
-noremap H ^
-noremap L $
-vnoremap L g_
 
 " Same when jumping around
 nnoremap g; g;zz
 nnoremap g, g,zz
 
 " Make Y consistent with C and D
+call yankstack#setup()
 nnoremap Y y$
+
+" Easier to type, and I never use the default behavior.
+noremap H ^
+noremap L $
+vnoremap L g_
+
+" Emacs 'kill ring' for Vim
+nmap <C-m> <Plug>yankstack_substitute_older_paste
 
 " Select just-pasted text
 nnoremap gV `[v`]
@@ -537,7 +544,6 @@ endfunction
 set guitablabel=%t
 set tabline=%!MyTabLine()
 
-
 " }}}
 " Folding ------------------------------------------------------------------ {{{
 
@@ -572,6 +578,7 @@ nnoremap <silent> <leader>ew :Explore<CR>
 " Plugin settings ---------------------------------------------------------- {{{
 
 let g:dwm_map_keys = 0
+let g:yankstack_map_keys = 0
 let g:seek_enable_jumps = 1
 let g:VimuxUseNearestPane = 1
 let g:ackprg = 'ag --nogroup --nocolor --column'
@@ -617,6 +624,13 @@ let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclud
 let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
   \ 'dir': '\v[\/](tmp|tags)$'
+  \ }
+
+let g:rails_projections = {
+  \ "app/admin/*.rb": { "command": "admin" },
+  \ "app/workers/*_worker.rb": { "command": "worker" },
+  \ "app/validators/*_validator.rb": { "command": "validator" },
+  \ "app/uploaders/*_uploader.rb": { "command": "uploader" }
   \ }
 
 " }}}

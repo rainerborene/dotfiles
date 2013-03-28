@@ -3,7 +3,7 @@
 . ~/.dotfiles/lib/z.fish
 
 alias j 'z'
-alias l 'tree --dirsfirst -ChFL 1'
+alias l 'tree --dirsfirst -ChaFL 1'
 alias hl 'less -R'
 alias c 'clear'
 alias e 'vim -c CtrlP'
@@ -40,12 +40,12 @@ alias gl 'git log --pretty="format:%Cgreen%h%Creset %an - %s" --graph'
 alias gpom 'git pull --rebase origin master'
 alias gcd 'cd (git rev-parse --show-toplevel)'
 alias gitv 'vim .git/index -c "Gitv --all" -c "tabonly"'
+alias vim '/Applications/MacVim.app/Contents/MacOS/Vim'
 
 alias o 'open'
 alias oo 'open .'
 alias pbc 'pbcopy'
 alias pbp 'pbpaste'
-alias vim '/Applications/MacVim.app/Contents/MacOS/Vim'
 
 # ruby on rails
 alias b 'bundle'
@@ -96,7 +96,7 @@ set -gx fish_greeting ''
 set -gx RUBY_GC_MALLOC_LIMIT 60000000
 set -gx RUBY_FREE_MIN 200000
 set -gx PYTHONPATH /usr/local/lib/python2.7/site-packages $PYTHONPATH
-set -gx EDITOR vim
+set -gx EDITOR /Applications/MacVim.app/Contents/MacOS/Vim
 
 set -gx PATH "/usr/X11R6/bin"
 prepend_to_path "/usr/bin"
@@ -169,7 +169,3 @@ function fish_prompt
 end
 
 # }}}
-
-if status --is-interactive
-    command fortune -s | cowsay -f tux -g
-end
