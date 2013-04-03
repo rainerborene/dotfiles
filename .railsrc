@@ -1,1 +1,1 @@
--d mysql -T
+-d postgresql -T

@@ -25,7 +25,7 @@ set nottimeout
 set ttyfast
 set splitbelow
 set splitright
-set shell=/bin/bash
+set shell=/bin/csh
 set lazyredraw
 set matchtime=3
 set dictionary=/usr/share/dict/words
@@ -104,7 +104,7 @@ endif
 set visualbell t_vb=
 set ignorecase
 set smartcase
-set foldlevelstart=99
+set foldlevelstart=0
 set laststatus=2
 set incsearch
 set hlsearch
@@ -136,13 +136,13 @@ set wrap
 au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
 au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
 au FileType qf,org,netrw setlocal colorcolumn& nolist
-au FileType qf setlocal nolist nocursorline nowrap
 au FileType org setlocal formatoptions+=t
 au FileType c setlocal foldmethod=syntax
 
 au BufNewFile,BufRead *.tumblr.html setfiletype tumblr
 au BufNewFile,BufRead *.ejs setfiletype html
 au BufNewFile,BufRead *.rss setfiletype xml
+au BufNewFile,BufRead *psql* setfiletype sql
 
 augroup ft_php
   au!
@@ -166,7 +166,7 @@ augroup END
 
 augroup ft_git
   au!
-  au FileType git setlocal foldmethod=syntax | normal zM
+  au FileType git setlocal foldmethod=syntax
   au FileType git,gitv,gitcommit setlocal colorcolumn& nolist
   au FileType gitcommit setlocal spell | wincmd K
   au BufReadPost fugitive://* set bufhidden=delete
@@ -185,19 +185,18 @@ augroup END
 
 augroup ft_ruby
   au!
-  au FileType ruby let b:vimpipe_command='ruby <(cat)'
-  au FileType ruby setlocal foldmethod=syntax makeprg=bundle\ exec\ rspec\ %
   au BufNewFile,BufRead {Vagrantfile,Guardfile,Capfile,Thorfile,pryrc,config.ru} setfiletype ruby
+  au FileType ruby let b:vimpipe_command='ruby <(cat)'
+  au FileType ruby setlocal foldmethod=syntax
+  au FileType ruby
+    \ if filereadable('zeus.json') |
+    \   compiler rspec | let &mp = 'zeus rspec %' |
+    \ end
 augroup END
 
 augroup ft_json
   au!
   au FileType json let b:vimpipe_command="python -m json.tool"
-augroup END
-
-augroup ft_css
-  au!
-  au FileType css nnoremap <localleader>s vi{:!sort<CR>
 augroup END
 
 augroup ft_html
@@ -219,8 +218,9 @@ augroup END
 
 augroup ft_vim
   au!
-  au FileType vim setlocal foldmethod=marker | normal zM
+  au FileType vim setlocal foldmethod=marker
   au FileType help setlocal textwidth=78
+  au FileType qf setlocal nolist nocursorline nowrap | wincmd J
   au BufReadPost netrw setlocal buftype=nofile bufhidden=delete nobuflisted
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
   au BufWritePost .vimrc source $MYVIMRC
@@ -253,9 +253,9 @@ au WinEnter,BufWinEnter,CursorHold * checktime
 
 " Restore cursor position
 au BufReadPost *
-      \ if line("'\"") > 1 && line("'\"") <= line("$") |
-      \   exe "normal! g`\"" |
-      \ endif
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
 
 " }}}
 " Mappings ----------------------------------------------------------------- {{{
@@ -298,7 +298,6 @@ nnoremap * *<c-o>
 
 " Switch segments of text with predefined replacements
 nnoremap - :Switch<cr>
-nnoremap + <nop>
 
 " For some reason pastetoggle doesn't redraw the screen (thus the status bar
 " doesn't change) while :set paste! does, so I use that instead.
@@ -317,16 +316,12 @@ nnoremap g; g;zz
 nnoremap g, g,zz
 
 " Make Y consistent with C and D
-call yankstack#setup()
 nnoremap Y y$
 
 " Easier to type, and I never use the default behavior.
 noremap H ^
 noremap L $
 vnoremap L g_
-
-" Emacs 'kill ring' for Vim
-nmap <C-m> <Plug>yankstack_substitute_older_paste
 
 " Select just-pasted text
 nnoremap gV `[v`]
@@ -453,16 +448,14 @@ noremap <leader>y "*y
 nnoremap <leader>p :set paste<CR>"*p<CR>:set nopaste<CR>
 nnoremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
 
-" Send visual selection to paste.stevelosh.com
+" Send visual selection to sprunge.us
 vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy && open `pbpaste`<cr>
+
+" Dispatch
+nnoremap <leader>t :Dispatch<CR>
 
 " Ack searching
 nnoremap <leader>a :Ack!<space>
-
-" Vimux as tslime replacement
-nmap <localleader>vp :VimuxPromptCommand<CR>
-vmap <localleader>vs "vy :call VimuxRunCommand(@v . "\n", 0)<CR>
-nmap <localleader>vs vip<LocalLeader>vs<CR>
 
 " Fugitive
 nnoremap <leader>gd :Gvdiff<cr>
@@ -477,13 +470,6 @@ nnoremap <leader>gr :Gremove<cr>
 nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gv :Gitv --all<cr>
 nnoremap <leader>gV :Gitv! --all<cr>
-
-ruby << EOF
-  class Object
-    def flush; end unless Object.new.respond_to?(:flush)
-  end
-EOF
-
 
 " }}}
 " Visual Mode */# from Scrooloose ------------------------------------------ {{{
@@ -578,13 +564,8 @@ nnoremap <silent> <leader>ew :Explore<CR>
 " Plugin settings ---------------------------------------------------------- {{{
 
 let g:dwm_map_keys = 0
-let g:yankstack_map_keys = 0
 let g:seek_enable_jumps = 1
-let g:VimuxUseNearestPane = 1
 let g:ackprg = 'ag --nogroup --nocolor --column'
-let g:vroom_use_vimux = 1
-let g:vroom_use_bundle_exec = 0
-let g:vroom_spec_command = 'zeus rspec'
 let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0

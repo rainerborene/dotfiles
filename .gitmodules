@@ -46,14 +46,6 @@
 	path = vim/bundle/gundo
 	url = git://github.com/sjl/gundo.vim.git
 	ignore = dirty
-[submodule "vim/bundle/textobj-rubyblock"]
-	path = vim/bundle/textobj-rubyblock
-	url = git://github.com/nelstrom/vim-textobj-rubyblock.git
-	ignore = dirty
-[submodule "vim/bundle/textobj-user"]
-	path = vim/bundle/textobj-user
-	url = git://github.com/kana/vim-textobj-user.git
-	ignore = dirty
 [submodule "vim/bundle/unimpaired"]
 	path = vim/bundle/unimpaired
 	url = git://github.com/tpope/vim-unimpaired.git
@@ -126,10 +118,6 @@
 	path = vim/bundle/clam
 	url = git://github.com/sjl/clam.vim.git
 	ignore = dirty
-[submodule "vim/bundle/textobj-indent"]
-	path = vim/bundle/textobj-indent
-	url = git://github.com/kana/vim-textobj-indent.git
-	ignore = dirty
 [submodule "vim/bundle/ruby"]
 	path = vim/bundle/ruby
 	url = git://github.com/vim-ruby/vim-ruby.git
@@ -145,10 +133,6 @@
 [submodule "vim/bundle/dwm"]
 	path = vim/bundle/dwm
 	url = git://github.com/spolu/dwm.vim.git
-	ignore = dirty
-[submodule "vim/bundle/textobj-word-column"]
-	path = vim/bundle/textobj-word-column
-	url = git://github.com/coderifous/textobj-word-column.vim.git
 	ignore = dirty
 [submodule "vim/bundle/repeat"]
 	path = vim/bundle/repeat
@@ -210,19 +194,31 @@
 	path = vim/bundle/switch
 	url = git://github.com/AndrewRadev/switch.vim.git
 	ignore = dirty
-[submodule "vim/bundle/vroom"]
-	path = vim/bundle/vroom
-	url = git://github.com/skalnik/vim-vroom.git
-	ignore = dirty
-[submodule "vim/bundle/vimux"]
-	path = vim/bundle/vimux
-	url = git://github.com/benmills/vimux.git
-	ignore = dirty
 [submodule "vim/bundle/powerline"]
 	path = vim/bundle/powerline
 	url = git://github.com/Lokaltog/vim-powerline.git
 	ignore = dirty
-[submodule "vim/bundle/yankstack"]
-	path = vim/bundle/yankstack
-	url = git://github.com/maxbrunsfeld/vim-yankstack.git
+[submodule "vim/bundle/expand-region"]
+	path = vim/bundle/expand-region
+	url = git://github.com/terryma/vim-expand-region.git
+	ignore = dirty
+[submodule "vim/bundle/textobj-user"]
+	path = vim/bundle/textobj-user
+	url = git://github.com/kana/vim-textobj-user.git
+	ignore = dirty
+[submodule "vim/bundle/textobj-indent"]
+	path = vim/bundle/textobj-indent
+	url = git://github.com/kana/vim-textobj-indent.git
+	ignore = dirty
+[submodule "vim/bundle/textobj-word-column"]
+	path = vim/bundle/textobj-word-column
+	url = git://github.com/coderifous/textobj-word-column.vim.git
+	ignore = dirty
+[submodule "vim/bundle/dispatch"]
+	path = vim/bundle/dispatch
+	url = git://github.com/tpope/vim-dispatch.git
+	ignore = dirty
+[submodule "vim/bundle/tbone"]
+	path = vim/bundle/tbone
+	url = git://github.com/tpope/vim-tbone.git
 	ignore = dirty
