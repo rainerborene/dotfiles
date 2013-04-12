@@ -25,7 +25,7 @@ set nottimeout
 set ttyfast
 set splitbelow
 set splitright
-set shell=/bin/csh
+set shell=/bin/bash
 set lazyredraw
 set matchtime=3
 set dictionary=/usr/share/dict/words
@@ -135,8 +135,7 @@ set wrap
 
 au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
 au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
-au FileType qf,org,netrw setlocal colorcolumn& nolist
-au FileType org setlocal formatoptions+=t
+au FileType qf,netrw setlocal colorcolumn& nolist
 au FileType c setlocal foldmethod=syntax
 
 au BufNewFile,BufRead *.tumblr.html setfiletype tumblr
@@ -203,6 +202,13 @@ augroup ft_html
   au!
   au FileType html setlocal foldmethod=manual
   au FileType html let b:vimpipe_command="lynx -dump -stdin"
+augroup END
+
+augroup ft_css
+  au!
+  au FileType sass
+    \ call SuperTabChain(&omnifunc, "<c-p>") |
+    \ call SuperTabSetDefaultCompletionType("<c-x><c-u>")
 augroup END
 
 augroup ft_markdown
@@ -452,7 +458,8 @@ nnoremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
 vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy && open `pbpaste`<cr>
 
 " Dispatch
-nnoremap <leader>t :Dispatch<CR>
+nnoremap <leader>r :Make<CR>
+nnoremap <leader>t :Dispatch<space>
 
 " Ack searching
 nnoremap <leader>a :Ack!<space>
@@ -554,7 +561,6 @@ set foldtext=MyFoldText()
 
 cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
-nnoremap <silent> <leader>eo :vsplit ~/Google\ Drive/outline.org<CR>
 nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
 nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
 nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
@@ -565,7 +571,10 @@ nnoremap <silent> <leader>ew :Explore<CR>
 
 let g:dwm_map_keys = 0
 let g:seek_enable_jumps = 1
-let g:ackprg = 'ag --nogroup --nocolor --column'
+let g:ackprg = 'ag --smart-case --nogroup --nocolor --column'
+let g:SuperTabLongestHighlight = 1
+let g:SuperTabDefaultCompletionType = '<c-n>'
+let g:SuperTabNoCompleteAfter = ['^', '\v\s{2,}']
 let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
@@ -582,7 +591,6 @@ let g:Powerline_stl_path_style = 'filename'
 let g:Powerline_symbols = 'fancy'
 let g:gundo_help = 0
 let g:gundo_preview_bottom = 1
-let g:org_plugins = ['ShowHide', '|', 'Navigator', 'EditStructure', '|', 'Todo']
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_signs = 1
@@ -612,6 +620,19 @@ let g:rails_projections = {
   \ "app/workers/*_worker.rb": { "command": "worker" },
   \ "app/validators/*_validator.rb": { "command": "validator" },
   \ "app/uploaders/*_uploader.rb": { "command": "uploader" }
+  \ }
+
+let g:expand_region_text_objects = {
+  \ 'iw'  : 0,
+  \ 'iW'  : 0,
+  \ 'i"'  : 0,
+  \ 'i''' : 0,
+  \ 'i]'  : 1,
+  \ 'ib'  : 1,
+  \ 'iB'  : 1,
+  \ 'ii'  : 0,
+  \ 'aM'  : 0,
+  \ 'ip'  : 0
   \ }
 
 " }}}

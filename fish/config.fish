@@ -3,6 +3,7 @@
 . ~/.dotfiles/lib/z.fish
 
 alias j 'z'
+alias t 'todo.sh'
 alias l 'tree --dirsfirst -ChaFL 1'
 alias hl 'less -R'
 alias c 'clear'
@@ -11,7 +12,9 @@ alias v 'vim'
 alias V 'vim .'
 alias m 'mvim .'
 alias tm 'tmux -u2'
-alias tat 'tmux attach -t (basename $PWD)'
+alias tms 'tm list-sessions'
+alias tmt 'tm attach -t'
+alias tat 'tm attach -t (basename $PWD)'
 alias pp 'python -mjson.tool'
 alias serve_this 'python -m SimpleHTTPServer'
 alias reload '. ~/.config/fish/config.fish'
@@ -40,7 +43,6 @@ alias gl 'git log --pretty="format:%Cgreen%h%Creset %an - %s" --graph'
 alias gpom 'git pull --rebase origin master'
 alias gcd 'cd (git rev-parse --show-toplevel)'
 alias gitv 'vim .git/index -c "Gitv --all" -c "tabonly"'
-alias vim '/Applications/MacVim.app/Contents/MacOS/Vim'
 
 alias o 'open'
 alias oo 'open .'
@@ -60,6 +62,14 @@ end
 
 function gg -d "Commit pending changes and quote all args as message"
     git commit -v -a -m "$argv"
+end
+
+function reload_chrome -d "Watch given paths and reload Google Chrome active tab"
+    find . -iname $argv -type f | peat "osascript -e '
+      tell application \"Google Chrome\" to tell the active tab of its first window
+        reload
+      end tell
+    '"
 end
 
 function utf8_encode
@@ -93,10 +103,13 @@ function prepend_to_path -d "Prepend the given dir to PATH if it exists and is n
 end
 
 set -gx fish_greeting ''
-set -gx RUBY_GC_MALLOC_LIMIT 60000000
-set -gx RUBY_FREE_MIN 200000
+set -gx EDITOR vim
 set -gx PYTHONPATH /usr/local/lib/python2.7/site-packages $PYTHONPATH
-set -gx EDITOR /Applications/MacVim.app/Contents/MacOS/Vim
+set -gx RUBY_HEAP_MIN_SLOTS 1000000
+set -gx RUBY_HEAP_SLOTS_INCREMENT 1000000
+set -gx RUBY_HEAP_SLOTS_GROWTH_FACTOR 1
+set -gx RUBY_GC_MALLOC_LIMIT 100000000
+set -gx RUBY_HEAP_FREE_MIN 500000
 
 set -gx PATH "/usr/X11R6/bin"
 prepend_to_path "/usr/bin"
@@ -114,11 +127,6 @@ prepend_to_path "/usr/local/share/npm/bin"
 
 function fish_user_key_bindings
     bind \cn accept-autosuggestion
-
-    # Ignore iterm2 escape sequences.  Vim will handle them if needed.
-    bind \e\[I true
-    bind \e\[O true
-    # ]]
 end
 
 # }}}
