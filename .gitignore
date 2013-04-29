@@ -1,13 +1,2 @@
-.bundle
-.sass-cache
-.DS_Store
-.netrwhist
-*.swp
-.rake_tasks~
-.rails_generators~
 vim/tmp
 vim/spell/*.spl
-Thumbs.db
-/tags
-custom_plan.rb
-zeus.json

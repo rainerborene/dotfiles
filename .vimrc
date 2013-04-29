@@ -55,7 +55,7 @@ set showbreak=↪
 set virtualedit+=block
 set shortmess=atI
 set mousemodel=popup
-set complete=.,w,b,u,U
+set complete=.,w,b,u,t
 set completeopt=longest,menuone,preview
 set mouse=a
 set ttymouse=xterm2
@@ -166,7 +166,7 @@ augroup END
 augroup ft_git
   au!
   au FileType git setlocal foldmethod=syntax
-  au FileType git,gitv,gitcommit setlocal colorcolumn& nolist
+  au FileType git,gitcommit setlocal colorcolumn& nolist
   au FileType gitcommit setlocal spell | wincmd K
   au BufReadPost fugitive://* set bufhidden=delete
   au User fugitive
@@ -190,6 +190,8 @@ augroup ft_ruby
   au FileType ruby
     \ if filereadable('zeus.json') |
     \   compiler rspec | let &mp = 'zeus rspec %' |
+    \   let b:dispatch = 'zeus rake spec' |
+    \   let b:start = 'zeus console' |
     \ end
 augroup END
 
@@ -204,10 +206,10 @@ augroup ft_html
   au FileType html let b:vimpipe_command="lynx -dump -stdin"
 augroup END
 
-augroup ft_css
+augroup ft_sass
   au!
   au FileType sass
-    \ call SuperTabChain(&omnifunc, "<c-p>") |
+    \ call SuperTabChain(&omnifunc, "<c-n>") |
     \ call SuperTabSetDefaultCompletionType("<c-x><c-u>")
 augroup END
 
@@ -322,12 +324,12 @@ nnoremap g; g;zz
 nnoremap g, g,zz
 
 " Make Y consistent with C and D
+call yankstack#setup()
 nnoremap Y y$
 
-" Easier to type, and I never use the default behavior.
-noremap H ^
-noremap L $
-vnoremap L g_
+" Yankstack
+nmap H <Plug>yankstack_substitute_older_paste
+nmap L <Plug>yankstack_substitute_newer_paste
 
 " Select just-pasted text
 nnoremap gV `[v`]
@@ -403,7 +405,7 @@ vnoremap ! :ClamVisual<space>
 noremap ' `
 
 " Regenerate ctags
-nnoremap <leader><cr> :silent !/usr/local/bin/ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
+nnoremap <leader><cr> :TagsGenerate<cr>
 
 " Because escape is too far away
 inoremap jj <ESC>
@@ -442,7 +444,6 @@ nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 " Open CtrlP on different modes
 nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 nnoremap <silent> <leader>l :CtrlPLine<CR>
-nnoremap <silent> <leader>. :CtrlPTag<CR>
 
 " Some toggle commands
 nnoremap <silent> <leader>u :GundoToggle<CR>
@@ -458,16 +459,21 @@ nnoremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
 vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy && open `pbpaste`<cr>
 
 " Dispatch
-nnoremap <leader>r :Make<CR>
-nnoremap <leader>t :Dispatch<space>
+nnoremap <leader>r :Start<CR>
+nnoremap <leader>m :Make<CR>
+nnoremap <leader>t :Dispatch<CR>
 
 " Ack searching
 nnoremap <leader>a :Ack!<space>
+
+" SnipMate
+source ~/.vim/snippets/support_functions.vim
 
 " Fugitive
 nnoremap <leader>gd :Gvdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
+nnoremap <leader>gl :vsplit \| Glog --<cr><C-W>T:copen<cr>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gh :Gbrowse<cr>
 nnoremap <leader>gco :Gread<cr>
@@ -475,8 +481,6 @@ nnoremap <leader>gci :Gcommit<cr>
 nnoremap <leader>gm :Gmove<space>
 nnoremap <leader>gr :Gremove<cr>
 nnoremap <leader>gp :Git push<cr>
-nnoremap <leader>gv :Gitv --all<cr>
-nnoremap <leader>gV :Gitv! --all<cr>
 
 " }}}
 " Visual Mode */# from Scrooloose ------------------------------------------ {{{
@@ -489,53 +493,6 @@ function! s:VSetSearch()
 endfunction
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
-
-" }}}
-" SnipMate ----------------------------------------------------------------- {{{
-
-source ~/.vim/snippets/support_functions.vim
-function! s:SetupSnippets()
-  if filereadable("./config/environment.rb")
-    call ExtractSnips("~/.vim/snippets/ruby-rails", "ruby")
-    call ExtractSnips("~/.vim/snippets/eruby-rails", "eruby")
-  endif
-  call ExtractSnips("~/.vim/snippets/html", "eruby")
-  call ExtractSnips("~/.vim/snippets/html", "xhtml")
-  call ExtractSnips("~/.vim/snippets/html", "php")
-endfunction
-autocmd VimEnter * call s:SetupSnippets()
-
-" }}}
-" Tab title ---------------------------------------------------------------- {{{
-
-function! MyTabLine()
-  let s = ''
-  for i in range(tabpagenr('$'))
-    " select the highlighting
-    if i + 1 == tabpagenr()
-      let s .= '%#TabLineSel#'
-    else
-      let s .= '%#TabLine#'
-    endif
-    " set the tab page number (for mouse clicks)
-    let s .= '%' . (i + 1) . 'T'
-    " the label is made by MyTabLabel()
-    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
-  endfor
-  " after the last tab fill with TabLineFill and reset tab page nr
-  let s .= '%#TabLineFill#%T'
-  return s
-endfunction
-
-function! MyTabLabel(n)
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  let label = bufname(buflist[winnr - 1])
-  return fnamemodify(label == '' ? "untitled" : label, ":t")
-endfunction
-
-set guitablabel=%t
-set tabline=%!MyTabLine()
 
 " }}}
 " Folding ------------------------------------------------------------------ {{{
@@ -561,9 +518,11 @@ set foldtext=MyFoldText()
 
 cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <silent> <leader>es :vsplit ~/.vim/snippets<CR>
 nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
 nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
 nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
+nnoremap <silent> <leader>eo :botright 10split ~/Google\ Drive/notes.txt<CR>
 nnoremap <silent> <leader>ew :Explore<CR>
 
 " }}}
@@ -574,7 +533,6 @@ let g:seek_enable_jumps = 1
 let g:ackprg = 'ag --smart-case --nogroup --nocolor --column'
 let g:SuperTabLongestHighlight = 1
 let g:SuperTabDefaultCompletionType = '<c-n>'
-let g:SuperTabNoCompleteAfter = ['^', '\v\s{2,}']
 let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
@@ -583,10 +541,7 @@ let g:netrw_banner = 0
 let g:netrw_dirhistmax = 0
 let g:netrw_use_errorwindow = 0
 let g:netrw_list_hide = '^\.,\~$,^tags$'
-let g:Gitv_WipeAllOnClose = 1
-let g:Gitv_OpenHorizontal = 1
-let g:Gitv_DoNotMapCtrlKey = 1
-let g:sparkupNextMapping = '<c-o>'
+let g:sparkupNextMapping = '<c-y>'
 let g:Powerline_stl_path_style = 'filename'
 let g:Powerline_symbols = 'fancy'
 let g:gundo_help = 0
@@ -604,10 +559,10 @@ let g:surround_{char2nr('=')} = "<%= \r %>"
 let g:surround_{char2nr('8')} = "/* \r */"
 let g:surround_{char2nr('s')} = " \r"
 let g:surround_{char2nr('^')} = "/^\r$/"
+let g:ctrlp_map = '<leader>,'
 let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_clear_cache_on_exit = 1
-let g:ctrlp_extensions = ['tag']
 let g:ctrlp_filter_greps = 'egrep -iv "\.(png|jpe?g|bmp|gif|png)"'
 let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps]
 let g:ctrlp_custom_ignore = {
@@ -622,17 +577,7 @@ let g:rails_projections = {
   \ "app/uploaders/*_uploader.rb": { "command": "uploader" }
   \ }
 
-let g:expand_region_text_objects = {
-  \ 'iw'  : 0,
-  \ 'iW'  : 0,
-  \ 'i"'  : 0,
-  \ 'i''' : 0,
-  \ 'i]'  : 1,
-  \ 'ib'  : 1,
-  \ 'iB'  : 1,
-  \ 'ii'  : 0,
-  \ 'aM'  : 0,
-  \ 'ip'  : 0
-  \ }
+let g:vim_tags_auto_generate = 0
+let g:vim_tags_gems_tags_command = "ctags -R --exclude=.git --languages=-javascript,markdown {OPTIONS} `bundle show --paths` 2>/dev/null"
 
 " }}}

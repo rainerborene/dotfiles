@@ -22,10 +22,6 @@
 	path = vim/bundle/sparkup
 	url = git://github.com/kogakure/vim-sparkup.git
 	ignore = dirty
-[submodule "vim/bundle/gitv"]
-	path = vim/bundle/gitv
-	url = git://github.com/gregsexton/gitv.git
-	ignore = dirty
 [submodule "vim/bundle/matchit"]
 	path = vim/bundle/matchit
 	url = git://github.com/edsono/vim-matchit.git
@@ -162,10 +158,6 @@
 	path = vim/bundle/powerline
 	url = git://github.com/Lokaltog/vim-powerline.git
 	ignore = dirty
-[submodule "vim/bundle/expand-region"]
-	path = vim/bundle/expand-region
-	url = git://github.com/terryma/vim-expand-region.git
-	ignore = dirty
 [submodule "vim/bundle/dispatch"]
 	path = vim/bundle/dispatch
 	url = git://github.com/tpope/vim-dispatch.git
@@ -181,4 +173,12 @@
 [submodule "vim/bundle/supertab"]
 	path = vim/bundle/supertab
 	url = git://github.com/ervandew/supertab.git
+	ignore = dirty
+[submodule "vim/bundle/tags"]
+	path = vim/bundle/tags
+	url = git://github.com/szw/vim-tags.git
+	ignore = dirty
+[submodule "vim/bundle/yankstack"]
+	path = vim/bundle/yankstack
+	url = git://github.com/nickstenning/vim-yankstack.git
 	ignore = dirty

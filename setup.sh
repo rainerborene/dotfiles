@@ -24,8 +24,7 @@ install() {
   echo "*** Downloading..."
   rm -Rf ~/.dotfiles \
     && git clone -q git://github.com/rainerborene/dotfiles.git ~/.dotfiles \
-    && cd ~/.dotfiles \
-    && git submodule update --init > /dev/null 2>&1
+    && git --git-dir ~/.dotfiles/.git submodule update --init > /dev/null 2>&1
 
   # Create symbolic links
   for name in $(find ~/.dotfiles -type f -depth 1 -exec basename "{}" \;); do
@@ -54,7 +53,6 @@ uninstall() {
     [[ -z "$(echo $DOTIGNORE | grep $name)" ]] && rm -Rf ~/$name
   done
   rm -Rf ~/.dotfiles
-  type -p fortune &> /dev/null && echo "\n$(fortune)"
 }
 
 #

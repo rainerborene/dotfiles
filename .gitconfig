@@ -1,23 +1,33 @@
+[core]
+	excludesfile = ~/.dotfiles/.cvsignore
+	editor = vim
 [user]
 	name = Rainer Borene
 	email = rainerborene@gmail.com
-
-[core]
-	excludesfile = ~/.dotfiles/.gitignore
-	editor = vim
-
+[github]
+	user = rainerborene
+[push]
+	default = current
+[pull]
+	rebase = true
+[web]
+	browser = open
 [color]
 	ui = auto
-
+[diff "ruby"]
+	funcname = "^ *\\(\\(def\\) .*\\)"
+[url "git://github.com/"]
+	insteadOf = gh:
+[url "git@github.com:"]
+	insteadOf = wgh:
+[url "git@heroku.com:"]
+	insteadOf = heroku:
 [merge]
 	summary = true
-	verbosity = 1
-	tool = fugitive
 	prompt = false
-
+	tool = fugitive
 [mergetool "fugitive"]
 	cmd = "mvim -f -c 'Gdiff' $MERGED"
-
 [alias]
 	d       = diff
 	di      = diff --cached
@@ -33,24 +43,3 @@
 	ll      = log --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
 	gl      = log -10 --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
 	gll     = log --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
-
-[push]
-	default = current
-
-[web]
-	browser = open
-
-[github]
-	user = rainerborene
-
-[url "git://github.com/"]
-	insteadOf = gh:
-
-[url "git@github.com:"]
-	insteadOf = wgh:
-
-[url "git@heroku.com:"]
-	insteadOf = heroku:
-
-[pull]
-	rebase = true

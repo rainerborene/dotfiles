@@ -1,0 +1,11 @@
+*.swp
+.DS_Store
+.bundle
+.netrwhist
+.rails_generators~
+.rake_tasks~
+.sass-cache
+/tags
+Thumbs.db
+custom_plan.rb
+zeus.json

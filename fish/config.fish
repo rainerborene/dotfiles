@@ -42,7 +42,6 @@ alias gcp 'git cherry-pick'
 alias gl 'git log --pretty="format:%Cgreen%h%Creset %an - %s" --graph'
 alias gpom 'git pull --rebase origin master'
 alias gcd 'cd (git rev-parse --show-toplevel)'
-alias gitv 'vim .git/index -c "Gitv --all" -c "tabonly"'
 
 alias o 'open'
 alias oo 'open .'
@@ -58,6 +57,10 @@ alias fore 'foreman start -f Procfile.dev'
 
 function psg -d "Grep for a running process, returning its PID and full string"
     ps auxww | grep --color=always $argv | grep -v grep | collapse | cuts -f 2,11-
+end
+
+function psk -d "Kill all running processes with given name"
+    psg $argv | awk '{print $1}' | xargs kill -9
 end
 
 function gg -d "Commit pending changes and quote all args as message"
@@ -110,8 +113,12 @@ set -gx RUBY_HEAP_SLOTS_INCREMENT 1000000
 set -gx RUBY_HEAP_SLOTS_GROWTH_FACTOR 1
 set -gx RUBY_GC_MALLOC_LIMIT 100000000
 set -gx RUBY_HEAP_FREE_MIN 500000
-
+set -gx JAVA_HOME (/usr/libexec/java_home)
+set -gx CLASSPATH "/usr/share/java/junit.jar:$JAVA_HOME"
+set -gx ANT_HOME /usr/share/ant/
+set -gx MAVEN_HOME /usr/share/maven/
 set -gx PATH "/usr/X11R6/bin"
+
 prepend_to_path "/usr/bin"
 prepend_to_path "/bin"
 prepend_to_path "/usr/sbin"
@@ -145,12 +152,6 @@ end
 function fish_prompt
     z --add "$PWD"
 
-    if test -f .ruby-version
-        set RBENV_VERSION (rbenv local)
-    else
-        set RBENV_VERSION (rbenv global)
-    end
-
     echo
 
     set_color magenta
@@ -174,6 +175,15 @@ function fish_prompt
     printf '➜ '
 
     set_color normal
+end
+
+# }}}
+# Always work in a tmux session {{{
+
+if test -x (which tmux)
+  if test $TERM != "screen-256color" -a $TERM != "screen"
+    tmux attach -t hack; or tmux new -s hack; exit
+  end
 end
 
 # }}}
