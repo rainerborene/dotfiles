@@ -1,5 +1,6 @@
 [core]
 	excludesfile = ~/.dotfiles/.cvsignore
+	attributesfile = ~/.dotfiles/.gitattributes
 	editor = vim
 [user]
 	name = Rainer Borene
@@ -16,6 +17,8 @@
 	ui = auto
 [diff "ruby"]
 	funcname = "^ *\\(\\(def\\) .*\\)"
+[diff "nodiff"]
+	command = /usr/bin/true
 [url "git://github.com/"]
 	insteadOf = gh:
 [url "git@github.com:"]

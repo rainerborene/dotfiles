@@ -60,15 +60,15 @@ uninstall() {
 #
 
 update() {
-  local github="https://raw.github.com"
-  echo "*** Updating..."
-  git --git-dir ~/.dotfiles/.git submodule -q foreach git clean -q -f
-  git --git-dir ~/.dotfiles/.git submodule -q foreach git pull -q origin master
+  git --git-dir ~/.dotfiles/.git submodule -q foreach git clean -qfd
+  git --git-dir ~/.dotfiles/.git submodule -q foreach git pull --rebase
 }
 
 # Parse arguments
 case $1 in
-  update) update; exit ;;
-  uninstall) uninstall; exit ;;
   install) install; exit ;;
+  uninstall) uninstall; exit ;;
+  update) update; exit ;;
 esac
+
+# vim: set fdm=marker fmr={,} :

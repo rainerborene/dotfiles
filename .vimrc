@@ -63,6 +63,10 @@ set background=dark
 set colorcolumn=+1
 set synmaxcol=500
 
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
 let g:badwolf_tabline = 2
 let g:badwolf_html_link_underline = 0
 let g:badwolf_css_props_highlight = 1
@@ -143,6 +147,16 @@ au BufNewFile,BufRead *.ejs setfiletype html
 au BufNewFile,BufRead *.rss setfiletype xml
 au BufNewFile,BufRead *psql* setfiletype sql
 
+augroup ft_erlang
+  au!
+  au FileType erlang let b:start = 'erl'
+augroup END
+
+augroup ft_xml
+  au!
+  au FileType xml runtime! ftplugin/html/sparkup.vim | filetype detect
+augroup END
+
 augroup ft_php
   au!
   au FileType php setlocal foldmethod=syntax
@@ -189,7 +203,7 @@ augroup ft_ruby
   au FileType ruby setlocal foldmethod=syntax
   au FileType ruby
     \ if filereadable('zeus.json') |
-    \   compiler rspec | let &mp = 'zeus rspec %' |
+    \   compiler rspec |
     \   let b:dispatch = 'zeus rake spec' |
     \   let b:start = 'zeus console' |
     \ end
@@ -206,9 +220,9 @@ augroup ft_html
   au FileType html let b:vimpipe_command="lynx -dump -stdin"
 augroup END
 
-augroup ft_sass
+augroup ft_css
   au!
-  au FileType sass
+  au FileType css,scss,sass
     \ call SuperTabChain(&omnifunc, "<c-n>") |
     \ call SuperTabSetDefaultCompletionType("<c-x><c-u>")
 augroup END
@@ -228,7 +242,7 @@ augroup ft_vim
   au!
   au FileType vim setlocal foldmethod=marker
   au FileType help setlocal textwidth=78
-  au FileType qf setlocal nolist nocursorline nowrap | wincmd J
+  au FileType qf setlocal nolist nowrap | wincmd J
   au BufReadPost netrw setlocal buftype=nofile bufhidden=delete nobuflisted
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
   au BufWritePost .vimrc source $MYVIMRC
@@ -264,6 +278,12 @@ au BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") |
   \   exe "normal! g`\"" |
   \ endif
+
+" Don't screw up folds when inserting text that might affect them, until
+" leaving insert mode. Foldmethod is local to the window. Protect against
+" screwing up folding when switching between windows.
+au InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
+au InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
 
 " }}}
 " Mappings ----------------------------------------------------------------- {{{
@@ -362,12 +382,8 @@ nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
-
-" Tiled Window Management
-nmap <C-N> <Plug>DWMNew
-nmap <C-C> <Plug>DWMClose
-nmap <C-@> <Plug>DWMFocus
-nmap <C-Space> <Plug>DWMFocus
+nnoremap <leader>o <C-W>s
+nnoremap <leader>v <C-W>v
 
 " Easy filetype switching
 nnoremap _fs :setf fish<CR>
@@ -458,10 +474,16 @@ nnoremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
 " Send visual selection to sprunge.us
 vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy && open `pbpaste`<cr>
 
+" Start a process in a new, focused split pane.
+function! s:SplitWindow()
+  exec printf("Tmux splitw -p 25 -c '%s' '%s'", getcwd(), exists('b:start') ? b:start : '')
+endfunction
+command! -nargs=0 SplitWindow call s:SplitWindow()
+
 " Dispatch
-nnoremap <leader>r :Start<CR>
-nnoremap <leader>m :Make<CR>
+nnoremap <leader>r :Rake<CR>
 nnoremap <leader>t :Dispatch<CR>
+nnoremap <leader>c :SplitWindow<CR>
 
 " Ack searching
 nnoremap <leader>a :Ack!<space>
@@ -473,7 +495,6 @@ source ~/.vim/snippets/support_functions.vim
 nnoremap <leader>gd :Gvdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
-nnoremap <leader>gl :vsplit \| Glog --<cr><C-W>T:copen<cr>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gh :Gbrowse<cr>
 nnoremap <leader>gco :Gread<cr>
@@ -518,7 +539,7 @@ set foldtext=MyFoldText()
 
 cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
-nnoremap <silent> <leader>es :vsplit ~/.vim/snippets<CR>
+nnoremap <silent> <leader>es :vsplit ~/.vim/snippets/<CR>
 nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
 nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
 nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
@@ -553,12 +574,8 @@ let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html', 'yaml'] }
-let g:surround_indent = 1
-let g:surround_{char2nr('-')} = "<% \r %>"
-let g:surround_{char2nr('=')} = "<%= \r %>"
-let g:surround_{char2nr('8')} = "/* \r */"
-let g:surround_{char2nr('s')} = " \r"
-let g:surround_{char2nr('^')} = "/^\r$/"
+let g:vim_tags_auto_generate = 0
+let g:vim_tags_gems_tags_command = "ctags -R --exclude=.git --languages=-javascript,markdown {OPTIONS} `bundle show --paths` 2>/dev/null"
 let g:ctrlp_map = '<leader>,'
 let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
 let g:ctrlp_working_path_mode = 0
@@ -576,8 +593,5 @@ let g:rails_projections = {
   \ "app/validators/*_validator.rb": { "command": "validator" },
   \ "app/uploaders/*_uploader.rb": { "command": "uploader" }
   \ }
-
-let g:vim_tags_auto_generate = 0
-let g:vim_tags_gems_tags_command = "ctags -R --exclude=.git --languages=-javascript,markdown {OPTIONS} `bundle show --paths` 2>/dev/null"
 
 " }}}

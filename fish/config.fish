@@ -54,6 +54,7 @@ alias be 'bundle exec'
 alias rs 'rails s thin'
 alias rc 'rails console'
 alias fore 'foreman start -f Procfile.dev'
+alias mina 'bundle exec mina'
 
 function psg -d "Grep for a running process, returning its PID and full string"
     ps auxww | grep --color=always $argv | grep -v grep | collapse | cuts -f 2,11-
