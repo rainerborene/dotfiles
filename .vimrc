@@ -296,12 +296,6 @@ let maplocalleader = "\\"
 map <Tab> %
 map <C-o> <nop>
 
-" Delete a buffer without closing the window
-nmap <leader>q <Plug>Kwbd
-
-" Wipe all buffers which are not active
-nmap <leader>hq <Plug>CloseHiddenBuffers
-
 " Use sane regexes.
 nnoremap / /\v
 vnoremap / /\v
