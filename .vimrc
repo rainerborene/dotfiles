@@ -201,7 +201,7 @@ augroup ft_ruby
   au BufNewFile,BufRead {Vagrantfile,Guardfile,Capfile,Thorfile,pryrc,config.ru} setfiletype ruby
   au FileType ruby let b:vimpipe_command='ruby <(cat)'
   au FileType ruby setlocal foldmethod=syntax
-  au FileType ruby
+  au User Rails
     \ if filereadable('zeus.json') |
     \   compiler rspec |
     \   let b:dispatch = 'zeus rake spec' |
@@ -245,24 +245,20 @@ augroup ft_vim
   au FileType qf setlocal nolist nowrap | wincmd J
   au BufReadPost netrw setlocal buftype=nofile bufhidden=delete nobuflisted
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
-  au BufWritePost .vimrc source $MYVIMRC
 augroup END
 
 " Only show cursorline in the current window and in normal mode.
 augroup cline
   au!
-  au WinLeave * set nocursorline
-  au WinEnter * set cursorline
-  au InsertEnter * set nocursorline
-  au InsertLeave * set cursorline
+  au WinLeave,InsertEnter * set nocursorline
+  au WinEnter,InsertLeave * set cursorline
 augroup END
 
 " Only shown when not in insert mode so I don't go insane.
 augroup trailing
   au!
-  au InsertEnter * :set listchars-=trail:⌴
-  au InsertLeave * :set listchars+=trail:⌴
-augroup END
+  au InsertEnter * set listchars-=trail:⌴
+augroup EN
 
 " Save when losing focus
 au FocusLost * :silent! wall
@@ -274,16 +270,32 @@ au VimResized * :wincmd =
 au WinEnter,BufWinEnter,CursorHold * checktime
 
 " Restore cursor position
-au BufReadPost *
-  \ if line("'\"") > 1 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
+augroup line_return
+  au!
+  au BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+augroup END
 
 " Don't screw up folds when inserting text that might affect them, until
 " leaving insert mode. Foldmethod is local to the window. Protect against
 " screwing up folding when switching between windows.
-au InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
-au InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
+augroup fast_completion
+  au!
+  au InsertEnter *
+    \ if !exists('w:last_fdm') |
+    \   let w:last_fdm=&foldmethod |
+    \   setlocal foldmethod=manual |
+    \ endif
+
+  au InsertLeave,WinLeave *
+    \ if exists('w:last_fdm') |
+    \   let &l:foldmethod=w:last_fdm |
+    \   unlet w:last_fdm |
+    \ endif
+augroup END
+
 
 " }}}
 " Mappings ----------------------------------------------------------------- {{{
@@ -364,19 +376,31 @@ nnoremap K <nop>
 " Kill window
 nnoremap K :q<cr>
 
+" Manual {{{2
+function! Manual()
+  if exists('$TMUX') && matchstr(&keywordprg, ':') ==# ""
+    call system(printf('tmux splitw -h "%s %s"', &keywordprg, expand("<cWORD>")))
+  else
+    norm! K
+  end
+endfunction
+" }}}2
+
+nnoremap M :call Manual()<CR>
+
 " I hate when the rendering occasionally gets messed up.
 nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
 
 " Sort lines
-nnoremap <leader>s vip:!sort<cr>
-vnoremap <leader>s :!sort<cr>
+nnoremap <leader>o vip:!sort<cr>
+vnoremap <leader>o :!sort<cr>
 
 " Speed up buffer switching
 nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
-nnoremap <leader>o <C-W>s
+nnoremap <leader>s <C-W>s
 nnoremap <leader>v <C-W>v
 
 " Easy filetype switching
@@ -395,10 +419,6 @@ nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
-nnoremap <Up> gk
-nnoremap <Down> gj
-vnoremap <Up> gk
-vnoremap <Down> gj
 
 " Abbreveations
 iabbrev enc # encoding: utf-8
@@ -468,16 +488,16 @@ nnoremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
 " Send visual selection to sprunge.us
 vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy && open `pbpaste`<cr>
 
-" Start a process in a new, focused split pane.
-function! s:SplitWindow()
-  exec printf("Tmux splitw -p 25 -c '%s' '%s'", getcwd(), exists('b:start') ? b:start : '')
+" Start a process in a new, focused split pane. {{{2
+function! SplitWindow()
+  call system(printf("tmux splitw -p 25 -c '%s' '%s'", getcwd(), exists('b:start') ? b:start : ''))
 endfunction
-command! -nargs=0 SplitWindow call s:SplitWindow()
+" }}}2
 
 " Dispatch
 nnoremap <leader>r :Rake<CR>
 nnoremap <leader>t :Dispatch<CR>
-nnoremap <leader>c :SplitWindow<CR>
+nnoremap <leader>c :call SplitWindow()<CR>
 
 " Ack searching
 nnoremap <leader>a :Ack!<space>
@@ -531,7 +551,7 @@ set foldtext=MyFoldText()
 " }}}
 " Quick editing ------------------------------------------------------------ {{{
 
-cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <silent> <leader>es :vsplit ~/.vim/snippets/<CR>
 nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
@@ -543,7 +563,6 @@ nnoremap <silent> <leader>ew :Explore<CR>
 " }}}
 " Plugin settings ---------------------------------------------------------- {{{
 
-let g:dwm_map_keys = 0
 let g:seek_enable_jumps = 1
 let g:ackprg = 'ag --smart-case --nogroup --nocolor --column'
 let g:SuperTabLongestHighlight = 1
@@ -555,7 +574,7 @@ let g:html5_aria_attributes_complete = 0
 let g:netrw_banner = 0
 let g:netrw_dirhistmax = 0
 let g:netrw_use_errorwindow = 0
-let g:netrw_list_hide = '^\.,\~$,^tags$'
+let g:netrw_list_hide = '\~$,^tags$'
 let g:sparkupNextMapping = '<c-y>'
 let g:Powerline_stl_path_style = 'filename'
 let g:Powerline_symbols = 'fancy'
@@ -585,7 +604,8 @@ let g:rails_projections = {
   \ "app/admin/*.rb": { "command": "admin" },
   \ "app/workers/*_worker.rb": { "command": "worker" },
   \ "app/validators/*_validator.rb": { "command": "validator" },
-  \ "app/uploaders/*_uploader.rb": { "command": "uploader" }
+  \ "app/uploaders/*_uploader.rb": { "command": "uploader" },
+  \ "app/presenters/*_presenter.rb": { "command": "presenter" }
   \ }
 
 " }}}

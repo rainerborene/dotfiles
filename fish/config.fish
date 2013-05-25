@@ -107,6 +107,7 @@ function prepend_to_path -d "Prepend the given dir to PATH if it exists and is n
 end
 
 set -gx fish_greeting ''
+set -gx LESS -R
 set -gx EDITOR vim
 set -gx PYTHONPATH /usr/local/lib/python2.7/site-packages $PYTHONPATH
 set -gx RUBY_HEAP_MIN_SLOTS 1000000
