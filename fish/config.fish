@@ -22,6 +22,7 @@ alias tailf 'tail -f'
 alias collapse "sed -e 's/  */ /g'"
 alias cuts "cut -d' '"
 alias mysql_repair 'mysqlcheck --auto-repair --check --optimize --all-databases -u root'
+alias simulator 'open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 
 alias g 'git'
 alias gd 'git diff'
@@ -107,7 +108,6 @@ function prepend_to_path -d "Prepend the given dir to PATH if it exists and is n
 end
 
 set -gx fish_greeting ''
-set -gx LESS -R
 set -gx EDITOR vim
 set -gx PYTHONPATH /usr/local/lib/python2.7/site-packages $PYTHONPATH
 set -gx RUBY_HEAP_MIN_SLOTS 1000000
@@ -115,10 +115,6 @@ set -gx RUBY_HEAP_SLOTS_INCREMENT 1000000
 set -gx RUBY_HEAP_SLOTS_GROWTH_FACTOR 1
 set -gx RUBY_GC_MALLOC_LIMIT 100000000
 set -gx RUBY_HEAP_FREE_MIN 500000
-set -gx JAVA_HOME (/usr/libexec/java_home)
-set -gx CLASSPATH "/usr/share/java/junit.jar:$JAVA_HOME"
-set -gx ANT_HOME /usr/share/ant/
-set -gx MAVEN_HOME /usr/share/maven/
 set -gx PATH "/usr/X11R6/bin"
 
 prepend_to_path "/usr/bin"
@@ -128,6 +124,7 @@ prepend_to_path "/sbin"
 prepend_to_path "/usr/local/bin"
 prepend_to_path "$HOME/.rbenv/bin"
 prepend_to_path "$HOME/.rbenv/shims"
+prepend_to_path "/opt/local/bin"
 prepend_to_path "/usr/local/mysql/bin"
 prepend_to_path "/usr/local/share/npm/bin"
 

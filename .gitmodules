@@ -162,10 +162,6 @@
 	path = vim/bundle/supertab
 	url = git://github.com/ervandew/supertab.git
 	ignore = dirty
-[submodule "vim/bundle/tags"]
-	path = vim/bundle/tags
-	url = git://github.com/szw/vim-tags.git
-	ignore = dirty
 [submodule "vim/bundle/yankstack"]
 	path = vim/bundle/yankstack
 	url = git://github.com/nickstenning/vim-yankstack.git

@@ -20,8 +20,6 @@ set nobackup
 set noswapfile
 set shiftround
 set updatecount=20
-set ttimeout
-set nottimeout
 set ttyfast
 set splitbelow
 set splitright
@@ -30,6 +28,15 @@ set lazyredraw
 set matchtime=3
 set dictionary=/usr/share/dict/words
 set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
+set autoindent
+set expandtab
+set shiftwidth=2
+set textwidth=80
+set formatoptions=qrn1
+set nojoinspaces
+set nrformats=
+set linebreak
+set wrap
 
 " }}}
 " Appearance --------------------------------------------------------------- {{{
@@ -54,18 +61,14 @@ set pumheight=10
 set showbreak=↪
 set virtualedit+=block
 set shortmess=atI
-set mousemodel=popup
 set complete=.,w,b,u,t
 set completeopt=longest,menuone,preview
-set mouse=a
-set ttymouse=xterm2
 set background=dark
 set colorcolumn=+1
-set synmaxcol=500
-
-if has('conceal')
-  set conceallevel=2 concealcursor=i
-endif
+set notimeout
+set ttimeout
+set ttimeoutlen=10
+set synmaxcol=800
 
 let g:badwolf_tabline = 2
 let g:badwolf_html_link_underline = 0
@@ -89,6 +92,9 @@ if has("gui_running")
     set guifont=bitstream\ vera\ sans\ mono\ 9
     set lines=999 columns=999
   endif
+else
+  set ttymouse=xterm2
+  set mouse=a
 end
 
 " }}}
@@ -108,6 +114,7 @@ endif
 set visualbell t_vb=
 set ignorecase
 set smartcase
+set foldopen-=block
 set foldlevelstart=0
 set laststatus=2
 set incsearch
@@ -122,24 +129,10 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set list
 
 " }}}
-" Text Formatting ---------------------------------------------------------- {{{
-
-set autoindent
-set expandtab
-set shiftwidth=2
-set textwidth=80
-set formatoptions=qrn1
-set nojoinspaces
-set nrformats=
-set linebreak
-set wrap
-
-" }}}
 " Filetype-specific -------------------------------------------------------- {{{
 
 au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
 au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
-au FileType qf,netrw setlocal colorcolumn& nolist
 au FileType c setlocal foldmethod=syntax
 
 au BufNewFile,BufRead *.tumblr.html setfiletype tumblr
@@ -154,7 +147,7 @@ augroup END
 
 augroup ft_xml
   au!
-  au FileType xml runtime! ftplugin/html/sparkup.vim | filetype detect
+  au FileType xml runtime! ftplugin/html/sparkup.vim
 augroup END
 
 augroup ft_php
@@ -222,7 +215,7 @@ augroup END
 
 augroup ft_css
   au!
-  au FileType css,scss,sass
+  au FileType css,scss,sass setlocal iskeyword+=- |
     \ call SuperTabChain(&omnifunc, "<c-n>") |
     \ call SuperTabSetDefaultCompletionType("<c-x><c-u>")
 augroup END
@@ -242,8 +235,8 @@ augroup ft_vim
   au!
   au FileType vim setlocal foldmethod=marker
   au FileType help setlocal textwidth=78
+  au FileType qf,netrw setlocal colorcolumn& nocursorline nolist nowrap tw=0
   au FileType qf setlocal nolist nowrap | wincmd J
-  au BufReadPost netrw setlocal buftype=nofile bufhidden=delete nobuflisted
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
 augroup END
 
@@ -258,6 +251,7 @@ augroup END
 augroup trailing
   au!
   au InsertEnter * set listchars-=trail:⌴
+  au InsertLeave * set listchars+=trail:⌴
 augroup EN
 
 " Save when losing focus
@@ -295,7 +289,6 @@ augroup fast_completion
     \   unlet w:last_fdm |
     \ endif
 augroup END
-
 
 " }}}
 " Mappings ----------------------------------------------------------------- {{{
@@ -435,7 +428,7 @@ vnoremap ! :ClamVisual<space>
 noremap ' `
 
 " Regenerate ctags
-nnoremap <leader><cr> :TagsGenerate<cr>
+nnoremap <leader><cr> :silent !/usr/local/bin/ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
 " Because escape is too far away
 inoremap jj <ESC>
@@ -575,6 +568,7 @@ let g:netrw_banner = 0
 let g:netrw_dirhistmax = 0
 let g:netrw_use_errorwindow = 0
 let g:netrw_list_hide = '\~$,^tags$'
+let g:netrw_fastbrowse = 0
 let g:sparkupNextMapping = '<c-y>'
 let g:Powerline_stl_path_style = 'filename'
 let g:Powerline_symbols = 'fancy'
@@ -601,11 +595,20 @@ let g:ctrlp_custom_ignore = {
   \ }
 
 let g:rails_projections = {
-  \ "app/admin/*.rb": { "command": "admin" },
-  \ "app/workers/*_worker.rb": { "command": "worker" },
   \ "app/validators/*_validator.rb": { "command": "validator" },
-  \ "app/uploaders/*_uploader.rb": { "command": "uploader" },
-  \ "app/presenters/*_presenter.rb": { "command": "presenter" }
-  \ }
+  \ "app/presenters/*_presenter.rb": { "command": "presenter" },
+  \ "app/admin/*.rb": {
+  \   "command": "admin" ,
+  \   "affinity": "model",
+  \   "template": "ActiveAdmin.register %S do\nend"
+  \ },
+  \ "app/workers/*_worker.rb": {
+  \   "command": "worker" ,
+  \   "template": "class %SWorker\nend"
+  \ },
+  \ "spec/factories.rb": {
+  \   "command": "factory",
+  \   "template": "FactoryGirl.define do\nend"
+  \ }}
 
 " }}}
