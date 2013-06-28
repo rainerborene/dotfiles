@@ -1,104 +1,48 @@
-" Essentials --------------------------------------------------------------- {{{
-
+" .vimrc
 filetype off
-runtime bundle/pathogen/autoload/pathogen.vim
-call pathogen#infect()
-filetype plugin indent on
-
-" }}}
-" Basic options ------------------------------------------------------------ {{{
-
 set nocompatible
-set history=1000
-set autoread
-set autowrite
-set hidden
-set spelllang=pt,en
-set encoding=utf-8
-set nobomb
-set nobackup
-set noswapfile
-set shiftround
-set updatecount=20
-set ttyfast
-set splitbelow
-set splitright
-set shell=/bin/bash
-set lazyredraw
-set matchtime=3
-set dictionary=/usr/share/dict/words
-set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
-set autoindent
-set expandtab
-set shiftwidth=2
-set textwidth=80
-set formatoptions=qrn1
-set nojoinspaces
-set nrformats=
-set linebreak
-set wrap
-
-" }}}
-" Appearance --------------------------------------------------------------- {{{
-
-syntax on
-set t_Co=256
-set title
-set cursorline
-set backspace=indent,eol,start
-set showcmd
-set noshowmode
-set wildmenu
-set wildmode=list:longest,full
-set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
-set wildignore+=*.DS_Store
-set wildignore+=.sass-cache
-set ruler
-set nonumber
-set norelativenumber
-set numberwidth=5
-set pumheight=10
-set showbreak=↪
-set virtualedit+=block
-set shortmess=atI
-set complete=.,w,b,u,t
-set completeopt=longest,menuone,preview
-set background=dark
-set colorcolumn=+1
-set notimeout
-set ttimeout
-set ttimeoutlen=10
-set synmaxcol=800
+set rtp+=~/.vim/bundle/pathogen
+call pathogen#infect()
+runtime! plugin/sensible.vim
 
 let g:badwolf_tabline = 2
 let g:badwolf_html_link_underline = 0
 let g:badwolf_css_props_highlight = 1
 colorscheme badwolf
 
-if has("gui_running")
-  " Remove all the UI cruft
-  set go-=T
-  set go-=l
-  set go-=L
-  set go-=r
-  set go-=R
+set hidden
+set noswapfile
+set nobackup
+set splitbelow
+set splitright
+set spelllang=pt,en
+set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
+set dictionary=/usr/share/dict/words
+set wildmode=list:longest,full
+set completeopt=longest,menuone,preview
+set fillchars=diff:⣿,vert:│
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+set showbreak=↪
+set linebreak
+set ignorecase
+set smartcase
+set hlsearch
+set gdefault
+set virtualedit+=block
+set shortmess=atI
+set textwidth=80
+set formatoptions=qn1
+set colorcolumn=+1
+set lazyredraw
+set synmaxcol=500
+set pumheight=10
+set foldopen-=block
+set shiftwidth=2 
+set softtabstop=2
+set expandtab
+set wrap
 
-  highlight SpellBad term=underline gui=undercurl guisp=Orange
-
-  if has("mac")
-    set guifont=Menlo:h12
-    set fuoptions=maxvert,maxhorz
-  elseif has("unix")
-    set guifont=bitstream\ vera\ sans\ mono\ 9
-    set lines=999 columns=999
-  endif
-else
-  set ttymouse=xterm2
-  set mouse=a
-end
-
-" }}}
-" Persistent undo ---------------------------------------------------------- {{{
+" Persistent undo {{{1
 
 set undofile
 set undoreload=10000
@@ -108,204 +52,36 @@ if !isdirectory(expand(&undodir))
   call mkdir(expand(&undodir), "p")
 endif
 
-" }}}
-" Visual Cues -------------------------------------------------------------- {{{
+" }}}1
+" Environments (GUI/Console) {{{1
 
-set visualbell t_vb=
-set ignorecase
-set smartcase
-set foldopen-=block
-set foldlevelstart=0
-set laststatus=2
-set incsearch
-set hlsearch
-set nostartofline
-set gdefault
-set scrolloff=3
-set sidescroll=1
-set sidescrolloff=10
-set fillchars=diff:⣿,vert:│
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
-set list
+if has('gui_running')
+  set guifont=Menlo:h12
 
-" }}}
-" Filetype-specific -------------------------------------------------------- {{{
+  " Remove all the UI cruft
+  set go-=T
+  set go-=l
+  set go-=L
+  set go-=r
+  set go-=R
 
-au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
-au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
-au FileType c setlocal foldmethod=syntax
+  highlight SpellBad term=underline gui=undercurl guisp=Orange
+else
+  set mouse=a
+endif
 
-au BufNewFile,BufRead *.tumblr.html setfiletype tumblr
-au BufNewFile,BufRead *.ejs setfiletype html
-au BufNewFile,BufRead *.rss setfiletype xml
-au BufNewFile,BufRead *psql* setfiletype sql
+" }}}1
+" Mappings {{{1
 
-augroup ft_erlang
-  au!
-  au FileType erlang let b:start = 'erl'
-augroup END
-
-augroup ft_xml
-  au!
-  au FileType xml runtime! ftplugin/html/sparkup.vim
-augroup END
-
-augroup ft_php
-  au!
-  au FileType php setlocal foldmethod=syntax
-  au FileType php let b:vimpipe_command="php -f %"
-augroup END
-
-augroup ft_java
-  au!
-  au FileType java compiler ant | setlocal makeprg=ant\ -find\ build.xml
-  au FileType java setlocal efm=%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%#
-augroup END
-
-augroup ft_fish
-  au!
-  au BufNewFile,BufRead *.fish setlocal filetype=fish
-  au FileType fish setlocal foldmethod=marker foldmarker={{{,}}}
-  au FileType fish setlocal commentstring=#\ %s
-  au FileType fish let b:vimpipe_command="fish <(cat)"
-augroup END
-
-augroup ft_git
-  au!
-  au FileType git setlocal foldmethod=syntax
-  au FileType git,gitcommit setlocal colorcolumn& nolist
-  au FileType gitcommit setlocal spell | wincmd K
-  au BufReadPost fugitive://* set bufhidden=delete
-  au User fugitive
-    \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
-    \   nnoremap <buffer> .. :edit %:h<CR> |
-    \ endif
-augroup END
-
-augroup ft_mongo
-  au!
-  au BufNewFile,BufReadPost *.mql setlocal filetype=mongoql
-  au FileType mongoql let b:vimpipe_command="mongo"
-  au FileType mongoql let b:vimpipe_filetype="json"
-augroup END
-
-augroup ft_ruby
-  au!
-  au BufNewFile,BufRead {Vagrantfile,Guardfile,Capfile,Thorfile,pryrc,config.ru} setfiletype ruby
-  au FileType ruby let b:vimpipe_command='ruby <(cat)'
-  au FileType ruby setlocal foldmethod=syntax
-  au User Rails
-    \ if filereadable('zeus.json') |
-    \   compiler rspec |
-    \   let b:dispatch = 'zeus rake spec' |
-    \   let b:start = 'zeus console' |
-    \ end
-augroup END
-
-augroup ft_json
-  au!
-  au FileType json let b:vimpipe_command="python -m json.tool"
-augroup END
-
-augroup ft_html
-  au!
-  au FileType html setlocal foldmethod=manual
-  au FileType html let b:vimpipe_command="lynx -dump -stdin"
-augroup END
-
-augroup ft_css
-  au!
-  au FileType css,scss,sass setlocal iskeyword+=- |
-    \ call SuperTabChain(&omnifunc, "<c-n>") |
-    \ call SuperTabSetDefaultCompletionType("<c-x><c-u>")
-augroup END
-
-augroup ft_markdown
-  au!
-  au BufNewFile,BufRead *.m*down setlocal filetype=markdown
-  au FileType markdown nnoremap <buffer> <localleader>1 yypVr=
-  au FileType markdown nnoremap <buffer> <localleader>2 yypVr-
-  au FileType markdown nnoremap <buffer> <localleader>3 I### <ESC>
-  au FileType markdown setlocal wrap linebreak nolist
-  au FileType markdown let b:vimpipe_command="multimarkdown"
-  au FileType markdown let b:vimpipe_filetype="html"
-augroup END
-
-augroup ft_vim
-  au!
-  au FileType vim setlocal foldmethod=marker
-  au FileType help setlocal textwidth=78
-  au FileType qf,netrw setlocal colorcolumn& nocursorline nolist nowrap tw=0
-  au FileType qf setlocal nolist nowrap | wincmd J
-  au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
-augroup END
-
-" Only show cursorline in the current window and in normal mode.
-augroup cline
-  au!
-  au WinLeave,InsertEnter * set nocursorline
-  au WinEnter,InsertLeave * set cursorline
-augroup END
-
-" Only shown when not in insert mode so I don't go insane.
-augroup trailing
-  au!
-  au InsertEnter * set listchars-=trail:⌴
-  au InsertLeave * set listchars+=trail:⌴
-augroup EN
-
-" Save when losing focus
-au FocusLost * :silent! wall
-
-" Resize splits when the window is resized
-au VimResized * :wincmd =
-
-" Make terminal Vim trigger autoread more often.
-au WinEnter,BufWinEnter,CursorHold * checktime
-
-" Restore cursor position
-augroup line_return
-  au!
-  au BufReadPost *
-    \ if line("'\"") > 1 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
-augroup END
-
-" Don't screw up folds when inserting text that might affect them, until
-" leaving insert mode. Foldmethod is local to the window. Protect against
-" screwing up folding when switching between windows.
-augroup fast_completion
-  au!
-  au InsertEnter *
-    \ if !exists('w:last_fdm') |
-    \   let w:last_fdm=&foldmethod |
-    \   setlocal foldmethod=manual |
-    \ endif
-
-  au InsertLeave,WinLeave *
-    \ if exists('w:last_fdm') |
-    \   let &l:foldmethod=w:last_fdm |
-    \   unlet w:last_fdm |
-    \ endif
-augroup END
-
-" }}}
-" Mappings ----------------------------------------------------------------- {{{
-
-" Leader keys
 let mapleader = ","
 let maplocalleader = "\\"
+
+" Abbreviations
+ab #e # encoding: utf-8
 
 " Easier bracket matching
 map <Tab> %
 map <C-o> <nop>
-
-" Use sane regexes.
-nnoremap / /\v
-vnoremap / /\v
-nnoremap ? ?\v
-vnoremap ? ?\v
 
 " Formatting, TextMate-style
 nnoremap Q gqip
@@ -317,69 +93,25 @@ nnoremap J mzJ`z
 " Clean trailing whitespace
 nnoremap <silent> <leader>w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
 
-" Use the old surround.vim key.  I can't deal with the new one.
-vmap s S
-
 " Don't move on *
 nnoremap * *<c-o>
 
 " Switch segments of text with predefined replacements
 nnoremap - :Switch<cr>
 
-" For some reason pastetoggle doesn't redraw the screen (thus the status bar
-" doesn't change) while :set paste! does, so I use that instead.
-nnoremap <silent> <F6> :set paste!<CR>
-
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
+" Use sane regexes.
+nnoremap / /\v
+vnoremap / /\v
+nnoremap ? ?\v
+vnoremap ? ?\v
+
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
 nnoremap N Nzzzv
-
-" Same when jumping around
-nnoremap g; g;zz
-nnoremap g, g,zz
-
-" Make Y consistent with C and D
-call yankstack#setup()
-nnoremap Y y$
-
-" Yankstack
-nmap H <Plug>yankstack_substitute_older_paste
-nmap L <Plug>yankstack_substitute_newer_paste
-
-" Select just-pasted text
-nnoremap gV `[v`]
-
-" Move to last change
-nnoremap gI `.
-
-" Enter command mode quickly
-nnoremap ; :
-
-" Cmdheight switching
-nnoremap <leader>1 :set cmdheight=1<cr>
-nnoremap <leader>2 :set cmdheight=2<cr>
-
-" Fuck you too, manual key.
-nnoremap K <nop>
-
-" Kill window
-nnoremap K :q<cr>
-
-" Manual {{{2
-function! Manual()
-  if exists('$TMUX') && matchstr(&keywordprg, ':') ==# ""
-    call system(printf('tmux splitw -h "%s %s"', &keywordprg, expand("<cWORD>")))
-  else
-    norm! K
-  end
-endfunction
-" }}}2
-
-nnoremap M :call Manual()<CR>
 
 " I hate when the rendering occasionally gets messed up.
 nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
@@ -413,34 +145,32 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
-" Abbreveations
-iabbrev enc # encoding: utf-8
-
-" Source
-vnoremap <leader>S y:execute @@<cr>:echo 'Sourced selection.'<cr>
-nnoremap <leader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
-
 " Clam
 nnoremap ! :Clam<space>
 vnoremap ! :ClamVisual<space>
 
-" Jump to line and column
-noremap ' `
+" Kill window
+nnoremap K :q<cr>
 
-" Regenerate ctags
-nnoremap <leader><cr> :silent !/usr/local/bin/ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
+" Because esc is too far.
+inoremap jj <Esc>
 
-" Because escape is too far away
-inoremap jj <ESC>
+" Make Y consistent with C and D
+call yankstack#setup()
+nnoremap Y y$
 
-" Toggle 'keep current line in the center of the screen' mode
-nnoremap <leader>C :let &scrolloff=999-&scrolloff<cr>
+" Yankstack
+nmap H <Plug>yankstack_substitute_older_paste
+nmap L <Plug>yankstack_substitute_newer_paste
 
-" Shortcut for []
-onoremap id i[
-onoremap ad a[
-vnoremap id i[
-vnoremap ad a[
+" Select just-pasted text
+nnoremap gV `[v`]
+
+" Move to last change
+nnoremap gI `.
+
+" Enter command mode quickly
+nnoremap ; :
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -464,12 +194,11 @@ noremap X "_X
 " Clear search highlight
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
+" Undo tree usable by humans
+nnoremap <silent> <leader>u :GundoToggle<CR>
+
 " Open CtrlP on different modes
 nnoremap <silent> <leader>b :CtrlPBuffer<CR>
-nnoremap <silent> <leader>l :CtrlPLine<CR>
-
-" Some toggle commands
-nnoremap <silent> <leader>u :GundoToggle<CR>
 
 " Yank to OS X pasteboard.
 noremap <leader>y "*y
@@ -477,9 +206,6 @@ noremap <leader>y "*y
 " Paste from OS X pasteboard without messing up indent.
 nnoremap <leader>p :set paste<CR>"*p<CR>:set nopaste<CR>
 nnoremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
-
-" Send visual selection to sprunge.us
-vnoremap <leader>G :w !curl -sF 'sprunge=<-' 'http://sprunge.us' \| tr -d '\n ' \| pbcopy && open `pbpaste`<cr>
 
 " Start a process in a new, focused split pane. {{{2
 function! SplitWindow()
@@ -495,8 +221,15 @@ nnoremap <leader>c :call SplitWindow()<CR>
 " Ack searching
 nnoremap <leader>a :Ack!<space>
 
-" SnipMate
-source ~/.vim/snippets/support_functions.vim
+" Quick editing
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <silent> <leader>es :vsplit ~/.vim/snippets/<CR>
+nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
+nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
+nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
+nnoremap <silent> <leader>eo :botright 10split ~/Google\ Drive/notes.txt<CR>
+nnoremap <silent> <leader>ew :Explore<CR>
 
 " Fugitive
 nnoremap <leader>gd :Gvdiff<cr>
@@ -508,10 +241,99 @@ nnoremap <leader>gco :Gread<cr>
 nnoremap <leader>gci :Gcommit<cr>
 nnoremap <leader>gm :Gmove<space>
 nnoremap <leader>gr :Gremove<cr>
-nnoremap <leader>gp :Git push<cr>
 
-" }}}
-" Visual Mode */# from Scrooloose ------------------------------------------ {{{
+" SnipMate
+source ~/.vim/snippets/support_functions.vim
+
+" }}}1
+" Autocommands {{{1
+
+au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
+au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
+au BufNewFile,BufRead *psql* setfiletype sql
+
+augroup ft_git
+  au!
+  au FileType git setlocal foldmethod=syntax
+  au FileType git,gitcommit setlocal colorcolumn& nolist
+  au FileType gitcommit setlocal spell | wincmd K
+  au BufReadPost fugitive://* set bufhidden=delete
+  au User fugitive
+    \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+    \   nnoremap <buffer> .. :edit %:h<CR> |
+    \ endif
+augroup END
+
+augroup ft_markdown
+  au!
+  au BufNewFile,BufRead *.m*down setlocal filetype=markdown
+  au FileType markdown nnoremap <buffer> <localleader>1 yypVr=
+  au FileType markdown nnoremap <buffer> <localleader>2 yypVr-
+  au FileType markdown nnoremap <buffer> <localleader>3 I### <ESC>
+  au FileType markdown setlocal wrap linebreak nolist
+  au FileType markdown let b:vimpipe_command="multimarkdown"
+  au FileType markdown let b:vimpipe_filetype="html"
+augroup END
+
+augroup ft_css
+  au!
+  au FileType css,scss,sass setlocal iskeyword+=- |
+    \ call SuperTabChain(&omnifunc, "<c-n>") |
+    \ call SuperTabSetDefaultCompletionType("<c-x><c-u>")
+augroup END
+
+augroup ft_vim
+  au!
+  au FileType vim setlocal foldmethod=marker
+  au FileType help setlocal textwidth=78
+  au FileType qf,netrw setlocal colorcolumn& nocursorline nolist nowrap tw=0
+  au FileType qf setlocal nolist nowrap | wincmd J
+  au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+augroup END
+
+augroup ft_ruby
+  au!
+  au FileType ruby let b:vimpipe_command='ruby <(cat)'
+  au User Rails
+    \ if filereadable('zeus.json') |
+    \   compiler rspec |
+    \   let b:dispatch = 'zeus rake spec' |
+    \   let b:start = 'zeus console' |
+    \ end
+augroup END
+
+" Save when losing focus
+au FocusLost * :silent! wall
+
+" Restore cursor position
+augroup line_return
+  au!
+  au BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+augroup END
+
+" Don't screw up folds when inserting text that might affect them, until
+" leaving insert mode. Foldmethod is local to the window. Protect against
+" screwing up folding when switching between windows.
+augroup fast_completion
+  au!
+  au InsertEnter *
+    \ if !exists('w:last_fdm') |
+    \   let w:last_fdm=&foldmethod |
+    \   setlocal foldmethod=manual |
+    \ endif
+
+  au InsertLeave,WinLeave *
+    \ if exists('w:last_fdm') |
+    \   let &l:foldmethod=w:last_fdm |
+    \   unlet w:last_fdm |
+    \ endif
+augroup END
+
+" }}}1
+" Visual Mode */# from Scrooloose {{{1
 
 function! s:VSetSearch()
   let temp = @@
@@ -522,8 +344,8 @@ endfunction
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
-" }}}
-" Folding ------------------------------------------------------------------ {{{
+" }}}1
+" Folding {{{1
 
 function! MyFoldText()
   let line = getline(v:foldstart)
@@ -541,48 +363,27 @@ function! MyFoldText()
 endfunction
 set foldtext=MyFoldText()
 
-" }}}
-" Quick editing ------------------------------------------------------------ {{{
+" }}}1
+" Plugin configuration {{{1
 
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
-nnoremap <silent> <leader>es :vsplit ~/.vim/snippets/<CR>
-nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
-nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
-nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
-nnoremap <silent> <leader>eo :botright 10split ~/Google\ Drive/notes.txt<CR>
-nnoremap <silent> <leader>ew :Explore<CR>
-
-" }}}
-" Plugin settings ---------------------------------------------------------- {{{
-
-let g:seek_enable_jumps = 1
+" ack.vim {{{2
 let g:ackprg = 'ag --smart-case --nogroup --nocolor --column'
-let g:SuperTabLongestHighlight = 1
-let g:SuperTabDefaultCompletionType = '<c-n>'
-let g:html5_event_handler_attributes_complete = 0
-let g:html5_rdfa_attributes_complete = 0
-let g:html5_microdata_attributes_complete = 0
-let g:html5_aria_attributes_complete = 0
+" }}}
+" ruby.vim {{{2
+let g:ruby_fold = 1
+" }}}2
+" netrw.vim {{{2
 let g:netrw_banner = 0
 let g:netrw_dirhistmax = 0
 let g:netrw_use_errorwindow = 0
 let g:netrw_list_hide = '\~$,^tags$'
 let g:netrw_fastbrowse = 0
-let g:sparkupNextMapping = '<c-y>'
-let g:Powerline_stl_path_style = 'filename'
-let g:Powerline_symbols = 'fancy'
-let g:gundo_help = 0
-let g:gundo_preview_bottom = 1
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_enable_signs = 1
-let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
-let g:syntastic_quiet_warnings = 0
-let g:syntastic_auto_loc_list = 2
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html', 'yaml'] }
-let g:vim_tags_auto_generate = 0
-let g:vim_tags_gems_tags_command = "ctags -R --exclude=.git --languages=-javascript,markdown {OPTIONS} `bundle show --paths` 2>/dev/null"
+" }}}2
+" supertab.vim {{{2
+let g:SuperTabLongestHighlight = 1
+let g:SuperTabDefaultCompletionType = '<c-n>'
+" }}}2
+" ctrlp.vim {{{2
 let g:ctrlp_map = '<leader>,'
 let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
 let g:ctrlp_working_path_mode = 0
@@ -593,7 +394,33 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
   \ 'dir': '\v[\/](tmp|tags)$'
   \ }
-
+" }}}2
+" html5.vim {{{2
+let g:html5_event_handler_attributes_complete = 0
+let g:html5_rdfa_attributes_complete = 0
+let g:html5_microdata_attributes_complete = 0
+let g:html5_aria_attributes_complete = 0
+" }}}2
+" sparkup.vim {{{2
+let g:sparkupNextMapping = '<c-y>'
+" }}}2
+" gundo.vim {{{2
+let g:gundo_help = 0
+let g:gundo_preview_bottom = 1
+" }}}2
+" syntastic.vim {{{2
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+let g:syntastic_enable_signs = 1
+let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
+let g:syntastic_quiet_warnings = 0
+let g:syntastic_auto_loc_list = 2
+let g:syntastic_mode_map = { 
+  \ 'mode': 'active',
+  \ 'passive_filetypes': ['html', 'yaml']
+  \ }
+" }}}
+" rails.vim {{{2
 let g:rails_projections = {
   \ "app/validators/*_validator.rb": { "command": "validator" },
   \ "app/presenters/*_presenter.rb": { "command": "presenter" },
@@ -610,5 +437,6 @@ let g:rails_projections = {
   \   "command": "factory",
   \   "template": "FactoryGirl.define do\nend"
   \ }}
+" }}}
 
 " }}}
