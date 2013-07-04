@@ -20,8 +20,8 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
 set dictionary=/usr/share/dict/words
 set wildmode=list:longest,full
 set completeopt=longest,menuone,preview
+set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮
 set fillchars=diff:⣿,vert:│
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set showbreak=↪
 set linebreak
 set ignorecase
@@ -51,6 +51,13 @@ set undodir=~/.vim/tmp/undo
 if !isdirectory(expand(&undodir))
   call mkdir(expand(&undodir), "p")
 endif
+
+" }}}1
+" Statusline {{{1
+
+set statusline=%f%m\ %{fugitive#statusline()}%=
+set statusline+=(%{&ff}/%{strlen(&fenc)?&fenc:&enc}/%{strlen(&ft)?&ft:'none'})
+set statusline+=\ (line\ %l/%L,\ col\ %03c)
 
 " }}}1
 " Environments (GUI/Console) {{{1
@@ -108,6 +115,7 @@ nnoremap / /\v
 vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
+cnoremap s/ s/\v
 
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
@@ -129,15 +137,8 @@ nnoremap <leader>s <C-W>s
 nnoremap <leader>v <C-W>v
 
 " Easy filetype switching
-nnoremap _fs :setf fish<CR>
-nnoremap _ss :setf sass<CR>
-nnoremap _ht :setf html<CR>
-nnoremap _vi :setf vim<CR>
-nnoremap _ob :setf objc<CR>
 nnoremap _rb :setf ruby<CR>
-nnoremap _tu :setf tumblr<CR>
 nnoremap _js :setf javascript<CR>
-nnoremap _sql :setf sql<CR>
 
 " Sane movement with wrap turned on
 nnoremap j gj
@@ -170,6 +171,7 @@ nnoremap gV `[v`]
 nnoremap gI `.
 
 " Enter command mode quickly
+nnoremap : ;
 nnoremap ; :
 
 " Space to toggle folds.
@@ -187,6 +189,10 @@ nnoremap <leader>z zMzvzz
 nnoremap <leader>d mz"dyy"dp`z
 vnoremap <leader>d "dymz"dP`z``
 
+" Insert Mode Completion
+inoremap <c-f> <c-x><c-f>
+inoremap <c-]> <c-x><c-]>
+
 " The black hole register
 noremap x "_x
 noremap X "_X
@@ -200,12 +206,18 @@ nnoremap <silent> <leader>u :GundoToggle<CR>
 " Open CtrlP on different modes
 nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 
-" Yank to OS X pasteboard.
-noremap <leader>y "*y
-
-" Paste from OS X pasteboard without messing up indent.
-nnoremap <leader>p :set paste<CR>"*p<CR>:set nopaste<CR>
-nnoremap <leader>P :set paste<CR>"*P<CR>:set nopaste<CR>
+" Copying text to the system clipboard.
+"
+" For some reason Vim no longer wants to talk to the OS X pasteboard through "*.
+" Computers are bullshit.
+function! g:FuckingCopyTheTextPlease() " {{{2
+    let old_z = @z
+    normal! gv"zy
+    call system('pbcopy', @z)
+    let @z = old_z
+endfunction " }}}2
+nnoremap <silent> <leader>p mz:r!pbpaste<cr>`z
+vnoremap <silent> <leader>y :<c-u>call g:FuckingCopyTheTextPlease()<cr>
 
 " Start a process in a new, focused split pane. {{{2
 function! SplitWindow()
@@ -222,7 +234,7 @@ nnoremap <leader>c :call SplitWindow()<CR>
 nnoremap <leader>a :Ack!<space>
 
 " Quick editing
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <silent> <leader>es :vsplit ~/.vim/snippets/<CR>
 nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
@@ -235,12 +247,6 @@ nnoremap <silent> <leader>ew :Explore<CR>
 nnoremap <leader>gd :Gvdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
-nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gh :Gbrowse<cr>
-nnoremap <leader>gco :Gread<cr>
-nnoremap <leader>gci :Gcommit<cr>
-nnoremap <leader>gm :Gmove<space>
-nnoremap <leader>gr :Gremove<cr>
 
 " SnipMate
 source ~/.vim/snippets/support_functions.vim
@@ -248,9 +254,17 @@ source ~/.vim/snippets/support_functions.vim
 " }}}1
 " Autocommands {{{1
 
+au BufNewFile,BufRead *psql* setfiletype sql
 au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
 au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
-au BufNewFile,BufRead *psql* setfiletype sql
+
+augroup ft_fish
+  au!
+  au BufNewFile,BufRead *.fish setlocal filetype=fish
+  au FileType fish setlocal foldmethod=marker foldmarker={{{,}}}
+  au FileType fish setlocal commentstring=#\ %s
+  au FileType fish let b:vimpipe_command="fish <(cat)"
+augroup END
 
 augroup ft_git
   au!

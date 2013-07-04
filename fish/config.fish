@@ -149,6 +149,8 @@ function git_prompt
 end
 
 function fish_prompt
+    set last_status $status
+
     z --add "$PWD"
 
     echo
@@ -168,10 +170,16 @@ function fish_prompt
     set_color normal
 
     git_prompt
+
     echo
 
-    set_color white -o
-    printf '➜ '
+    if test $last_status -eq 0
+        set_color white -o
+        printf '><((°> '
+    else
+        set_color red -o
+        printf '[%d] ><((ˣ> ' $last_status
+    end
 
     set_color normal
 end
