@@ -1,4 +1,4 @@
-# rainerborene's dotfiles
+# ~rainerborene's dotfiles
 
 ## Installation
 
@@ -65,4 +65,6 @@ Now set up your credentials.
 - [vim-ragtag](https://github.com/tpope/vim-ragtag): ghetto HTML/XML mappings (formerly allml.vim)
 - [vim-sensible](https://github.com/tpope/vim-sensible): Defaults everyone can agree on
 
-Have fun.
+## License
+
+`:help license`
