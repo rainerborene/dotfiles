@@ -124,7 +124,6 @@ prepend_to_path "/sbin"
 prepend_to_path "/usr/local/bin"
 prepend_to_path "$HOME/.rbenv/bin"
 prepend_to_path "$HOME/.rbenv/shims"
-prepend_to_path "/opt/local/bin"
 prepend_to_path "/usr/local/mysql/bin"
 prepend_to_path "/usr/local/share/npm/bin"
 
@@ -194,3 +193,5 @@ if test -x (which tmux)
 end
 
 # }}}
+
+true

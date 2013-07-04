@@ -3,7 +3,9 @@ filetype off
 set nocompatible
 set rtp+=~/.vim/bundle/pathogen
 call pathogen#infect()
-runtime! plugin/sensible.vim
+runtime plugin/sensible.vim
+runtime plugin/scriptease.vim
+runtime snippets/support_functions.vim
 
 let g:badwolf_tabline = 2
 let g:badwolf_html_link_underline = 0
@@ -35,7 +37,6 @@ set formatoptions=qn1
 set colorcolumn=+1
 set lazyredraw
 set synmaxcol=500
-set pumheight=10
 set foldopen-=block
 set shiftwidth=2 
 set softtabstop=2
@@ -150,8 +151,14 @@ vnoremap k gk
 nnoremap ! :Clam<space>
 vnoremap ! :ClamVisual<space>
 
+" Unbind scriptease mappings.
+augroup! scriptease_help
+
 " Kill window
 nnoremap K :q<cr>
+
+" Man
+nnoremap M K
 
 " Because esc is too far.
 inoremap jj <Esc>
@@ -169,10 +176,6 @@ nnoremap gV `[v`]
 
 " Move to last change
 nnoremap gI `.
-
-" Enter command mode quickly
-nnoremap : ;
-nnoremap ; :
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -248,9 +251,6 @@ nnoremap <leader>gd :Gvdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gw :Gwrite<cr>
 
-" SnipMate
-source ~/.vim/snippets/support_functions.vim
-
 " }}}1
 " Autocommands {{{1
 
@@ -301,7 +301,7 @@ augroup ft_vim
   au FileType vim setlocal foldmethod=marker
   au FileType help setlocal textwidth=78
   au FileType qf,netrw setlocal colorcolumn& nocursorline nolist nowrap tw=0
-  au FileType qf setlocal nolist nowrap | wincmd J
+  au FileType qf setlocal nolist nowrap | wincmd J | nnoremap <buffer> q :q<cr>
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
 augroup END
 
