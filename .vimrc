@@ -3,18 +3,14 @@ filetype off
 set nocompatible
 set rtp+=~/.vim/bundle/pathogen
 call pathogen#infect()
+
 runtime plugin/sensible.vim
 runtime plugin/scriptease.vim
 runtime snippets/support_functions.vim
 
-let g:badwolf_tabline = 2
-let g:badwolf_html_link_underline = 0
-let g:badwolf_css_props_highlight = 1
-colorscheme badwolf
-
 set hidden
-set noswapfile
 set nobackup
+set noswapfile
 set splitbelow
 set splitright
 set spelllang=pt,en
@@ -38,11 +34,27 @@ set colorcolumn=+1
 set lazyredraw
 set synmaxcol=500
 set foldopen-=block
-set shiftwidth=2 
+set shiftwidth=2
 set softtabstop=2
 set expandtab
 set wrap
 
+" Color scheme {{{1
+
+set background=dark
+let g:badwolf_tabline = 2
+let g:badwolf_html_link_underline = 0
+let g:badwolf_css_props_highlight = 1
+colorscheme badwolf
+
+" }}}1
+" Statusline {{{1
+
+set statusline=%f%m\ %{fugitive#statusline()}%=
+set statusline+=(%{&ff}/%{strlen(&fenc)?&fenc:&enc}/%{strlen(&ft)?&ft:'none'})
+set statusline+=\ (line\ %l/%L,\ col\ %03c)
+
+" }}}1
 " Persistent undo {{{1
 
 set undofile
@@ -52,13 +64,6 @@ set undodir=~/.vim/tmp/undo
 if !isdirectory(expand(&undodir))
   call mkdir(expand(&undodir), "p")
 endif
-
-" }}}1
-" Statusline {{{1
-
-set statusline=%f%m\ %{fugitive#statusline()}%=
-set statusline+=(%{&ff}/%{strlen(&fenc)?&fenc:&enc}/%{strlen(&ft)?&ft:'none'})
-set statusline+=\ (line\ %l/%L,\ col\ %03c)
 
 " }}}1
 " Environments (GUI/Console) {{{1
@@ -105,7 +110,7 @@ nnoremap <silent> <leader>w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
 nnoremap * *<c-o>
 
 " Switch segments of text with predefined replacements
-nnoremap - :Switch<cr>
+nnoremap <silent> - :Switch<cr>
 
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
@@ -152,7 +157,7 @@ nnoremap ! :Clam<space>
 vnoremap ! :ClamVisual<space>
 
 " Unbind scriptease mappings.
-augroup! scriptease_help
+silent! aug! scriptease_help
 
 " Kill window
 nnoremap K :q<cr>
@@ -174,6 +179,9 @@ nmap L <Plug>yankstack_substitute_newer_paste
 " Select just-pasted text
 nnoremap gV `[v`]
 
+" Tabular alignment
+vnoremap <Enter> :Tabularize /\v/<left>
+
 " Move to last change
 nnoremap gI `.
 
@@ -193,8 +201,10 @@ nnoremap <leader>d mz"dyy"dp`z
 vnoremap <leader>d "dymz"dP`z``
 
 " Insert Mode Completion
+inoremap <C-o> <C-x><C-o>
 inoremap <c-f> <c-x><c-f>
 inoremap <c-]> <c-x><c-]>
+inoremap <C-l> <C-x><C-l>
 
 " The black hole register
 noremap x "_x
@@ -229,9 +239,9 @@ endfunction
 " }}}2
 
 " Dispatch
-nnoremap <leader>r :Rake<CR>
-nnoremap <leader>t :Dispatch<CR>
-nnoremap <leader>c :call SplitWindow()<CR>
+nnoremap <silent> <leader>r :Rake<CR>
+nnoremap <silent> <leader>t :Dispatch<CR>
+nnoremap <silent> <leader>c :call SplitWindow()<CR>
 
 " Ack searching
 nnoremap <leader>a :Ack!<space>
@@ -247,16 +257,20 @@ nnoremap <silent> <leader>eo :botright 10split ~/Google\ Drive/notes.txt<CR>
 nnoremap <silent> <leader>ew :Explore<CR>
 
 " Fugitive
-nnoremap <leader>gd :Gvdiff<cr>
-nnoremap <leader>gs :Gstatus<cr>
-nnoremap <leader>gw :Gwrite<cr>
+nnoremap <silent> <leader>gl :silent Glog \| copen \| redraw!<cr>
+nnoremap <silent> <leader>gd :Gvdiff -<cr>
+nnoremap <silent> <leader>gs :Gstatus<cr>
+nnoremap <silent> <leader>gw :Gwrite<cr>
 
 " }}}1
 " Autocommands {{{1
 
-au BufNewFile,BufRead *psql* setfiletype sql
-au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
-au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
+augroup custom
+  au!
+  au BufRead *psql* setfiletype sql
+  au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
+  au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
+augroup END
 
 augroup ft_fish
   au!
@@ -268,8 +282,8 @@ augroup END
 
 augroup ft_git
   au!
-  au FileType git setlocal foldmethod=syntax
-  au FileType git,gitcommit setlocal colorcolumn& nolist
+  au FileType git,gitcommit setlocal foldmethod=syntax colorcolumn& nolist
+  au FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-r><C-g><CR>
   au FileType gitcommit setlocal spell | wincmd K
   au BufReadPost fugitive://* set bufhidden=delete
   au User fugitive
@@ -382,7 +396,7 @@ set foldtext=MyFoldText()
 
 " ack.vim {{{2
 let g:ackprg = 'ag --smart-case --nogroup --nocolor --column'
-" }}}
+" }}}2
 " ruby.vim {{{2
 let g:ruby_fold = 1
 " }}}2
@@ -429,11 +443,11 @@ let g:syntastic_enable_signs = 1
 let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
-let g:syntastic_mode_map = { 
+let g:syntastic_mode_map = {
   \ 'mode': 'active',
   \ 'passive_filetypes': ['html', 'yaml']
   \ }
-" }}}
+" }}}2
 " rails.vim {{{2
 let g:rails_projections = {
   \ "app/validators/*_validator.rb": { "command": "validator" },
@@ -451,6 +465,9 @@ let g:rails_projections = {
   \   "command": "factory",
   \   "template": "FactoryGirl.define do\nend"
   \ }}
-" }}}
+" }}}2
+" vitality.vim {{{2
+let g:vitality_fix_cursor = 0
+" }}}2
 
 " }}}
