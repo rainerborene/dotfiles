@@ -1,8 +1,5 @@
 " .vimrc
-filetype off
-set nocompatible
-set rtp+=~/.vim/bundle/pathogen
-call pathogen#infect()
+source ~/.dotfiles/.vimrc.bundles
 
 runtime plugin/sensible.vim
 runtime plugin/scriptease.vim

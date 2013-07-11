@@ -55,20 +55,10 @@ uninstall() {
   rm -Rf ~/.dotfiles
 }
 
-#
-# Update themes and other files.
-#
-
-update() {
-  git --git-dir ~/.dotfiles/.git submodule -q foreach git clean -qfd
-  git --git-dir ~/.dotfiles/.git submodule -q foreach git pull --rebase
-}
-
 # Parse arguments
 case $1 in
   install) install; exit ;;
   uninstall) uninstall; exit ;;
-  update) update; exit ;;
 esac
 
 # vim: set fdm=marker fmr={,} :
