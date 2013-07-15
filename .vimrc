@@ -15,9 +15,6 @@ set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
 set dictionary=/usr/share/dict/words
 set wildmode=list:longest,full
 set completeopt=longest,menuone,preview
-set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮
-set fillchars=diff:⣿,vert:│
-set showbreak=↪
 set linebreak
 set ignorecase
 set smartcase
@@ -29,7 +26,6 @@ set textwidth=80
 set formatoptions=qn1
 set colorcolumn=+1
 set lazyredraw
-set synmaxcol=500
 set foldopen-=block
 set shiftwidth=2
 set softtabstop=2
@@ -99,6 +95,11 @@ vnoremap Q gq
 
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
+
+" Edit the alternate file fast.
+nnoremap <C-e> <C-^>
+nnoremap <C-y> <Nop>
+nnoremap <C-^> <Nop>
 
 " Clean trailing whitespace
 nnoremap <silent> <leader>w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
@@ -254,8 +255,9 @@ nnoremap <silent> <leader>eo :botright 10split ~/Google\ Drive/notes.txt<CR>
 nnoremap <silent> <leader>ew :Explore<CR>
 
 " Fugitive
-nnoremap <silent> <leader>gl :silent Glog \| copen \| redraw!<cr>
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
+nnoremap <silent> <leader>ge :Gedit<cr>
+nnoremap <silent> <leader>gl :silent Glog \| copen \| redraw!<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gw :Gwrite<cr>
 
@@ -264,7 +266,7 @@ nnoremap <silent> <leader>gw :Gwrite<cr>
 
 augroup custom
   au!
-  au BufRead *psql* setfiletype sql
+  au BufRead *psql* setfiletype pgsql
   au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
   au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
 augroup END
@@ -446,6 +448,7 @@ let g:syntastic_mode_map = {
   \ }
 " }}}2
 " rails.vim {{{2
+let g:rails_menu = 0
 let g:rails_projections = {
   \ "app/validators/*_validator.rb": { "command": "validator" },
   \ "app/presenters/*_presenter.rb": { "command": "presenter" },
@@ -467,4 +470,4 @@ let g:rails_projections = {
 let g:vitality_fix_cursor = 0
 " }}}2
 
-" }}}
+" }}}1
