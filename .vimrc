@@ -14,6 +14,9 @@ set spelllang=pt,en
 set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
 set dictionary=/usr/share/dict/words
 set wildmode=list:longest,full
+set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
+set wildignore+=*.DS_Store
+set wildignore+=.sass-cache
 set completeopt=longest,menuone,preview
 set linebreak
 set ignorecase
@@ -255,6 +258,7 @@ nnoremap <silent> <leader>eo :botright 10split ~/Google\ Drive/notes.txt<CR>
 nnoremap <silent> <leader>ew :Explore<CR>
 
 " Fugitive
+nnoremap <leader>gg :Git!<space>
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
 nnoremap <silent> <leader>ge :Gedit<cr>
 nnoremap <silent> <leader>gl :silent Glog \| copen \| redraw!<cr>
@@ -266,9 +270,16 @@ nnoremap <silent> <leader>gw :Gwrite<cr>
 
 augroup custom
   au!
-  au BufRead *psql* setfiletype pgsql
   au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
   au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
+augroup END
+
+augroup ft_postgres
+  au!
+  au BufNewFile,BufRead *.sql set filetype=pgsql
+  au FileType pgsql set softtabstop=2 shiftwidth=2
+  au FileType pgsql set foldmethod=indent
+  au BufRead *psql* setfiletype pgsql
 augroup END
 
 augroup ft_fish
@@ -416,7 +427,7 @@ let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_filter_greps = 'egrep -iv "\.(png|jpe?g|bmp|gif|png)"'
-let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps]
+let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps, 'ag %s -l --nocolor -g ""']
 let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
   \ 'dir': '\v[\/](tmp|tags)$'

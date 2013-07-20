@@ -11,5 +11,4 @@ bind h:cmd;shift move screenOriginX;screenOriginY screenSizeX/2;screenSizeY
 bind k:cmd;shift push up bar-resize:screenSizeY/2
 bind j:cmd;shift push down bar-resize:screenSizeY/2
 bind l:cmd;shift move screenOriginX+screenSizeX/2;screenOriginY screenSizeX/2;screenSizeY
-bind g:cmd grid padding:5 0:6,2
-bind esc:cmd hint
+bind space:cmd;shift grid padding:5 0:6,2

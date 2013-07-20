@@ -69,6 +69,12 @@ function gg -d "Commit pending changes and quote all args as message"
     git commit -v -a -m "$argv"
 end
 
+function emptytrash -d "Empty the OS X trash folders"
+    sudo rm -rfv /Volumes/*/.Trashes
+    sudo rm -rfv ~/.Trash
+    sudo rm -rfv /private/var/log/asl/*.asl
+end
+
 function reload_chrome -d "Watch given paths and reload Google Chrome active tab"
     find . -iname $argv -type f | peat "osascript -e '
       tell application \"Google Chrome\" to tell the active tab of its first window
@@ -187,9 +193,9 @@ end
 # Always work in a tmux session {{{
 
 if test -x (which tmux)
-  if test $TERM != "screen-256color" -a $TERM != "screen"
-    tmux attach -t hack; or tmux new -s hack; exit
-  end
+    if test $TERM != "screen-256color" -a $TERM != "screen"
+        tmux attach -t hack; or tmux new -s hack; exit
+    end
 end
 
 # }}}
