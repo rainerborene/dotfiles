@@ -5,6 +5,7 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'AndrewRadev/switch.vim'
+Bundle 'AndrewRadev/linediff.vim'
 Bundle 'edsono/vim-matchit'
 Bundle 'ervandew/supertab'
 Bundle 'exu/pgsql.vim'
@@ -46,6 +47,5 @@ Bundle 'tpope/vim-scriptease'
 Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-sleuth'
 Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-tbone'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'vim-ruby/vim-ruby'

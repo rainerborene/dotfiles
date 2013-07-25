@@ -6,6 +6,7 @@ runtime plugin/scriptease.vim
 runtime snippets/support_functions.vim
 
 set hidden
+set confirm
 set nobackup
 set noswapfile
 set splitbelow
@@ -99,11 +100,6 @@ vnoremap Q gq
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
 
-" Edit the alternate file fast.
-nnoremap <C-e> <C-^>
-nnoremap <C-y> <Nop>
-nnoremap <C-^> <Nop>
-
 " Clean trailing whitespace
 nnoremap <silent> <leader>w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
 
@@ -122,14 +118,13 @@ nnoremap / /\v
 vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
-cnoremap s/ s/\v
 
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
 " I hate when the rendering occasionally gets messed up.
-nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
+nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>:filetype detect<cr>
 
 " Sort lines
 nnoremap <leader>o vip:!sort<cr>
@@ -203,8 +198,8 @@ vnoremap <leader>d "dymz"dP`z``
 
 " Insert Mode Completion
 inoremap <C-o> <C-x><C-o>
-inoremap <c-f> <c-x><c-f>
-inoremap <c-]> <c-x><c-]>
+inoremap <C-k> <C-x><C-k>
+inoremap <C-]> <C-x><C-]>
 inoremap <C-l> <C-x><C-l>
 
 " The black hole register
@@ -243,6 +238,10 @@ endfunction
 nnoremap <silent> <leader>r :Rake<CR>
 nnoremap <silent> <leader>t :Dispatch<CR>
 nnoremap <silent> <leader>c :call SplitWindow()<CR>
+
+" Linediff
+vnoremap <leader>l :Linediff<cr>
+nnoremap <leader>L :LinediffReset<cr>
 
 " Ack searching
 nnoremap <leader>a :Ack!<space>
@@ -414,7 +413,7 @@ let g:ruby_fold = 1
 let g:netrw_banner = 0
 let g:netrw_dirhistmax = 0
 let g:netrw_use_errorwindow = 0
-let g:netrw_list_hide = '\~$,^tags$'
+let g:netrw_list_hide = '\~$,^tags,.DS_Store$'
 let g:netrw_fastbrowse = 0
 " }}}2
 " supertab.vim {{{2
