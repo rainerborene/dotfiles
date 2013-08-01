@@ -124,7 +124,10 @@ nnoremap n nzzzv
 nnoremap N Nzzzv
 
 " I hate when the rendering occasionally gets messed up.
-nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>:filetype detect<cr>
+nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
+
+" Automatically adjusts indentation
+nnoremap <silent> <leader>f :filetype detect<cr>
 
 " Sort lines
 nnoremap <leader>o vip:!sort<cr>
@@ -158,11 +161,8 @@ silent! aug! scriptease_help
 " Kill window
 nnoremap K :q<cr>
 
-" Man
+" Lookup keyword
 nnoremap M K
-
-" Because esc is too far.
-inoremap jj <Esc>
 
 " Make Y consistent with C and D
 call yankstack#setup()
@@ -171,6 +171,9 @@ nnoremap Y y$
 " Yankstack
 nmap H <Plug>yankstack_substitute_older_paste
 nmap L <Plug>yankstack_substitute_newer_paste
+
+" Substitute in visual mode
+vnoremap s :s/\v
 
 " Select just-pasted text
 nnoremap gV `[v`]
@@ -269,7 +272,7 @@ nnoremap <silent> <leader>gw :Gwrite<cr>
 
 augroup custom
   au!
-  au FileType html,xml,js,css,php autocmd BufWritePre <buffer> normal ,w
+  au FileType html,xml,js,css,php,ruby autocmd BufWritePre <buffer> normal ,w
   au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
 augroup END
 
@@ -433,6 +436,7 @@ let g:ctrlp_custom_ignore = {
   \ }
 " }}}2
 " html5.vim {{{2
+let g:html_indent_tags = 'li\|p'
 let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
@@ -446,8 +450,6 @@ let g:gundo_help = 0
 let g:gundo_preview_bottom = 1
 " }}}2
 " syntastic.vim {{{2
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_signs = 1
 let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
 let g:syntastic_quiet_warnings = 0
