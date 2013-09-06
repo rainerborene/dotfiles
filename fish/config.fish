@@ -115,7 +115,9 @@ end
 
 set -gx fish_greeting ''
 set -gx EDITOR vim
+set -gx GOPATH $HOME/.go
 set -gx PYTHONPATH /usr/local/lib/python2.7/site-packages $PYTHONPATH
+set -gx PKG_CONFIG_PATH (brew --prefix sqlite)/lib/pkgconfig
 set -gx RUBY_HEAP_MIN_SLOTS 1000000
 set -gx RUBY_HEAP_SLOTS_INCREMENT 1000000
 set -gx RUBY_HEAP_SLOTS_GROWTH_FACTOR 1
@@ -132,6 +134,7 @@ prepend_to_path "$HOME/.rbenv/bin"
 prepend_to_path "$HOME/.rbenv/shims"
 prepend_to_path "/usr/local/mysql/bin"
 prepend_to_path "/usr/local/share/npm/bin"
+prepend_to_path "$GOPATH/bin"
 
 # }}}
 # Bind Keys {{{

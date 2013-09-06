@@ -5,6 +5,9 @@
 [user]
 	name = Rainer Borene
 	email = rainerborene@gmail.com
+[grep]
+	extendedRegexp = true
+	lineNumber = true
 [github]
 	user = rainerborene
 [push]

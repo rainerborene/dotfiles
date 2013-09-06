@@ -3,7 +3,6 @@ source ~/.dotfiles/.vimrc.bundles
 
 runtime plugin/sensible.vim
 runtime plugin/scriptease.vim
-runtime snippets/support_functions.vim
 
 set hidden
 set confirm
@@ -18,7 +17,8 @@ set wildmode=list:longest,full
 set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
-set completeopt=longest,menuone,preview
+set completeopt=longest,menuone
+set fillchars=diff:⣿,vert:│
 set linebreak
 set ignorecase
 set smartcase
@@ -32,7 +32,7 @@ set colorcolumn=+1
 set lazyredraw
 set foldopen-=block
 set shiftwidth=2
-set softtabstop=2
+set tabstop=4
 set expandtab
 set wrap
 
@@ -74,8 +74,6 @@ if has('gui_running')
   set go-=L
   set go-=r
   set go-=R
-
-  highlight SpellBad term=underline gui=undercurl guisp=Orange
 else
   set mouse=a
 endif
@@ -92,6 +90,8 @@ ab #e # encoding: utf-8
 " Easier bracket matching
 map <Tab> %
 map <C-o> <nop>
+silent! unmap [%
+silent! unmap ]%
 
 " Formatting, TextMate-style
 nnoremap Q gqip
@@ -99,6 +99,14 @@ vnoremap Q gq
 
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
+
+" Marks and Quotes
+noremap ' `
+noremap ` '
+noremap ` <C-^>
+
+" Move to last change
+nnoremap gI `.
 
 " Clean trailing whitespace
 nnoremap <silent> <leader>w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
@@ -172,17 +180,11 @@ nnoremap Y y$
 nmap H <Plug>yankstack_substitute_older_paste
 nmap L <Plug>yankstack_substitute_newer_paste
 
-" Substitute in visual mode
-vnoremap s :s/\v
-
 " Select just-pasted text
 nnoremap gV `[v`]
 
 " Tabular alignment
 vnoremap <Enter> :Tabularize /\v/<left>
-
-" Move to last change
-nnoremap gI `.
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -200,9 +202,8 @@ nnoremap <leader>d mz"dyy"dp`z
 vnoremap <leader>d "dymz"dP`z``
 
 " Insert Mode Completion
-inoremap <C-o> <C-x><C-o>
-inoremap <C-k> <C-x><C-k>
 inoremap <C-]> <C-x><C-]>
+inoremap <C-k> <C-x><C-k>
 inoremap <C-l> <C-x><C-l>
 
 " The black hole register
@@ -222,17 +223,17 @@ nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 "
 " For some reason Vim no longer wants to talk to the OS X pasteboard through "*.
 " Computers are bullshit.
-function! g:FuckingCopyTheTextPlease() " {{{2
+function! s:FuckingCopyTheTextPlease() " {{{2
     let old_z = @z
     normal! gv"zy
     call system('pbcopy', @z)
     let @z = old_z
 endfunction " }}}2
 nnoremap <silent> <leader>p mz:r!pbpaste<cr>`z
-vnoremap <silent> <leader>y :<c-u>call g:FuckingCopyTheTextPlease()<cr>
+vnoremap <silent> <leader>y :<c-u>call <SID>FuckingCopyTheTextPlease()<cr>
 
 " Start a process in a new, focused split pane. {{{2
-function! SplitWindow()
+function! s:SplitWindow()
   call system(printf("tmux splitw -p 25 -c '%s' '%s'", getcwd(), exists('b:start') ? b:start : ''))
 endfunction
 " }}}2
@@ -240,7 +241,7 @@ endfunction
 " Dispatch
 nnoremap <silent> <leader>r :Rake<CR>
 nnoremap <silent> <leader>t :Dispatch<CR>
-nnoremap <silent> <leader>c :call SplitWindow()<CR>
+nnoremap <silent> <leader>c :call <SID>SplitWindow()<CR>
 
 " Linediff
 vnoremap <leader>l :Linediff<cr>
@@ -248,11 +249,11 @@ nnoremap <leader>L :LinediffReset<cr>
 
 " Ack searching
 nnoremap <leader>a :Ack!<space>
+vnoremap <leader>a "zy:execute "Ack! " . shellescape(@z)<cr>
 
 " Quick editing
 cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
-nnoremap <silent> <leader>es :vsplit ~/.vim/snippets/<CR>
 nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
 nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
 nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
@@ -298,6 +299,7 @@ augroup ft_git
   au FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-r><C-g><CR>
   au FileType gitcommit setlocal spell | wincmd K
   au BufReadPost fugitive://* set bufhidden=delete
+  au QuickFixCmdPost *grep* cwindow
   au User fugitive
     \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
     \   nnoremap <buffer> .. :edit %:h<CR> |
@@ -317,9 +319,7 @@ augroup END
 
 augroup ft_css
   au!
-  au FileType css,scss,sass setlocal iskeyword+=- |
-    \ call SuperTabChain(&omnifunc, "<c-n>") |
-    \ call SuperTabSetDefaultCompletionType("<c-x><c-u>")
+  au FileType css,scss,sass setlocal iskeyword+=-
 augroup END
 
 augroup ft_vim
@@ -340,6 +340,11 @@ augroup ft_ruby
     \   let b:dispatch = 'zeus rake spec' |
     \   let b:start = 'zeus console' |
     \ end
+augroup END
+
+augroup ft_go
+  au!
+  au FileType go let b:vimpipe_command='go run %'
 augroup END
 
 " Save when losing focus
@@ -418,10 +423,6 @@ let g:netrw_dirhistmax = 0
 let g:netrw_use_errorwindow = 0
 let g:netrw_list_hide = '\~$,^tags,.DS_Store$'
 let g:netrw_fastbrowse = 0
-" }}}2
-" supertab.vim {{{2
-let g:SuperTabLongestHighlight = 1
-let g:SuperTabDefaultCompletionType = '<c-n>'
 " }}}2
 " ctrlp.vim {{{2
 let g:ctrlp_map = '<leader>,'

@@ -1,3 +1,4 @@
+*.rdb
 *.swp
 .DS_Store
 .bundle
