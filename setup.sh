@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-# 
-# ~rainerborene dotfiles
-# Licensed under the WTFPL License.
-#
+# vim: set fdm=marker fmr={,} :
 
 DOTIGNORE="README.md install.sh fish lib sshconfig gitmodules"
 
@@ -60,5 +57,3 @@ case $1 in
   install) install; exit ;;
   uninstall) uninstall; exit ;;
 esac
-
-# vim: set fdm=marker fmr={,} :

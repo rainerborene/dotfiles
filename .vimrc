@@ -45,13 +45,6 @@ let g:badwolf_css_props_highlight = 1
 colorscheme badwolf
 
 " }}}1
-" Statusline {{{1
-
-set statusline=%f%m\ %{fugitive#statusline()}%=
-set statusline+=(%{&ff}/%{strlen(&fenc)?&fenc:&enc}/%{strlen(&ft)?&ft:'none'})
-set statusline+=\ (line\ %l/%L,\ col\ %03c)
-
-" }}}1
 " Persistent undo {{{1
 
 set undofile
@@ -66,7 +59,7 @@ endif
 " Environments (GUI/Console) {{{1
 
 if has('gui_running')
-  set guifont=Menlo:h12
+  set guifont=Menlo:h12 vb noeb t_vb=
 
   " Remove all the UI cruft
   set go-=T
@@ -134,9 +127,6 @@ nnoremap N Nzzzv
 " I hate when the rendering occasionally gets messed up.
 nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
 
-" Automatically adjusts indentation
-nnoremap <silent> <leader>f :filetype detect<cr>
-
 " Sort lines
 nnoremap <leader>o vip:!sort<cr>
 vnoremap <leader>o :!sort<cr>
@@ -163,14 +153,23 @@ vnoremap k gk
 nnoremap ! :Clam<space>
 vnoremap ! :ClamVisual<space>
 
-" Unbind scriptease mappings.
-silent! aug! scriptease_help
-
 " Kill window
 nnoremap K :q<cr>
 
+" Open a window with the man page for the word under the cursor {{{2
+function s:Man()
+  if &ft == 'go' && exists(':Godoc')
+    exec "Godoc " . expand("<cWORD>")
+  elseif &ft == 'ruby' && exists(':Clam')
+    exec printf("Clam %s %s | col -b", &kp, expand("<cWORD>"))
+  else
+    norm! K
+  end
+endfunction
+" }}}
+
 " Lookup keyword
-nnoremap M K
+nnoremap <silent> M :call <SID>Man()<CR>
 
 " Make Y consistent with C and D
 call yankstack#setup()
@@ -200,11 +199,6 @@ nnoremap <leader>z zMzvzz
 " Duplication
 nnoremap <leader>d mz"dyy"dp`z
 vnoremap <leader>d "dymz"dP`z``
-
-" Insert Mode Completion
-inoremap <C-]> <C-x><C-]>
-inoremap <C-k> <C-x><C-k>
-inoremap <C-l> <C-x><C-l>
 
 " The black hole register
 noremap x "_x
@@ -271,7 +265,7 @@ nnoremap <silent> <leader>gw :Gwrite<cr>
 " }}}1
 " Autocommands {{{1
 
-augroup custom
+augroup common
   au!
   au FileType html,xml,js,css,php,ruby autocmd BufWritePre <buffer> normal ,w
   au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
@@ -317,6 +311,11 @@ augroup ft_markdown
   au FileType markdown let b:vimpipe_filetype="html"
 augroup END
 
+augroup ft_json
+  au!
+  au FileType json setlocal equalprg=python\ -m\ json.tool
+augroup END
+
 augroup ft_css
   au!
   au FileType css,scss,sass setlocal iskeyword+=-
@@ -325,7 +324,7 @@ augroup END
 augroup ft_vim
   au!
   au FileType vim setlocal foldmethod=marker
-  au FileType help setlocal textwidth=78
+  au FileType man,help wincmd L | setlocal textwidth=78
   au FileType qf,netrw setlocal colorcolumn& nocursorline nolist nowrap tw=0
   au FileType qf setlocal nolist nowrap | wincmd J | nnoremap <buffer> q :q<cr>
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
@@ -333,6 +332,7 @@ augroup END
 
 augroup ft_ruby
   au!
+  au FileType ruby setlocal keywordprg=ri\ -T
   au FileType ruby let b:vimpipe_command='ruby <(cat)'
   au User Rails
     \ if filereadable('zeus.json') |
@@ -345,6 +345,12 @@ augroup END
 augroup ft_go
   au!
   au FileType go let b:vimpipe_command='go run %'
+  au FileType go nnoremap <buffer> <silent> <localleader>t :Fmt<cr>:w<cr>:e<cr>
+  au FileType godoc wincmd L | nnoremap <buffer> <silent> K :q<cr>
+augroup END
+
+augroup scriptease_help
+  au!
 augroup END
 
 " Save when losing focus
@@ -411,46 +417,61 @@ set foldtext=MyFoldText()
 " }}}1
 " Plugin configuration {{{1
 
-" ack.vim {{{2
+" Ack {{{2
+
 let g:ackprg = 'ag --smart-case --nogroup --nocolor --column'
+
 " }}}2
-" ruby.vim {{{2
+" Ruby {{{2
+
 let g:ruby_fold = 1
+
 " }}}2
-" netrw.vim {{{2
+" Netrw {{{2
+
 let g:netrw_banner = 0
 let g:netrw_dirhistmax = 0
 let g:netrw_use_errorwindow = 0
 let g:netrw_list_hide = '\~$,^tags,.DS_Store$'
 let g:netrw_fastbrowse = 0
+
 " }}}2
-" ctrlp.vim {{{2
+" CtrlP {{{2
+
 let g:ctrlp_map = '<leader>,'
 let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_clear_cache_on_exit = 1
+let g:ctrlp_use_caching = 0
 let g:ctrlp_filter_greps = 'egrep -iv "\.(png|jpe?g|bmp|gif|png)"'
 let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps, 'ag %s -l --nocolor -g ""']
 let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
   \ 'dir': '\v[\/](tmp|tags)$'
   \ }
+
 " }}}2
-" html5.vim {{{2
+" HTML5 {{{2
+
 let g:html_indent_tags = 'li\|p'
 let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete = 0
 let g:html5_microdata_attributes_complete = 0
 let g:html5_aria_attributes_complete = 0
+
 " }}}2
-" sparkup.vim {{{2
+" Sparkup {{{2
+
 let g:sparkupNextMapping = '<c-y>'
+
 " }}}2
-" gundo.vim {{{2
+" Gundo {{{2
+
 let g:gundo_help = 0
 let g:gundo_preview_bottom = 1
+
 " }}}2
-" syntastic.vim {{{2
+" Syntastic {{{2
+
 let g:syntastic_enable_signs = 1
 let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
 let g:syntastic_quiet_warnings = 0
@@ -459,8 +480,10 @@ let g:syntastic_mode_map = {
   \ 'mode': 'active',
   \ 'passive_filetypes': ['html', 'yaml']
   \ }
+
 " }}}2
-" rails.vim {{{2
+" Rails {{{2
+
 let g:rails_menu = 0
 let g:rails_projections = {
   \ "app/validators/*_validator.rb": { "command": "validator" },
@@ -478,9 +501,24 @@ let g:rails_projections = {
   \   "command": "factory",
   \   "template": "FactoryGirl.define do\nend"
   \ }}
+
 " }}}2
-" vitality.vim {{{2
+" Vitality {{{2
+
 let g:vitality_fix_cursor = 0
+
+" }}}2
+" YouCompleteMe {{{2
+
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
+
+" }}}2
+" Powerline {{{2
+
+let g:Powerline_symbols = 'fancy'
+let g:Powerline_cache_enabled = 1
+
 " }}}2
 
 " }}}1
