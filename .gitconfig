@@ -35,17 +35,16 @@
 [mergetool "fugitive"]
 	cmd = "mvim -f -c 'Gdiff' $MERGED"
 [alias]
-	d       = diff
-	di      = diff --cached
-	co      = checkout
-	ci      = commit
-	uns     = reset HEAD
+	a		= add
+	s		= status
+	p		= push
+	d		= diff
+	dc		= diff --cached
+	co		= checkout
+	ci		= commit
+	uns		= reset HEAD
 	unstage = reset HEAD
-	po      = push origin
-	lo      = pull origin
-	st      = status
-	stat    = status
-	l       = log -16 --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
-	ll      = log --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
-	gl      = log -10 --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
-	gll     = log --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
+	l		= log -16 --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
+	ll		= log --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
+	gl		= log -10 --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
+	gll		= log --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'

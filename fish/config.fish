@@ -1,53 +1,34 @@
 # Useful aliases {{{
 
-. ~/.dotfiles/lib/z.fish
+. ~/.dotfiles/fish/z.fish
 
-alias j 'z'
-alias t 'todo.sh'
-alias l 'tree --dirsfirst -ChaFL 1'
-alias hl 'less -R'
-alias c 'clear'
 alias e 'vim -c CtrlP'
 alias v 'vim'
-alias V 'vim .'
 alias m 'mvim .'
+
 alias tm 'tmux -u2'
 alias tms 'tm list-sessions'
 alias tmt 'tm attach -t'
 alias tat 'tm attach -t (basename $PWD)'
+
+alias j 'z'
+alias g 'git'
+alias c 'clear'
+alias l 'tree --dirsfirst -ChaFL 1'
+alias hl 'less -R'
+alias tailf 'tail -f'
+alias cuts "cut -d' '"
 alias pp 'python -mjson.tool'
 alias serve_this 'python -m SimpleHTTPServer'
-alias reload '. ~/.config/fish/config.fish'
-alias tailf 'tail -f'
 alias collapse "sed -e 's/  */ /g'"
-alias cuts "cut -d' '"
 alias mysql_repair 'mysqlcheck --auto-repair --check --optimize --all-databases -u root'
-alias simulator 'open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
-
-alias g 'git'
-alias gd 'git diff'
-alias gdc 'git diff --cached'
-alias ga 'git add'
-alias gbd 'git branch -D'
-alias gs 'git status'
-alias gca 'git commit -a -m'
-alias gm 'git merge --no-ff'
-alias gpt 'git push --tags'
-alias gp 'git push'
-alias grh 'git reset --hard'
-alias gb 'git branch'
-alias gcob 'git checkout -b'
-alias gco 'git checkout'
-alias gba 'git branch -a'
-alias gcp 'git cherry-pick'
-alias gl 'git log --pretty="format:%Cgreen%h%Creset %an - %s" --graph'
-alias gpom 'git pull --rebase origin master'
-alias gcd 'cd (git rev-parse --show-toplevel)'
+alias reload '. ~/.config/fish/config.fish'
 
 alias o 'open'
 alias oo 'open .'
 alias pbc 'pbcopy'
 alias pbp 'pbpaste'
+alias simulator 'open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 
 # ruby on rails
 alias b 'bundle'
@@ -65,22 +46,10 @@ function psk -d "Kill all running processes with given name"
     psg $argv | awk '{print $1}' | xargs kill -9
 end
 
-function gg -d "Commit pending changes and quote all args as message"
-    git commit -v -a -m "$argv"
-end
-
 function emptytrash -d "Empty the OS X trash folders"
     sudo rm -rfv /Volumes/*/.Trashes
     sudo rm -rfv ~/.Trash
     sudo rm -rfv /private/var/log/asl/*.asl
-end
-
-function reload_chrome -d "Watch given paths and reload Google Chrome active tab"
-    find . -iname $argv -type f | peat "osascript -e '
-      tell application \"Google Chrome\" to tell the active tab of its first window
-        reload
-      end tell
-    '"
 end
 
 function utf8_encode
@@ -200,6 +169,11 @@ if test -x (which tmux)
         tmux attach -t hack; or tmux new -s hack; exit
     end
 end
+
+# }}}
+# Loads different environment variables depending on your path {{{
+
+eval (direnv hook fish)
 
 # }}}
 

@@ -3,6 +3,7 @@ source ~/.dotfiles/.vimrc.bundles
 
 runtime plugin/sensible.vim
 runtime plugin/scriptease.vim
+runtime macros/matchit.vim
 
 set hidden
 set confirm
@@ -78,7 +79,8 @@ let mapleader = ","
 let maplocalleader = "\\"
 
 " Abbreviations
-ab #e # encoding: utf-8
+ia #e # encoding: utf-8
+ia pry binding.pry
 
 " Easier bracket matching
 map <Tab> %
@@ -139,10 +141,6 @@ nnoremap <C-l> <C-W>l
 nnoremap <leader>s <C-W>s
 nnoremap <leader>v <C-W>v
 
-" Easy filetype switching
-nnoremap _rb :setf ruby<CR>
-nnoremap _js :setf javascript<CR>
-
 " Sane movement with wrap turned on
 nnoremap j gj
 nnoremap k gk
@@ -166,7 +164,7 @@ function s:Man()
     norm! K
   end
 endfunction
-" }}}
+" }}}2
 
 " Lookup keyword
 nnoremap <silent> M :call <SID>Man()<CR>
@@ -195,10 +193,6 @@ nnoremap zO zCzO
 
 " Focus the current fold by folding all the others
 nnoremap <leader>z zMzvzz
-
-" Duplication
-nnoremap <leader>d mz"dyy"dp`z
-vnoremap <leader>d "dymz"dP`z``
 
 " The black hole register
 noremap x "_x
@@ -258,7 +252,6 @@ nnoremap <silent> <leader>ew :Explore<CR>
 nnoremap <leader>gg :Git!<space>
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
 nnoremap <silent> <leader>ge :Gedit<cr>
-nnoremap <silent> <leader>gl :silent Glog \| copen \| redraw!<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gw :Gwrite<cr>
 
@@ -285,6 +278,17 @@ augroup ft_fish
   au FileType fish setlocal foldmethod=marker foldmarker={{{,}}}
   au FileType fish setlocal commentstring=#\ %s
   au FileType fish let b:vimpipe_command="fish <(cat)"
+augroup END
+
+augroup ft_muttrc
+    au!
+    au BufRead,BufNewFile *.muttrc set ft=muttrc
+    au FileType muttrc setlocal foldmethod=marker foldmarker={{{,}}}
+augroup END
+
+augroup ft_mail
+    au!
+    au Filetype mail setlocal spell
 augroup END
 
 augroup ft_git
@@ -318,6 +322,7 @@ augroup END
 
 augroup ft_css
   au!
+  au FileType css,scss setlocal foldmethod=marker foldmarker={,}
   au FileType css,scss,sass setlocal iskeyword+=-
 augroup END
 
@@ -336,7 +341,6 @@ augroup ft_ruby
   au FileType ruby let b:vimpipe_command='ruby <(cat)'
   au User Rails
     \ if filereadable('zeus.json') |
-    \   compiler rspec |
     \   let b:dispatch = 'zeus rake spec' |
     \   let b:start = 'zeus console' |
     \ end
@@ -512,6 +516,7 @@ let g:vitality_fix_cursor = 0
 
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_min_num_of_chars_for_completion = 4
 
 " }}}2
 " Powerline {{{2

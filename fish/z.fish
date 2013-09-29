@@ -27,7 +27,7 @@ function z -d "Jump to a recent directory."
 
 		set -l tempfile (mktemp $datafile.XXXXXX)
 		test -f $tempfile; or return
-		
+
         # maintain the file
         awk -v path="$argv" -v now=(date +%s) -F"|" '
             BEGIN {
@@ -79,7 +79,7 @@ function z -d "Jump to a recent directory."
             set -l list 0
             set -l typ ''
             set -l fnd ''
-            
+
             while [ (count $argv) -gt 0 ]
                 switch "$argv[1]"
                     case -- '-h'
@@ -182,7 +182,7 @@ function z -d "Jump to a recent directory."
             end
         end
     end
-end	
+end
 
 function __z_init -d 'Set up automatic population of the directory list for z'
 	functions fish_prompt | grep -q 'z --add'

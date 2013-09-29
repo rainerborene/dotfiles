@@ -38,6 +38,7 @@ Create a symbolic to `private.xml` for [KeyRemap4MacBook](https://pqrs.org/macos
 - [switch.vim](https://github.com/AndrewRadev/switch.vim): A simple Vim plugin to switch segments of text with predefined replacements
 - [syntastic](https://github.com/scrooloose/syntastic): Syntax checking hacks for vim
 - [tabular](https://github.com/godlygeek/tabular): Vim script for text filtering and alignment
+- [tern_for_vim](https://github.com/marijnh/tern_for_vim): Tern plugin for Vim
 - [vim-abolish](https://github.com/tpope/vim-abolish): easily search for, substitute, and abbreviate multiple variants of a word
 - [vim-bundler](https://github.com/tpope/vim-bundler): Lightweight support for Ruby's Bundler
 - [vim-commentary](https://github.com/tpope/vim-commentary): comment stuff out
@@ -53,6 +54,7 @@ Create a symbolic to `private.xml` for [KeyRemap4MacBook](https://pqrs.org/macos
 - [vim-matchit](https://github.com/edsono/vim-matchit): git repository for a vim plugin called matchit
 - [vim-pathogen](https://github.com/tpope/vim-pathogen): manage your runtimepath
 - [vim-pipe](https://github.com/krisajenkins/vim-pipe): Send a vim buffer through a command and instantly see the output.
+- [vim-powerline](https://github.com/Lokaltog/vim-powerline): The ultimate vim statusline utility.
 - [vim-ragtag](https://github.com/tpope/vim-ragtag): ghetto HTML/XML mappings (formerly allml.vim)
 - [vim-rails](https://github.com/tpope/vim-rails): Ruby on Rails power tools
 - [vim-rake](https://github.com/tpope/vim-rake): it's like rails.vim without the rails'

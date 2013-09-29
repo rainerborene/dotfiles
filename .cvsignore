@@ -1,4 +1,5 @@
 *.rdb
+*.pyc
 *.swp
 .DS_Store
 .bundle
