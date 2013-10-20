@@ -2,9 +2,8 @@
 
 . ~/.dotfiles/fish/z.fish
 
-alias e 'vim -c CtrlP'
 alias v 'vim'
-alias m 'mvim .'
+alias m 'mvim'
 
 alias tm 'tmux -u2'
 alias tms 'tm list-sessions'
@@ -28,7 +27,6 @@ alias o 'open'
 alias oo 'open .'
 alias pbc 'pbcopy'
 alias pbp 'pbpaste'
-alias simulator 'open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 
 # ruby on rails
 alias b 'bundle'
@@ -104,6 +102,7 @@ prepend_to_path "$HOME/.rbenv/shims"
 prepend_to_path "/usr/local/mysql/bin"
 prepend_to_path "/usr/local/share/npm/bin"
 prepend_to_path "$GOPATH/bin"
+prepend_to_path "./bin"
 
 # }}}
 # Bind Keys {{{

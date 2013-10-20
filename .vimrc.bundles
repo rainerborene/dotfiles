@@ -3,6 +3,7 @@ set nocompatible
 set shell=/bin/bash
 set rtp+=~/.vim/bundle/vundle/
 set rtp+=~/.go/src/github.com/nsf/gocode/vim/
+set rtp+=/usr/local/Cellar/go/1.1.2/misc/vim/
 call vundle#rc()
 
 Bundle 'AndrewRadev/linediff.vim'
@@ -14,17 +15,17 @@ Bundle 'exu/pgsql.vim'
 Bundle 'gmarik/vundle'
 Bundle 'godlygeek/tabular'
 Bundle 'groenewege/vim-less'
-Bundle 'jnwhiteh/vim-golang'
+Bundle 'justinmk/vim-sneak'
 Bundle 'kana/vim-smartinput'
 Bundle 'kien/ctrlp.vim'
 Bundle 'krisajenkins/vim-pipe'
 Bundle 'marijnh/tern_for_vim'
 Bundle 'michaeljsmith/vim-indent-object'
 Bundle 'mileszs/ack.vim'
-Bundle 'nickstenning/vim-yankstack'
 Bundle 'othree/html5.vim'
 Bundle 'pangloss/vim-javascript'
 Bundle 'plasticboy/vim-markdown'
+Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'scrooloose/syntastic'
 Bundle 'sjl/badwolf'
 Bundle 'sjl/clam.vim'
@@ -49,6 +50,6 @@ Bundle 'tpope/vim-scriptease'
 Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-sleuth'
 Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-tbone'
 Bundle 'tpope/vim-unimpaired'
-Bundle 'tristen/vim-sparkup'
 Bundle 'vim-ruby/vim-ruby'

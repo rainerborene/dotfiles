@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # vim: set fdm=marker fmr={,} :
 
-DOTIGNORE="README.md install.sh fish lib sshconfig gitmodules"
+DOTIGNORE="README.md install.sh fish mutt sshconfig gitmodules"
 
 #
 # Git must be installed on your machine.

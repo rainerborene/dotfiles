@@ -2,8 +2,7 @@ vim/tmp
 vim/spell/*.spl
 vim/bundle
 mutt/cache/*
-!mutt/cache/.gitkeep
-mutt/temp/*
-!mutt/temp/.gitkeep
+mutt/tmp/*
+!.gitkeep
 mutt/certificates
 tags

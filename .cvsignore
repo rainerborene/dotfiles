@@ -1,6 +1,7 @@
 *.rdb
 *.pyc
 *.swp
+*.test
 .DS_Store
 .bundle
 .netrwhist

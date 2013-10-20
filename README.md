@@ -4,12 +4,12 @@
 
     bash <(curl -# https://raw.github.com/rainerborene/dotfiles/master/setup.sh) install
 
-This will clone this repository and create symlinks for all config files in your 
+This will clone this repository and create symlinks for all config files in your
 home directory. After some time you might want to keep updated with the main
 repository, you could run the following command inside the dotfiles directory
 to sync:
 
-    git pull origin master 
+    git pull origin master
 
 If you'd like to switch your shell from the default `bash` to `fish`, you can do
 so with the following command.
@@ -32,7 +32,7 @@ Create a symbolic to `private.xml` for [KeyRemap4MacBook](https://pqrs.org/macos
 - [clam.vim](https://github.com/sjl/clam.vim): A lightweight Vim plugin for working with shell commands.
 - [ctrlp.vim](https://github.com/kien/ctrlp.vim): Fuzzy file, buffer, mru, tag, etc finder.
 - [gundo.vim](https://github.com/sjl/gundo.vim): A git mirror of gundo.vim
-- [html5.vim](https://github.com/othree/html5.vim): HTML5 omnicomplete and syntax 
+- [html5.vim](https://github.com/othree/html5.vim): HTML5 omnicomplete and syntax
 - [linediff.vim](https://github.com/AndrewRadev/linediff.vim): A vim plugin to perform diffs on blocks of code
 - [supertab](https://github.com/ervandew/supertab): Perform all your vim insert mode completions with Tab
 - [switch.vim](https://github.com/AndrewRadev/switch.vim): A simple Vim plugin to switch segments of text with predefined replacements
@@ -66,10 +66,10 @@ Create a symbolic to `private.xml` for [KeyRemap4MacBook](https://pqrs.org/macos
 - [vim-sleuth](https://github.com/tpope/vim-sleuth): Heuristically set buffer options
 - [vim-slim](https://github.com/slim-template/vim-slim): A clone of the slim vim plugin from stonean. For use with Pathogen.
 - [vim-smartinput](https://github.com/kana/vim-smartinput): Provide smart input assistant
-- [vim-sparkup](https://github.com/kogakure/vim-sparkup): Bundled vim version of Sparkup, clone into .vim/bundle (pathogen needed)
+- [vim-sneak](https://github.com/justinmk/vim-sneak): The missing motion for Vim
+- [vim-sparkup](https://github.com/rstacruz/sparkup): A parser for a condensed HTML format
 - [vim-surround](https://github.com/tpope/vim-surround): quoting/parenthesizing made simple
 - [vim-unimpaired](https://github.com/tpope/vim-unimpaired): pairs of handy bracket mappings
-- [vim-yankstack](https://github.com/nickstenning/vim-yankstack): A lightweight implementation of emacs's kill-ring for vim
 
 ## License
 

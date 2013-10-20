@@ -8,7 +8,9 @@ runtime macros/matchit.vim
 set hidden
 set confirm
 set nobackup
+set autowrite
 set noswapfile
+set noshowmode
 set splitbelow
 set splitright
 set spelllang=pt,en
@@ -28,10 +30,9 @@ set gdefault
 set virtualedit+=block
 set shortmess=atI
 set textwidth=80
-set formatoptions=qn1
+set formatoptions=qrn1
 set colorcolumn=+1
 set lazyredraw
-set foldopen-=block
 set shiftwidth=2
 set tabstop=4
 set expandtab
@@ -61,13 +62,7 @@ endif
 
 if has('gui_running')
   set guifont=Menlo:h12 vb noeb t_vb=
-
-  " Remove all the UI cruft
-  set go-=T
-  set go-=l
-  set go-=L
-  set go-=r
-  set go-=R
+  set guioptions=egm
 else
   set mouse=a
 endif
@@ -95,11 +90,6 @@ vnoremap Q gq
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
 
-" Marks and Quotes
-noremap ' `
-noremap ` '
-noremap ` <C-^>
-
 " Move to last change
 nnoremap gI `.
 
@@ -126,6 +116,10 @@ vnoremap ? ?\v
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
+" Same when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
+
 " I hate when the rendering occasionally gets messed up.
 nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
 
@@ -147,9 +141,24 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
+" Easier to type, and I never use the default behavior.
+noremap H ^
+noremap L $
+vnoremap L g_
+
+" Resize windows
+nnoremap <left>  <c-w><
+nnoremap <right> <c-w>>
+nnoremap <up>    <c-w>-
+nnoremap <down>  <c-w>+
+
 " Clam
 nnoremap ! :Clam<space>
 vnoremap ! :ClamVisual<space>
+
+" Sneak previous mapping
+nmap \| <Plug>SneakPrevious
+xmap \| <Plug>VSneakPrevious
 
 " Kill window
 nnoremap K :q<cr>
@@ -170,12 +179,7 @@ endfunction
 nnoremap <silent> M :call <SID>Man()<CR>
 
 " Make Y consistent with C and D
-call yankstack#setup()
 nnoremap Y y$
-
-" Yankstack
-nmap H <Plug>yankstack_substitute_older_paste
-nmap L <Plug>yankstack_substitute_newer_paste
 
 " Select just-pasted text
 nnoremap gV `[v`]
@@ -198,6 +202,9 @@ nnoremap <leader>z zMzvzz
 noremap x "_x
 noremap X "_X
 
+" Show last search in quickfix (http://travisjeffery.com/b/2011/10/m-x-occur-for-vim/)
+nnoremap <silent> g/ :vimgrep /<C-R>//j %<CR>\|:cw<CR>
+
 " Clear search highlight
 nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
 
@@ -212,10 +219,10 @@ nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 " For some reason Vim no longer wants to talk to the OS X pasteboard through "*.
 " Computers are bullshit.
 function! s:FuckingCopyTheTextPlease() " {{{2
-    let old_z = @z
-    normal! gv"zy
-    call system('pbcopy', @z)
-    let @z = old_z
+  let old_z = @z
+  normal! gv"zy
+  call system('pbcopy', @z)
+  let @z = old_z
 endfunction " }}}2
 nnoremap <silent> <leader>p mz:r!pbpaste<cr>`z
 vnoremap <silent> <leader>y :<c-u>call <SID>FuckingCopyTheTextPlease()<cr>
@@ -249,7 +256,6 @@ nnoremap <silent> <leader>eo :botright 10split ~/Google\ Drive/notes.txt<CR>
 nnoremap <silent> <leader>ew :Explore<CR>
 
 " Fugitive
-nnoremap <leader>gg :Git!<space>
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
 nnoremap <silent> <leader>ge :Gedit<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
@@ -260,8 +266,8 @@ nnoremap <silent> <leader>gw :Gwrite<cr>
 
 augroup common
   au!
-  au FileType html,xml,js,css,php,ruby autocmd BufWritePre <buffer> normal ,w
-  au FileType javascript,java,css setlocal foldmethod=marker foldmarker={,}
+  au BufWritePre <buffer> normal ,w
+  au FileType javascript,java setlocal foldmethod=marker foldmarker={,}
 augroup END
 
 augroup ft_postgres
@@ -281,27 +287,27 @@ augroup ft_fish
 augroup END
 
 augroup ft_muttrc
-    au!
-    au BufRead,BufNewFile *.muttrc set ft=muttrc
-    au FileType muttrc setlocal foldmethod=marker foldmarker={{{,}}}
+  au!
+  au BufRead,BufNewFile *.muttrc set ft=muttrc
+  au FileType muttrc setlocal foldmethod=marker foldmarker={{{,}}}
 augroup END
 
 augroup ft_mail
-    au!
-    au Filetype mail setlocal spell
+  au!
+  au Filetype mail setlocal spell
 augroup END
 
 augroup ft_git
   au!
   au FileType git,gitcommit setlocal foldmethod=syntax colorcolumn& nolist
-  au FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-r><C-g><CR>
+  au FileType gitcommit nmap <silent> <buffer> U :call system("git checkout -- <C-r><C-g>")<CR>R
   au FileType gitcommit setlocal spell | wincmd K
   au BufReadPost fugitive://* set bufhidden=delete
   au QuickFixCmdPost *grep* cwindow
   au User fugitive
-    \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
-    \   nnoremap <buffer> .. :edit %:h<CR> |
-    \ endif
+        \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+        \   nnoremap <buffer> .. :edit %:h<CR> |
+        \ endif
 augroup END
 
 augroup ft_markdown
@@ -340,10 +346,10 @@ augroup ft_ruby
   au FileType ruby setlocal keywordprg=ri\ -T
   au FileType ruby let b:vimpipe_command='ruby <(cat)'
   au User Rails
-    \ if filereadable('zeus.json') |
-    \   let b:dispatch = 'zeus rake spec' |
-    \   let b:start = 'zeus console' |
-    \ end
+        \ if filereadable('zeus.json') |
+        \   let b:dispatch = 'zeus rake spec' |
+        \   let b:start = 'zeus console' |
+        \ endif
 augroup END
 
 augroup ft_go
@@ -364,9 +370,9 @@ au FocusLost * :silent! wall
 augroup line_return
   au!
   au BufReadPost *
-    \ if line("'\"") > 1 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
+        \ if line("'\"") > 1 && line("'\"") <= line("$") |
+        \   exe "normal! g`\"" |
+        \ endif
 augroup END
 
 " Don't screw up folds when inserting text that might affect them, until
@@ -375,16 +381,16 @@ augroup END
 augroup fast_completion
   au!
   au InsertEnter *
-    \ if !exists('w:last_fdm') |
-    \   let w:last_fdm=&foldmethod |
-    \   setlocal foldmethod=manual |
-    \ endif
+        \ if !exists('w:last_fdm') |
+        \   let w:last_fdm=&foldmethod |
+        \   setlocal foldmethod=manual |
+        \ endif
 
   au InsertLeave,WinLeave *
-    \ if exists('w:last_fdm') |
-    \   let &l:foldmethod=w:last_fdm |
-    \   unlet w:last_fdm |
-    \ endif
+        \ if exists('w:last_fdm') |
+        \   let &l:foldmethod=w:last_fdm |
+        \   unlet w:last_fdm |
+        \ endif
 augroup END
 
 " }}}1
@@ -398,6 +404,18 @@ function! s:VSetSearch()
 endfunction
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
+
+" }}}1
+" Populate the argument list from the quickfix {{{1
+
+function! s:QuickfixFilenames()
+  let buffer_numbers = {}
+  for quickfix_item in getqflist()
+    let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
+  endfor
+  return join(map(values(buffer_numbers), 'fnameescape(v:val)'))
+endfunction
+command! -nargs=0 -bar Qargs execute 'args' s:QuickfixFilenames()
 
 " }}}1
 " Folding {{{1
@@ -449,9 +467,9 @@ let g:ctrlp_use_caching = 0
 let g:ctrlp_filter_greps = 'egrep -iv "\.(png|jpe?g|bmp|gif|png)"'
 let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps, 'ag %s -l --nocolor -g ""']
 let g:ctrlp_custom_ignore = {
-  \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
-  \ 'dir': '\v[\/](tmp|tags)$'
-  \ }
+      \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
+      \ 'dir': '\v[\/](tmp|tags)$'
+      \ }
 
 " }}}2
 " HTML5 {{{2
@@ -481,30 +499,30 @@ let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
 let g:syntastic_quiet_warnings = 0
 let g:syntastic_auto_loc_list = 2
 let g:syntastic_mode_map = {
-  \ 'mode': 'active',
-  \ 'passive_filetypes': ['html', 'yaml']
-  \ }
+      \ 'mode': 'active',
+      \ 'passive_filetypes': ['html', 'yaml']
+      \ }
 
 " }}}2
 " Rails {{{2
 
 let g:rails_menu = 0
 let g:rails_projections = {
-  \ "app/validators/*_validator.rb": { "command": "validator" },
-  \ "app/presenters/*_presenter.rb": { "command": "presenter" },
-  \ "app/admin/*.rb": {
-  \   "command": "admin" ,
-  \   "affinity": "model",
-  \   "template": "ActiveAdmin.register %S do\nend"
-  \ },
-  \ "app/workers/*_worker.rb": {
-  \   "command": "worker" ,
-  \   "template": "class %SWorker\nend"
-  \ },
-  \ "spec/factories.rb": {
-  \   "command": "factory",
-  \   "template": "FactoryGirl.define do\nend"
-  \ }}
+      \ "app/validators/*_validator.rb": { "command": "validator" },
+      \ "app/presenters/*_presenter.rb": { "command": "presenter" },
+      \ "app/admin/*.rb": {
+      \   "command": "admin" ,
+      \   "affinity": "model",
+      \   "template": "ActiveAdmin.register %S do\nend"
+      \ },
+      \ "app/workers/*_worker.rb": {
+      \   "command": "worker" ,
+      \   "template": "class %SWorker\nend"
+      \ },
+      \ "spec/factories.rb": {
+      \   "command": "factory",
+      \   "template": "FactoryGirl.define do\nend"
+      \ }}
 
 " }}}2
 " Vitality {{{2
@@ -514,6 +532,7 @@ let g:vitality_fix_cursor = 0
 " }}}2
 " YouCompleteMe {{{2
 
+let g:ycm_filetype_specific_completion_to_disable = { 'ruby': 1 }
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_min_num_of_chars_for_completion = 4
