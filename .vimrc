@@ -99,6 +99,10 @@ nnoremap <silent> <leader>w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
 " Don't move on *
 nnoremap * *<c-o>
 
+" Fast scrolling
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
+
 " Switch segments of text with predefined replacements
 nnoremap <silent> - :Switch<cr>
 

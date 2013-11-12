@@ -9,6 +9,7 @@
 .rake_tasks~
 .sass-cache
 .tern-port
+.vagrant
 /tags
 Thumbs.db
 custom_plan.rb

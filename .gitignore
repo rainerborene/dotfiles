@@ -1,8 +1,9 @@
+tags
 vim/tmp
 vim/spell/*.spl
 vim/bundle
 mutt/cache/*
 mutt/tmp/*
 !.gitkeep
-mutt/certificates
-tags
+mutt/accounts.muttrc
+mutt/sig

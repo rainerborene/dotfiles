@@ -2,8 +2,8 @@
 
 . ~/.dotfiles/fish/z.fish
 
-alias v 'vim'
 alias m 'mvim'
+alias v 'vim'
 
 alias tm 'tmux -u2'
 alias tms 'tm list-sessions'
@@ -97,8 +97,8 @@ prepend_to_path "/bin"
 prepend_to_path "/usr/sbin"
 prepend_to_path "/sbin"
 prepend_to_path "/usr/local/bin"
-prepend_to_path "$HOME/.rbenv/bin"
-prepend_to_path "$HOME/.rbenv/shims"
+prepend_to_path (rbenv root)/bin
+prepend_to_path (rbenv root)/shims
 prepend_to_path "/usr/local/mysql/bin"
 prepend_to_path "/usr/local/share/npm/bin"
 prepend_to_path "$GOPATH/bin"
@@ -118,7 +118,7 @@ function git_prompt
     if git rev-parse --git-dir >/dev/null 2>&1
         set_color normal
         printf ' on '
-        set_color magenta
+        set_color red
         printf '%s' (git rev-parse --abbrev-ref HEAD 2>/dev/null)
         set_color normal
     end
@@ -131,7 +131,7 @@ function fish_prompt
 
     echo
 
-    set_color magenta
+    set_color red
     printf '%s' (whoami)
     set_color normal
     printf ' at '
