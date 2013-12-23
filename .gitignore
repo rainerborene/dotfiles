@@ -1,9 +1,10 @@
-tags
-vim/tmp
-vim/spell/*.spl
-vim/bundle
-mutt/cache/*
-mutt/tmp/*
 !.gitkeep
 mutt/accounts.muttrc
+mutt/cache/*
 mutt/sig
+mutt/tmp/*
+tags
+vim/bundle
+vim/spell/*.spl
+vim/tmp
+vim/yankring_history_v2.txt

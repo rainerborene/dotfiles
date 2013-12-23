@@ -14,10 +14,6 @@ fi
 # Install the dot files into user's home directory.
 #
 
-link() {
-  ln -nfs ~/.dotfiles/$0 ~/$0
-}
-
 install() {
   # Clone repository and initialize modules
   echo "*** Downloading..."
@@ -29,6 +25,7 @@ install() {
   link .agignore
   link .ctags
   link .gemrc
+  link .gitconfig
   link .hushlogin
   link .irbrc
   link .jshintrc
@@ -37,12 +34,17 @@ install() {
   link .tmux.conf
   link .urlview
   link .vimrc
+  link .vim
 
   # Copy sshconfig to ssh directory
   mkdir -p ~/.ssh && ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
 
   # Done
   echo "*** Installed"
+}
+
+link() {
+  ln -nfs ~/.dotfiles/$0 ~/$0
 }
 
 install

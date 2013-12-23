@@ -3,7 +3,7 @@ set nocompatible
 set shell=/bin/bash
 set rtp+=~/.vim/bundle/vundle/
 set rtp+=~/.go/src/github.com/nsf/gocode/vim/
-set rtp+=/usr/local/Cellar/go/1.1.2/libexec/misc/vim/
+set rtp+=/usr/local/Cellar/go/1.2/libexec/misc/vim/
 call vundle#rc()
 
 Bundle 'AndrewRadev/linediff.vim'
@@ -52,3 +52,4 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-tbone'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'vim-ruby/vim-ruby'
+Bundle 'vim-scripts/YankRing.vim'

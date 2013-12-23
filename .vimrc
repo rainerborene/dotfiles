@@ -22,6 +22,7 @@ set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
 set completeopt=longest,menuone
 set fillchars=diff:⣿,vert:│
+set pastetoggle=<F6>
 set linebreak
 set ignorecase
 set smartcase
@@ -45,6 +46,9 @@ let g:badwolf_tabline = 2
 let g:badwolf_html_link_underline = 0
 let g:badwolf_css_props_highlight = 1
 colorscheme badwolf
+
+" Highlight VCS conflict markers
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " }}}1
 " Persistent undo {{{1
@@ -72,10 +76,6 @@ endif
 
 let mapleader = ","
 let maplocalleader = "\\"
-
-" Abbreviations
-ia #e # encoding: utf-8
-ia pry binding.pry
 
 " Easier bracket matching
 map <Tab> %
@@ -167,24 +167,6 @@ xmap \| <Plug>VSneakPrevious
 " Kill window
 nnoremap K :q<cr>
 
-" Open a window with the man page for the word under the cursor {{{2
-function s:Man()
-  if &ft == 'go' && exists(':Godoc')
-    exec "Godoc " . expand("<cWORD>")
-  elseif &ft == 'ruby' && exists(':Clam')
-    exec printf("Clam %s %s | col -b", &kp, expand("<cWORD>"))
-  else
-    norm! K
-  end
-endfunction
-" }}}2
-
-" Lookup keyword
-nnoremap <silent> M :call <SID>Man()<CR>
-
-" Make Y consistent with C and D
-nnoremap Y y$
-
 " Select just-pasted text
 nnoremap gV `[v`]
 
@@ -195,22 +177,24 @@ vnoremap <Enter> :Tabularize /\v/<left>
 nnoremap <Space> za
 vnoremap <Space> za
 
-" Make zO recursively open whatever top level fold we're in, no matter where the
-" cursor happens to be.
-nnoremap zO zCzO
+" Make zO recursively open whatever fold we're in, even if it's partially open.
+nnoremap zO zczO
 
 " Focus the current fold by folding all the others
 nnoremap <leader>z zMzvzz
 
-" The black hole register
+" Send to the black hole register
 noremap x "_x
 noremap X "_X
 
 " Show last search in quickfix (http://travisjeffery.com/b/2011/10/m-x-occur-for-vim/)
 nnoremap <silent> g/ :vimgrep /<C-R>//j %<CR>\|:cw<CR>
 
+" Rebuild Ctags (mnemonic RC -> CR -> <cr>)
+nnoremap <leader><cr> :silent !ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
+
 " Clear search highlight
-nnoremap <silent> <leader>/ :silent :nohlsearch<CR>
+nnoremap <silent> <leader>/ :nohlsearch<CR>
 
 " Undo tree usable by humans
 nnoremap <silent> <leader>u :GundoToggle<CR>
@@ -228,7 +212,7 @@ function! s:FuckingCopyTheTextPlease() " {{{2
   call system('pbcopy', @z)
   let @z = old_z
 endfunction " }}}2
-nnoremap <silent> <leader>p mz:r!pbpaste<cr>`z
+noremap <leader>p :silent! set paste<CR>"*p:set nopaste<CR>
 vnoremap <silent> <leader>y :<c-u>call <SID>FuckingCopyTheTextPlease()<cr>
 
 " Start a process in a new, focused split pane. {{{2
@@ -256,43 +240,51 @@ nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
 nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
 nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
-nnoremap <silent> <leader>eo :botright 10split ~/Google\ Drive/notes.txt<CR>
+nnoremap <silent> <leader>eo :botright 10split ~/.notes<CR>
 nnoremap <silent> <leader>ew :Explore<CR>
 
 " Fugitive
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
 nnoremap <silent> <leader>ge :Gedit<cr>
+nnoremap <silent> <leader>gl :Glog<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gw :Gwrite<cr>
 
 " }}}1
 " Autocommands {{{1
 
-augroup common
-  au!
-  au BufWritePre <buffer> normal ,w
-  au FileType javascript,java setlocal foldmethod=marker foldmarker={,}
-augroup END
-
 augroup ft_postgres
   au!
-  au BufNewFile,BufRead *.sql set filetype=pgsql
+  au BufNewFile,BufRead *.sql,*psql* set filetype=pgsql
   au FileType pgsql set softtabstop=2 shiftwidth=2
   au FileType pgsql set foldmethod=indent
-  au BufRead *psql* setfiletype pgsql
+  au FileType pgsql setlocal commentstring=--\ %s comments=:--
 augroup END
 
 augroup ft_fish
   au!
-  au BufNewFile,BufRead *.fish setlocal filetype=fish
+  au BufNewFile,BufRead *.fish set filetype=fish
   au FileType fish setlocal foldmethod=marker foldmarker={{{,}}}
   au FileType fish setlocal commentstring=#\ %s
   au FileType fish let b:vimpipe_command="fish <(cat)"
 augroup END
 
+augroup ft_javascript
+  au!
+  au FileType json setlocal equalprg=python\ -m\ json.tool
+  au FileType javascript setlocal foldmethod=marker foldmarker={,}
+augroup END
+
+augroup ft_html
+  au!
+  au FileType html,eruby setlocal foldmethod=manual
+  au FileType html,eruby nnoremap <buffer> <localleader>f Vatzf
+  au FileType html,eruby nnoremap <buffer> <localleader>= Vat=
+augroup END
+
 augroup ft_muttrc
   au!
-  au BufRead,BufNewFile *.muttrc set ft=muttrc
+  au BufRead,BufNewFile *.muttrc set filetype=muttrc
   au FileType muttrc setlocal foldmethod=marker foldmarker={{{,}}}
 augroup END
 
@@ -316,7 +308,7 @@ augroup END
 
 augroup ft_markdown
   au!
-  au BufNewFile,BufRead *.m*down setlocal filetype=markdown
+  au BufNewFile,BufRead *.m*down setlocal filetype=markdown foldlevel=1
   au FileType markdown nnoremap <buffer> <localleader>1 yypVr=
   au FileType markdown nnoremap <buffer> <localleader>2 yypVr-
   au FileType markdown nnoremap <buffer> <localleader>3 I### <ESC>
@@ -325,9 +317,10 @@ augroup ft_markdown
   au FileType markdown let b:vimpipe_filetype="html"
 augroup END
 
-augroup ft_json
+augroup ft_tmux
   au!
-  au FileType json setlocal equalprg=python\ -m\ json.tool
+  au BufNewFile,BufRead .tmux.conf,tmux.conf* setlocal filetype=tmux
+  au BufNewFile,BufRead .tmux.conf,tmux.conf* setlocal commentstring=#\ %s
 augroup END
 
 augroup ft_css
@@ -347,6 +340,7 @@ augroup END
 
 augroup ft_ruby
   au!
+  au FileType ruby setlocal foldmethod=syntax
   au FileType ruby setlocal keywordprg=ri\ -T
   au FileType ruby let b:vimpipe_command='ruby <(cat)'
   au User Rails
@@ -358,9 +352,10 @@ augroup END
 
 augroup ft_go
   au!
-  au FileType go let b:vimpipe_command='go run %'
-  au FileType go nnoremap <buffer> <silent> <localleader>t :Fmt<cr>:w<cr>:e<cr>
   au FileType godoc wincmd L | nnoremap <buffer> <silent> K :q<cr>
+  au FileType go nnoremap <buffer> <silent> <localleader>t :Fmt<cr>:w<cr>:e<cr>
+  au FileType go let b:vimpipe_command='go run %'
+  au FileType go setlocal commentstring=\/\/\ %s
 augroup END
 
 augroup scriptease_help
@@ -369,6 +364,12 @@ augroup END
 
 " Save when losing focus
 au FocusLost * :silent! wall
+
+" Resize splits when the window is resized
+au VimResized * :wincmd =
+
+" No folds closed when editing a new files
+au BufNew * setlocal foldlevelstart=99
 
 " Restore cursor position
 augroup line_return
@@ -422,6 +423,30 @@ endfunction
 command! -nargs=0 -bar Qargs execute 'args' s:QuickfixFilenames()
 
 " }}}1
+" YankRing {{{1
+
+function! YRRunAfterMaps()
+  nnoremap <silent> Y :<C-U>YRYankCount 'y$'<CR>
+  omap <expr> H YRMapsExpression("", "^")
+  omap <expr> L YRMapsExpression("", "$")
+  vnoremap <silent> p :<c-u>YRPaste 'p', 'v'<cr>gv:YRYankRange 'v'<cr>
+endfunction
+
+" }}}1
+" Dash.app {{{1
+
+function! s:Dash()
+  let varname = printf('g:dash_for_%s', &filetype)
+  let prefix = exists(varname) ? eval(varname) : &filetype
+  if &filetype ==# 'vim'
+    norm! K
+    return
+  endif
+  call system(printf("open dash://'%s:%s'", prefix, expand('<cword>')))
+endfunction
+nnoremap M :call <SID>Dash()<CR>
+
+" }}}1
 " Folding {{{1
 
 function! MyFoldText()
@@ -450,7 +475,7 @@ let g:ackprg = 'ag --smart-case --nogroup --nocolor --column'
 " }}}2
 " Ruby {{{2
 
-let g:ruby_fold = 1
+let g:ruby_space_errors = 1
 
 " }}}2
 " Netrw {{{2
@@ -465,8 +490,9 @@ let g:netrw_fastbrowse = 0
 " CtrlP {{{2
 
 let g:ctrlp_map = '<leader>,'
+let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
 let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
-let g:ctrlp_working_path_mode = 0
+let g:ctrlp_working_path_mode = 'car'
 let g:ctrlp_use_caching = 0
 let g:ctrlp_filter_greps = 'egrep -iv "\.(png|jpe?g|bmp|gif|png)"'
 let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps, 'ag %s -l --nocolor -g ""']
@@ -474,6 +500,17 @@ let g:ctrlp_custom_ignore = {
       \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
       \ 'dir': '\v[\/](tmp|tags)$'
       \ }
+
+function! s:DeleteBuffer()
+  let path = fnamemodify(getline('.')[2:], ':p')
+  let bufn = matchstr(path, '\v\d+\ze\*No Name')
+  exec "bd" bufn ==# "" ? path : bufn
+  exec "norm \<F5>"
+endfunction
+
+function! CtrlPMappings()
+  nnoremap <buffer> <silent> <C-@> :call <sid>DeleteBuffer()<cr>
+endfunction
 
 " }}}2
 " HTML5 {{{2
@@ -528,6 +565,8 @@ let g:rails_projections = {
       \   "template": "FactoryGirl.define do\nend"
       \ }}
 
+let g:rails_abbreviations = { "pry": "binding.pry" }
+
 " }}}2
 " Vitality {{{2
 
@@ -537,15 +576,29 @@ let g:vitality_fix_cursor = 0
 " YouCompleteMe {{{2
 
 let g:ycm_filetype_specific_completion_to_disable = { 'ruby': 1 }
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_min_num_of_chars_for_completion = 4
+let g:ycm_use_ultisnips_completer = 0
 
 " }}}2
 " Powerline {{{2
 
 let g:Powerline_symbols = 'fancy'
 let g:Powerline_cache_enabled = 1
+
+" }}}2
+" YankRing {{{2
+
+let g:yankring_n_keys = 'Y D'
+let g:yankring_history_dir = expand('~/.vim')
+
+" }}}2
+" Dash.app {{{2
+
+let g:dash_for_javascript = 'jquery'
+let g:dash_for_eruby = 'rails'
+let g:dash_for_ruby = 'rails'
+let g:dash_for_yaml = 'ansible'
 
 " }}}2
 

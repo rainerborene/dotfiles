@@ -16,3 +16,4 @@ custom_plan.rb
 zeus.json
 Gemfile.lock.tags
 public/ckeditor_assets
+vagrant_ansible_inventory_default

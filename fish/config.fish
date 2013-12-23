@@ -34,7 +34,6 @@ alias be 'bundle exec'
 alias rs 'rails s thin'
 alias rc 'rails console'
 alias fore 'foreman start -f Procfile.dev'
-alias mina 'bundle exec mina'
 
 function psg -d "Grep for a running process, returning its PID and full string"
     ps auxww | grep --color=always $argv | grep -v grep | collapse | cuts -f 2,11-
@@ -50,10 +49,10 @@ function emptytrash -d "Empty the OS X trash folders"
     sudo rm -rfv /private/var/log/asl/*.asl
 end
 
-function utf8_encode
-    set -l encoding (file -I $argv | cut -d '=' -f 2)
-    iconv -f $encoding -t utf-8 $argv > $argv.utf8
-    rm -v $argv; and mv -v $argv.utf8 $argv
+function ip -d "Send IP address to clipboard"
+    set -l ip (curl -s ifconfig.me/ip)
+    echo $ip | pbcopy
+    echo $ip
 end
 
 function mcd
@@ -83,6 +82,7 @@ end
 set -gx fish_greeting ''
 set -gx EDITOR vim
 set -gx GOPATH $HOME/.go
+set -gx SSL_CERT_FILE /usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
 set -gx PYTHONPATH /usr/local/lib/python2.7/site-packages $PYTHONPATH
 set -gx PKG_CONFIG_PATH (brew --prefix sqlite)/lib/pkgconfig
 set -gx RUBY_HEAP_MIN_SLOTS 1000000
@@ -102,6 +102,7 @@ prepend_to_path (rbenv root)/shims
 prepend_to_path "/usr/local/mysql/bin"
 prepend_to_path "/usr/local/share/npm/bin"
 prepend_to_path "$GOPATH/bin"
+prepend_to_path "$HOME/.dotfiles/mutt"
 prepend_to_path "./bin"
 
 # }}}
