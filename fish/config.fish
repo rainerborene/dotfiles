@@ -97,9 +97,12 @@ prepend_to_path "/bin"
 prepend_to_path "/usr/sbin"
 prepend_to_path "/sbin"
 prepend_to_path "/usr/local/bin"
-prepend_to_path (rbenv root)/bin
-prepend_to_path (rbenv root)/shims
-prepend_to_path "/usr/local/mysql/bin"
+
+if test -x "(which rbenv)"
+    prepend_to_path (rbenv root)/bin
+    prepend_to_path (rbenv root)/shims
+end
+
 prepend_to_path "/usr/local/share/npm/bin"
 prepend_to_path "$GOPATH/bin"
 prepend_to_path "$HOME/.dotfiles/mutt"
@@ -164,7 +167,7 @@ end
 # }}}
 # Always work in a tmux session {{{
 
-if test -x (which tmux)
+if test -x "(which tmux)"
     if test $TERM != "screen-256color" -a $TERM != "screen"
         tmux attach -t hack; or tmux new -s hack; exit
     end
@@ -173,7 +176,7 @@ end
 # }}}
 # Loads different environment variables depending on your path {{{
 
-eval (direnv hook fish)
+test -x "(which direnv)"; and eval (direnv hook fish)
 
 # }}}
 

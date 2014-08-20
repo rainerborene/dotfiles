@@ -22,19 +22,22 @@ install() {
   git clone -q git://github.com/rainerborene/dotfiles.git ~/.dotfiles
 
   # Create symbolic links
-  link .agignore
-  link .ctags
-  link .gemrc
-  link .gitconfig
-  link .hushlogin
-  link .irbrc
-  link .jshintrc
-  link .pryrc
-  link .railsrc
-  link .tmux.conf
-  link .urlview
-  link .vimrc
-  link .vim
+  dotlink agignore
+  dotlink ctags
+  dotlink gemrc
+  dotlink gitconfig
+  dotlink hushlogin
+  dotlink irbrc
+  dotlink jshintrc
+  dotlink pryrc
+  dotlink railsrc
+  dotlink tmux.conf
+  dotlink urlview
+  dotlink vimrc
+
+  # Manual linking
+  ln -nfs ~/.dotfiles/vim ~/.vim
+  ln -nfs ~/.dotfiles/fish/config.fish ~/.config/fish/config.fish
 
   # Copy sshconfig to ssh directory
   mkdir -p ~/.ssh && ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
@@ -43,8 +46,8 @@ install() {
   echo "*** Installed"
 }
 
-link() {
-  ln -nfs ~/.dotfiles/$0 ~/$0
+dotlink() {
+  ln -nfs ~/.dotfiles/.$1 ~/.$1
 }
 
 install
