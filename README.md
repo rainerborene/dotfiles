@@ -21,10 +21,6 @@ Now set up your credentials.
     git config --global user.name "Jonh Doe"
     git config --global user.email jonh@doe.com
 
-Create a symbolic to `private.xml` for [KeyRemap4MacBook](https://pqrs.org/macosx/keyremap4macbook/) custom settings.
-
-    ln -nfs ~/.dotfiles/private.xml ~/Library/Application\ Support/KeyRemap4MacBook/private.xml
-
 ## What plugins are included?
 
 - [YankRing.vim](https://github.com/vim-scripts/YankRing.vim): Maintains a history of previous yanks, changes and deletes
