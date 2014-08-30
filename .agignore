@@ -1,7 +1,8 @@
-tmp
-public/assets
-vendor/assets/javascripts/ckeditor
-node_modules
 .bundle
+.zeus.sock
 log
+node_modules
+public/assets
 tags
+tmp
+vendor/assets/javascripts/ckeditor
