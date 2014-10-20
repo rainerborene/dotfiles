@@ -16,10 +16,10 @@ fi
 
 install() {
   # Clone repository and initialize modules
-  echo "*** Downloading..."
-  rm -Rf ~/.dotfiles
+  # echo "*** Downloading..."
+  # rm -Rf ~/.dotfiles
 
-  git clone -q git://github.com/rainerborene/dotfiles.git ~/.dotfiles
+  # git clone -q git://github.com/rainerborene/dotfiles.git ~/.dotfiles
 
   # Create symbolic links
   dotlink agignore
@@ -35,12 +35,14 @@ install() {
   dotlink urlview
   dotlink vimrc
 
+  # Create directories
+  mkdir -p ~/.ssh
+  mkdir -p ~/.config/fish
+
   # Manual linking
   ln -nfs ~/.dotfiles/vim ~/.vim
   ln -nfs ~/.dotfiles/fish/config.fish ~/.config/fish/config.fish
-
-  # Copy sshconfig to ssh directory
-  mkdir -p ~/.ssh && ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
+  ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
 
   # Done
   echo "*** Installed"

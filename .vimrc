@@ -1,10 +1,11 @@
 " .vimrc
 source ~/.dotfiles/.vimrc.bundles
 
+runtime plugin/rsi.vim
 runtime plugin/sensible.vim
 runtime plugin/scriptease.vim
-runtime macros/matchit.vim
 
+set number
 set hidden
 set confirm
 set nobackup
@@ -13,6 +14,7 @@ set noswapfile
 set noshowmode
 set splitbelow
 set splitright
+set foldlevel=99
 set spelllang=pt,en
 set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
 set dictionary=/usr/share/dict/words
@@ -21,18 +23,17 @@ set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
 set completeopt=longest,menuone
-set fillchars=diff:⣿,vert:│
 set pastetoggle=<F6>
 set linebreak
 set ignorecase
 set smartcase
 set hlsearch
 set gdefault
+set mouse=a
 set virtualedit+=block
 set shortmess=atI
 set textwidth=80
 set formatoptions=qrn1
-set colorcolumn=+1
 set lazyredraw
 set shiftwidth=2
 set tabstop=4
@@ -40,12 +41,6 @@ set expandtab
 set wrap
 
 " Color scheme {{{1
-
-set background=dark
-let g:badwolf_tabline = 2
-let g:badwolf_html_link_underline = 0
-let g:badwolf_css_props_highlight = 1
-colorscheme badwolf
 
 " Highlight VCS conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
@@ -59,16 +54,6 @@ set undodir=~/.vim/tmp/undo
 
 if !isdirectory(expand(&undodir))
   call mkdir(expand(&undodir), "p")
-endif
-
-" }}}1
-" Environments (GUI/Console) {{{1
-
-if has('gui_running')
-  set guifont=Menlo:h12 vb noeb t_vb=
-  set guioptions=egm
-else
-  set mouse=a
 endif
 
 " }}}1
@@ -94,14 +79,7 @@ nnoremap J mzJ`z
 nnoremap gI `.
 
 " Clean trailing whitespace
-nnoremap <silent> <leader>w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
-
-" Don't move on *
-nnoremap * *<c-o>
-
-" Fast scrolling
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
+nnoremap <silent> =w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
 
 " Switch segments of text with predefined replacements
 nnoremap <silent> - :Switch<cr>
@@ -110,34 +88,63 @@ nnoremap <silent> - :Switch<cr>
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
-" Use sane regexes.
-nnoremap / /\v
-vnoremap / /\v
-nnoremap ? ?\v
-vnoremap ? ?\v
+" Use sane regexes and mark position before search.
+nnoremap / ms/\v
+nnoremap ? ms?\v
 
-" Keep search matches in the middle of the window.
-nnoremap n nzzzv
-nnoremap N Nzzzv
+" Search within visual block
+xnoremap / <esc>/\%V\v
+xnoremap ? <esc>?\%V\v
 
-" Same when jumping around
-nnoremap g; g;zz
-nnoremap g, g,zz
+" Fast esc key
+inoremap jj <Esc>
+
+" Substitute.
+xnoremap s :s/\v/g<Left><Left>
+
+" Auto center
+nnoremap <silent> n nzzzv
+nnoremap <silent> N Nzzzv
+nnoremap <silent> * *zz
+nnoremap <silent> # #zz
+nnoremap <silent> g* g*zz
+nnoremap <silent> g# g#zz
+nnoremap <silent> g; g;zz
+nnoremap <silent> g, g,zz
+
+" Don't move on *
+nnoremap * *<c-o>
 
 " I hate when the rendering occasionally gets messed up.
 nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
 
 " Sort lines
-nnoremap <leader>o vip:!sort<cr>
-vnoremap <leader>o :!sort<cr>
+nnoremap gs vip:!sort<cr>
+vnoremap gs :!sort<cr>
 
-" Speed up buffer switching
+" UltiSnips trigger keys
+inoremap <C-c> <Nop>
+inoremap <C-b> <Nop>
+
+" Speed up window switching
 nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
 nnoremap <leader>s <C-W>s
 nnoremap <leader>v <C-W>v
+
+" Fast tab switching
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+nnoremap <leader>4 4gt
+nnoremap <leader>5 5gt
+nnoremap <C-t> :tabnew<CR>
+
+" Fast scrolling
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
 
 " Sane movement with wrap turned on
 nnoremap j gj
@@ -150,19 +157,9 @@ noremap H ^
 noremap L $
 vnoremap L g_
 
-" Resize windows
-nnoremap <left>  <c-w><
-nnoremap <right> <c-w>>
-nnoremap <up>    <c-w>-
-nnoremap <down>  <c-w>+
-
 " Clam
 nnoremap ! :Clam<space>
 vnoremap ! :ClamVisual<space>
-
-" Sneak previous mapping
-nmap \| <Plug>SneakPrevious
-xmap \| <Plug>VSneakPrevious
 
 " Kill window
 nnoremap K :q<cr>
@@ -171,7 +168,7 @@ nnoremap K :q<cr>
 nnoremap gV `[v`]
 
 " Tabular alignment
-vnoremap <Enter> :Tabularize /\v/<left>
+vnoremap <CR> :Tabularize /\v/<left>
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -183,15 +180,32 @@ nnoremap zO zczO
 " Focus the current fold by folding all the others
 nnoremap <leader>z zMzvzz
 
+" Command history navigation
+cnoremap <C-j> <t_kd>
+cnoremap <C-k> <t_ku>
+
+" Get off my lawn
+cnoremap <Up> <Nop>
+cnoremap <Down> <Nop>
+cnoremap <Left> <Nop>
+cnoremap <Right> <Nop>
+nnoremap <Up> <Nop>
+nnoremap <Down> <Nop>
+nnoremap <Left> <Nop>
+nnoremap <Right> <Nop>
+
 " Send to the black hole register
 noremap x "_x
 noremap X "_X
+
+" Preserve previous paste
+vnoremap p pgvy
 
 " Show last search in quickfix (http://travisjeffery.com/b/2011/10/m-x-occur-for-vim/)
 nnoremap <silent> g/ :vimgrep /<C-R>//j %<CR>\|:cw<CR>
 
 " Rebuild Ctags (mnemonic RC -> CR -> <cr>)
-nnoremap <leader><cr> :silent !ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
+nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
 " Clear search highlight
 nnoremap <silent> <leader>/ :nohlsearch<CR>
@@ -212,36 +226,15 @@ function! s:FuckingCopyTheTextPlease() " {{{2
   call system('pbcopy', @z)
   let @z = old_z
 endfunction " }}}2
-noremap <leader>p :silent! set paste<CR>"*p:set nopaste<CR>
-vnoremap <silent> <leader>y :<c-u>call <SID>FuckingCopyTheTextPlease()<cr>
+vnoremap <silent> Y :<c-u>call <SID>FuckingCopyTheTextPlease()<cr>
 
-" Start a process in a new, focused split pane. {{{2
-function! s:SplitWindow()
-  call system(printf("tmux splitw -p 25 -c '%s' '%s'", getcwd(), exists('b:start') ? b:start : ''))
-endfunction
-" }}}2
-
-" Dispatch
-nnoremap <silent> <leader>r :Rake<CR>
-nnoremap <silent> <leader>t :Dispatch<CR>
-nnoremap <silent> <leader>c :call <SID>SplitWindow()<CR>
-
-" Linediff
-vnoremap <leader>l :Linediff<cr>
-nnoremap <leader>L :LinediffReset<cr>
-
-" Ack searching
-nnoremap <leader>a :Ack!<space>
-vnoremap <leader>a "zy:execute "Ack! " . shellescape(@z)<cr>
+" Ag searching
+nnoremap <leader>a :Ag!<Space>
+vnoremap <leader>a "zy:execute "Ag! " . shellescape(@z)<cr>
 
 " Quick editing
 cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
-nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
-nnoremap <silent> <leader>ed :vsplit ~/.vim/spell/custom-dictionary.utf-8.add<cr>
-nnoremap <silent> <leader>ef :vsplit ~/.config/fish/config.fish<cr>
-nnoremap <silent> <leader>et :vsplit ~/.tmux.conf<CR>
-nnoremap <silent> <leader>eo :botright 10split ~/.notes<CR>
-nnoremap <silent> <leader>ew :Explore<CR>
+nnoremap <silent> <leader>e :Explore<CR>
 
 " Fugitive
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
@@ -249,6 +242,31 @@ nnoremap <silent> <leader>ge :Gedit<cr>
 nnoremap <silent> <leader>gl :Glog<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gw :Gwrite<cr>
+
+" Linediff
+vnoremap <leader>l :Linediff<cr>
+nnoremap <leader>L :LinediffReset<cr>
+
+" Dispatch
+nnoremap dm :Make<CR>
+nnoremap dr :Start<CR>
+nnoremap d! :Dispatch!<CR>
+nnoremap d<CR> :Dispatch<CR>
+nnoremap d<Space> :Dispatch<Space>
+
+" Easy filetype switching
+nnoremap =f :setfiletype<Space>
+
+" Insert Mode Completion
+" Note that ctrl-@ is triggered by ctrl-<space> in many terminals.
+inoremap <C-]> <C-x><C-]>
+inoremap <C-l> <C-x><C-l>
+inoremap <C-@> <C-x><C-o>
+inoremap <C-j> <C-n>
+inoremap <C-k> <C-p>
+
+" Documentation
+nnoremap <silent> M :call investigate#Investigate()<CR>
 
 " }}}1
 " Autocommands {{{1
@@ -271,8 +289,14 @@ augroup END
 
 augroup ft_javascript
   au!
-  au FileType json setlocal equalprg=python\ -m\ json.tool
+  au BufNewFile,BufRead .jshintrc set filetype=javascript
+  au BufNewFile,BufRead *.json setlocal equalprg=python\ -m\ json.tool
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
+  au FileType javascript let b:vimpipe_command="node"
+  au FileType javascript let b:switch_custom_definitions =
+        \ [
+        \   switch_custom.dot_notation
+        \ ]
 augroup END
 
 augroup ft_html
@@ -333,6 +357,7 @@ augroup ft_vim
   au!
   au FileType vim setlocal foldmethod=marker
   au FileType man,help wincmd L | setlocal textwidth=78
+  au FileType qf nnoremap <buffer> <cr> <cr>
   au FileType qf,netrw setlocal colorcolumn& nocursorline nolist nowrap tw=0
   au FileType qf setlocal nolist nowrap | wincmd J | nnoremap <buffer> q :q<cr>
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
@@ -340,20 +365,20 @@ augroup END
 
 augroup ft_ruby
   au!
+  au BufRead *gemrc setlocal filetype=yaml
   au FileType ruby setlocal foldmethod=syntax
   au FileType ruby setlocal keywordprg=ri\ -T
   au FileType ruby let b:vimpipe_command='ruby <(cat)'
-  au User Rails
-        \ if filereadable('zeus.json') |
-        \   let b:dispatch = 'zeus rake spec' |
-        \   let b:start = 'zeus console' |
-        \ endif
+augroup END
+
+augroup ft_lua
+  au!
+  au FileType lua let b:vimpipe_command='lua -lluarocks.loader <(cat)'
 augroup END
 
 augroup ft_go
   au!
   au FileType godoc wincmd L | nnoremap <buffer> <silent> K :q<cr>
-  au FileType go nnoremap <buffer> <silent> <localleader>t :Fmt<cr>:w<cr>:e<cr>
   au FileType go let b:vimpipe_command='go run %'
   au FileType go setlocal commentstring=\/\/\ %s
 augroup END
@@ -368,7 +393,7 @@ au FocusLost * :silent! wall
 " Resize splits when the window is resized
 au VimResized * :wincmd =
 
-" No folds closed when editing a new files
+" No folds closed when editing new files
 au BufNew * setlocal foldlevelstart=99
 
 " Restore cursor position
@@ -423,30 +448,6 @@ endfunction
 command! -nargs=0 -bar Qargs execute 'args' s:QuickfixFilenames()
 
 " }}}1
-" YankRing {{{1
-
-function! YRRunAfterMaps()
-  nnoremap <silent> Y :<C-U>YRYankCount 'y$'<CR>
-  omap <expr> H YRMapsExpression("", "^")
-  omap <expr> L YRMapsExpression("", "$")
-  vnoremap <silent> p :<c-u>YRPaste 'p', 'v'<cr>gv:YRYankRange 'v'<cr>
-endfunction
-
-" }}}1
-" Dash.app {{{1
-
-function! s:Dash()
-  let varname = printf('g:dash_for_%s', &filetype)
-  let prefix = exists(varname) ? eval(varname) : &filetype
-  if &filetype ==# 'vim'
-    norm! K
-    return
-  endif
-  call system(printf("open dash://'%s:%s'", prefix, expand('<cword>')))
-endfunction
-nnoremap M :call <SID>Dash()<CR>
-
-" }}}1
 " Folding {{{1
 
 function! MyFoldText()
@@ -466,25 +467,62 @@ endfunction
 set foldtext=MyFoldText()
 
 " }}}1
+" Automatically create any non-existent directories before writing the buffer {{{1
+
+function! s:Mkdir()
+  let dir = expand('%:p:h')
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+    echo 'Created non-existing directory: '.dir
+  endif
+endfunction
+autocmd BufWritePre * call s:Mkdir()
+
+" }}}1
 " Plugin configuration {{{1
 
-" Ack {{{2
-
-let g:ackprg = 'ag --smart-case --nogroup --nocolor --column'
-
-" }}}2
 " Ruby {{{2
 
 let g:ruby_space_errors = 1
+let g:ruby_operators = 1
 
 " }}}2
-" Netrw {{{2
+" Investigate {{{2
 
-let g:netrw_banner = 0
-let g:netrw_dirhistmax = 0
-let g:netrw_use_errorwindow = 0
-let g:netrw_list_hide = '\~$,^tags,.DS_Store$'
-let g:netrw_fastbrowse = 0
+let g:investigate_use_dash = 1
+let g:investigate_dash_for_ruby = "rails"
+
+" }}}2
+" HTML5 {{{2
+
+let g:html_indent_tags = 'li\|p'
+let g:html5_event_handler_attributes_complete = 0
+let g:html5_rdfa_attributes_complete = 0
+let g:html5_microdata_attributes_complete = 0
+let g:html5_aria_attributes_complete = 0
+
+" }}}2
+" Gundo {{{2
+
+let g:gundo_help = 0
+let g:gundo_preview_bottom = 1
+
+" }}}2
+" Syntastic {{{2
+
+let g:syntastic_enable_signs = 1
+let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
+let g:syntastic_auto_loc_list = 2
+let g:syntastic_mode_map = {
+      \ 'mode': 'active',
+      \ 'passive_filetypes': ['html', 'yaml']
+      \ }
+
+" }}}2
+" Rails {{{2
+
+let g:rails_menu = 0
+let g:rails_abbreviations = { "pry": "binding.pry" }
 
 " }}}2
 " CtrlP {{{2
@@ -513,13 +551,11 @@ function! CtrlPMappings()
 endfunction
 
 " }}}2
-" HTML5 {{{2
+" Netrw {{{2
 
-let g:html_indent_tags = 'li\|p'
-let g:html5_event_handler_attributes_complete = 0
-let g:html5_rdfa_attributes_complete = 0
-let g:html5_microdata_attributes_complete = 0
-let g:html5_aria_attributes_complete = 0
+let g:netrw_banner = 0
+let g:netrw_use_errorwindow = 0
+let g:netrw_list_hide = '\~$,^tags,.DS_Store$'
 
 " }}}2
 " Sparkup {{{2
@@ -527,78 +563,29 @@ let g:html5_aria_attributes_complete = 0
 let g:sparkupNextMapping = '<c-y>'
 
 " }}}2
-" Gundo {{{2
+" Surround {{{2
 
-let g:gundo_help = 0
-let g:gundo_preview_bottom = 1
+let g:surround_no_insert_mappings = 1
 
 " }}}2
-" Syntastic {{{2
+" UltiSnips {{{2
 
-let g:syntastic_enable_signs = 1
-let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
-let g:syntastic_quiet_warnings = 0
-let g:syntastic_auto_loc_list = 2
-let g:syntastic_mode_map = {
-      \ 'mode': 'active',
-      \ 'passive_filetypes': ['html', 'yaml']
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<c-b>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-c>"
+let g:UltiSnipsEditSplit = "vertical"
+let g:UltiSnipsSnippetsDir = "~/.vim/snippets"
+
+" }}}2
+" Switch {{{2
+
+let g:switch_custom =
+      \ {
+      \   'dot_notation': {
+      \     '\[["'']\(\k\+\)["'']\]': '\.\1',
+      \     '\.\(\k\+\)': '[''\1'']'
+      \   }
       \ }
-
-" }}}2
-" Rails {{{2
-
-let g:rails_menu = 0
-let g:rails_projections = {
-      \ "app/validators/*_validator.rb": { "command": "validator" },
-      \ "app/presenters/*_presenter.rb": { "command": "presenter" },
-      \ "app/admin/*.rb": {
-      \   "command": "admin" ,
-      \   "affinity": "model",
-      \   "template": "ActiveAdmin.register %S do\nend"
-      \ },
-      \ "app/workers/*_worker.rb": {
-      \   "command": "worker" ,
-      \   "template": "class %SWorker\nend"
-      \ },
-      \ "spec/factories.rb": {
-      \   "command": "factory",
-      \   "template": "FactoryGirl.define do\nend"
-      \ }}
-
-let g:rails_abbreviations = { "pry": "binding.pry" }
-
-" }}}2
-" Vitality {{{2
-
-let g:vitality_fix_cursor = 0
-
-" }}}2
-" YouCompleteMe {{{2
-
-let g:ycm_filetype_specific_completion_to_disable = { 'ruby': 1 }
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_min_num_of_chars_for_completion = 4
-let g:ycm_use_ultisnips_completer = 0
-
-" }}}2
-" Powerline {{{2
-
-let g:Powerline_symbols = 'fancy'
-let g:Powerline_cache_enabled = 1
-
-" }}}2
-" YankRing {{{2
-
-let g:yankring_n_keys = 'Y D'
-let g:yankring_history_dir = expand('~/.vim')
-
-" }}}2
-" Dash.app {{{2
-
-let g:dash_for_javascript = 'jquery'
-let g:dash_for_eruby = 'rails'
-let g:dash_for_ruby = 'rails'
-let g:dash_for_yaml = 'ansible'
 
 " }}}2
 

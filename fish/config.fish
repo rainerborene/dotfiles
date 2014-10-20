@@ -1,3 +1,12 @@
+# Start X at login {{{
+
+if status --is-login
+    if test -z "$DISPLAY" -a $XDG_VTNR = 1
+        exec startx
+    end
+end
+
+# }}}
 # Useful aliases {{{
 
 . ~/.dotfiles/fish/z.fish
@@ -14,6 +23,7 @@ alias j 'z'
 alias g 'git'
 alias c 'clear'
 alias l 'tree --dirsfirst -ChaFL 1'
+alias ls 'ls -h'
 alias hl 'less -R'
 alias tailf 'tail -f'
 alias cuts "cut -d' '"
@@ -28,7 +38,6 @@ alias oo 'open .'
 alias pbc 'pbcopy'
 alias pbp 'pbpaste'
 
-# ruby on rails
 alias b 'bundle'
 alias be 'bundle exec'
 alias rs 'rails s thin'
@@ -43,6 +52,10 @@ function psk -d "Kill all running processes with given name"
     psg $argv | awk '{print $1}' | xargs kill -9
 end
 
+function gopath -d "Enter \$GOPATH directory"
+    cd $GOPATH/src
+end
+
 function emptytrash -d "Empty the OS X trash folders"
     sudo rm -rfv /Volumes/*/.Trashes
     sudo rm -rfv ~/.Trash
@@ -50,7 +63,7 @@ function emptytrash -d "Empty the OS X trash folders"
 end
 
 function ip -d "Send IP address to clipboard"
-    set -l ip (curl -s ifconfig.me/ip)
+    set -l ip (curl -s icanhazip.com)
     echo $ip | pbcopy
     echo $ip
 end
@@ -59,6 +72,19 @@ function mcd
     mkdir -p $argv
     cd $argv
 end
+
+# }}}
+# Completions {{{
+
+function make_completion --argument alias command
+    complete -f -c $alias -a "(
+        set -l cmd (commandline -op);
+        set -e cmd[1];
+        complete -f -C\"$command \$cmd\";
+    )"
+end
+
+make_completion g 'git'
 
 # }}}
 # Directories {{{
@@ -80,39 +106,41 @@ function prepend_to_path -d "Prepend the given dir to PATH if it exists and is n
 end
 
 set -gx fish_greeting ''
+set -gx GPG_TTY (tty)
 set -gx EDITOR vim
 set -gx GOPATH $HOME/.go
+set -gx LANG en_US.UTF-8
+set -gx LC_ALL en_US.UTF-8
 set -gx SSL_CERT_FILE /usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
 set -gx PYTHONPATH /usr/local/lib/python2.7/site-packages $PYTHONPATH
+set -gx JAVA_HOME (/usr/libexec/java_home)
+set -gx AWS_AUTO_SCALING_HOME /usr/local/autoscaling
+set -gx AWS_AUTO_SCALING_URL https://autoscaling.sa-east-1.amazonaws.com
 set -gx PKG_CONFIG_PATH (brew --prefix sqlite)/lib/pkgconfig
-set -gx RUBY_HEAP_MIN_SLOTS 1000000
-set -gx RUBY_HEAP_SLOTS_INCREMENT 1000000
-set -gx RUBY_HEAP_SLOTS_GROWTH_FACTOR 1
-set -gx RUBY_GC_MALLOC_LIMIT 100000000
-set -gx RUBY_HEAP_FREE_MIN 500000
+set -gx PKG_CONFIG_PATH /usr/local/Cellar/libxml2/2.9.1/lib/pkgconfig $PKG_CONFIG_PATH
 set -gx PATH "/usr/X11R6/bin"
 
+prepend_to_path "/Applications/Apache Flex SDK/bin"
 prepend_to_path "/usr/bin"
 prepend_to_path "/bin"
 prepend_to_path "/usr/sbin"
 prepend_to_path "/sbin"
 prepend_to_path "/usr/local/bin"
-
-if test -x "(which rbenv)"
-    prepend_to_path (rbenv root)/bin
-    prepend_to_path (rbenv root)/shims
-end
-
+prepend_to_path (rbenv root)/bin
+prepend_to_path (rbenv root)/shims
 prepend_to_path "/usr/local/share/npm/bin"
+prepend_to_path "$AWS_AUTO_SCALING_HOME/bin"
 prepend_to_path "$GOPATH/bin"
 prepend_to_path "$HOME/.dotfiles/mutt"
 prepend_to_path "./bin"
+
+eval (luarocks path | tr '=' ' ' | sed 's/export/set -gx/')
 
 # }}}
 # Bind Keys {{{
 
 function fish_user_key_bindings
-    bind \cn accept-autosuggestion
+    bind \ce accept-autosuggestion
 end
 
 # }}}
@@ -167,16 +195,11 @@ end
 # }}}
 # Always work in a tmux session {{{
 
-if test -x "(which tmux)"
+if which -s tmux
     if test $TERM != "screen-256color" -a $TERM != "screen"
         tmux attach -t hack; or tmux new -s hack; exit
     end
 end
-
-# }}}
-# Loads different environment variables depending on your path {{{
-
-test -x "(which direnv)"; and eval (direnv hook fish)
 
 # }}}
 
