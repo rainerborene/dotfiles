@@ -1,23 +1,9 @@
-# Start X at login {{{
-
-if status --is-login
-    if test -z "$DISPLAY" -a $XDG_VTNR = 1
-        exec startx
-    end
-end
-
-# }}}
 # Useful aliases {{{
 
 . ~/.dotfiles/fish/z.fish
 
-alias m 'mvim'
+alias vi 'vim'
 alias v 'vim'
-
-alias tm 'tmux -u2'
-alias tms 'tm list-sessions'
-alias tmt 'tm attach -t'
-alias tat 'tm attach -t (basename $PWD)'
 
 alias j 'z'
 alias g 'git'
@@ -30,13 +16,19 @@ alias cuts "cut -d' '"
 alias pp 'python -mjson.tool'
 alias serve_this 'python -m SimpleHTTPServer'
 alias collapse "sed -e 's/  */ /g'"
-alias mysql_repair 'mysqlcheck --auto-repair --check --optimize --all-databases -u root'
 alias reload '. ~/.config/fish/config.fish'
 
-alias o 'open'
-alias oo 'open .'
-alias pbc 'pbcopy'
-alias pbp 'pbpaste'
+if test (uname) = 'Linux'
+    alias o 'gvfs-open'
+    alias oo 'gvfs-open (pwd)'
+    alias pbc 'xclip -selection clipboard'
+    alias pbp 'xclip -selection clipboard -o'
+else
+    alias o 'open'
+    alias oo 'open .'
+    alias pbc 'pbcopy'
+    alias pbp 'pbpaste'
+end
 
 alias b 'bundle'
 alias be 'bundle exec'
@@ -53,19 +45,11 @@ function psk -d "Kill all running processes with given name"
 end
 
 function gopath -d "Enter \$GOPATH directory"
-    cd $GOPATH/src
-end
-
-function emptytrash -d "Empty the OS X trash folders"
-    sudo rm -rfv /Volumes/*/.Trashes
-    sudo rm -rfv ~/.Trash
-    sudo rm -rfv /private/var/log/asl/*.asl
+    cd $GOPATH/src/github.com/rainerborene
 end
 
 function ip -d "Send IP address to clipboard"
-    set -l ip (curl -s icanhazip.com)
-    echo $ip | pbcopy
-    echo $ip
+    curl -s icanhazip.com | pbc
 end
 
 function mcd
@@ -109,32 +93,18 @@ set -gx fish_greeting ''
 set -gx GPG_TTY (tty)
 set -gx EDITOR vim
 set -gx GOPATH $HOME/.go
-set -gx LANG en_US.UTF-8
-set -gx LC_ALL en_US.UTF-8
-set -gx SSL_CERT_FILE /usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
-set -gx PYTHONPATH /usr/local/lib/python2.7/site-packages $PYTHONPATH
-set -gx JAVA_HOME (/usr/libexec/java_home)
-set -gx AWS_AUTO_SCALING_HOME /usr/local/autoscaling
-set -gx AWS_AUTO_SCALING_URL https://autoscaling.sa-east-1.amazonaws.com
-set -gx PKG_CONFIG_PATH (brew --prefix sqlite)/lib/pkgconfig
-set -gx PKG_CONFIG_PATH /usr/local/Cellar/libxml2/2.9.1/lib/pkgconfig $PKG_CONFIG_PATH
-set -gx PATH "/usr/X11R6/bin"
 
-prepend_to_path "/Applications/Apache Flex SDK/bin"
-prepend_to_path "/usr/bin"
 prepend_to_path "/bin"
-prepend_to_path "/usr/sbin"
 prepend_to_path "/sbin"
+prepend_to_path "/usr/sbin"
+prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
-prepend_to_path (rbenv root)/bin
-prepend_to_path (rbenv root)/shims
+prepend_to_path "/usr/local/heroku/bin"
+prepend_to_path "$HOME/.rbenv/bin"
+prepend_to_path "$HOME/.rbenv/shims"
 prepend_to_path "/usr/local/share/npm/bin"
-prepend_to_path "$AWS_AUTO_SCALING_HOME/bin"
 prepend_to_path "$GOPATH/bin"
-prepend_to_path "$HOME/.dotfiles/mutt"
 prepend_to_path "./bin"
-
-eval (luarocks path | tr '=' ' ' | sed 's/export/set -gx/')
 
 # }}}
 # Bind Keys {{{
@@ -182,7 +152,7 @@ function fish_prompt
     echo
 
     if test $last_status -eq 0
-        set_color white -o
+        set_color black -o
         printf '><((°> '
     else
         set_color red -o
@@ -195,9 +165,9 @@ end
 # }}}
 # Always work in a tmux session {{{
 
-if which -s tmux
+if type tmux >/dev/null 2>&1
     if test $TERM != "screen-256color" -a $TERM != "screen"
-        tmux attach -t hack; or tmux new -s hack; exit
+        tmux attach -t work; or tmux new -s work; exit
     end
 end
 

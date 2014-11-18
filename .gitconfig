@@ -28,6 +28,8 @@
 	insteadOf = wgh:
 [url "git@heroku.com:"]
 	insteadOf = heroku:
+[url "git@bitbucket.org:"]
+	insteadOf = bb:
 [merge]
 	summary = true
 	prompt = false
@@ -35,20 +37,21 @@
 [mergetool "fugitive"]
 	cmd = "vim -f -c 'Gdiff' $MERGED"
 [alias]
-	a		= add
-	s		= status
-	p		= push
-	d		= diff
-	ba		= branch -a
-	dc		= diff --cached
-	co		= checkout
-	ci		= commit
-	uns		= reset HEAD
-	unstage = reset HEAD
-	l		= log -16 --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
-	ll		= log --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
-	gl		= log -10 --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
-	gll		= log --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
+	a				= add
+	s				= status
+	p				= push
+	d				= diff
+	ba				= branch -a
+	dc				= diff --cached
+	co				= checkout
+	ci				= commit
+	uns				= reset HEAD
+	unstage			= reset HEAD
+	l				= log -16 --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
+	ll				= log --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
+	gl				= log -10 --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
+	gll				= log --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
+	changed			= git diff-tree --no-commit-id --name-only -r
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f

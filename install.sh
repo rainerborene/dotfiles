@@ -16,12 +16,13 @@ fi
 
 install() {
   # Clone repository and initialize modules
-  # echo "*** Downloading..."
-  # rm -Rf ~/.dotfiles
+  echo "*** Downloading..."
+  rm -Rf ~/.dotfiles
 
-  # git clone -q git://github.com/rainerborene/dotfiles.git ~/.dotfiles
+  git clone -q git://github.com/rainerborene/dotfiles.git ~/.dotfiles
 
   # Create symbolic links
+  dotlink curlrc
   dotlink agignore
   dotlink ctags
   dotlink gemrc
@@ -32,8 +33,8 @@ install() {
   dotlink pryrc
   dotlink railsrc
   dotlink tmux.conf
-  dotlink urlview
   dotlink vimrc
+  dotlink vimperatorrc
 
   # Create directories
   mkdir -p ~/.ssh

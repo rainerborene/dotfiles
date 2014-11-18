@@ -14,7 +14,7 @@ to sync:
 If you'd like to switch your shell from the default `bash` to `fish`, you can do
 so with the following command.
 
-    chsh -s /usr/local/bin/fish
+    chsh -s $(which fish)
 
 Now set up your credentials.
 

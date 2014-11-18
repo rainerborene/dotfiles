@@ -1,0 +1,7 @@
+"3.8.3 (created: 2014/11/09 13:19:01)
+
+set gui=none
+set hintchars=hjklasdfgyuiopqwertnmzxcvb
+source! /home/rainerborene/.vimperatorrc.local
+
+" vim: set ft=vimperator:

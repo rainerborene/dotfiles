@@ -5,7 +5,6 @@ runtime plugin/rsi.vim
 runtime plugin/sensible.vim
 runtime plugin/scriptease.vim
 
-set number
 set hidden
 set confirm
 set nobackup
@@ -23,6 +22,7 @@ set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
 set completeopt=longest,menuone
+set fillchars=diff:⣿,vert:│
 set pastetoggle=<F6>
 set linebreak
 set ignorecase
@@ -41,6 +41,14 @@ set expandtab
 set wrap
 
 " Color scheme {{{1
+
+set background=light
+let g:solarized_bold = 0
+let g:solarized_underline = 0
+let g:solarized_termtrans = 1
+colorscheme solarized
+
+hi VertSplit ctermbg=NONE
 
 " Highlight VCS conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
@@ -184,25 +192,12 @@ nnoremap <leader>z zMzvzz
 cnoremap <C-j> <t_kd>
 cnoremap <C-k> <t_ku>
 
-" Get off my lawn
-cnoremap <Up> <Nop>
-cnoremap <Down> <Nop>
-cnoremap <Left> <Nop>
-cnoremap <Right> <Nop>
-nnoremap <Up> <Nop>
-nnoremap <Down> <Nop>
-nnoremap <Left> <Nop>
-nnoremap <Right> <Nop>
-
 " Send to the black hole register
 noremap x "_x
 noremap X "_X
 
 " Preserve previous paste
 vnoremap p pgvy
-
-" Show last search in quickfix (http://travisjeffery.com/b/2011/10/m-x-occur-for-vim/)
-nnoremap <silent> g/ :vimgrep /<C-R>//j %<CR>\|:cw<CR>
 
 " Rebuild Ctags (mnemonic RC -> CR -> <cr>)
 nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
@@ -223,7 +218,7 @@ nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 function! s:FuckingCopyTheTextPlease() " {{{2
   let old_z = @z
   normal! gv"zy
-  call system('pbcopy', @z)
+  call system('xclip -selection clipboard', @z)
   let @z = old_z
 endfunction " }}}2
 vnoremap <silent> Y :<c-u>call <SID>FuckingCopyTheTextPlease()<cr>
@@ -258,7 +253,7 @@ nnoremap d<Space> :Dispatch<Space>
 nnoremap =f :setfiletype<Space>
 
 " Insert Mode Completion
-" Note that ctrl-@ is triggered by ctrl-<space> in many terminals.
+" Note that <C-@> is triggered by <C-Space> in many terminals.
 inoremap <C-]> <C-x><C-]>
 inoremap <C-l> <C-x><C-l>
 inoremap <C-@> <C-x><C-o>
@@ -489,7 +484,6 @@ let g:ruby_operators = 1
 " }}}2
 " Investigate {{{2
 
-let g:investigate_use_dash = 1
 let g:investigate_dash_for_ruby = "rails"
 
 " }}}2

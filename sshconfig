@@ -1,9 +1,9 @@
-Host vagrant
-    HostName 127.0.0.1
-    User vagrant
-    Port 2222
-    UserKnownHostsFile /dev/null
-    StrictHostKeyChecking no
-    PasswordAuthentication no
-    IdentityFile ~/.vagrant.d/insecure_private_key
-    IdentitiesOnly yes
+Host votenaweb
+    HostName ec2-54-94-146-1.sa-east-1.compute.amazonaws.com
+    User ubuntu
+    IdentityFile ~/Webcitizen/webcitizen.pem
+
+Host worker
+    HostName ec2-54-94-158-121.sa-east-1.compute.amazonaws.com
+    User ubuntu
+    IdentityFile ~/Webcitizen/webcitizen.pem
