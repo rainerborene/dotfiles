@@ -16,7 +16,7 @@ fi
 
 install() {
   # Clone repository and initialize modules
-  echo "*** Downloading..."
+  echo "dotfiles: downloading..."
   rm -Rf ~/.dotfiles
 
   git clone -q git://github.com/rainerborene/dotfiles.git ~/.dotfiles
@@ -45,11 +45,17 @@ install() {
   ln -nfs ~/.dotfiles/fish/config.fish ~/.config/fish/config.fish
   ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
 
+  # Setup vim
+  echo "dotfiles: installing vundle.vim"
+  mkdir ~/.dotfiles/vim/bundle
+  git clone -q https://github.com/gmarik/Vundle.vim.git ~/.dotfiles/vim/bundle/vundle
+
   # Done
-  echo "*** Installed"
+  echo "dotfiles: installed"
 }
 
 dotlink() {
+  echo "dotfiles: linking .$1"
   ln -nfs ~/.dotfiles/.$1 ~/.$1
 }
 
