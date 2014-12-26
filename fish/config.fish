@@ -9,7 +9,7 @@ alias j 'z'
 alias g 'git'
 alias c 'clear'
 alias l 'tree --dirsfirst -ChaFL 1'
-alias ls 'ls -h'
+alias ls 'ls -h --color --group-directories-first'
 alias hl 'less -R'
 alias tailf 'tail -f'
 alias cuts "cut -d' '"
@@ -45,7 +45,7 @@ function psk -d "Kill all running processes with given name"
 end
 
 function gopath -d "Enter \$GOPATH directory"
-    cd $GOPATH/src/github.com/rainerborene
+    mcd $GOPATH/src/github.com/rainerborene
 end
 
 function ip -d "Send IP address to clipboard"
@@ -93,6 +93,8 @@ set -gx fish_greeting ''
 set -gx GPG_TTY (tty)
 set -gx EDITOR vim
 set -gx GOPATH $HOME/.go
+set -gx WINEARCH win32
+set -gx DOCKER_HOST unix:///var/run/docker.sock
 
 prepend_to_path "/bin"
 prepend_to_path "/sbin"
@@ -100,9 +102,11 @@ prepend_to_path "/usr/sbin"
 prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
 prepend_to_path "/usr/local/heroku/bin"
+prepend_to_path "/usr/local/share/npm/bin"
+prepend_to_path "$HOME/.gem/ruby/2.1.0/bin"
 prepend_to_path "$HOME/.rbenv/bin"
 prepend_to_path "$HOME/.rbenv/shims"
-prepend_to_path "/usr/local/share/npm/bin"
+prepend_to_path "$HOME/.dotfiles/bin"
 prepend_to_path "$GOPATH/bin"
 prepend_to_path "./bin"
 
@@ -116,51 +120,45 @@ end
 # }}}
 # Prompt {{{
 
-function git_prompt
-    if git rev-parse --git-dir >/dev/null 2>&1
-        set_color normal
-        printf ' on '
-        set_color red
-        printf '%s' (git rev-parse --abbrev-ref HEAD 2>/dev/null)
-        set_color normal
-    end
-end
-
 function fish_prompt
-    set last_status $status
-
-    z --add "$PWD"
-
-    echo
-
-    set_color red
-    printf '%s' (whoami)
-    set_color normal
-    printf ' at '
-
-    set_color yellow
-    printf '%s' (hostname|cut -d . -f 1)
-    set_color normal
-    printf ' in '
-
-    set_color $fish_color_cwd
-    printf '%s' (prompt_pwd)
-    set_color normal
-
-    git_prompt
-
-    echo
-
-    if test $last_status -eq 0
-        set_color black -o
-        printf '><((°> '
-    else
-        set_color red -o
-        printf '[%d] ><((ˣ> ' $last_status
+  z --add "$PWD"
+  if not set -q -g __fish_robbyrussell_functions_defined
+    set -g __fish_robbyrussell_functions_defined
+    function _git_branch_name
+      echo (git symbolic-ref HEAD ^/dev/null | sed -e 's|^refs/heads/||')
     end
 
-    set_color normal
+    function _is_git_dirty
+      echo (git status -s --ignore-submodules=dirty ^/dev/null)
+    end
+  end
+
+  set -l cyan (set_color -o cyan)
+  set -l yellow (set_color -o yellow)
+  set -l red (set_color -o red)
+  set -l blue (set_color -o blue)
+  set -l normal (set_color normal)
+
+  set -l arrow "$red➜ "
+  set -l cwd $cyan(basename (prompt_pwd))
+
+  if [ (_git_branch_name) ]
+    set -l git_branch $red(_git_branch_name)
+    set git_info "$blue git:($git_branch$blue)"
+
+    if [ (_is_git_dirty) ]
+      set -l dirty "$yellow ✗"
+      set git_info "$git_info$dirty"
+    end
+  end
+
+  echo -n -s $arrow ' '$cwd $git_info $normal ' '
 end
+
+# }}}
+# Colored output {{{
+
+eval (dircolors -c ~/.dotfiles/.dircolors)
 
 # }}}
 # Always work in a tmux session {{{

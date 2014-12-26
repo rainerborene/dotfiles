@@ -31,6 +31,7 @@ set hlsearch
 set gdefault
 set mouse=a
 set virtualedit+=block
+set colorcolumn=+1
 set shortmess=atI
 set textwidth=80
 set formatoptions=qrn1
@@ -42,7 +43,7 @@ set wrap
 
 " Color scheme {{{1
 
-set background=light
+set background=dark
 let g:solarized_bold = 0
 let g:solarized_underline = 0
 let g:solarized_termtrans = 1
@@ -130,6 +131,10 @@ nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
 nnoremap gs vip:!sort<cr>
 vnoremap gs :!sort<cr>
 
+" Yankstack
+nmap <C-p> <Plug>yankstack_substitute_older_paste
+nmap <C-n> <Plug>yankstack_substitute_newer_paste
+
 " UltiSnips trigger keys
 inoremap <C-c> <Nop>
 inoremap <C-b> <Nop>
@@ -175,8 +180,11 @@ nnoremap K :q<cr>
 " Select just-pasted text
 nnoremap gV `[v`]
 
-" Tabular alignment
-vnoremap <CR> :Tabularize /\v/<left>
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -206,30 +214,17 @@ nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 nnoremap <silent> <leader>/ :nohlsearch<CR>
 
 " Undo tree usable by humans
-nnoremap <silent> <leader>u :GundoToggle<CR>
+nnoremap <silent> <leader>u :UndotreeToggle<CR>
 
-" Open CtrlP on different modes
-nnoremap <silent> <leader>b :CtrlPBuffer<CR>
+" Unite
+nnoremap <leader>, :<C-u>Unite -no-split -buffer-name=files -start-insert file_rec/git<cr>
+nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer buffer<cr>
+nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank history/yank<CR>
+nnoremap <leader>a :<C-u>Unite -no-split -buffer-name=grep -no-empty -resume -auto-preview grep<cr>
+vnoremap <leader>a "zy:execute "Unite -buffer-name=grep -no-empty -resume -auto-preview grep:.::" . @z<cr>
 
-" Copying text to the system clipboard.
-"
-" For some reason Vim no longer wants to talk to the OS X pasteboard through "*.
-" Computers are bullshit.
-function! s:FuckingCopyTheTextPlease() " {{{2
-  let old_z = @z
-  normal! gv"zy
-  call system('xclip -selection clipboard', @z)
-  let @z = old_z
-endfunction " }}}2
-vnoremap <silent> Y :<c-u>call <SID>FuckingCopyTheTextPlease()<cr>
-
-" Ag searching
-nnoremap <leader>a :Ag!<Space>
-vnoremap <leader>a "zy:execute "Ag! " . shellescape(@z)<cr>
-
-" Quick editing
-cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
-nnoremap <silent> <leader>e :Explore<CR>
+" File explorer
+nnoremap <silent> <leader>e :VimFilerBufferDir<CR>
 
 " Fugitive
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
@@ -260,9 +255,6 @@ inoremap <C-@> <C-x><C-o>
 inoremap <C-j> <C-n>
 inoremap <C-k> <C-p>
 
-" Documentation
-nnoremap <silent> M :call investigate#Investigate()<CR>
-
 " }}}1
 " Autocommands {{{1
 
@@ -284,8 +276,7 @@ augroup END
 
 augroup ft_javascript
   au!
-  au BufNewFile,BufRead .jshintrc set filetype=javascript
-  au BufNewFile,BufRead *.json setlocal equalprg=python\ -m\ json.tool
+  au BufNewFile,BufRead .jshintrc,*.es6 set filetype=javascript
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
   au FileType javascript let b:vimpipe_command="node"
   au FileType javascript let b:switch_custom_definitions =
@@ -353,7 +344,7 @@ augroup ft_vim
   au FileType vim setlocal foldmethod=marker
   au FileType man,help wincmd L | setlocal textwidth=78
   au FileType qf nnoremap <buffer> <cr> <cr>
-  au FileType qf,netrw setlocal colorcolumn& nocursorline nolist nowrap tw=0
+  au FileType qf setlocal colorcolumn& nocursorline nolist nowrap tw=0
   au FileType qf setlocal nolist nowrap | wincmd J | nnoremap <buffer> q :q<cr>
   au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
 augroup END
@@ -482,11 +473,6 @@ let g:ruby_space_errors = 1
 let g:ruby_operators = 1
 
 " }}}2
-" Investigate {{{2
-
-let g:investigate_dash_for_ruby = "rails"
-
-" }}}2
 " HTML5 {{{2
 
 let g:html_indent_tags = 'li\|p'
@@ -511,45 +497,6 @@ let g:syntastic_mode_map = {
       \ 'mode': 'active',
       \ 'passive_filetypes': ['html', 'yaml']
       \ }
-
-" }}}2
-" Rails {{{2
-
-let g:rails_menu = 0
-let g:rails_abbreviations = { "pry": "binding.pry" }
-
-" }}}2
-" CtrlP {{{2
-
-let g:ctrlp_map = '<leader>,'
-let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
-let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
-let g:ctrlp_working_path_mode = 'car'
-let g:ctrlp_use_caching = 0
-let g:ctrlp_filter_greps = 'egrep -iv "\.(png|jpe?g|bmp|gif|png)"'
-let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps, 'ag %s -l --nocolor -g ""']
-let g:ctrlp_custom_ignore = {
-      \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
-      \ 'dir': '\v[\/](tmp|tags)$'
-      \ }
-
-function! s:DeleteBuffer()
-  let path = fnamemodify(getline('.')[2:], ':p')
-  let bufn = matchstr(path, '\v\d+\ze\*No Name')
-  exec "bd" bufn ==# "" ? path : bufn
-  exec "norm \<F5>"
-endfunction
-
-function! CtrlPMappings()
-  nnoremap <buffer> <silent> <C-@> :call <sid>DeleteBuffer()<cr>
-endfunction
-
-" }}}2
-" Netrw {{{2
-
-let g:netrw_banner = 0
-let g:netrw_use_errorwindow = 0
-let g:netrw_list_hide = '\~$,^tags,.DS_Store$'
 
 " }}}2
 " Sparkup {{{2
@@ -580,6 +527,34 @@ let g:switch_custom =
       \     '\.\(\k\+\)': '[''\1'']'
       \   }
       \ }
+
+" }}}2
+" Unite {{{2
+
+call unite#custom_source('file_rec,file,buffer', 'ignore_pattern', '\.git/')
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+
+let g:unite_source_grep_command = 'ag'
+let g:unite_source_grep_default_opts = '-i --line-numbers --nocolor --nogroup --hidden'
+let g:unite_source_grep_recursive_opt = ''
+let g:unite_source_history_yank_enable = 1
+let g:unite_split_rule = 'botright'
+
+function! s:unite_settings()
+  imap <buffer> <C-j> <Plug>(unite_select_next_line)
+  imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+  imap <silent> <buffer> <expr> <C-x> unite#do_action('split')
+  imap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
+  imap <silent> <buffer> <expr> <C-t> unite#do_action('tabopen')
+  nmap <buffer> <ESC> <Plug>(unite_exit)
+endfunction
+autocmd FileType unite call s:unite_settings()
+
+" }}}2
+" VimFiler {{{2
+
+let g:vimfiler_as_default_explorer = 1
 
 " }}}2
 

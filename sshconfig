@@ -1,9 +1,7 @@
 Host votenaweb
     HostName ec2-54-94-146-1.sa-east-1.compute.amazonaws.com
     User ubuntu
-    IdentityFile ~/Webcitizen/webcitizen.pem
 
 Host worker
     HostName ec2-54-94-158-121.sa-east-1.compute.amazonaws.com
     User ubuntu
-    IdentityFile ~/Webcitizen/webcitizen.pem
