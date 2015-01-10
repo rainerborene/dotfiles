@@ -21,13 +21,15 @@ set wildmode=list:longest,full
 set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=*.DS_Store
 set wildignore+=.sass-cache
+set grepprg=pt\ --nocolor\ --nogroup\ -e\ '$*'
 set completeopt=longest,menuone
 set fillchars=diff:⣿,vert:│
+set guifont=Source\ Code\ Pro\ 10
+set guioptions=aegimt
 set pastetoggle=<F6>
 set linebreak
 set ignorecase
 set smartcase
-set hlsearch
 set gdefault
 set mouse=a
 set virtualedit+=block
@@ -44,10 +46,8 @@ set wrap
 " Color scheme {{{1
 
 set background=dark
-let g:solarized_bold = 0
-let g:solarized_underline = 0
-let g:solarized_termtrans = 1
-colorscheme solarized
+let g:base16colorspace=256
+colorscheme base16-default
 
 hi VertSplit ctermbg=NONE
 
@@ -97,32 +97,12 @@ nnoremap <silent> - :Switch<cr>
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
-" Use sane regexes and mark position before search.
-nnoremap / ms/\v
-nnoremap ? ms?\v
-
-" Search within visual block
-xnoremap / <esc>/\%V\v
-xnoremap ? <esc>?\%V\v
+" Search-replace.
+nnoremap g/ ms:<c-u>OverCommandLine<cr>%s/
+xnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\%V
 
 " Fast esc key
 inoremap jj <Esc>
-
-" Substitute.
-xnoremap s :s/\v/g<Left><Left>
-
-" Auto center
-nnoremap <silent> n nzzzv
-nnoremap <silent> N Nzzzv
-nnoremap <silent> * *zz
-nnoremap <silent> # #zz
-nnoremap <silent> g* g*zz
-nnoremap <silent> g# g#zz
-nnoremap <silent> g; g;zz
-nnoremap <silent> g, g,zz
-
-" Don't move on *
-nnoremap * *<c-o>
 
 " I hate when the rendering occasionally gets messed up.
 nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
@@ -130,14 +110,6 @@ nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
 " Sort lines
 nnoremap gs vip:!sort<cr>
 vnoremap gs :!sort<cr>
-
-" Yankstack
-nmap <C-p> <Plug>yankstack_substitute_older_paste
-nmap <C-n> <Plug>yankstack_substitute_newer_paste
-
-" UltiSnips trigger keys
-inoremap <C-c> <Nop>
-inoremap <C-b> <Nop>
 
 " Speed up window switching
 nnoremap <C-h> <C-W>h
@@ -155,10 +127,6 @@ nnoremap <leader>4 4gt
 nnoremap <leader>5 5gt
 nnoremap <C-t> :tabnew<CR>
 
-" Fast scrolling
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
-
 " Sane movement with wrap turned on
 nnoremap j gj
 nnoremap k gk
@@ -170,15 +138,14 @@ noremap H ^
 noremap L $
 vnoremap L g_
 
-" Clam
-nnoremap ! :Clam<space>
-vnoremap ! :ClamVisual<space>
-
 " Kill window
 nnoremap K :q<cr>
 
 " Select just-pasted text
 nnoremap gV `[v`]
+
+" Make Y consistent with C and D.
+nnoremap Y y$
 
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
 vmap <Enter> <Plug>(EasyAlign)
@@ -207,11 +174,8 @@ noremap X "_X
 " Preserve previous paste
 vnoremap p pgvy
 
-" Rebuild Ctags (mnemonic RC -> CR -> <cr>)
-nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
-
-" Clear search highlight
-nnoremap <silent> <leader>/ :nohlsearch<CR>
+" Rebuild Ctags
+nnoremap <silent> g<cr> :call vimproc#system('ctags -R . &')<cr>
 
 " Undo tree usable by humans
 nnoremap <silent> <leader>u :UndotreeToggle<CR>
@@ -271,14 +235,12 @@ augroup ft_fish
   au BufNewFile,BufRead *.fish set filetype=fish
   au FileType fish setlocal foldmethod=marker foldmarker={{{,}}}
   au FileType fish setlocal commentstring=#\ %s
-  au FileType fish let b:vimpipe_command="fish <(cat)"
 augroup END
 
 augroup ft_javascript
   au!
   au BufNewFile,BufRead .jshintrc,*.es6 set filetype=javascript
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
-  au FileType javascript let b:vimpipe_command="node"
   au FileType javascript let b:switch_custom_definitions =
         \ [
         \   switch_custom.dot_notation
@@ -323,8 +285,6 @@ augroup ft_markdown
   au FileType markdown nnoremap <buffer> <localleader>2 yypVr-
   au FileType markdown nnoremap <buffer> <localleader>3 I### <ESC>
   au FileType markdown setlocal wrap linebreak nolist
-  au FileType markdown let b:vimpipe_command="multimarkdown"
-  au FileType markdown let b:vimpipe_filetype="html"
 augroup END
 
 augroup ft_tmux
@@ -354,18 +314,11 @@ augroup ft_ruby
   au BufRead *gemrc setlocal filetype=yaml
   au FileType ruby setlocal foldmethod=syntax
   au FileType ruby setlocal keywordprg=ri\ -T
-  au FileType ruby let b:vimpipe_command='ruby <(cat)'
-augroup END
-
-augroup ft_lua
-  au!
-  au FileType lua let b:vimpipe_command='lua -lluarocks.loader <(cat)'
 augroup END
 
 augroup ft_go
   au!
   au FileType godoc wincmd L | nnoremap <buffer> <silent> K :q<cr>
-  au FileType go let b:vimpipe_command='go run %'
   au FileType go setlocal commentstring=\/\/\ %s
 augroup END
 
@@ -391,6 +344,23 @@ augroup line_return
         \ endif
 augroup END
 
+augroup search_status
+  autocmd!
+  autocmd CursorMoved * :AnzuUpdateSearchStatus|echo anzu#search_status()
+augroup END
+
+augroup search_position
+  autocmd!
+  autocmd User OverCmdLineExecute call KeepCursorPosition()
+augroup END
+
+function! KeepCursorPosition()
+  if line("'s")
+    call cursor(line("'s"), col("'s"))
+    delmarks s
+  endif
+endfunction
+
 " Don't screw up folds when inserting text that might affect them, until
 " leaving insert mode. Foldmethod is local to the window. Protect against
 " screwing up folding when switching between windows.
@@ -408,30 +378,6 @@ augroup fast_completion
         \   unlet w:last_fdm |
         \ endif
 augroup END
-
-" }}}1
-" Visual Mode */# from Scrooloose {{{1
-
-function! s:VSetSearch()
-  let temp = @@
-  norm! gvy
-  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-  let @@ = temp
-endfunction
-vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
-vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
-
-" }}}1
-" Populate the argument list from the quickfix {{{1
-
-function! s:QuickfixFilenames()
-  let buffer_numbers = {}
-  for quickfix_item in getqflist()
-    let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
-  endfor
-  return join(map(values(buffer_numbers), 'fnameescape(v:val)'))
-endfunction
-command! -nargs=0 -bar Qargs execute 'args' s:QuickfixFilenames()
 
 " }}}1
 " Folding {{{1
@@ -482,12 +428,6 @@ let g:html5_microdata_attributes_complete = 0
 let g:html5_aria_attributes_complete = 0
 
 " }}}2
-" Gundo {{{2
-
-let g:gundo_help = 0
-let g:gundo_preview_bottom = 1
-
-" }}}2
 " Syntastic {{{2
 
 let g:syntastic_enable_signs = 1
@@ -509,15 +449,6 @@ let g:sparkupNextMapping = '<c-y>'
 let g:surround_no_insert_mappings = 1
 
 " }}}2
-" UltiSnips {{{2
-
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<c-b>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-c>"
-let g:UltiSnipsEditSplit = "vertical"
-let g:UltiSnipsSnippetsDir = "~/.vim/snippets"
-
-" }}}2
 " Switch {{{2
 
 let g:switch_custom =
@@ -531,17 +462,20 @@ let g:switch_custom =
 " }}}2
 " Unite {{{2
 
-call unite#custom_source('file_rec,file,buffer', 'ignore_pattern', '\.git/')
+call unite#custom_source('file_rec/git,buffer', 'ignore_pattern', '\v\.(git|png|jpg|gif)$')
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 
-let g:unite_source_grep_command = 'ag'
-let g:unite_source_grep_default_opts = '-i --line-numbers --nocolor --nogroup --hidden'
+let g:unite_source_grep_command = 'pt'
+let g:unite_source_grep_default_opts = '--nogroup --nocolor'
 let g:unite_source_grep_recursive_opt = ''
+let g:unite_source_grep_encoding = 'utf-8'
 let g:unite_source_history_yank_enable = 1
 let g:unite_split_rule = 'botright'
 
 function! s:unite_settings()
+  let b:delimitMate_autoclose = 0
+  imap <buffer> jj <Plug>(unite_insert_leave)
   imap <buffer> <C-j> <Plug>(unite_select_next_line)
   imap <buffer> <C-k> <Plug>(unite_select_previous_line)
   imap <silent> <buffer> <expr> <C-x> unite#do_action('split')
@@ -555,6 +489,21 @@ autocmd FileType unite call s:unite_settings()
 " VimFiler {{{2
 
 let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_ignore_pattern = '^\%(\.git\|\.DS_Store\)$'
+
+ " Like Textmate icons.
+let g:vimfiler_tree_leaf_icon = ' '
+let g:vimfiler_tree_opened_icon = '▾'
+let g:vimfiler_tree_closed_icon = '▸'
+let g:vimfiler_file_icon = ' '
+let g:vimfiler_readonly_file_icon = '✗'
+let g:vimfiler_marked_file_icon = '✓'
+
+call vimfiler#custom#profile('default', 'context', {
+      \ 'safe' : 0,
+      \ 'auto_expand' : 1,
+      \ 'parent' : 0,
+      \ })
 
 " }}}2
 

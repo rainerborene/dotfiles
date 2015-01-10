@@ -1,5 +1,7 @@
 # Useful aliases {{{
 
+sh ~/.dotfiles/bin/base16-default.dark.sh
+
 . ~/.dotfiles/fish/z.fish
 
 alias vi 'vim'
@@ -95,10 +97,8 @@ set -gx EDITOR vim
 set -gx GOPATH $HOME/.go
 set -gx WINEARCH win32
 set -gx DOCKER_HOST unix:///var/run/docker.sock
+set -gx BROWSER firefox
 
-prepend_to_path "/bin"
-prepend_to_path "/sbin"
-prepend_to_path "/usr/sbin"
 prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
 prepend_to_path "/usr/local/heroku/bin"

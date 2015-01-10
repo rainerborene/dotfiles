@@ -23,7 +23,7 @@ install() {
 
   # Create symbolic links
   dotlink curlrc
-  dotlink agignore
+  dotlink ptignore
   dotlink ctags
   dotlink gemrc
   dotlink gitconfig
@@ -35,6 +35,7 @@ install() {
   dotlink tmux.conf
   dotlink vimrc
   dotlink vimperatorrc
+  dotlink Xresources
 
   # Create directories
   mkdir -p ~/.ssh
@@ -46,9 +47,9 @@ install() {
   ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
 
   # Setup vim
-  echo "dotfiles: installing vundle.vim"
+  echo "dotfiles: installing vim package manager"
   mkdir ~/.dotfiles/vim/bundle
-  git clone -q https://github.com/gmarik/Vundle.vim.git ~/.dotfiles/vim/bundle/vundle
+  git clone -q https://github.com/junegunn/vim-plug.git ~/.dotfiles/vim/bundle/vim-plug
 
   # Done
   echo "dotfiles: installed"
