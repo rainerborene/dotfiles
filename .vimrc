@@ -1,46 +1,46 @@
 " .vimrc
 source ~/.dotfiles/.vimrc.bundles
 
-runtime plugin/rsi.vim
-runtime plugin/sensible.vim
-runtime plugin/scriptease.vim
-
-set hidden
-set confirm
-set nobackup
+set autoindent
+set autoread
 set autowrite
-set noswapfile
+set backspace=indent,eol,start
+set colorcolumn=+1
+set complete-=i
+set completeopt=longest,menuone
+set confirm
+set display+=lastline
+set encoding=utf-8
+set expandtab
+set fillchars=diff:⣿,vert:│
+set foldlevel=99
+set formatoptions=qrn1j
+set gdefault
+set hidden
+set history=1000
+set ignorecase
+set incsearch
+set laststatus=2
+set lazyredraw
+set linebreak
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set noshowmode
+set noswapfile
+set nrformats-=octal
+set shiftwidth=2
+set shortmess=aoOtI
+set showcmd
+set smartcase
+set smarttab
+set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
+set spelllang=pt,en
 set splitbelow
 set splitright
-set foldlevel=99
-set spelllang=pt,en
-set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
-set dictionary=/usr/share/dict/words
-set wildmode=list:longest,full
-set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
-set wildignore+=*.DS_Store
-set wildignore+=.sass-cache
-set grepprg=pt\ --nocolor\ --nogroup\ -e\ '$*'
-set completeopt=longest,menuone
-set fillchars=diff:⣿,vert:│
-set guifont=Source\ Code\ Pro\ 10
-set guioptions=aegimt
-set pastetoggle=<F6>
-set linebreak
-set ignorecase
-set smartcase
-set gdefault
-set mouse=a
-set virtualedit+=block
-set colorcolumn=+1
-set shortmess=atI
-set textwidth=80
-set formatoptions=qrn1
-set lazyredraw
-set shiftwidth=2
 set tabstop=4
-set expandtab
+set textwidth=80
+set ttimeout
+set ttimeoutlen=100
+set virtualedit+=block
 set wrap
 
 " Color scheme {{{1
@@ -53,6 +53,32 @@ hi VertSplit ctermbg=NONE
 
 " Highlight VCS conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+
+" }}}1
+" Statusline {{{1
+
+set statusline=%f%m\ %{fugitive#statusline()}%=
+set statusline+=(%{&ff}/%{strlen(&fenc)?&fenc:&enc}/%{strlen(&ft)?&ft:'none'})
+set statusline+=\ (line\ %l/%L,\ col\ %03c)
+
+" }}}1
+" Wilmenu completion {{{1
+
+set wildmenu
+set wildmode=list:longest,full
+set wildignore+=*.DS_Store
+set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
+set wildignore+=.sass-cache
+
+" }}}1
+" Environments (GUI/Console) {{{1
+
+if has("gui_running")
+  set guifont=Source\ Code\ Pro\ 10
+  set guioptions=aegimt
+else
+  set mouse=a
+end
 
 " }}}1
 " Persistent undo {{{1
@@ -87,11 +113,11 @@ nnoremap J mzJ`z
 " Move to last change
 nnoremap gI `.
 
+" Insert mode undo.
+inoremap <C-U> <C-G>u<C-U>
+
 " Clean trailing whitespace
 nnoremap <silent> =w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
-
-" Switch segments of text with predefined replacements
-nnoremap <silent> - :Switch<cr>
 
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
@@ -174,6 +200,12 @@ noremap X "_X
 " Preserve previous paste
 vnoremap p pgvy
 
+" Multiblock
+omap ab <Plug>(textobj-multiblock-a)
+omap ib <Plug>(textobj-multiblock-i)
+xmap ab <Plug>(textobj-multiblock-a)
+xmap ib <Plug>(textobj-multiblock-i)
+
 " Rebuild Ctags
 nnoremap <silent> g<cr> :call vimproc#system('ctags -R . &')<cr>
 
@@ -182,10 +214,10 @@ nnoremap <silent> <leader>u :UndotreeToggle<CR>
 
 " Unite
 nnoremap <leader>, :<C-u>Unite -no-split -buffer-name=files -start-insert file_rec/git<cr>
-nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer buffer<cr>
+nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer -start-insert buffer<cr>
 nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank history/yank<CR>
-nnoremap <leader>a :<C-u>Unite -no-split -buffer-name=grep -no-empty -resume -auto-preview grep<cr>
-vnoremap <leader>a "zy:execute "Unite -buffer-name=grep -no-empty -resume -auto-preview grep:.::" . @z<cr>
+nnoremap <expr> <leader>a ":\<C-u>Unite -no-split -buffer-name=grep%".tabpagenr()." -no-empty -resume -auto-preview grep\<cr>"
+vnoremap <leader>a "zy:execute "Unite -no-split -buffer-name=grep%".tabpagenr()." -no-empty -resume -auto-preview grep:.::" . @z<cr>"
 
 " File explorer
 nnoremap <silent> <leader>e :VimFilerBufferDir<CR>
@@ -196,17 +228,6 @@ nnoremap <silent> <leader>ge :Gedit<cr>
 nnoremap <silent> <leader>gl :Glog<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gw :Gwrite<cr>
-
-" Linediff
-vnoremap <leader>l :Linediff<cr>
-nnoremap <leader>L :LinediffReset<cr>
-
-" Dispatch
-nnoremap dm :Make<CR>
-nnoremap dr :Start<CR>
-nnoremap d! :Dispatch!<CR>
-nnoremap d<CR> :Dispatch<CR>
-nnoremap d<Space> :Dispatch<Space>
 
 " Easy filetype switching
 nnoremap =f :setfiletype<Space>
@@ -241,10 +262,6 @@ augroup ft_javascript
   au!
   au BufNewFile,BufRead .jshintrc,*.es6 set filetype=javascript
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
-  au FileType javascript let b:switch_custom_definitions =
-        \ [
-        \   switch_custom.dot_notation
-        \ ]
 augroup END
 
 augroup ft_html
@@ -252,17 +269,6 @@ augroup ft_html
   au FileType html,eruby setlocal foldmethod=manual
   au FileType html,eruby nnoremap <buffer> <localleader>f Vatzf
   au FileType html,eruby nnoremap <buffer> <localleader>= Vat=
-augroup END
-
-augroup ft_muttrc
-  au!
-  au BufRead,BufNewFile *.muttrc set filetype=muttrc
-  au FileType muttrc setlocal foldmethod=marker foldmarker={{{,}}}
-augroup END
-
-augroup ft_mail
-  au!
-  au Filetype mail setlocal spell
 augroup END
 
 augroup ft_git
@@ -297,6 +303,11 @@ augroup ft_css
   au!
   au FileType css,scss setlocal foldmethod=marker foldmarker={,}
   au FileType css,scss,sass setlocal iskeyword+=-
+augroup END
+
+augroup ft_i3
+  au!
+  au BufEnter *i3/config setlocal filetype=i3 commentstring=#\ %s
 augroup END
 
 augroup ft_vim
@@ -342,11 +353,6 @@ augroup line_return
         \ if line("'\"") > 1 && line("'\"") <= line("$") |
         \   exe "normal! g`\"" |
         \ endif
-augroup END
-
-augroup search_status
-  autocmd!
-  autocmd CursorMoved * :AnzuUpdateSearchStatus|echo anzu#search_status()
 augroup END
 
 augroup search_position
@@ -449,39 +455,33 @@ let g:sparkupNextMapping = '<c-y>'
 let g:surround_no_insert_mappings = 1
 
 " }}}2
-" Switch {{{2
-
-let g:switch_custom =
-      \ {
-      \   'dot_notation': {
-      \     '\[["'']\(\k\+\)["'']\]': '\.\1',
-      \     '\.\(\k\+\)': '[''\1'']'
-      \   }
-      \ }
-
-" }}}2
 " Unite {{{2
 
 call unite#custom_source('file_rec/git,buffer', 'ignore_pattern', '\v\.(git|png|jpg|gif)$')
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 
+if executable("pt")
+  set grepprg=pt\ --nocolor\ --nogroup\ -e\ '$*'
+end
+
 let g:unite_source_grep_command = 'pt'
-let g:unite_source_grep_default_opts = '--nogroup --nocolor'
+let g:unite_source_grep_default_opts = '--nogroup --nocolor -e'
 let g:unite_source_grep_recursive_opt = ''
 let g:unite_source_grep_encoding = 'utf-8'
 let g:unite_source_history_yank_enable = 1
-let g:unite_split_rule = 'botright'
 
 function! s:unite_settings()
   let b:delimitMate_autoclose = 0
   imap <buffer> jj <Plug>(unite_insert_leave)
   imap <buffer> <C-j> <Plug>(unite_select_next_line)
   imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+  imap <silent> <C-z> <Plug>(unite_toggle_mark_current_candidate)
   imap <silent> <buffer> <expr> <C-x> unite#do_action('split')
   imap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
   imap <silent> <buffer> <expr> <C-t> unite#do_action('tabopen')
   nmap <buffer> <ESC> <Plug>(unite_exit)
+  nmap <buffer> <expr> v unite#do_action('vsplit')
 endfunction
 autocmd FileType unite call s:unite_settings()
 
@@ -489,7 +489,7 @@ autocmd FileType unite call s:unite_settings()
 " VimFiler {{{2
 
 let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_ignore_pattern = '^\%(\.git\|\.DS_Store\)$'
+let g:vimfiler_ignore_pattern = '\v\.(git|DS_Store|pyc)$'
 
  " Like Textmate icons.
 let g:vimfiler_tree_leaf_icon = ' '

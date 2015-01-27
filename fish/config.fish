@@ -103,6 +103,7 @@ prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
 prepend_to_path "/usr/local/heroku/bin"
 prepend_to_path "/usr/local/share/npm/bin"
+prepend_to_path "$HOME/Projects/docker-extras/bin"
 prepend_to_path "$HOME/.gem/ruby/2.1.0/bin"
 prepend_to_path "$HOME/.rbenv/bin"
 prepend_to_path "$HOME/.rbenv/shims"
@@ -120,18 +121,16 @@ end
 # }}}
 # Prompt {{{
 
+function _git_branch_name
+  echo (git symbolic-ref HEAD ^/dev/null | sed -e 's|^refs/heads/||')
+end
+
+function _is_git_dirty
+  echo (git status -s --ignore-submodules=dirty ^/dev/null)
+end
+
 function fish_prompt
   z --add "$PWD"
-  if not set -q -g __fish_robbyrussell_functions_defined
-    set -g __fish_robbyrussell_functions_defined
-    function _git_branch_name
-      echo (git symbolic-ref HEAD ^/dev/null | sed -e 's|^refs/heads/||')
-    end
-
-    function _is_git_dirty
-      echo (git status -s --ignore-submodules=dirty ^/dev/null)
-    end
-  end
 
   set -l cyan (set_color -o cyan)
   set -l yellow (set_color -o yellow)
@@ -163,12 +162,6 @@ eval (dircolors -c ~/.dotfiles/.dircolors)
 # }}}
 # Always work in a tmux session {{{
 
-if type tmux >/dev/null 2>&1
-    if test $TERM != "screen-256color" -a $TERM != "screen"
-        tmux attach -t work; or tmux new -s work; exit
-    end
-end
+tmx work
 
 # }}}
-
-true

@@ -1,9 +1,10 @@
 urxvt*underlineURLs: true
 urxvt*scrollBar: false
 urxvt*saveLines: 0
-urxvt*font: xft:ubuntu mono:size=10
-urxvt*boldFont: xft:ubuntu mono:bold:size=10
-urxvt*italicFont: xft:ubuntu mono:italic:size=10
+urxvt*font: xft:termsynu:size=10
+urxvt*boldFont: xft:termsynu:bold:size=10
+urxvt*italicFont: xft:termsynu:italic:size=10
+urxvt.borderless: true
 
 ! Base16 Default
 ! Scheme: Chris Kempson (http://chriskempson.com)

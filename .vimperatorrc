@@ -1,7 +1,10 @@
 "3.8.3 (created: 2014/11/09 13:19:01)
 
-set gui=none
+set nohlsearch
+set toolbars=none
 set hintchars=hjklasdfgyuiopqwertnmzxcvb
-source! /home/rainerborene/.vimperatorrc.local
+
+noremap j 3j
+noremap k 3k
 
 " vim: set ft=vimperator:

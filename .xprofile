@@ -1,0 +1,2 @@
+# vim: set filetype=bash
+export PATH=$PATH:~/.dotfiles/bin:/usr/lib/gnome-settings-daemon:/opt/dropbox
