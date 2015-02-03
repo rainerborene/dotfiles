@@ -1,12 +1,11 @@
 # Useful aliases {{{
 
-sh ~/.dotfiles/bin/base16-default.dark.sh
+sh ~/.dotfiles/bin/base16-ocean.dark.sh
 
 . ~/.dotfiles/fish/z.fish
 
 alias vi 'vim'
 alias v 'vim'
-
 alias j 'z'
 alias g 'git'
 alias c 'clear'
@@ -20,17 +19,10 @@ alias serve_this 'python -m SimpleHTTPServer'
 alias collapse "sed -e 's/  */ /g'"
 alias reload '. ~/.config/fish/config.fish'
 
-if test (uname) = 'Linux'
-    alias o 'gvfs-open'
-    alias oo 'gvfs-open (pwd)'
-    alias pbc 'xclip -selection clipboard'
-    alias pbp 'xclip -selection clipboard -o'
-else
-    alias o 'open'
-    alias oo 'open .'
-    alias pbc 'pbcopy'
-    alias pbp 'pbpaste'
-end
+alias o 'gvfs-open'
+alias oo 'gvfs-open (pwd)'
+alias pbc 'xclip -selection clipboard'
+alias pbp 'xclip -selection clipboard -o'
 
 alias b 'bundle'
 alias be 'bundle exec'

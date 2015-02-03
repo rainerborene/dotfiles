@@ -2,7 +2,7 @@
 
 ## Installation
 
-    curl https://raw.githubusercontent.com/rainerborene/dotfiles/master/install.sh | bash
+    curl https://raw.githubusercontent.com/rainerborene/dotfiles/master/bin/setup_dotfiles.sh | bash
 
 This will clone this repository and create symlinks for all config files in your
 home directory. After some time you might want to keep updated with the main
@@ -21,6 +21,14 @@ Now set up your credentials.
     git config --global user.name "Jonh Doe"
     git config --global user.email jonh@doe.com
 
-## License
+## What I use
 
-`:help license`
+- bspwm
+- sxhkd
+- dmenu2
+- tmux
+- urxvt
+- compton
+- jq
+- feh
+- scrot

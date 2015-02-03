@@ -14,7 +14,7 @@ fi
 # Install the dot files into user's home directory.
 #
 
-install() {
+setup() {
   # Clone repository and initialize modules
   echo "dotfiles: downloading..."
   rm -Rf ~/.dotfiles
@@ -36,15 +36,14 @@ install() {
   dotlink vimrc
   dotlink vimperatorrc
   dotlink Xresources
+  dotlink xprofile
 
   # Create directories
-  mkdir -p ~/.ssh
   mkdir -p ~/.config/fish
 
   # Manual linking
   ln -nfs ~/.dotfiles/vim ~/.vim
   ln -nfs ~/.dotfiles/fish/config.fish ~/.config/fish/config.fish
-  ln -nfs ~/.dotfiles/sshconfig ~/.ssh/config
 
   # Setup vim
   echo "dotfiles: installing vim package manager"
@@ -60,4 +59,4 @@ dotlink() {
   ln -nfs ~/.dotfiles/.$1 ~/.$1
 }
 
-install
+setup

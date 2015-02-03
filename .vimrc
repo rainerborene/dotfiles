@@ -47,9 +47,9 @@ set wrap
 
 set background=dark
 let g:base16colorspace=256
-colorscheme base16-default
+colorscheme base16-ocean
 
-hi VertSplit ctermbg=NONE
+hi VertSplit ctermbg=NONE guibg=NONE
 
 " Highlight VCS conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
@@ -74,8 +74,8 @@ set wildignore+=.sass-cache
 " Environments (GUI/Console) {{{1
 
 if has("gui_running")
-  set guifont=Source\ Code\ Pro\ 10
-  set guioptions=aegimt
+  set guifont=Termsynu\ 10
+  set guioptions=aegit
 else
   set mouse=a
 end

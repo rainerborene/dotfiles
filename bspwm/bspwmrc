@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+export PATH=$PATH:~/.dotfiles/bin:/usr/lib/gnome-settings-daemon:/opt/dropbox
+export SXHKD_SHELL=/usr/bin/sh
+
+bspc config border_width        3
+bspc config window_gap         15
+
+bspc config split_ratio           0.52
+bspc config borderless_monocle    true
+bspc config gapless_monocle       true
+bspc config focus_by_distance     true
+bspc config focus_follows_pointer true
+
+bspc monitor VGA1 -d 1 2 3 4
+bspc monitor HDMI1 -d 5 6 7 8
+
+bspc rule -a Firefox desktop=^1 focus=on
+bspc rule -a Skype desktop=^2 floating=on
+bspc rule -a URxvt desktop=^5
+bspc rule -a Wine floating=on
+bspc rule -a feh floating=on manage=off lower=on
+
+gnome-settings-daemon &
+feh --bg-fill ~/Pictures/close-up_drop_black_blue_rain_4502_1600x1200.jpg &
+xrdb -merge ~/.Xresources &
+xset -b &
+skype &
+firefox &
+urxvt &
+sxhkd &
+panel &
