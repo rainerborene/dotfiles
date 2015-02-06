@@ -29,6 +29,5 @@ Now set up your credentials.
 - tmux
 - urxvt
 - compton
-- jq
 - feh
 - scrot

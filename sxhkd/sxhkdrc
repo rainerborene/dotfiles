@@ -2,11 +2,14 @@
 # bspwm hotkeys
 #
 
-alt + Escape
-	bspc quit
+alt + super + Escape
+	pkill -x panel; bspc quit
 
 alt + q
 	bspc window -c
+
+alt + w
+	bspc monitor -f next
 
 alt + t
 	bspc desktop -l next
@@ -23,11 +26,6 @@ alt + {semicolon,Tab}
 alt + apostrophe
 	bspc window -s last
 
-alt + {o,i}
-	bspc control --record-history off; \
-	bspc window {older,newer} -f; \
-	bspc control --record-history on
-
 alt + y
 	bspc window -w last.manual
 
@@ -40,8 +38,15 @@ alt + {_,shift + }{h,j,k,l}
 alt + {_,shift + }c
 	bspc window -f {next,prev}
 
+alt + shift + {comma,period}
+	bspc desktop -R {90,270}
+
+# Move window into presel position
+alt + shift {a,s,d,f}
+	bspc window -w {left.manual,down.manual,up.manual,right.manual}
+
 alt + {comma,period}
-	bspc desktop -C {backward,forward}
+	bspc desktop -F {horizontal,vertical}
 
 alt + bracket{left,right}
 	bspc desktop -f {prev,next}
@@ -52,11 +57,11 @@ alt + ctrl + {h,j,k,l}
 alt + ctrl + {_,shift + }space
 	bspc {window -p cancel,desktop -c}
 
-super + {h,j,k,l}
-	bspc window -e {left -10,down +10,up -10,right +10}
+super + {h,l}
+	window_move {-p,-n} -x -s 20
 
-super + shift + {h,j,k,l}
-	bspc window -e {right -10,up +10,down -10,left +10}
+super + {j,k}
+	window_move {-p,-n} -y -s 20
 
 alt + ctrl + {1-9}
 	bspc window -r 0.{1-9}
@@ -84,7 +89,7 @@ alt + Return
 	urxvt
 
 alt + d
-	~/.dotfiles/bin/dmenu_launch
+	dmenu_launch
 
 alt + n
 	nautilus --browser --no-desktop
@@ -92,9 +97,6 @@ alt + n
 Print
 	scrot ~/Pictures/screenshot-$(date +%F-%S).png
 
-Shift + Print
-	scrot -s ~/Pictures/screenshot-$(date +%F-%S).png
-
 # make sxhkd reload its configuration files:
-alt + shift + r
+alt + Escape
 	pkill -USR1 -x sxhkd

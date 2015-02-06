@@ -151,7 +151,6 @@ nnoremap <leader>2 2gt
 nnoremap <leader>3 3gt
 nnoremap <leader>4 4gt
 nnoremap <leader>5 5gt
-nnoremap <C-t> :tabnew<CR>
 
 " Sane movement with wrap turned on
 nnoremap j gj
@@ -457,9 +456,9 @@ let g:surround_no_insert_mappings = 1
 " }}}2
 " Unite {{{2
 
-call unite#custom_source('file_rec/git,buffer', 'ignore_pattern', '\v\.(git|png|jpg|gif)$')
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
+call unite#custom#source('file_rec/git,buffer', 'ignore_pattern', '\v\.(git|png|jpg|gif)$')
 
 if executable("pt")
   set grepprg=pt\ --nocolor\ --nogroup\ -e\ '$*'
