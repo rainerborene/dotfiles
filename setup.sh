@@ -23,7 +23,7 @@ setup() {
 
   # Create symbolic links
   dotlink curlrc
-  dotlink ptignore
+  dotlink agignore
   dotlink ctags
   dotlink gemrc
   dotlink gitconfig

@@ -8,6 +8,9 @@ alt + super + Escape
 alt + q
 	bspc window -c
 
+alt + x
+	bspc window -k
+
 alt + w
 	bspc monitor -f next
 
@@ -17,36 +20,36 @@ alt + t
 alt + b
 	bspc desktop -B
 
+alt + e
+	bspc window -f {next.floating,next.tiled}
+
+alt + p
+	bspc window -t private
+
+alt + o
+	bspc window -t locked
+
 alt + {s,f}
 	bspc window -t {floating,fullscreen}
 
 alt + {semicolon,Tab}
 	bspc {window,desktop} -f last
 
-alt + apostrophe
-	bspc window -s last
-
-alt + y
-	bspc window -w last.manual
-
 alt + m
 	bspc window -s biggest
 
-alt + {_,shift + }{h,j,k,l}
-	bspc window -{f,s} {left,down,up,right}
-
-alt + {_,shift + }c
-	bspc window -f {next,prev}
+alt + {comma,period}
+	bspc desktop -F {horizontal,vertical}
 
 alt + shift + {comma,period}
 	bspc desktop -R {90,270}
 
+alt + {_,shift + }{h,j,k,l}
+	bspc window -{f,s} {left,down,up,right}
+
 # Move window into presel position
 alt + shift {a,s,d,f}
 	bspc window -w {left.manual,down.manual,up.manual,right.manual}
-
-alt + {comma,period}
-	bspc desktop -F {horizontal,vertical}
 
 alt + bracket{left,right}
 	bspc desktop -f {prev,next}
@@ -57,17 +60,21 @@ alt + ctrl + {h,j,k,l}
 alt + ctrl + {_,shift + }space
 	bspc {window -p cancel,desktop -c}
 
+alt + ctrl + {1-9}
+	bspc window -r 0.{1-9}
+
+alt + {_,shift + }{1-9,0}
+	bspc {desktop -f,window -d} ^{1-9,10}
+
 super + {h,l}
 	window_move {-p,-n} -x -s 20
 
 super + {j,k}
 	window_move {-p,-n} -y -s 20
 
-alt + ctrl + {1-9}
-	bspc window -r 0.{1-9}
-
-alt + {_,shift + }{1-9,0}
-	bspc {desktop -f,window -d} ^{1-9,10}
+#
+# mouse bindings
+#
 
 ~button1
 	bspc pointer -g focus
@@ -94,8 +101,14 @@ alt + d
 alt + n
 	nautilus --browser --no-desktop
 
+alt + Print
+	scrot -s ~/Pictures/screenshot-$(date +%F-%S).png
+
 Print
 	scrot ~/Pictures/screenshot-$(date +%F-%S).png
+
+alt + shift + e
+	bspwm-exit
 
 # make sxhkd reload its configuration files:
 alt + Escape

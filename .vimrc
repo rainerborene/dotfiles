@@ -43,10 +43,20 @@ set ttimeoutlen=100
 set virtualedit+=block
 set wrap
 
+" Environments (GUI/Console) {{{1
+
+if has("gui_running")
+  set guifont=Termsynu\ 10
+  set guioptions=aegit
+else
+  let g:base16colorspace=256
+  set mouse=a
+end
+
+" }}}1
 " Color scheme {{{1
 
 set background=dark
-let g:base16colorspace=256
 colorscheme base16-ocean
 
 hi VertSplit ctermbg=NONE guibg=NONE
@@ -69,16 +79,6 @@ set wildmode=list:longest,full
 set wildignore+=*.DS_Store
 set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=.sass-cache
-
-" }}}1
-" Environments (GUI/Console) {{{1
-
-if has("gui_running")
-  set guifont=Termsynu\ 10
-  set guioptions=aegit
-else
-  set mouse=a
-end
 
 " }}}1
 " Persistent undo {{{1
@@ -212,7 +212,7 @@ nnoremap <silent> g<cr> :call vimproc#system('ctags -R . &')<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<CR>
 
 " Unite
-nnoremap <leader>, :<C-u>Unite -no-split -buffer-name=files -start-insert file_rec/git<cr>
+nnoremap <leader>, :<C-u>Unite -no-split -buffer-name=files -start-insert file_rec/async<cr>
 nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer -start-insert buffer<cr>
 nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank history/yank<CR>
 nnoremap <expr> <leader>a ":\<C-u>Unite -no-split -buffer-name=grep%".tabpagenr()." -no-empty -resume -auto-preview grep\<cr>"
@@ -304,11 +304,6 @@ augroup ft_css
   au FileType css,scss,sass setlocal iskeyword+=-
 augroup END
 
-augroup ft_i3
-  au!
-  au BufEnter *i3/config setlocal filetype=i3 commentstring=#\ %s
-augroup END
-
 augroup ft_vim
   au!
   au FileType vim setlocal foldmethod=marker
@@ -321,6 +316,7 @@ augroup END
 
 augroup ft_ruby
   au!
+  au BufRead Guardfile setlocal filetype=ruby
   au BufRead *gemrc setlocal filetype=yaml
   au FileType ruby setlocal foldmethod=syntax
   au FileType ruby setlocal keywordprg=ri\ -T
@@ -460,15 +456,10 @@ call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#source('file_rec/git,buffer', 'ignore_pattern', '\v\.(git|png|jpg|gif)$')
 
-if executable("pt")
-  set grepprg=pt\ --nocolor\ --nogroup\ -e\ '$*'
-end
-
-let g:unite_source_grep_command = 'pt'
-let g:unite_source_grep_default_opts = '--nogroup --nocolor -e'
-let g:unite_source_grep_recursive_opt = ''
-let g:unite_source_grep_encoding = 'utf-8'
 let g:unite_source_history_yank_enable = 1
+let g:unite_source_grep_command = 'ag'
+let g:unite_source_grep_default_opts = '-i --line-numbers --nocolor --nogroup --hidden'
+let g:unite_source_rec_async_command = 'ag --nocolor --nogroup --hidden -U -g ""'
 
 function! s:unite_settings()
   let b:delimitMate_autoclose = 0
@@ -503,6 +494,11 @@ call vimfiler#custom#profile('default', 'context', {
       \ 'auto_expand' : 1,
       \ 'parent' : 0,
       \ })
+
+" }}}2
+" Switch {{{2
+
+let g:switch_mapping = "-"
 
 " }}}2
 

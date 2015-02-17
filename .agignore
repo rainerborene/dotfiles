@@ -1,3 +1,5 @@
+.vagrant
+.git
 .bundle
 .zeus.sock
 log
@@ -5,4 +7,3 @@ node_modules
 public/assets
 tags
 tmp
-vendor/assets/javascripts/ckeditor

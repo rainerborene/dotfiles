@@ -2,7 +2,7 @@
 
 ## Installation
 
-    curl https://raw.githubusercontent.com/rainerborene/dotfiles/master/bin/setup_dotfiles.sh | bash
+    curl https://raw.githubusercontent.com/rainerborene/dotfiles/master/setup.sh | bash
 
 This will clone this repository and create symlinks for all config files in your
 home directory. After some time you might want to keep updated with the main
@@ -26,8 +26,12 @@ Now set up your credentials.
 - bspwm
 - sxhkd
 - dmenu2
-- tmux
-- urxvt
 - compton
 - feh
 - scrot
+- urxvt
+- tmux
+- vim
+- the_silver_searcher
+- j4-dmenu-desktop
+- simplescreenrecorder

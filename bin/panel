@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-export PANEL_FIFO=/tmp/panel-fifo
-export PANEL_HEIGHT=20
-export PANEL_FONT_FAMILY="-*-terminus-medium-r-normal-*-12-*-*-*-c-*-*-1"
+PANEL_FIFO=/tmp/panel-fifo
+PANEL_HEIGHT=20
+PANEL_FONT_FAMILY="-*-terminus-medium-r-normal-*-12-*-*-*-c-*-*-1"
+MONITOR=$(bspc query -M | wc -l)
 
 COLOR_FOREGROUND='#FFA3A6AB'
 COLOR_BACKGROUND='#FF34322E'
@@ -29,7 +30,57 @@ COLOR_TITLE_BG='#FF34322E'
 COLOR_STATUS_FG='#FFA3A6AB'
 COLOR_STATUS_BG='#FF34322E'
 
-if [ $(pgrep -cx panel) -gt 1 ] ; then
+#
+# S* clock output
+# T* xtitle output
+# W* bspwm internal state
+#
+# M* active monitor
+# m* inactive monitor
+# O* focused occupied desktop
+# F* focused free desktop
+# U* focused urgent desktop#
+# o* occupied desktop
+# f* free desktop
+# u* urgent desktop
+# L* layout
+#
+parse() {
+  while read -r line; do
+    case $line in
+      S*)
+        sys_infos="%{F$COLOR_STATUS_FG}%{B$COLOR_STATUS_BG} ${line#?} %{B-}%{F-}"
+        ;;
+      T*)
+        title="%{F$COLOR_TITLE_FG}%{B$COLOR_TITLE_BG} ${line#?} %{B-}%{F-}"
+        ;;
+      W*)
+        wm_infos=""
+        IFS=':'
+        set -- ${line#?}
+        while [ $# -gt 0 ] ; do
+          item=$1
+          name=${item#?}
+          case $item in
+            M*) [[ $MONITOR -gt 1 ]] && wm_infos="$wm_infos %{F$COLOR_ACTIVE_MONITOR_FG}%{B$COLOR_ACTIVE_MONITOR_BG} ${name} %{B-}%{F-}  " ;;
+            m*) [[ $MONITOR -gt 1 ]] && wm_infos="$wm_infos %{F$COLOR_INACTIVE_MONITOR_FG}%{B$COLOR_INACTIVE_MONITOR_BG} ${name} %{B-}%{F-}  " ;;
+            O*) wm_infos="${wm_infos}%{F$COLOR_FOCUSED_OCCUPIED_FG}%{B$COLOR_FOCUSED_OCCUPIED_BG}%{U$COLOR_FOREGROUND} ${name} %{B-}%{F-}" ;;
+            F*) wm_infos="${wm_infos}%{F$COLOR_FOCUSED_FREE_FG}%{B$COLOR_FOCUSED_FREE_BG}%{U$COLOR_FOREGROUND} ${name} %{B-}%{F-}" ;;
+            U*) wm_infos="${wm_infos}%{F$COLOR_FOCUSED_URGENT_FG}%{B$COLOR_FOCUSED_URGENT_BG}%{U$COLOR_FOREGROUND} ${name} %{B-}%{F-}" ;;
+            o*) wm_infos="${wm_infos}%{F$COLOR_OCCUPIED_FG}%{B$COLOR_OCCUPIED_BG} ${name} %{B-}%{F-}" ;;
+            f*) wm_infos="${wm_infos}%{F$COLOR_FREE_FG}%{B$COLOR_FREE_BG} ${name} %{B-}%{F-}" ;;
+            u*) wm_infos="${wm_infos}%{F$COLOR_URGENT_FG}%{B$COLOR_URGENT_BG} ${name} %{B-}%{F-}" ;;
+            L*) wm_infos="$wm_infos  %{F$COLOR_LAYOUT_FG}%{B$COLOR_LAYOUT_BG} ${name} %{B-}%{F-}" ;;
+          esac
+          shift
+        done
+        ;;
+    esac
+    printf "%s\n" "%{l}${wm_infos}%{c}${title}%{r}${sys_infos}"
+  done
+}
+
+if [ $(pgrep -cx panel) -gt 1 ]; then
   printf "%s\n" "The panel is already running." >&2
   exit 1
 fi
@@ -43,74 +94,6 @@ bspc config -m VGA1 top_padding $PANEL_HEIGHT
 bspc control --subscribe > "$PANEL_FIFO" &
 xtitle -sf 'T%s' > "$PANEL_FIFO" &
 clock -sf 'S%a %H:%M' > "$PANEL_FIFO" &
-
-num_mon=$(bspc query -M | wc -l)
-
-cat $PANEL_FIFO | while read -r line; do
-  case $line in
-    S*)
-      # clock output
-      sys_infos="%{F$COLOR_STATUS_FG}%{B$COLOR_STATUS_BG} ${line#?} %{B-}%{F-}"
-      ;;
-    T*)
-      # xtitle output
-      title="%{F$COLOR_TITLE_FG}%{B$COLOR_TITLE_BG} ${line#?} %{B-}%{F-}"
-      ;;
-    W*)
-      # bspwm internal state
-      wm_infos=""
-      IFS=':'
-      set -- ${line#?}
-      while [ $# -gt 0 ] ; do
-        item=$1
-        name=${item#?}
-        case $item in
-          M*)
-            # active monitor
-            if [ $num_mon -gt 1 ] ; then
-              wm_infos="$wm_infos %{F$COLOR_ACTIVE_MONITOR_FG}%{B$COLOR_ACTIVE_MONITOR_BG} ${name} %{B-}%{F-}  "
-            fi
-            ;;
-          m*)
-            # inactive monitor
-            if [ $num_mon -gt 1 ] ; then
-              wm_infos="$wm_infos %{F$COLOR_INACTIVE_MONITOR_FG}%{B$COLOR_INACTIVE_MONITOR_BG} ${name} %{B-}%{F-}  "
-            fi
-            ;;
-          O*)
-            # focused occupied desktop
-            wm_infos="${wm_infos}%{F$COLOR_FOCUSED_OCCUPIED_FG}%{B$COLOR_FOCUSED_OCCUPIED_BG}%{U$COLOR_FOREGROUND} ${name} %{B-}%{F-}"
-            ;;
-          F*)
-            # focused free desktop
-            wm_infos="${wm_infos}%{F$COLOR_FOCUSED_FREE_FG}%{B$COLOR_FOCUSED_FREE_BG}%{U$COLOR_FOREGROUND} ${name} %{B-}%{F-}"
-            ;;
-          U*)
-            # focused urgent desktop
-            wm_infos="${wm_infos}%{F$COLOR_FOCUSED_URGENT_FG}%{B$COLOR_FOCUSED_URGENT_BG}%{U$COLOR_FOREGROUND} ${name} %{B-}%{F-}"
-            ;;
-          o*)
-            # occupied desktop
-            wm_infos="${wm_infos}%{F$COLOR_OCCUPIED_FG}%{B$COLOR_OCCUPIED_BG} ${name} %{B-}%{F-}"
-            ;;
-          f*)
-            # free desktop
-            wm_infos="${wm_infos}%{F$COLOR_FREE_FG}%{B$COLOR_FREE_BG} ${name} %{B-}%{F-}"
-            ;;
-          u*)
-            # urgent desktop
-            wm_infos="${wm_infos}%{F$COLOR_URGENT_FG}%{B$COLOR_URGENT_BG} ${name} %{B-}%{F-}"
-            ;;
-          L*)
-            # layout
-            wm_infos="$wm_infos  %{F$COLOR_LAYOUT_FG}%{B$COLOR_LAYOUT_BG} ${name} %{B-}%{F-}"
-            ;;
-        esac
-        shift
-      done
-      ;;
-  esac
-  printf "%s\n" "%{l}${wm_infos}%{c}${title}%{r}${sys_infos}"
-done | bar -g 1680x$PANEL_HEIGHT+1440+0 -f "$PANEL_FONT_FAMILY" -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
+cat $PANEL_FIFO | parse | bar -g 1680x$PANEL_HEIGHT+1440+0 -f "$PANEL_FONT_FAMILY" -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
 
 wait

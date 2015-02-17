@@ -19,11 +19,12 @@ bspc rule -a Firefox desktop=^1 focus=on
 bspc rule -a Skype desktop=^2 floating=on
 bspc rule -a Steam desktop=^3
 bspc rule -a URxvt desktop=^5
+bspc rule -a Wine center=off
 
 gnome-settings-daemon &
 feh --bg-fill ~/Pictures/6Z8WnzT.png &
 xrdb -merge ~/.Xresources &
-xset -b &
+dropbox start &
 skype &
 firefox &
 urxvt &

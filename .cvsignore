@@ -15,7 +15,6 @@
 Gemfile.lock.tags
 Thumbs.db
 custom_plan.rb
-public/ckeditor_assets
 tags
 vagrant_ansible_inventory_default*
 zeus.json

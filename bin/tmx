@@ -12,7 +12,7 @@ trim() {
   echo $1;
 }
 
-format='#{window_active} #{window_id} #{window_name}'
+format='#{window_active} #{window_id} #{pane_current_command}'
 base_session="$1"
 tmux_nb=$(trim `tmux ls | grep "^$base_session" | wc -l`)
 
@@ -23,15 +23,12 @@ activew() {
   } | tr '\n' '|' | sed 's/|$//'
 }
 
-windows() {
+purge() {
   tmux lsw -F "$format" \
     | grep -Ev "$(activew)" \
-    | grep fish \
-    | awk '{ print $2 }'
-}
-
-purge() {
-  windows | xargs -Iz tmux kill-window -t z
+    | grep $(basename $SHELL) \
+    | awk '{ print $2 }' \
+    | xargs -Iz tmux kill-window -t z
 }
 
 run() {

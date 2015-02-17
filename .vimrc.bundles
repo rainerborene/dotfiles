@@ -22,6 +22,7 @@ let g:loaded_vimballPlugin = "v35"
 
 call plug#begin('~/.vim/bundle')
 
+Plug 'AndrewRadev/switch.vim'
 Plug 'cespare/vim-toml'
 Plug 'chriskempson/base16-vim'
 Plug 'exu/pgsql.vim'
