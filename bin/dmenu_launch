@@ -11,9 +11,8 @@ height=20 # menu window height
 lines=4 # lists items vertically
 dim=0.9 # opacity
 
-r=$(bspc query -T -m focused | head -1 | grep -Eo '[0-9]+x[0-9]+')
-w=$(echo $r | cut -d x -f 1)
-h=$(echo $r | cut -d x -f 2)
+w=$(i3-msg -t get_workspaces | jq '.[]|select(.focused).rect.width')
+h=$(i3-msg -t get_workspaces | jq '.[]|select(.focused).rect|.height+.y')
 x=$((($w - $width) / 2))
 y=$((($h - $height*5) / 2))
 

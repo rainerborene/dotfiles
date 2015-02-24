@@ -23,8 +23,9 @@ Now set up your credentials.
 
 ## What I use
 
-- bspwm
-- sxhkd
+- i3
+- i3status
+- jq
 - dmenu2
 - compton
 - feh

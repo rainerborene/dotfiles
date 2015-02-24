@@ -294,8 +294,7 @@ augroup END
 
 augroup ft_tmux
   au!
-  au BufNewFile,BufRead .tmux.conf,tmux.conf* setlocal filetype=tmux
-  au BufNewFile,BufRead .tmux.conf,tmux.conf* setlocal commentstring=#\ %s
+  au BufNewFile,BufRead .tmux.conf setlocal commentstring=#\ %s
 augroup END
 
 augroup ft_css
@@ -316,7 +315,6 @@ augroup END
 
 augroup ft_ruby
   au!
-  au BufRead Guardfile setlocal filetype=ruby
   au BufRead *gemrc setlocal filetype=yaml
   au FileType ruby setlocal foldmethod=syntax
   au FileType ruby setlocal keywordprg=ri\ -T
@@ -423,10 +421,6 @@ let g:ruby_operators = 1
 " HTML5 {{{2
 
 let g:html_indent_tags = 'li\|p'
-let g:html5_event_handler_attributes_complete = 0
-let g:html5_rdfa_attributes_complete = 0
-let g:html5_microdata_attributes_complete = 0
-let g:html5_aria_attributes_complete = 0
 
 " }}}2
 " Syntastic {{{2
@@ -499,6 +493,13 @@ call vimfiler#custom#profile('default', 'context', {
 " Switch {{{2
 
 let g:switch_mapping = "-"
+let g:switch_custom_definitions = []
+
+" Dot notation
+call add(switch_custom_definitions, {
+      \ '\[["'']\(\k\+\)["'']\]': '\.\1',
+      \ '\.\(\k\+\)': '[''\1'']'
+      \ })
 
 " }}}2
 
