@@ -4,16 +4,7 @@ export SHELL=/bin/bash
 fn='Termsynu-10' # font
 nf='\#eff1f5' # foreground
 nb='\#2b303b' # background
-sb='\#d08770' # selected background
-sf='\#2b303b' # selected foregroudn
-width=300 # menu window width
-height=20 # menu window height
-lines=4 # lists items vertically
-dim=0.9 # opacity
+sb='\#8fa1b3' # selected background
+sf='\#ffffff' # selected foreground
 
-w=$(i3-msg -t get_workspaces | jq '.[]|select(.focused).rect.width')
-h=$(i3-msg -t get_workspaces | jq '.[]|select(.focused).rect|.height+.y')
-x=$((($w - $width) / 2))
-y=$((($h - $height*5) / 2))
-
-exec j4-dmenu-desktop --dmenu="dmenu -i -l $lines -nb $nb -fn $fn -nf $nf -sb $sb -sf $sf -x $x -y $y -w $width -h $height -dim $dim" --term="urxvt"
+exec j4-dmenu-desktop --dmenu="dmenu -i -h 17 -y 1 -nb $nb -fn $fn -nf $nf -sb $sb -sf $sf" --term="urxvt"

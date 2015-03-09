@@ -1,15 +1,24 @@
 # i3 config file (v4)
 set $mod Mod1
 
-new_window pixel 3
-hide_edge_borders both
-gaps inner 15
-mouse_warping none
+set $ws1  1:
+set $ws2  2:
+set $ws3  3:
+set $ws4  4:
+set $ws5  5:
+set $ws6  6:
+set $ws7  7
+set $ws8  8
+set $ws9  9
+set $ws10 10
 
-client.focused          #68a8c5 #68a8c5 #f1edfb #68a8c5
-client.unfocused        #9ac1d9 #9ac1d9 #f1edfb #9ac1d9
-client.focused_inactive #9ac1d9 #9ac1d9 #f1edfb #9ac1d9
-client.urgent           #bf616a #bf616a #f1edfb #bf616a
+set $background #2b303b
+set $white      #eff1f5
+set $red        #bf616a
+set $darkblue   #65737e
+set $blue       #4f5b66
+set $lightblue  #8fa1b3
+set $brightblue #6fc2ef
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -69,29 +78,29 @@ bindsym $mod+a focus parent
 bindsym $mod+d focus child
 
 # switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
 bindsym $mod+Tab workspace back_and_forth
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+2 move container to workspace 2
-bindsym $mod+Shift+3 move container to workspace 3
-bindsym $mod+Shift+4 move container to workspace 4
-bindsym $mod+Shift+5 move container to workspace 5
-bindsym $mod+Shift+6 move container to workspace 6
-bindsym $mod+Shift+7 move container to workspace 7
-bindsym $mod+Shift+8 move container to workspace 8
-bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
 bindsym $mod+Shift+Tab move container to workspace back_and_forth
 
 # reloading/restarting/exiting
@@ -104,23 +113,25 @@ for_window [class="Wine"] floating enable
 for_window [class="Skype"] floating enable
 for_window [class="Steam" title="Friends"] floating enable
 for_window [class="Steam" title="Chat$"] floating enable
+for_window [class="California"] floating enable
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="task_dialog"] floating enable
 
 # assign certain applications to a specific workspace
-assign [class="Firefox"] 1
-assign [class="Skype"] 2
-assign [class="URxvt"] 5
+assign [class="Firefox"] $ws1
+assign [class="Skype"] $ws2
+assign [class="Steam"] $ws4
+assign [class="URxvt"] $ws5
 
 # workspace screens
-workspace 1 output VGA1
-workspace 2 output VGA1
-workspace 3 output VGA1
-workspace 4 output VGA1
-workspace 5 output HDMI1
-workspace 6 output HDMI1
-workspace 7 output HDMI1
-workspace 8 output HDMI1
+workspace $ws1 output VGA1
+workspace $ws2 output VGA1
+workspace $ws3 output VGA1
+workspace $ws4 output VGA1
+workspace $ws5 output HDMI1
+workspace $ws6 output HDMI1
+workspace $ws7 output HDMI1
+workspace $ws8 output HDMI1
 
 # screenshot
 bindsym --release Print exec scrot $HOME/Pictures/screenshot-$(date +%Y-%m-%d).png
@@ -172,18 +183,31 @@ bar {
     position top
     status_command i3status
     tray_output VGA1
+    strip_workspace_numbers yes
 
     colors {
-        background #2b303b
-        statusline #eff1f5
-        separator #2b303b
+        background $background
+        statusline $white
+        separator $background
 
-        focused_workspace  #8fa1b3 #8fa1b3 #eff1f5
-        active_workspace   #4f5b66 #4f5b66 #eff1f5
-        inactive_workspace #2b303b #2b303b #65737e
-        urgent_workspace   #bf616a #bf616a #eff1f5
+        focused_workspace  $lightblue  $lightblue  $white
+        active_workspace   $blue       $blue       $white
+        inactive_workspace $background $background $darkblue
+        urgent_workspace   $red        $red        $white
     }
 }
+
+new_window pixel 3
+new_float pixel 3
+hide_edge_borders both
+mouse_warping none
+gaps inner 15
+gaps outer 30
+
+client.focused          $brightblue $brightblue $background $brightblue
+client.unfocused        $lightblue  $lightblue  $white      $lightblue
+client.focused_inactive $lightblue  $lightblue  $white      $lightblue
+client.urgent           $red        $red        $white      $red
 
 exec --no-startup-id gnome-settings-daemon
 exec --no-startup-id xrdb -merge ~/.Xresources
@@ -192,5 +216,5 @@ exec --no-startup-id nm-applet
 exec --no-startup-id firefox
 exec --no-startup-id skype
 exec --no-startup-id compton -b
-
-exec_always --no-startup-id feh --bg-fill ~/Pictures/close-up_drop_black_blue_rain_4502_1600x1200.jpg
+exec --no-startup-id xcape
+exec_always --no-startup-id feh --bg-fill ~/Pictures/bmw_m6_dark_knight_black_forest_fog_front_bumper_100117_1920x1080.jpg

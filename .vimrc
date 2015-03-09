@@ -47,7 +47,7 @@ set wrap
 
 if has("gui_running")
   set guifont=Termsynu\ 10
-  set guioptions=aegit
+  set guioptions=agit
 else
   let g:base16colorspace=256
   set mouse=a
@@ -127,9 +127,6 @@ nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 nnoremap g/ ms:<c-u>OverCommandLine<cr>%s/
 xnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\%V
 
-" Fast esc key
-inoremap jj <Esc>
-
 " I hate when the rendering occasionally gets messed up.
 nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
 
@@ -151,6 +148,7 @@ nnoremap <leader>2 2gt
 nnoremap <leader>3 3gt
 nnoremap <leader>4 4gt
 nnoremap <leader>5 5gt
+nnoremap <leader>t :tabnew<CR>
 
 " Sane movement with wrap turned on
 nnoremap j gj
@@ -216,7 +214,7 @@ nnoremap <leader>, :<C-u>Unite -no-split -buffer-name=files -start-insert file_r
 nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer -start-insert buffer<cr>
 nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank history/yank<CR>
 nnoremap <expr> <leader>a ":\<C-u>Unite -no-split -buffer-name=grep%".tabpagenr()." -no-empty -resume -auto-preview grep\<cr>"
-vnoremap <leader>a "zy:execute "Unite -no-split -buffer-name=grep%".tabpagenr()." -no-empty -resume -auto-preview grep:.::" . @z<cr>"
+vnoremap <leader>a "zy:execute "Unite -no-split -buffer-name=grep%".tabpagenr()." -no-empty -auto-preview grep:.::" . @z<cr>"
 
 " File explorer
 nnoremap <silent> <leader>e :VimFilerBufferDir<CR>
@@ -270,6 +268,15 @@ augroup ft_html
   au FileType html,eruby nnoremap <buffer> <localleader>= Vat=
 augroup END
 
+augroup ft_awk
+  au FileType awk setlocal commentstring=#\ %s
+augroup END
+
+augroup ft_i3
+  au!
+  au BufRead,BufNewFile *i3/config set ft=i3
+augroup END
+
 augroup ft_git
   au!
   au FileType git,gitcommit setlocal foldmethod=syntax colorcolumn& nolist
@@ -295,6 +302,11 @@ augroup END
 augroup ft_tmux
   au!
   au BufNewFile,BufRead .tmux.conf setlocal commentstring=#\ %s
+augroup END
+
+augroup ft_c
+  au!
+  au FileType c setlocal noet shiftwidth=8 tabstop=8
 augroup END
 
 augroup ft_css
@@ -457,7 +469,6 @@ let g:unite_source_rec_async_command = 'ag --nocolor --nogroup --hidden -U -g ""
 
 function! s:unite_settings()
   let b:delimitMate_autoclose = 0
-  imap <buffer> jj <Plug>(unite_insert_leave)
   imap <buffer> <C-j> <Plug>(unite_select_next_line)
   imap <buffer> <C-k> <Plug>(unite_select_previous_line)
   imap <silent> <C-z> <Plug>(unite_toggle_mark_current_candidate)

@@ -36,3 +36,4 @@ Now set up your credentials.
 - the_silver_searcher
 - j4-dmenu-desktop
 - simplescreenrecorder
+- jshint

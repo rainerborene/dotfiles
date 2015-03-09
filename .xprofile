@@ -1,2 +1,3 @@
 # vim: set filetype=bash
 export PATH=$PATH:~/.dotfiles/bin:/usr/lib/gnome-settings-daemon:/opt/dropbox
+export SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS=0

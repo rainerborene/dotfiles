@@ -90,13 +90,14 @@ set -gx GOPATH $HOME/.go
 set -gx WINEARCH win32
 set -gx DOCKER_HOST unix:///var/run/docker.sock
 set -gx BROWSER firefox
+set -gx GEM_HOME $HOME/.gem/ruby/2.1/
 
 prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
 prepend_to_path "/usr/local/heroku/bin"
 prepend_to_path "/usr/local/share/npm/bin"
 prepend_to_path "$HOME/Projects/docker-extras/bin"
-prepend_to_path "$HOME/.gem/ruby/2.1.0/bin"
+prepend_to_path "$HOME/.gem/ruby/2.1/bin"
 prepend_to_path "$HOME/.rbenv/bin"
 prepend_to_path "$HOME/.rbenv/shims"
 prepend_to_path "$HOME/.dotfiles/bin"
