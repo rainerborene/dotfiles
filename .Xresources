@@ -1,10 +1,17 @@
-urxvt*underlineURLs: true
-urxvt*scrollBar: false
-urxvt*saveLines: 0
-urxvt*font: xft:termsynu:size=10
-urxvt*boldFont: xft:termsynu:bold:size=10
-urxvt*italicFont: xft:termsynu:italic:size=10
-urxvt.borderless: true
+! better font rendering
+Xft.dpi: 96
+Xft.antialias: true
+Xft.rgba: rgb
+Xft.hinting: true
+Xft.hintstyle: hintslight
+
+! URxvt
+URxvt.underlineURLs: true
+URxvt.scrollBar: false
+URxvt.saveLines: 0
+URxvt.internalBorder: 5
+URxvt.font:xft:Tewi:style=normal:pixelsize=12
+URxvt.boldFont:xft:Tewi:style=bold:pixelsize=12
 
 ! Base16 Default
 ! Scheme: Chris Kempson (http://chriskempson.com)

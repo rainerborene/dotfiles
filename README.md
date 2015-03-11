@@ -24,16 +24,15 @@ Now set up your credentials.
 ## What I use
 
 - i3
-- i3status
 - jq
 - dmenu2
 - compton
 - feh
 - scrot
 - urxvt
+- fish
 - tmux
 - vim
 - the_silver_searcher
 - j4-dmenu-desktop
-- simplescreenrecorder
 - jshint

@@ -1,8 +1,47 @@
-# Useful aliases {{{
+# Environment variables {{{
+
+function prepend_to_path -d "Prepend the given dir to PATH if it exists and is not already in it"
+    if test -d $argv[1]
+        if not contains $argv[1] $PATH
+            set -gx PATH "$argv[1]" $PATH
+        end
+    end
+end
+
+set -gx fish_greeting ''
+set -gx GPG_TTY (tty)
+set -gx EDITOR vim
+set -gx GOPATH $HOME/.go
+set -gx WINEARCH win32
+set -gx DOCKER_HOST unix:///var/run/docker.sock
+set -gx BROWSER firefox
+set -gx GEM_HOME $HOME/.gem/ruby/2.1/
+
+prepend_to_path "/usr/bin"
+prepend_to_path "/usr/local/bin"
+prepend_to_path "/usr/local/heroku/bin"
+prepend_to_path "/usr/local/share/npm/bin"
+prepend_to_path "$HOME/Projects/docker-extras/bin"
+prepend_to_path "$HOME/.gem/ruby/2.1/bin"
+prepend_to_path "$HOME/.rbenv/bin"
+prepend_to_path "$HOME/.rbenv/shims"
+prepend_to_path "$HOME/.dotfiles/bin"
+prepend_to_path "$GOPATH/bin"
+prepend_to_path "./bin"
+
+# }}}
+# Startup {{{
+
+if not status --is-interactive
+  exit
+end
 
 sh ~/.dotfiles/bin/base16-ocean.dark.sh
 
-. ~/.dotfiles/fish/z.fish
+# }}}
+# Useful aliases {{{
+
+. ~/.dotfiles/.config/fish/z.fish
 
 alias vi 'vim'
 alias v 'vim'
@@ -19,8 +58,8 @@ alias serve_this 'python -m SimpleHTTPServer'
 alias collapse "sed -e 's/  */ /g'"
 alias reload '. ~/.config/fish/config.fish'
 
-alias o 'gvfs-open'
-alias oo 'gvfs-open (pwd)'
+alias o 'command gvfs-open $ARGV >/dev/null 2>&1'
+alias oo 'gvfs-open (pwd) >/dev/null 2>&1'
 alias pbc 'xclip -selection clipboard'
 alias pbp 'xclip -selection clipboard -o'
 
@@ -71,38 +110,6 @@ alias ..    'cd ..'
 alias ...   'cd ../..'
 alias ....  'cd ../../..'
 alias ..... 'cd ../../../..'
-
-# }}}
-# Environment variables {{{
-
-function prepend_to_path -d "Prepend the given dir to PATH if it exists and is not already in it"
-    if test -d $argv[1]
-        if not contains $argv[1] $PATH
-            set -gx PATH "$argv[1]" $PATH
-        end
-    end
-end
-
-set -gx fish_greeting ''
-set -gx GPG_TTY (tty)
-set -gx EDITOR vim
-set -gx GOPATH $HOME/.go
-set -gx WINEARCH win32
-set -gx DOCKER_HOST unix:///var/run/docker.sock
-set -gx BROWSER firefox
-set -gx GEM_HOME $HOME/.gem/ruby/2.1/
-
-prepend_to_path "/usr/bin"
-prepend_to_path "/usr/local/bin"
-prepend_to_path "/usr/local/heroku/bin"
-prepend_to_path "/usr/local/share/npm/bin"
-prepend_to_path "$HOME/Projects/docker-extras/bin"
-prepend_to_path "$HOME/.gem/ruby/2.1/bin"
-prepend_to_path "$HOME/.rbenv/bin"
-prepend_to_path "$HOME/.rbenv/shims"
-prepend_to_path "$HOME/.dotfiles/bin"
-prepend_to_path "$GOPATH/bin"
-prepend_to_path "./bin"
 
 # }}}
 # Bind Keys {{{

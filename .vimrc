@@ -46,7 +46,7 @@ set wrap
 " Environments (GUI/Console) {{{1
 
 if has("gui_running")
-  set guifont=Termsynu\ 10
+  set guifont=Tewi\ 9
   set guioptions=agit
 else
   let g:base16colorspace=256
@@ -274,7 +274,7 @@ augroup END
 
 augroup ft_i3
   au!
-  au BufRead,BufNewFile *i3/config set ft=i3
+  au BufRead,BufNewFile *i3/config setlocal ft=i3 commentstring=#\ %s
 augroup END
 
 augroup ft_git
@@ -297,11 +297,6 @@ augroup ft_markdown
   au FileType markdown nnoremap <buffer> <localleader>2 yypVr-
   au FileType markdown nnoremap <buffer> <localleader>3 I### <ESC>
   au FileType markdown setlocal wrap linebreak nolist
-augroup END
-
-augroup ft_tmux
-  au!
-  au BufNewFile,BufRead .tmux.conf setlocal commentstring=#\ %s
 augroup END
 
 augroup ft_c

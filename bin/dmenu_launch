@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 export SHELL=/bin/bash
 
-fn='Termsynu-10' # font
+fn='Tewi-8' # font
 nf='\#eff1f5' # foreground
 nb='\#2b303b' # background
 sb='\#8fa1b3' # selected background

@@ -33,22 +33,20 @@ setup() {
   dotlink pryrc
   dotlink railsrc
   dotlink tmux.conf
+  dotlink vim
   dotlink vimrc
   dotlink vimperatorrc
   dotlink Xresources
   dotlink xprofile
 
-  # Create directories
+  # Fish config
   mkdir -p ~/.config/fish
-
-  # Manual linking
-  ln -nfs ~/.dotfiles/vim ~/.vim
-  ln -nfs ~/.dotfiles/fish/config.fish ~/.config/fish/config.fish
+  ln -nfs ~/.dotfiles/.config/fish/config.fish ~/.config/fish/config.fish
 
   # Setup vim
   echo "dotfiles: installing vim package manager"
-  mkdir ~/.dotfiles/vim/bundle
-  git clone -q https://github.com/junegunn/vim-plug.git ~/.dotfiles/vim/bundle/vim-plug
+  mkdir ~/.dotfiles/.vim/bundle
+  git clone -q https://github.com/junegunn/vim-plug.git ~/.dotfiles/.vim/bundle/vim-plug
 
   # Done
   echo "dotfiles: installed"

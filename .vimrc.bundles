@@ -60,6 +60,7 @@ Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+Plug 'justinmk/vim-dirvish'
 
 call plug#end()
 

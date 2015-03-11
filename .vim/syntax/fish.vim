@@ -3,8 +3,8 @@
 " Maintainer:	 yann monclair <yann@monclair.info>
 " Heavily based on zsh.vim by Felix von Leitner
 " there is still much work to be done, this is just a start, it should get
-" better with time 
-" Url: http://monclair.info/~yann/vim  
+" better with time
+" Url: http://monclair.info/~yann/vim
 " Last Change:	2005/11/08
 
 
@@ -23,7 +23,7 @@ syn match   fishSpecial	"\\\d\d\d\|\\[abcfnrtv\\']"
 syn region	fishSinglequote	start=+'+ skip=+\\'+ end=+'+
 " A bunch of useful fish keywords
 syn keyword	fishFunction	function
-syn keyword	fishStatement	. and bg begin bind break builtin	
+syn keyword	fishStatement	. and bg begin bind break builtin
 syn keyword	fishStatement	case cd command commandline complete continue count
 syn keyword	fishStatement	dirh dirs end else eval exec exit
 syn keyword	fishStatement	fg fishd for function functions
@@ -31,9 +31,9 @@ syn keyword	fishStatement	help if jobs mimedb nextd not or
 syn keyword	fishStatement	popd prevd pushd random return read
 syn keyword	fishStatement	set set_color switch tokenize
 syn keyword	fishStatement	ulimit umask while
-syn keyword	fishInputrc	backward-char backward-delete-char backward-kill-line backward-kill-word backward-word 
+syn keyword	fishInputrc	backward-char backward-delete-char backward-kill-line backward-kill-word backward-word
 syn keyword	fishInputrc	beginning-of-history beginning-of-line complete delete-char delete-line
-syn keyword     fishInputrc     explain forward-char forward-word history-search-backward history-search-forward 
+syn keyword     fishInputrc     explain forward-char forward-word history-search-backward history-search-forward
 syn keyword     fishInputrc     kill-line kill-whole-line kill-word yank yank-pop
 
 syn keyword	fishConditional	if else case then in
@@ -129,7 +129,7 @@ if version >= 508 || !exists("did_fish_syntax_inits")
  " hi fishFunction		guifg=Red gui=bold
  " hi fishFunctionName		guifg=Blue gui=bold
   "hi fishVariables 		ctermbg=3 guifg=Blue gui=bold
-  
+
   delcommand HiLink
 endif
 
