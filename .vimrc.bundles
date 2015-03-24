@@ -24,11 +24,13 @@ call plug#begin('~/.vim/bundle')
 
 Plug 'AndrewRadev/switch.vim'
 Plug 'chriskempson/base16-vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'fatih/vim-go'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/vim-oblique'
 Plug 'junegunn/vim-plug'
 Plug 'junegunn/vim-pseudocl'
+Plug 'justinmk/vim-dirvish'
 Plug 'kana/vim-fakeclip'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-textobj-indent'
@@ -41,9 +43,7 @@ Plug 'Raimondi/delimitMate'
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'scrooloose/syntastic'
 Plug 'sheerun/vim-polyglot'
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/vimfiler.vim'
-Plug 'Shougo/vimproc'
+Plug 'thinca/vim-qfreplace'
 Plug 'thinca/vim-quickrun'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
@@ -60,7 +60,6 @@ Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'justinmk/vim-dirvish'
 
 call plug#end()
 

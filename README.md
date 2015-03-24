@@ -24,7 +24,7 @@ Now set up your credentials.
 ## What I use
 
 - i3
-- jq
+- i3blocks
 - dmenu2
 - compton
 - feh
@@ -36,3 +36,4 @@ Now set up your credentials.
 - the_silver_searcher
 - j4-dmenu-desktop
 - jshint
+- xcape

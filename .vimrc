@@ -43,6 +43,10 @@ set ttimeoutlen=100
 set virtualedit+=block
 set wrap
 
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor
+end
+
 " Environments (GUI/Console) {{{1
 
 if has("gui_running")
@@ -204,20 +208,21 @@ xmap ab <Plug>(textobj-multiblock-a)
 xmap ib <Plug>(textobj-multiblock-i)
 
 " Rebuild Ctags
-nnoremap <silent> g<cr> :call vimproc#system('ctags -R . &')<cr>
+nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
 " Undo tree usable by humans
 nnoremap <silent> <leader>u :UndotreeToggle<CR>
 
-" Unite
-nnoremap <leader>, :<C-u>Unite -no-split -buffer-name=files -start-insert file_rec/async<cr>
-nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer -start-insert buffer<cr>
-nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank history/yank<CR>
-nnoremap <expr> <leader>a ":\<C-u>Unite -no-split -buffer-name=grep%".tabpagenr()." -no-empty -resume -auto-preview grep\<cr>"
-vnoremap <leader>a "zy:execute "Unite -no-split -buffer-name=grep%".tabpagenr()." -no-empty -auto-preview grep:.::" . @z<cr>"
+" Open CtrlP on different modes
+nnoremap <silent> <leader>b :CtrlPBuffer<CR>
+
+" Ag searching
+nnoremap <leader>a :grep<Space>
+vnoremap <leader>a "zy:execute "grep " . shellescape(@z)<cr>
 
 " File explorer
-nnoremap <silent> <leader>e :VimFilerBufferDir<CR>
+cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
+nnoremap <silent> <leader>e :Dirvish %<cr>
 
 " Fugitive
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
@@ -337,6 +342,14 @@ augroup scriptease_help
   au!
 augroup END
 
+augroup my_dirvish_events
+    au!
+    au User DirvishEnter let b:dirvish.showhidden = 1
+    au User DirvishEnter nmap <buffer> l <Plug>(dirvish_visitTarget)
+    au User DirvishEnter nmap <buffer> h <Plug>(dirvish_focusOnParent)
+    au User DirvishEnter nmap <buffer> <expr> N feedkeys(':e ' . bufname("%"))
+augroup END
+
 " Save when losing focus
 au FocusLost * :silent! wall
 
@@ -451,49 +464,29 @@ let g:sparkupNextMapping = '<c-y>'
 let g:surround_no_insert_mappings = 1
 
 " }}}2
-" Unite {{{2
+" CtrlP {{{2
 
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-call unite#custom#source('file_rec/git,buffer', 'ignore_pattern', '\v\.(git|png|jpg|gif)$')
+let g:ctrlp_map = '<leader>,'
+let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
+let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
+let g:ctrlp_use_caching = 0
+let g:ctrlp_filter_greps = 'egrep -iv "\.(png|jpe?g|bmp|gif|png)"'
+let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps, 'ag %s -l --nocolor -g ""']
+let g:ctrlp_custom_ignore = {
+      \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
+      \ 'dir': '\v[\/](tmp|tags)$'
+      \ }
 
-let g:unite_source_history_yank_enable = 1
-let g:unite_source_grep_command = 'ag'
-let g:unite_source_grep_default_opts = '-i --line-numbers --nocolor --nogroup --hidden'
-let g:unite_source_rec_async_command = 'ag --nocolor --nogroup --hidden -U -g ""'
-
-function! s:unite_settings()
-  let b:delimitMate_autoclose = 0
-  imap <buffer> <C-j> <Plug>(unite_select_next_line)
-  imap <buffer> <C-k> <Plug>(unite_select_previous_line)
-  imap <silent> <C-z> <Plug>(unite_toggle_mark_current_candidate)
-  imap <silent> <buffer> <expr> <C-x> unite#do_action('split')
-  imap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
-  imap <silent> <buffer> <expr> <C-t> unite#do_action('tabopen')
-  nmap <buffer> <ESC> <Plug>(unite_exit)
-  nmap <buffer> <expr> v unite#do_action('vsplit')
+function! s:DeleteBuffer()
+  let path = fnamemodify(getline('.')[2:], ':p')
+  let bufn = matchstr(path, '\v\d+\ze\*No Name')
+  exec "bd" bufn ==# "" ? path : bufn
+  exec "norm \<F5>"
 endfunction
-autocmd FileType unite call s:unite_settings()
 
-" }}}2
-" VimFiler {{{2
-
-let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_ignore_pattern = '\v\.(git|DS_Store|pyc)$'
-
- " Like Textmate icons.
-let g:vimfiler_tree_leaf_icon = ' '
-let g:vimfiler_tree_opened_icon = '▾'
-let g:vimfiler_tree_closed_icon = '▸'
-let g:vimfiler_file_icon = ' '
-let g:vimfiler_readonly_file_icon = '✗'
-let g:vimfiler_marked_file_icon = '✓'
-
-call vimfiler#custom#profile('default', 'context', {
-      \ 'safe' : 0,
-      \ 'auto_expand' : 1,
-      \ 'parent' : 0,
-      \ })
+function! CtrlPMappings()
+  nnoremap <buffer> <silent> <C-@> :call <sid>DeleteBuffer()<cr>
+endfunction
 
 " }}}2
 " Switch {{{2

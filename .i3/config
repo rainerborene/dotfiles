@@ -17,8 +17,8 @@ set $white      #eff1f5
 set $red        #bf616a
 set $darkblue   #65737e
 set $blue       #4f5b66
-set $lightblue  #8fa1b3
-set $brightblue #6fc2ef
+set $lightblue  #5a647e
+set $brightblue #6fb3d2
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -134,8 +134,8 @@ workspace $ws7 output HDMI1
 workspace $ws8 output HDMI1
 
 # screenshot
-bindsym --release Print exec scrot $HOME/Pictures/screenshot-$(date +%Y-%m-%d).png
-bindsym --release Shift+Print exec scrot -s $HOME/Pictures/screenshot-$(date +%Y-%m-%d).png
+bindsym --release Print exec scrot $HOME/Pictures/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym --release Shift+Print exec scrot -s $HOME/Pictures/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png
 
 # nautilus
 bindsym $mod+n exec --no-startup-id nautilus --browser --no-desktop
@@ -143,11 +143,6 @@ bindsym $mod+n exec --no-startup-id nautilus --browser --no-desktop
 # resize window (you can also use the mouse for that)
 mode "resize" {
     # These bindings trigger as soon as you enter the resize mode
-
-    # Pressing left will shrink the window’s width.
-    # Pressing right will grow the window’s width.
-    # Pressing up will shrink the window’s height.
-    # Pressing down will grow the window’s height.
     bindsym h resize shrink width 10 px or 10 ppt
     bindsym j resize grow height 10 px or 10 ppt
     bindsym k resize shrink height 10 px or 10 ppt
@@ -181,7 +176,7 @@ bindsym $mod+Pause mode "$mode_system"
 # finds out, if available)
 bar {
     position top
-    status_command i3status
+    status_command i3blocks
     tray_output VGA1
     strip_workspace_numbers yes
 
@@ -190,8 +185,8 @@ bar {
         statusline $white
         separator $background
 
-        focused_workspace  $lightblue  $lightblue  $white
-        active_workspace   $blue       $blue       $white
+        focused_workspace  $background $background $white
+        active_workspace   $background $background $white
         inactive_workspace $background $background $darkblue
         urgent_workspace   $red        $red        $white
     }
@@ -216,4 +211,5 @@ exec --no-startup-id firefox
 exec --no-startup-id skype
 exec --no-startup-id compton -b
 exec --no-startup-id xcape
-exec_always --no-startup-id feh --bg-fill ~/Pictures/bmw_m6_dark_knight_black_forest_fog_front_bumper_100117_1920x1080.jpg
+
+exec_always --no-startup-id feh --bg-fill ~/Pictures/road_night_lights_88183_1920x1080.jpg

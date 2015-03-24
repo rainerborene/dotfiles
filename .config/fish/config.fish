@@ -36,6 +36,10 @@ if not status --is-interactive
   exit
 end
 
+# Always work in a tmux session
+tmx work
+
+# Load colorscheme
 sh ~/.dotfiles/bin/base16-ocean.dark.sh
 
 # }}}
@@ -158,10 +162,5 @@ end
 # Colored output {{{
 
 eval (dircolors -c ~/.dotfiles/.dircolors)
-
-# }}}
-# Always work in a tmux session {{{
-
-tmx work
 
 # }}}

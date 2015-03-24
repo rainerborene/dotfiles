@@ -5,6 +5,6 @@ fn='Tewi-8' # font
 nf='\#eff1f5' # foreground
 nb='\#2b303b' # background
 sb='\#8fa1b3' # selected background
-sf='\#ffffff' # selected foreground
+sf='\#2b303b' # selected foreground
 
 exec j4-dmenu-desktop --dmenu="dmenu -i -h 17 -y 1 -nb $nb -fn $fn -nf $nf -sb $sb -sf $sf" --term="urxvt"

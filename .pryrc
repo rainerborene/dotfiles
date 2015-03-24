@@ -12,14 +12,6 @@ Pry.config.exception_handler = proc do |output, exception, _|
   output.puts "from #{exception.backtrace.first}\e[0m"
 end
 
-# tell Readline when the window resizes
-old_winch = trap 'WINCH' do
-  if `stty size` =~ /\A(\d+) (\d+)\n\z/
-    Readline.set_screen_size $1.to_i, $2.to_i
-  end
-  old_winch.call unless old_winch.nil?
-end
-
 if defined?(Rails)
   begin
     require "rails/console/app"
