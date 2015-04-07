@@ -51,31 +51,24 @@ bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
-# split in vertical orientation
-bindsym $mod+b split v
-
-# split in horizontal orientation
+# split in vertical/horizontal orientation
+bindsym $mod+s split v
 bindsym $mod+v split h
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
 
-# change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+# make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# show the first scratchpad window
+bindsym $mod+minus scratchpad show
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
-
-# focus the parent container
-bindsym $mod+a focus parent
-
-# focus the child container
-bindsym $mod+d focus child
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -204,12 +197,13 @@ client.unfocused        $lightblue  $lightblue  $white      $lightblue
 client.focused_inactive $lightblue  $lightblue  $white      $lightblue
 client.urgent           $red        $red        $white      $red
 
-exec --no-startup-id xrdb -merge ~/.Xresources
+exec --no-startup-id xrdb -merge ~/.Xresource change for clicks on titlebarss
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
 exec --no-startup-id firefox
 exec --no-startup-id skype
 exec --no-startup-id compton -b
 exec --no-startup-id xcape
-
-exec_always --no-startup-id feh --bg-fill ~/Pictures/road_night_lights_88183_1920x1080.jpg
+exec --no-startup-id xset r rate 250 50
+exec --no-startup-id setxkbmap -model abnt2 -layout br -variant abnt2 -option ctrl:nocaps
+exec --no-startup-id feh --bg-fill ~/Pictures/road_night_lights_88183_1920x1080.jpg

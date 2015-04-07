@@ -43,10 +43,6 @@ set ttimeoutlen=100
 set virtualedit+=block
 set wrap
 
-if executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor
-end
-
 " Environments (GUI/Console) {{{1
 
 if has("gui_running")
@@ -67,13 +63,6 @@ hi VertSplit ctermbg=NONE guibg=NONE
 
 " Highlight VCS conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
-
-" }}}1
-" Statusline {{{1
-
-set statusline=%f%m\ %{fugitive#statusline()}%=
-set statusline+=(%{&ff}/%{strlen(&fenc)?&fenc:&enc}/%{strlen(&ft)?&ft:'none'})
-set statusline+=\ (line\ %l/%L,\ col\ %03c)
 
 " }}}1
 " Wilmenu completion {{{1
@@ -216,13 +205,9 @@ nnoremap <silent> <leader>u :UndotreeToggle<CR>
 " Open CtrlP on different modes
 nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 
-" Ag searching
-nnoremap <leader>a :grep<Space>
-vnoremap <leader>a "zy:execute "grep " . shellescape(@z)<cr>
-
 " File explorer
 cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
-nnoremap <silent> <leader>e :Dirvish %<cr>
+nnoremap <silent> <leader>e :Dirvish %:p:h<cr>
 
 " Fugitive
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
@@ -315,16 +300,6 @@ augroup ft_css
   au FileType css,scss,sass setlocal iskeyword+=-
 augroup END
 
-augroup ft_vim
-  au!
-  au FileType vim setlocal foldmethod=marker
-  au FileType man,help wincmd L | setlocal textwidth=78
-  au FileType qf nnoremap <buffer> <cr> <cr>
-  au FileType qf setlocal colorcolumn& nocursorline nolist nowrap tw=0
-  au FileType qf setlocal nolist nowrap | wincmd J | nnoremap <buffer> q :q<cr>
-  au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
-augroup END
-
 augroup ft_ruby
   au!
   au BufRead *gemrc setlocal filetype=yaml
@@ -338,53 +313,36 @@ augroup ft_go
   au FileType go setlocal commentstring=\/\/\ %s
 augroup END
 
-augroup scriptease_help
-  au!
-augroup END
-
 augroup my_dirvish_events
-    au!
-    au User DirvishEnter let b:dirvish.showhidden = 1
-    au User DirvishEnter nmap <buffer> l <Plug>(dirvish_visitTarget)
-    au User DirvishEnter nmap <buffer> h <Plug>(dirvish_focusOnParent)
-    au User DirvishEnter nmap <buffer> <expr> N feedkeys(':e ' . bufname("%"))
-augroup END
-
-" Save when losing focus
-au FocusLost * :silent! wall
-
-" Resize splits when the window is resized
-au VimResized * :wincmd =
-
-" No folds closed when editing new files
-au BufNew * setlocal foldlevelstart=99
-
-" Restore cursor position
-augroup line_return
   au!
-  au BufReadPost *
-        \ if line("'\"") > 1 && line("'\"") <= line("$") |
-        \   exe "normal! g`\"" |
-        \ endif
+  au User DirvishEnter let b:dirvish.showhidden = 1
+  au User DirvishEnter nmap <buffer> l <Plug>(dirvish_visitTarget)
+  au User DirvishEnter nmap <buffer> h <Plug>(dirvish_focusOnParent)
+  au User DirvishEnter nmap <buffer> <expr> N feedkeys(':e ' . bufname("%"))
 augroup END
 
-augroup search_position
-  autocmd!
-  autocmd User OverCmdLineExecute call KeepCursorPosition()
-augroup END
-
-function! KeepCursorPosition()
-  if line("'s")
-    call cursor(line("'s"), col("'s"))
-    delmarks s
-  endif
-endfunction
-
-" Don't screw up folds when inserting text that might affect them, until
-" leaving insert mode. Foldmethod is local to the window. Protect against
-" screwing up folding when switching between windows.
-augroup fast_completion
+augroup vimrc
   au!
+  au FileType vim setlocal foldmethod=marker
+  au FileType qf setlocal colorcolumn& nocursorline nolist nowrap tw=0
+  au FileType qf setlocal nolist nowrap | wincmd J | nnoremap <buffer> q :q<cr>
+  au BufWinEnter *.txt if &ft == 'help' | wincmd T | nnoremap <buffer> q :q<cr> | endif
+
+  " Unset paste on InsertLeave
+  au InsertLeave * silent! set nopaste
+
+  " Save when losing focus
+  au FocusLost * :silent! wall
+
+  " Resize splits when the window is resized
+  au VimResized * :wincmd =
+
+  " No folds closed when editing new files
+  au BufNew * setlocal foldlevelstart=99
+
+  " Don't screw up folds when inserting text that might affect them, until
+  " leaving insert mode. Foldmethod is local to the window. Protect against
+  " screwing up folding when switching between windows.
   au InsertEnter *
         \ if !exists('w:last_fdm') |
         \   let w:last_fdm=&foldmethod |
@@ -396,7 +354,55 @@ augroup fast_completion
         \   let &l:foldmethod=w:last_fdm |
         \   unlet w:last_fdm |
         \ endif
+
+  " Restore cursor position
+  au BufReadPost *
+        \ if line("'\"") > 1 && line("'\"") <= line("$") |
+        \   exe "normal! g`\"" |
+        \ endif
 augroup END
+
+augroup scriptease_help
+  au!
+augroup END
+
+augroup search_position
+  autocmd!
+  autocmd User OverCmdLineExecute call s:restore_cursor_position()
+augroup END
+
+function! s:restore_cursor_position()
+  if line("'s")
+    call cursor(line("'s"), col("'s"))
+    delmarks s
+  endif
+endfunction
+
+" }}}1
+" Ag {{{1
+
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor\ --hidden
+end
+command -nargs=+ -complete=file -bang -bar Ag silent! grep! <args> | cwindow | redraw!
+vnoremap <leader>a "zy:execute "Ag! " . @z<cr>
+nnoremap <leader>a :Ag!<Space>
+
+" }}}1
+" Quickfix niceties {{{1
+
+function! QuickFixDo(cmd)
+  let bufnam = {}
+  for q in getqflist()
+    let bufnam[q.bufnr] = bufname(q.bufnr)
+  endfor
+  for n in keys(bufnam)
+    exe 'buffer' n
+    exe a:cmd
+    update
+  endfor
+endfunction
+command! -nargs=+ Qfixdo call QuickFixDo(<q-args>)
 
 " }}}1
 " Folding {{{1
@@ -468,7 +474,7 @@ let g:surround_no_insert_mappings = 1
 
 let g:ctrlp_map = '<leader>,'
 let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
-let g:ctrlp_reuse_window = 'netrw\|help\|quickfix'
+let g:ctrlp_reuse_window = 'dirvish'
 let g:ctrlp_use_caching = 0
 let g:ctrlp_filter_greps = 'egrep -iv "\.(png|jpe?g|bmp|gif|png)"'
 let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps, 'ag %s -l --nocolor -g ""']
@@ -501,5 +507,17 @@ call add(switch_custom_definitions, {
       \ })
 
 " }}}2
+" Airline {{{2
+
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols = {}
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+" }}}
 
 " }}}1

@@ -1,11 +1,15 @@
 color=#eff1f5
 
+[focused window]
+command=xtitle -s
+interval=persist
+
 [volume label]
 full_text=
 color=#8fa1b3
 
 [volume]
-command=volumectl
+command=/usr/libexec/i3blocks/volume
 interval=once
 signal=10
 

@@ -23,6 +23,7 @@ let g:loaded_vimballPlugin = "v35"
 call plug#begin('~/.vim/bundle')
 
 Plug 'AndrewRadev/switch.vim'
+Plug 'bling/vim-airline'
 Plug 'chriskempson/base16-vim'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'fatih/vim-go'
@@ -36,7 +37,6 @@ Plug 'kana/vim-niceblock'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-user'
 Plug 'mbbill/undotree'
-Plug 'mustache/vim-mustache-handlebars'
 Plug 'osyo-manga/vim-over'
 Plug 'osyo-manga/vim-textobj-multiblock'
 Plug 'Raimondi/delimitMate'

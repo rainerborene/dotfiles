@@ -25,6 +25,7 @@ Now set up your credentials.
 
 - i3
 - i3blocks
+- xtitle
 - dmenu2
 - compton
 - feh
