@@ -39,10 +39,6 @@ setup() {
   dotlink Xresources
   dotlink xprofile
 
-  # Fish config
-  mkdir -p ~/.config/fish
-  ln -nfs ~/.dotfiles/.config/fish/config.fish ~/.config/fish/config.fish
-
   # Setup vim
   echo "dotfiles: installing vim package manager"
   mkdir ~/.dotfiles/.vim/bundle

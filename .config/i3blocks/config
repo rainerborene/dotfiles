@@ -3,6 +3,7 @@ color=#eff1f5
 [focused window]
 command=xtitle -s
 interval=persist
+color=#A6D1FA
 
 [volume label]
 full_text=

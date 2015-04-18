@@ -12,7 +12,7 @@ set confirm
 set display+=lastline
 set encoding=utf-8
 set expandtab
-set fillchars=diff:⣿,vert:│
+set fillchars=diff:—,vert:│
 set foldlevel=99
 set formatoptions=qrn1j
 set gdefault
@@ -204,6 +204,7 @@ nnoremap <silent> <leader>u :UndotreeToggle<CR>
 
 " Open CtrlP on different modes
 nnoremap <silent> <leader>b :CtrlPBuffer<CR>
+nnoremap <silent> <leader>. :CtrlPTag<CR>
 
 " File explorer
 cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
@@ -258,6 +259,11 @@ augroup ft_html
   au FileType html,eruby nnoremap <buffer> <localleader>= Vat=
 augroup END
 
+augroup ft_xml
+  au!
+  au FileType xml let &equalprg='xmllint --format --recover - 2>/dev/null'
+augroup END
+
 augroup ft_awk
   au FileType awk setlocal commentstring=#\ %s
 augroup END
@@ -273,7 +279,6 @@ augroup ft_git
   au FileType gitcommit nmap <silent> <buffer> U :call system("git checkout -- <C-r><C-g>")<CR>R
   au FileType gitcommit setlocal spell | wincmd K
   au BufReadPost fugitive://* set bufhidden=delete
-  au QuickFixCmdPost *grep* cwindow
   au User fugitive
         \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
         \   nnoremap <buffer> .. :edit %:h<CR> |
@@ -316,8 +321,8 @@ augroup END
 augroup my_dirvish_events
   au!
   au User DirvishEnter let b:dirvish.showhidden = 1
-  au User DirvishEnter nmap <buffer> l <Plug>(dirvish_visitTarget)
-  au User DirvishEnter nmap <buffer> h <Plug>(dirvish_focusOnParent)
+  au User DirvishEnter nmap <silent> <buffer> l <Plug>(dirvish_visitTarget)
+  au User DirvishEnter nmap <silent> <buffer> h <Plug>(dirvish_focusOnParent)
   au User DirvishEnter nmap <buffer> <expr> N feedkeys(':e ' . bufname("%"))
 augroup END
 
@@ -327,6 +332,9 @@ augroup vimrc
   au FileType qf setlocal colorcolumn& nocursorline nolist nowrap tw=0
   au FileType qf setlocal nolist nowrap | wincmd J | nnoremap <buffer> q :q<cr>
   au BufWinEnter *.txt if &ft == 'help' | wincmd T | nnoremap <buffer> q :q<cr> | endif
+
+  " Automatically opens the quickfix window after :Ggrep.
+  au QuickFixCmdPost *grep* cwindow
 
   " Unset paste on InsertLeave
   au InsertLeave * silent! set nopaste
@@ -476,8 +484,7 @@ let g:ctrlp_map = '<leader>,'
 let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
 let g:ctrlp_reuse_window = 'dirvish'
 let g:ctrlp_use_caching = 0
-let g:ctrlp_filter_greps = 'egrep -iv "\.(png|jpe?g|bmp|gif|png)"'
-let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | ' . ctrlp_filter_greps, 'ag %s -l --nocolor -g ""']
+let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | egrep -iv "\.(png|jpe?g|bmp|gif|png)"', 'ag %s -l --nocolor -g ""']
 let g:ctrlp_custom_ignore = {
       \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
       \ 'dir': '\v[\/](tmp|tags)$'

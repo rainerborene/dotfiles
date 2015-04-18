@@ -43,7 +43,6 @@ Plug 'Raimondi/delimitMate'
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'scrooloose/syntastic'
 Plug 'sheerun/vim-polyglot'
-Plug 'thinca/vim-qfreplace'
 Plug 'thinca/vim-quickrun'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'

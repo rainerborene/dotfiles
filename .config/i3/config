@@ -115,6 +115,8 @@ assign [class="Firefox"] $ws1
 assign [class="Skype"] $ws2
 assign [class="Steam"] $ws4
 assign [class="URxvt"] $ws5
+assign [class="Popcorntime"] $ws3
+assign [class="Google-chrome-stable"] $ws3
 
 # workspace screens
 workspace $ws1 output VGA1
@@ -197,13 +199,13 @@ client.unfocused        $lightblue  $lightblue  $white      $lightblue
 client.focused_inactive $lightblue  $lightblue  $white      $lightblue
 client.urgent           $red        $red        $white      $red
 
-exec --no-startup-id xrdb -merge ~/.Xresource change for clicks on titlebarss
+exec --no-startup-id xrdb -merge ~/.Xresources
+exec --no-startup-id setxkbmap -model abnt2 -layout br -variant abnt2 -option ctrl:nocaps
+exec --no-startup-id xset r rate 250 50
+exec --no-startup-id xcape
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
 exec --no-startup-id firefox
 exec --no-startup-id skype
 exec --no-startup-id compton -b
-exec --no-startup-id xcape
-exec --no-startup-id xset r rate 250 50
-exec --no-startup-id setxkbmap -model abnt2 -layout br -variant abnt2 -option ctrl:nocaps
 exec --no-startup-id feh --bg-fill ~/Pictures/road_night_lights_88183_1920x1080.jpg
