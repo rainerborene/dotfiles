@@ -5,20 +5,15 @@ set nocompatible
 " Init package manager
 source ~/.vim/bundle/vim-plug/plug.vim
 
-" Disable netrw
+" Disable default plugins
 let g:loaded_netrwPlugin = 1
-
-" Disable GetLatestVimPlugin.vim
+let g:loaded_vimballPlugin = "v35"
 let g:loaded_getscriptPlugin = 1
-
-" Prevent built-in tar and zip plugins from loading
+let g:loaded_2html_plugin = 1
 let g:loaded_tarPlugin = 1
 let g:loaded_tar = 1
 let g:loaded_zipPlugin = 1
 let g:loaded_zip = 1
-
-" Disable Vimball plugin
-let g:loaded_vimballPlugin = "v35"
 
 call plug#begin('~/.vim/bundle')
 

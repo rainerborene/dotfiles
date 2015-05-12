@@ -3,7 +3,7 @@ color=#eff1f5
 [focused window]
 command=xtitle -s
 interval=persist
-color=#A6D1FA
+color=#a6d1fa
 
 [volume label]
 full_text=
@@ -19,7 +19,7 @@ full_text=
 color=#8fa1b3
 
 [wireless]
-command=[[ $(iwgetid -r) == "" ]] && echo "" || iwgetid -r
+command=iwgetid -r
 interval=5
 
 [date label]

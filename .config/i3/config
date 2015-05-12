@@ -16,9 +16,7 @@ set $background #2b303b
 set $white      #eff1f5
 set $red        #bf616a
 set $darkblue   #65737e
-set $blue       #4f5b66
-set $lightblue  #5a647e
-set $brightblue #6fb3d2
+set $brightblue #6a9fb5
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -38,6 +36,7 @@ bindsym $mod+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+p exec --no-startup-id dmenu_launch
+bindsym $mod+o exec --no-startup-id passmenu_launch
 
 # change focus
 bindsym $mod+h focus left
@@ -113,10 +112,12 @@ for_window [window_role="task_dialog"] floating enable
 # assign certain applications to a specific workspace
 assign [class="Firefox"] $ws1
 assign [class="Skype"] $ws2
-assign [class="Steam"] $ws4
-assign [class="URxvt"] $ws5
 assign [class="Popcorntime"] $ws3
 assign [class="Google-chrome-stable"] $ws3
+assign [class="Steam"] $ws4
+assign [class="dota_linux"] $ws4
+assign [title="Steam"] $ws4
+assign [class="URxvt"] $ws5
 
 # workspace screens
 workspace $ws1 output VGA1
@@ -183,7 +184,7 @@ bar {
         focused_workspace  $background $background $white
         active_workspace   $background $background $white
         inactive_workspace $background $background $darkblue
-        urgent_workspace   $red        $red        $white
+        urgent_workspace   $brightblue $brightblue $white
     }
 }
 
@@ -194,11 +195,12 @@ mouse_warping none
 gaps inner 15
 gaps outer 30
 
-client.focused          $brightblue $brightblue $background $brightblue
-client.unfocused        $lightblue  $lightblue  $white      $lightblue
-client.focused_inactive $lightblue  $lightblue  $white      $lightblue
-client.urgent           $red        $red        $white      $red
+client.focused          $red        $red        $background $red
+client.unfocused        $background $background $white      $background
+client.focused_inactive $background $background $white      $background
+client.urgent           $brightblue $brightblue $white      $brightblue
 
+exec --no-startup-id xrandr --output VGA1 --primary --right-of HDMI1
 exec --no-startup-id xrdb -merge ~/.Xresources
 exec --no-startup-id setxkbmap -model abnt2 -layout br -variant abnt2 -option ctrl:nocaps
 exec --no-startup-id xset r rate 250 50

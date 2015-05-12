@@ -1,0 +1,25 @@
+# Format {{{
+
+progressbar_look = "━━─"
+song_list_format = "%t $R%l"
+song_columns_list_format = (20)[]{a} (50)[]{t|f:Title} (7f)[]{l}
+
+# }}}
+# Misc {{{
+
+header_visibility = "no"
+mouse_support = "no"
+
+# }}}
+# Colors {{{
+
+active_column_color = "cyan"
+statusbar_color = "blue"
+empty_tag_color = "blue"
+main_window_color = "blue"
+main_window_highlight_color = "blue"
+progressbar_color = 20
+progressbar_elapsed_color = "red"
+
+# }}}
+# vi: set fdm=marker :

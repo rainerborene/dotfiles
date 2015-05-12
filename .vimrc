@@ -321,9 +321,10 @@ augroup END
 augroup my_dirvish_events
   au!
   au User DirvishEnter let b:dirvish.showhidden = 1
+  au User DirvishEnter nmap <buffer> <expr> N feedkeys(':e ' . bufname("%"))
+  au User DirvishEnter nmap <silent> <buffer> dd :call delete(getline('.'))<cr>R
   au User DirvishEnter nmap <silent> <buffer> l <Plug>(dirvish_visitTarget)
   au User DirvishEnter nmap <silent> <buffer> h <Plug>(dirvish_focusOnParent)
-  au User DirvishEnter nmap <buffer> <expr> N feedkeys(':e ' . bufname("%"))
 augroup END
 
 augroup vimrc
@@ -347,6 +348,12 @@ augroup vimrc
 
   " No folds closed when editing new files
   au BufNew * setlocal foldlevelstart=99
+
+  " Don't keep undo files in temp directories or shm
+  au BufWritePre /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/* setlocal noundofile
+
+  " Don't keep viminfo for files in temp directories or shm
+  au BufNewFile,BufReadPre /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/* setlocal viminfo=
 
   " Don't screw up folds when inserting text that might affect them, until
   " leaving insert mode. Foldmethod is local to the window. Protect against

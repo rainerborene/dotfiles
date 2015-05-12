@@ -15,14 +15,14 @@ set -gx GOPATH $HOME/.go
 set -gx WINEARCH win32
 set -gx DOCKER_HOST unix:///var/run/docker.sock
 set -gx BROWSER firefox
-set -gx GEM_HOME $HOME/.gem/ruby/2.1/
+set -gx GEM_HOME $HOME/.gem/ruby/2.2.0/
 
 prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
 prepend_to_path "/usr/local/heroku/bin"
 prepend_to_path "/usr/local/share/npm/bin"
 prepend_to_path "$HOME/Projects/docker-extras/bin"
-prepend_to_path "$HOME/.gem/ruby/2.1/bin"
+prepend_to_path "$HOME/.gem/ruby/2.2.0/bin"
 prepend_to_path "$HOME/.rbenv/bin"
 prepend_to_path "$HOME/.rbenv/shims"
 prepend_to_path "$HOME/.dotfiles/bin"
@@ -35,9 +35,6 @@ prepend_to_path "./bin"
 if not status --is-interactive
   exit
 end
-
-# Always work in a tmux session
-tmx work
 
 # Load colorscheme
 sh ~/.dotfiles/bin/base16-ocean.dark.sh
@@ -83,10 +80,6 @@ end
 
 function gopath -d "Enter \$GOPATH directory"
     mcd $GOPATH/src/github.com/rainerborene
-end
-
-function ip -d "Send IP address to clipboard"
-    curl -s icanhazip.com | pbc
 end
 
 function mcd

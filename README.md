@@ -31,6 +31,8 @@ Now set up your credentials.
 - feh
 - scrot
 - urxvt
+- urxvt-perls
+- urxvt-vtwheel
 - fish
 - tmux
 - vim
@@ -38,3 +40,6 @@ Now set up your credentials.
 - j4-dmenu-desktop
 - jshint
 - xcape
+- pass
+- passmenu
+- ncmpcpp

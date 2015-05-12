@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec passmenu -i -h 17 -y 1 -nb '#2b303b' -fn 'Tewi-8' -nf '#eff1f5' -sb '#8fa1b3' -sf '#2b303b'
