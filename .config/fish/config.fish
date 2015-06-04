@@ -50,7 +50,7 @@ alias j 'z'
 alias g 'git'
 alias c 'clear'
 alias l 'tree --dirsfirst -ChaFL 1'
-alias ls 'ls -h --color --group-directories-first'
+alias ls 'exa --group-directories-first'
 alias hl 'less -R'
 alias tailf 'tail -f'
 alias cuts "cut -d' '"
@@ -58,6 +58,7 @@ alias pp 'python -mjson.tool'
 alias serve_this 'python -m SimpleHTTPServer'
 alias collapse "sed -e 's/  */ /g'"
 alias reload '. ~/.config/fish/config.fish'
+alias rt 'dtach -A /tmp/rtorrent -r winch rtorrent'
 
 alias o 'command gvfs-open $ARGV >/dev/null 2>&1'
 alias oo 'gvfs-open (pwd) >/dev/null 2>&1'
@@ -150,10 +151,5 @@ function fish_prompt
 
   echo -n -s $arrow ' '$cwd $git_info $normal ' '
 end
-
-# }}}
-# Colored output {{{
-
-eval (dircolors -c ~/.dotfiles/.dircolors)
 
 # }}}

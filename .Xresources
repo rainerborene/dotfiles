@@ -6,12 +6,17 @@ Xft.hinting: true
 Xft.hintstyle: hintslight
 
 ! URxvt
-URxvt.font:xft:Tewi:style=normal:pixelsize=12
-URxvt.boldFont:xft:Tewi:style=bold:pixelsize=12
-URxvt.scrollBar: false
+URxvt.saveLines: 12000
 URxvt.internalBorder: 5
 URxvt.perl-ext-common: default,matcher,vtwheel,selection-to-clipboard,clipboard
+URxvt.font:xft:Tewi:style=normal:pixelsize=12
+URxvt.boldFont:xft:Tewi:style=bold:pixelsize=12
 URxvt.iso14755: False
+URxvt.iso14755_52: False
+URxvt.scrollBar: false
+URxvt.scrollTtyOutput: false
+URxvt.scrollWithBuffer: true
+URxvt.scrollTtyKeypress: true
 
 ! Clickable URLs
 URxvt.underlineURLs: true

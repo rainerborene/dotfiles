@@ -49,8 +49,14 @@ if has("gui_running")
   set guifont=Tewi\ 9
   set guioptions=agit
 else
-  let g:base16colorspace=256
   set mouse=a
+  let g:base16colorspace=256
+
+  " Change cursor shape on insert mode.
+  if &term == 'rxvt-unicode-256color'
+    let &t_SI = "\<Esc>[5 q"
+    let &t_EI = "\<Esc>[1 q"
+  endif
 end
 
 " }}}1
@@ -143,6 +149,10 @@ nnoremap <leader>4 4gt
 nnoremap <leader>5 5gt
 nnoremap <leader>t :tabnew<CR>
 
+" Fast scrolling
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
+
 " Sane movement with wrap turned on
 nnoremap j gj
 nnoremap k gk
@@ -206,9 +216,8 @@ nnoremap <silent> <leader>u :UndotreeToggle<CR>
 nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 nnoremap <silent> <leader>. :CtrlPTag<CR>
 
-" File explorer
-cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
-nnoremap <silent> <leader>e :Dirvish %:p:h<cr>
+" Open NERDTree file explorer
+nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
 
 " Fugitive
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
@@ -318,19 +327,10 @@ augroup ft_go
   au FileType go setlocal commentstring=\/\/\ %s
 augroup END
 
-augroup my_dirvish_events
-  au!
-  au User DirvishEnter let b:dirvish.showhidden = 1
-  au User DirvishEnter nmap <buffer> <expr> N feedkeys(':e ' . bufname("%"))
-  au User DirvishEnter nmap <silent> <buffer> dd :call delete(getline('.'))<cr>R
-  au User DirvishEnter nmap <silent> <buffer> l <Plug>(dirvish_visitTarget)
-  au User DirvishEnter nmap <silent> <buffer> h <Plug>(dirvish_focusOnParent)
-augroup END
-
 augroup vimrc
   au!
   au FileType vim setlocal foldmethod=marker
-  au FileType qf setlocal colorcolumn& nocursorline nolist nowrap tw=0
+  au FileType qf,nerdtree setlocal colorcolumn& nocursorline nolist nowrap tw=0
   au FileType qf setlocal nolist nowrap | wincmd J | nnoremap <buffer> q :q<cr>
   au BufWinEnter *.txt if &ft == 'help' | wincmd T | nnoremap <buffer> q :q<cr> | endif
 
@@ -350,10 +350,10 @@ augroup vimrc
   au BufNew * setlocal foldlevelstart=99
 
   " Don't keep undo files in temp directories or shm
-  au BufWritePre /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/* setlocal noundofile
+  au BufWritePre /tmp/* setlocal noundofile
 
   " Don't keep viminfo for files in temp directories or shm
-  au BufNewFile,BufReadPre /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/* setlocal viminfo=
+  au BufNewFile,BufReadPre /tmp/* setlocal viminfo=
 
   " Don't screw up folds when inserting text that might affect them, until
   " leaving insert mode. Foldmethod is local to the window. Protect against
@@ -489,7 +489,7 @@ let g:surround_no_insert_mappings = 1
 
 let g:ctrlp_map = '<leader>,'
 let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
-let g:ctrlp_reuse_window = 'dirvish'
+let g:ctrlp_reuse_window = 'nerdtree\|help\|quickfix'
 let g:ctrlp_use_caching = 0
 let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | egrep -iv "\.(png|jpe?g|bmp|gif|png)"', 'ag %s -l --nocolor -g ""']
 let g:ctrlp_custom_ignore = {
@@ -507,6 +507,15 @@ endfunction
 function! CtrlPMappings()
   nnoremap <buffer> <silent> <C-@> :call <sid>DeleteBuffer()<cr>
 endfunction
+
+" }}}2
+" NERDTree {{{2
+
+let g:NERDTreeHijackNetrw = 1
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeMapActivateNode = 'l'
+let g:NERDTreeMapCloseDir = 'h'
 
 " }}}2
 " Switch {{{2

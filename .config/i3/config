@@ -35,8 +35,8 @@ bindsym $mod+Return exec urxvt
 bindsym $mod+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+p exec --no-startup-id dmenu_launch
-bindsym $mod+o exec --no-startup-id passmenu_launch
+bindsym $mod+p exec --no-startup-id j4-dmenu-desktop --dmenu='dmenu -i -h 18 -nb "$background" -fn "Tewi-8" -nf "$white" -sb "#8fa1b3" -sf "$background"' --term='urxvt'
+bindsym $mod+o exec --no-startup-id passmenu -i -h 18 -nb "$background" -fn "Tewi-8" -nf "$white" -sb "#8fa1b3" -sf "$background"
 
 # change focus
 bindsym $mod+h focus left
@@ -98,11 +98,11 @@ bindsym $mod+Shift+Tab move container to workspace back_and_forth
 # reloading/restarting/exiting
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # window specific settings
 for_window [class="Wine"] floating enable
 for_window [class="Skype"] floating enable
+for_window [class="Vinagre"] floating enable
 for_window [class="Steam" title="Friends"] floating enable
 for_window [class="Steam" title="Chat$"] floating enable
 for_window [class="California"] floating enable
@@ -115,8 +115,8 @@ assign [class="Skype"] $ws2
 assign [class="Popcorntime"] $ws3
 assign [class="Google-chrome-stable"] $ws3
 assign [class="Steam"] $ws4
-assign [class="dota_linux"] $ws4
 assign [title="Steam"] $ws4
+assign [class="dota_linux"] $ws4
 assign [class="URxvt"] $ws5
 
 # workspace screens
@@ -171,6 +171,7 @@ bindsym $mod+Pause mode "$mode_system"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
+    output VGA1
     position top
     status_command i3blocks
     tray_output VGA1

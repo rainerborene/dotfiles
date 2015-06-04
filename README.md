@@ -43,3 +43,5 @@ Now set up your credentials.
 - pass
 - passmenu
 - ncmpcpp
+- exa
+- rtorrent
