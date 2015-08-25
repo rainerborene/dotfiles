@@ -23,12 +23,14 @@ set incsearch
 set laststatus=2
 set lazyredraw
 set linebreak
-set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+set mouse=a
 set noshowmode
 set noswapfile
 set nrformats-=octal
 set shiftwidth=2
 set shortmess=aoOtI
+set showbreak=↪
 set showcmd
 set smartcase
 set smarttab
@@ -49,14 +51,11 @@ if has("gui_running")
   set guifont=Tewi\ 9
   set guioptions=agit
 else
-  set mouse=a
-  let g:base16colorspace=256
-
   " Change cursor shape on insert mode.
-  if &term == 'rxvt-unicode-256color'
-    let &t_SI = "\<Esc>[5 q"
-    let &t_EI = "\<Esc>[1 q"
-  endif
+  let &t_SI = "\<Esc>[5 q"
+  let &t_EI = "\<Esc>[1 q"
+
+  let g:base16colorspace=256
 end
 
 " }}}1
@@ -205,6 +204,14 @@ omap ab <Plug>(textobj-multiblock-a)
 omap ib <Plug>(textobj-multiblock-i)
 xmap ab <Plug>(textobj-multiblock-a)
 xmap ib <Plug>(textobj-multiblock-i)
+
+" Save
+inoremap <C-s> <C-o>:update<cr>
+nnoremap <C-s> :update<cr>
+
+" Search
+vnoremap <leader>a "zy:execute "Ack! " . @z<cr>
+nnoremap <leader>a :Ack!<Space>
 
 " Rebuild Ctags
 nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
@@ -377,31 +384,21 @@ augroup vimrc
         \ endif
 augroup END
 
-augroup scriptease_help
+augroup plugin_oblique
   au!
+  au User Oblique       normal! zz
+  au User ObliqueStar   normal! zz
+  au User ObliqueRepeat normal! zz
 augroup END
 
-augroup search_position
-  autocmd!
-  autocmd User OverCmdLineExecute call s:restore_cursor_position()
+augroup plugin_over
+  au!
+  au User OverCmdLineExecute
+      \ if line("'s") |
+      \   call cursor(line("'s"), col("'s")) |
+      \   delmarks s |
+      \ endif
 augroup END
-
-function! s:restore_cursor_position()
-  if line("'s")
-    call cursor(line("'s"), col("'s"))
-    delmarks s
-  endif
-endfunction
-
-" }}}1
-" Ag {{{1
-
-if executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor\ --hidden
-end
-command -nargs=+ -complete=file -bang -bar Ag silent! grep! <args> | cwindow | redraw!
-vnoremap <leader>a "zy:execute "Ag! " . @z<cr>
-nnoremap <leader>a :Ag!<Space>
 
 " }}}1
 " Quickfix niceties {{{1
@@ -542,5 +539,16 @@ let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
 " }}}
+" Ack {{{2
+
+let g:ackprg = "ag --vimgrep"
+
+" }}}2
+" Notes {{{2
+
+let g:notes_directories = ['~/Notes/']
+let g:notes_suffix = '.txt'
+
+" }}}2
 
 " }}}1

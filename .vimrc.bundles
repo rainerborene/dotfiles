@@ -30,6 +30,7 @@ Plug 'kana/vim-niceblock'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-user'
 Plug 'mbbill/undotree'
+Plug 'mileszs/ack.vim'
 Plug 'osyo-manga/vim-over'
 Plug 'osyo-manga/vim-textobj-multiblock'
 Plug 'Raimondi/delimitMate'
@@ -38,6 +39,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
 Plug 'sheerun/vim-polyglot'
 Plug 'thinca/vim-quickrun'
+Plug 'thinca/vim-textobj-comment'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
@@ -49,14 +51,15 @@ Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+Plug 'unblevable/quick-scope'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
 
 call plug#end()
 
-" Load some plugins early.
+" Eager-load these plugins so we can override their settings.
 runtime! plugin/rsi.vim
-runtime! plugin/scriptease.vim
 runtime! macros/matchit.vim

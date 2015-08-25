@@ -21,7 +21,6 @@ prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
 prepend_to_path "/usr/local/heroku/bin"
 prepend_to_path "/usr/local/share/npm/bin"
-prepend_to_path "$HOME/Projects/docker-extras/bin"
 prepend_to_path "$HOME/.gem/ruby/2.2.0/bin"
 prepend_to_path "$HOME/.rbenv/bin"
 prepend_to_path "$HOME/.rbenv/shims"
@@ -36,13 +35,14 @@ if not status --is-interactive
   exit
 end
 
+. ~/.dotfiles/.config/fish/z.fish
+. ~/.dotfiles/.config/fish/ssh_agent_start.fish
+
 # Load colorscheme
 sh ~/.dotfiles/bin/base16-ocean.dark.sh
 
 # }}}
 # Useful aliases {{{
-
-. ~/.dotfiles/.config/fish/z.fish
 
 alias vi 'vim'
 alias v 'vim'
@@ -58,7 +58,6 @@ alias pp 'python -mjson.tool'
 alias serve_this 'python -m SimpleHTTPServer'
 alias collapse "sed -e 's/  */ /g'"
 alias reload '. ~/.config/fish/config.fish'
-alias rt 'dtach -A /tmp/rtorrent -r winch rtorrent'
 
 alias o 'command gvfs-open $ARGV >/dev/null 2>&1'
 alias oo 'gvfs-open (pwd) >/dev/null 2>&1'
@@ -70,6 +69,16 @@ alias be 'bundle exec'
 alias rs 'rails s thin'
 alias rc 'rails console'
 alias fore 'foreman start -f Procfile.dev'
+
+function docker_clean_container -d "Remove docker container that matches regular expression"
+  if count $argv >/dev/null
+    docker ps -a | awk "/$argv/ { print \$1 }" | xargs docker rm
+  end
+end
+
+function docker_clean_images -d "Remove images tagged with <none>"
+  docker images | awk '/^<none>/ { print $3 }' | xargs docker rmi
+end
 
 function psg -d "Grep for a running process, returning its PID and full string"
     ps auxww | grep --color=always $argv | grep -v grep | collapse | cuts -f 2,11-

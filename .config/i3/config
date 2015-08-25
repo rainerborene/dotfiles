@@ -13,6 +13,7 @@ set $ws9  9:
 set $ws10 10:
 
 set $background #2b303b
+set $selected   #a6d1fa
 set $white      #eff1f5
 set $red        #bf616a
 set $darkblue   #65737e
@@ -29,13 +30,13 @@ floating_modifier $mod
 workspace_auto_back_and_forth yes
 
 # start a terminal
-bindsym $mod+Return exec urxvt
+bindsym $mod+Return exec urxvt -cd "`xcwd`"
 
 # kill focused window
 bindsym $mod+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+p exec --no-startup-id j4-dmenu-desktop --dmenu='dmenu -i -h 18 -nb "$background" -fn "Tewi-8" -nf "$white" -sb "#8fa1b3" -sf "$background"' --term='urxvt'
+bindsym $mod+p exec --no-startup-id j4-dmenu-desktop --dmenu='dmenu -i -h 18 -nb "$background" -fn "Tewi-8" -nf "$white" -sb "#8fa1b3" -sf "$background"'
 bindsym $mod+o exec --no-startup-id passmenu -i -h 18 -nb "$background" -fn "Tewi-8" -nf "$white" -sb "#8fa1b3" -sf "$background"
 
 # change focus
@@ -134,7 +135,7 @@ bindsym --release Print exec scrot $HOME/Pictures/screenshot-$(date +%Y-%m-%d_%H
 bindsym --release Shift+Print exec scrot -s $HOME/Pictures/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png
 
 # nautilus
-bindsym $mod+n exec --no-startup-id nautilus --browser --no-desktop
+bindsym $mod+n exec --no-startup-id thunar
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -182,7 +183,7 @@ bar {
         statusline $white
         separator $background
 
-        focused_workspace  $background $background $white
+        focused_workspace  $background $background $selected
         active_workspace   $background $background $white
         inactive_workspace $background $background $darkblue
         urgent_workspace   $brightblue $brightblue $white
@@ -196,7 +197,7 @@ mouse_warping none
 gaps inner 15
 gaps outer 30
 
-client.focused          $red        $red        $background $red
+client.focused          $selected   $selected   $background $selected
 client.unfocused        $background $background $white      $background
 client.focused_inactive $background $background $white      $background
 client.urgent           $brightblue $brightblue $white      $brightblue
@@ -209,6 +210,7 @@ exec --no-startup-id xcape
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
 exec --no-startup-id firefox
+exec --no-startup-id urxvt
 exec --no-startup-id skype
 exec --no-startup-id compton -b
 exec --no-startup-id feh --bg-fill ~/Pictures/road_night_lights_88183_1920x1080.jpg

@@ -41,7 +41,8 @@ Now set up your credentials.
 - jshint
 - xcape
 - pass
-- passmenu
 - ncmpcpp
 - exa
-- rtorrent
+- xcwd-git
+- gtk-theme-arc-git
+- vertex-icons-git
