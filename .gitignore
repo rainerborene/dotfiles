@@ -1,6 +1,8 @@
-.vim/bundle
+.vim/bundle/*
+!.vim/bundle/.keep
 .vim/spell/*.spl
 .vim/tmp
 .vim/yankring_history_v2.txt
 .vim/unite
 tags
+.config/systemd/user/*.wants/

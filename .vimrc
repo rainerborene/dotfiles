@@ -537,6 +537,7 @@ let g:airline_symbols = {}
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
+let g:airline_theme = 'base16'
 
 " }}}
 " Ack {{{2
@@ -546,7 +547,7 @@ let g:ackprg = "ag --vimgrep"
 " }}}2
 " Notes {{{2
 
-let g:notes_directories = ['~/Notes/']
+let g:notes_directories = ['~/Dropbox/Notes/']
 let g:notes_suffix = '.txt'
 
 " }}}2

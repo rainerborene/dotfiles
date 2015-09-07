@@ -9,21 +9,17 @@ function prepend_to_path -d "Prepend the given dir to PATH if it exists and is n
 end
 
 set -gx fish_greeting ''
-set -gx GPG_TTY (tty)
 set -gx EDITOR vim
 set -gx GOPATH $HOME/.go
-set -gx WINEARCH win32
-set -gx DOCKER_HOST unix:///var/run/docker.sock
 set -gx BROWSER firefox
 set -gx GEM_HOME $HOME/.gem/ruby/2.2.0/
+set -gx SSH_AUTH_SOCK $XDG_RUNTIME_DIR/ssh-agent.socket
 
 prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
 prepend_to_path "/usr/local/heroku/bin"
 prepend_to_path "/usr/local/share/npm/bin"
 prepend_to_path "$HOME/.gem/ruby/2.2.0/bin"
-prepend_to_path "$HOME/.rbenv/bin"
-prepend_to_path "$HOME/.rbenv/shims"
 prepend_to_path "$HOME/.dotfiles/bin"
 prepend_to_path "$GOPATH/bin"
 prepend_to_path "./bin"
@@ -36,7 +32,6 @@ if not status --is-interactive
 end
 
 . ~/.dotfiles/.config/fish/z.fish
-. ~/.dotfiles/.config/fish/ssh_agent_start.fish
 
 # Load colorscheme
 sh ~/.dotfiles/bin/base16-ocean.dark.sh
@@ -50,7 +45,7 @@ alias j 'z'
 alias g 'git'
 alias c 'clear'
 alias l 'tree --dirsfirst -ChaFL 1'
-alias ls 'exa --group-directories-first'
+# alias ls 'exa --group-directories-first'
 alias hl 'less -R'
 alias tailf 'tail -f'
 alias cuts "cut -d' '"
@@ -59,8 +54,8 @@ alias serve_this 'python -m SimpleHTTPServer'
 alias collapse "sed -e 's/  */ /g'"
 alias reload '. ~/.config/fish/config.fish'
 
-alias o 'command gvfs-open $ARGV >/dev/null 2>&1'
-alias oo 'gvfs-open (pwd) >/dev/null 2>&1'
+alias o 'command xdg-open $ARGV >/dev/null 2>&1'
+alias oo 'xdg-open (pwd) >/dev/null 2>&1'
 alias pbc 'xclip -selection clipboard'
 alias pbp 'xclip -selection clipboard -o'
 

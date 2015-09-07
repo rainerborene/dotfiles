@@ -1,22 +1,22 @@
-color=#eff1f5
+color=#65737e
 
 [focused window]
 command=xtitle -s
 interval=persist
-color=#a6d1fa
+color=#f5f5f5
 
 [volume label]
 full_text=
-color=#8fa1b3
+color=#c0c5ce
 
 [volume]
-command=/usr/libexec/i3blocks/volume
+command=/usr/lib/i3blocks/volume
 interval=once
 signal=10
 
 [wireless label]
 full_text=
-color=#8fa1b3
+color=#c0c5ce
 
 [wireless]
 command=iwgetid -r
@@ -24,7 +24,7 @@ interval=5
 
 [date label]
 full_text=
-color=#8fa1b3
+color=#c0c5ce
 
 [date]
 command=date '+%d/%m/%Y'
@@ -33,7 +33,7 @@ separator=false
 
 [time label]
 full_text=
-color=#8fa1b3
+color=#c0c5ce
 
 [time]
 command=date '+%H:%M:%S'

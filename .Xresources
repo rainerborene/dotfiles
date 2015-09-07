@@ -18,6 +18,11 @@ URxvt.scrollTtyOutput: false
 URxvt.scrollWithBuffer: true
 URxvt.scrollTtyKeypress: true
 
+! Clipboard
+URxvt.keysym.M-c:   perl:clipboard:copy
+URxvt.keysym.M-v:   perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escape
+
 ! Clickable URLs
 URxvt.underlineURLs: true
 URxvt.url-launcher: /usr/bin/firefox

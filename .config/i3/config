@@ -1,32 +1,55 @@
+# vim: set fdm=marker :
 # i3 config file (v4)
+
+# Variables {{{1
+
 set $mod Mod1
 
 set $ws1  1:
 set $ws2  2:
-set $ws3  3:
-set $ws4  4:
-set $ws5  5:
-set $ws6  6:
+set $ws3  3:
+set $ws4  4:
+set $ws5  5:
+set $ws6  6:
 set $ws7  7:
 set $ws8  8:
 set $ws9  9:
 set $ws10 10:
 
+set $dark       #65737e
 set $background #2b303b
-set $selected   #a6d1fa
-set $white      #eff1f5
+set $white      #f5f5f5
 set $red        #bf616a
-set $darkblue   #65737e
-set $brightblue #6a9fb5
+
+# }}}1
+# Basic settings {{{1
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 font pango:Tewi, Icons, 9
 
-# Use Mouse+$mod to drag floating windows to their wanted position
+new_window pixel 2
+new_float pixel 2
+hide_edge_borders both
+mouse_warping none
+gaps inner 10
+gaps outer 10
+
+# }}}1
+# Window titles {{{1
+
+client.focused          $white $white $background $white
+client.unfocused        $dark  $dark  $white      $dark
+client.focused_inactive $dark  $dark  $white      $dark
+client.urgent           $red   $red   $white      $red
+
+# }}}1
+# Keybindings {{{1
+
+# use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# Automatic back-and-forth when switching to the current workspace
+# automatic back-and-forth when switching to the current workspace
 workspace_auto_back_and_forth yes
 
 # start a terminal
@@ -100,36 +123,6 @@ bindsym $mod+Shift+Tab move container to workspace back_and_forth
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
-# window specific settings
-for_window [class="Wine"] floating enable
-for_window [class="Skype"] floating enable
-for_window [class="Vinagre"] floating enable
-for_window [class="Steam" title="Friends"] floating enable
-for_window [class="Steam" title="Chat$"] floating enable
-for_window [class="California"] floating enable
-for_window [window_role="pop-up"] floating enable
-for_window [window_role="task_dialog"] floating enable
-
-# assign certain applications to a specific workspace
-assign [class="Firefox"] $ws1
-assign [class="Skype"] $ws2
-assign [class="Popcorntime"] $ws3
-assign [class="Google-chrome-stable"] $ws3
-assign [class="Steam"] $ws4
-assign [title="Steam"] $ws4
-assign [class="dota_linux"] $ws4
-assign [class="URxvt"] $ws5
-
-# workspace screens
-workspace $ws1 output VGA1
-workspace $ws2 output VGA1
-workspace $ws3 output VGA1
-workspace $ws4 output VGA1
-workspace $ws5 output HDMI1
-workspace $ws6 output HDMI1
-workspace $ws7 output HDMI1
-workspace $ws8 output HDMI1
-
 # screenshot
 bindsym --release Print exec scrot $HOME/Pictures/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png
 bindsym --release Shift+Print exec scrot -s $HOME/Pictures/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png
@@ -169,13 +162,33 @@ mode "$mode_system" {
 
 bindsym $mod+Pause mode "$mode_system"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
+# }}}1
+# Window assigments {{{1
+
+for_window [class="Wine"] floating enable
+for_window [class="Skype"] floating enable
+for_window [class="Vinagre"] floating enable
+for_window [class="Steam" title="Friends"] floating enable
+for_window [class="Steam" title="Chat$"] floating enable
+for_window [class="California"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+
+assign [class="Firefox"] $ws1
+assign [class="Skype"] $ws2
+assign [class="Popcorntime"] $ws4
+assign [class="Google-chrome-stable"] $ws4
+assign [class="Steam"] $ws5
+assign [title="Steam"] $ws5
+assign [class="dota_linux"] $ws5
+assign [class="URxvt"] $ws3
+
+# }}}1
+# Bar configuration {{{1
+
 bar {
-    output VGA1
     position top
     status_command i3blocks
-    tray_output VGA1
     strip_workspace_numbers yes
 
     colors {
@@ -183,34 +196,24 @@ bar {
         statusline $white
         separator $background
 
-        focused_workspace  $background $background $selected
+        focused_workspace  $background $background $white
         active_workspace   $background $background $white
-        inactive_workspace $background $background $darkblue
-        urgent_workspace   $brightblue $brightblue $white
+        inactive_workspace $background $background $dark
+        urgent_workspace   $red        $red        $white
     }
 }
 
-new_window pixel 3
-new_float pixel 3
-hide_edge_borders both
-mouse_warping none
-gaps inner 15
-gaps outer 30
+# }}}1
+# Startup {{{1
 
-client.focused          $selected   $selected   $background $selected
-client.unfocused        $background $background $white      $background
-client.focused_inactive $background $background $white      $background
-client.urgent           $brightblue $brightblue $white      $brightblue
-
-exec --no-startup-id xrandr --output VGA1 --primary --right-of HDMI1
-exec --no-startup-id xrdb -merge ~/.Xresources
-exec --no-startup-id setxkbmap -model abnt2 -layout br -variant abnt2 -option ctrl:nocaps
+exec --no-startup-id feh --bg-fill ~/Pictures/02915_crossingthegap_1280x800.jpg
 exec --no-startup-id xset r rate 250 50
 exec --no-startup-id xcape
-exec --no-startup-id dropbox start
-exec --no-startup-id nm-applet
-exec --no-startup-id firefox
-exec --no-startup-id urxvt
-exec --no-startup-id skype
+exec --no-startup-id nm-applet --sm-disable
 exec --no-startup-id compton -b
-exec --no-startup-id feh --bg-fill ~/Pictures/road_night_lights_88183_1920x1080.jpg
+exec --no-startup-id urxvt
+exec --no-startup-id dropbox start
+exec --no-startup-id firefox
+exec --no-startup-id skype
+
+# }}}1
