@@ -11,10 +11,10 @@ set $ws3  3:
 set $ws4  4:
 set $ws5  5:
 set $ws6  6:
-set $ws7  7:
-set $ws8  8:
-set $ws9  9:
-set $ws10 10:
+set $ws7  7:
+set $ws8  8:
+set $ws9  9:
+set $ws10 10:
 
 set $dark       #65737e
 set $background #2b303b
@@ -24,14 +24,15 @@ set $red        #bf616a
 # }}}1
 # Basic settings {{{1
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
 font pango:Tewi, Icons, 9
 
-new_window pixel 2
-new_float pixel 2
+new_window none
+new_float none
 hide_edge_borders both
+
+workspace_auto_back_and_forth yes
 mouse_warping none
+
 gaps inner 10
 gaps outer 10
 
@@ -46,54 +47,36 @@ client.urgent           $red   $red   $white      $red
 # }}}1
 # Keybindings {{{1
 
-# use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# automatic back-and-forth when switching to the current workspace
-workspace_auto_back_and_forth yes
+bindsym $mod+Return exec --no-startup-id urxvt -cd "`xcwd`"
 
-# start a terminal
-bindsym $mod+Return exec urxvt -cd "`xcwd`"
-
-# kill focused window
 bindsym $mod+q kill
 
-# start dmenu (a program launcher)
 bindsym $mod+p exec --no-startup-id j4-dmenu-desktop --dmenu='dmenu -i -h 18 -nb "$background" -fn "Tewi-8" -nf "$white" -sb "#8fa1b3" -sf "$background"'
 bindsym $mod+o exec --no-startup-id passmenu -i -h 18 -nb "$background" -fn "Tewi-8" -nf "$white" -sb "#8fa1b3" -sf "$background"
 
-# change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 
-# move focused window
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
-# split in vertical/horizontal orientation
 bindsym $mod+s split v
 bindsym $mod+v split h
 
-# enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
 
-# make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
-
-# show the first scratchpad window
 bindsym $mod+minus scratchpad show
 
-# toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
-
-# change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
-# switch to workspace
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2
 bindsym $mod+3 workspace $ws3
@@ -106,7 +89,6 @@ bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws10
 bindsym $mod+Tab workspace back_and_forth
 
-# move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
 bindsym $mod+Shift+3 move container to workspace $ws3
@@ -119,68 +101,39 @@ bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 bindsym $mod+Shift+Tab move container to workspace back_and_forth
 
-# reloading/restarting/exiting
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
-# screenshot
-bindsym --release Print exec scrot $HOME/Pictures/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png
-bindsym --release Shift+Print exec scrot -s $HOME/Pictures/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png
-
-# nautilus
 bindsym $mod+n exec --no-startup-id thunar
 
-# resize window (you can also use the mouse for that)
 mode "resize" {
-    # These bindings trigger as soon as you enter the resize mode
     bindsym h resize shrink width 10 px or 10 ppt
     bindsym j resize grow height 10 px or 10 ppt
     bindsym k resize shrink height 10 px or 10 ppt
     bindsym l resize grow width 10 px or 10 ppt
 
-    # back to normal: Enter or Escape
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
 
 bindsym $mod+r mode "resize"
 
-set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
-
-mode "$mode_system" {
-    bindsym l exec --no-startup-id i3exit lock, mode "default"
-    bindsym e exec --no-startup-id i3exit logout, mode "default"
-    bindsym s exec --no-startup-id i3exit suspend, mode "default"
-    bindsym h exec --no-startup-id i3exit hibernate, mode "default"
-    bindsym r exec --no-startup-id i3exit reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
-
-    # back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-bindsym $mod+Pause mode "$mode_system"
-
 # }}}1
 # Window assigments {{{1
 
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+
 for_window [class="Wine"] floating enable
 for_window [class="Skype"] floating enable
-for_window [class="Vinagre"] floating enable
-for_window [class="Steam" title="Friends"] floating enable
-for_window [class="Steam" title="Chat$"] floating enable
-for_window [class="California"] floating enable
-for_window [window_role="pop-up"] floating enable
-for_window [window_role="task_dialog"] floating enable
+for_window [class="URxvt"] border pixel 2
 
 assign [class="Firefox"] $ws1
 assign [class="Skype"] $ws2
 assign [class="Popcorntime"] $ws4
 assign [class="Google-chrome-stable"] $ws4
-assign [class="Steam"] $ws5
-assign [title="Steam"] $ws5
-assign [class="dota_linux"] $ws5
 assign [class="URxvt"] $ws3
 
 # }}}1
@@ -207,9 +160,8 @@ bar {
 # Startup {{{1
 
 exec --no-startup-id feh --bg-fill ~/Pictures/02915_crossingthegap_1280x800.jpg
-exec --no-startup-id xset r rate 250 50
+exec --no-startup-id xset r rate 200 20
 exec --no-startup-id xcape
-exec --no-startup-id nm-applet --sm-disable
 exec --no-startup-id compton -b
 exec --no-startup-id urxvt
 exec --no-startup-id dropbox start

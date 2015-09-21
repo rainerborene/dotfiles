@@ -13,7 +13,6 @@ set -gx EDITOR vim
 set -gx GOPATH $HOME/.go
 set -gx BROWSER firefox
 set -gx GEM_HOME $HOME/.gem/ruby/2.2.0/
-set -gx SSH_AUTH_SOCK $XDG_RUNTIME_DIR/ssh-agent.socket
 
 prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
@@ -45,7 +44,6 @@ alias j 'z'
 alias g 'git'
 alias c 'clear'
 alias l 'tree --dirsfirst -ChaFL 1'
-# alias ls 'exa --group-directories-first'
 alias hl 'less -R'
 alias tailf 'tail -f'
 alias cuts "cut -d' '"
@@ -92,18 +90,9 @@ function mcd
     cd $argv
 end
 
-# }}}
-# Completions {{{
-
-function make_completion --argument alias command
-    complete -f -c $alias -a "(
-        set -l cmd (commandline -op);
-        set -e cmd[1];
-        complete -f -C\"$command \$cmd\";
-    )"
+function g -d "git" --wraps "git"
+   git $argv
 end
-
-make_completion g 'git'
 
 # }}}
 # Directories {{{

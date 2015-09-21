@@ -25,50 +25,54 @@ Now set up your credentials.
 
 ## Packages
 
-Here are the main packages I use on my computer.
+Most of the packages I use on my computer. Make sure to insert archlinuxfr on
+pacman mirrorlist.
 
 install with `pacman`
 
 - alsa-utils
+- ctags
+- dfc
 - dropbox
 - feh
 - firefox
 - fish
 - git
-- gvfs (for automounting and trash)
+- gvfs
 - gvim
 - lightdm
 - lightdm-gtk-greeter
-- networkmanager
-- network-manager-applet
+- mpv
 - openssh
 - pass
+- redshift
+- ristretto
 - rxvt-unicode
-- scrot
 - skype
 - the_silver_searcher
 - thunar
+- thunar-archive-plugin
+- thunar-media-tags-plugin
 - thunar-volman
-- tmux
 - tree
-- unzip
+- tumbler
 - urxvt-perls
-- vlc
+- wpa_supplicant
 - xdg-user-dirs
 - xorg-server
 - xorg-server-utils
 - xorg-xev
+- zathura
+- zathura-pdf-poppler
 
 install with `yaourt`
 
 - bdf-tewi-git
 - compton
 - dmenu2
-- exa-git
 - gtk-theme-arc-git
 - i3blocks
 - i3-gaps-git
-- i3lock-wrapper
 - j4-dmenu-desktop
 - thunar-dropbox
 - ttf-ms-win8
@@ -78,5 +82,3 @@ install with `yaourt`
 - xcape
 - xcwd-git
 - xtitle-git
-
-Note: make sure to insert archlinuxfr on pacman mirrorlist.

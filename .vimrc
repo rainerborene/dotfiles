@@ -330,7 +330,6 @@ augroup END
 
 augroup ft_go
   au!
-  au FileType godoc wincmd L | nnoremap <buffer> <silent> K :q<cr>
   au FileType go setlocal commentstring=\/\/\ %s
 augroup END
 

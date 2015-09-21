@@ -3,7 +3,7 @@ color=#65737e
 [focused window]
 command=xtitle -s
 interval=persist
-color=#f5f5f5
+color=#9ac1d9
 
 [volume label]
 full_text=
@@ -19,8 +19,16 @@ full_text=
 color=#c0c5ce
 
 [wireless]
-command=iwgetid -r
+command=wpa_cli status | sed -n -e 's/^ssid=\(.*\)/\1/p'
 interval=5
+
+[battery label]
+full_text=
+color=#c0c5ce
+
+[battery]
+command=acpi -b | awk '{ gsub("Unknown","Charging",$3); print $3, $4 }' | tr -d ','
+interval=10
 
 [date label]
 full_text=

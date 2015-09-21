@@ -5,4 +5,3 @@
 .vim/yankring_history_v2.txt
 .vim/unite
 tags
-.config/systemd/user/*.wants/
