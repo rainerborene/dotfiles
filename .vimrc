@@ -8,6 +8,8 @@ set backspace=indent,eol,start
 set colorcolumn=+1
 set complete-=i
 set completeopt=longest,menuone
+set concealcursor=niv
+set conceallevel=2
 set confirm
 set display+=lastline
 set encoding=utf-8
@@ -24,7 +26,6 @@ set laststatus=2
 set lazyredraw
 set linebreak
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
-set mouse=a
 set noshowmode
 set noswapfile
 set nrformats-=octal
@@ -40,6 +41,7 @@ set splitbelow
 set splitright
 set tabstop=4
 set textwidth=80
+set notimeout
 set ttimeout
 set ttimeoutlen=100
 set virtualedit+=block
@@ -51,9 +53,13 @@ if has("gui_running")
   set guifont=Tewi\ 9
   set guioptions=agit
 else
-  " Change cursor shape on insert mode.
-  let &t_SI = "\<Esc>[5 q"
-  let &t_EI = "\<Esc>[1 q"
+  set mouse=a
+  set t_Co=256
+  set t_vb=
+  set visualbell
+
+  let &t_SI="\<Esc>[5 q"
+  let &t_EI="\<Esc>[1 q"
 
   let g:base16colorspace=256
 end
@@ -111,9 +117,6 @@ nnoremap J mzJ`z
 " Move to last change
 nnoremap gI `.
 
-" Insert mode undo.
-inoremap <C-U> <C-G>u<C-U>
-
 " Clean trailing whitespace
 nnoremap <silent> =w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
 
@@ -122,8 +125,8 @@ nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
 " Search-replace.
-nnoremap g/ ms:<c-u>OverCommandLine<cr>%s/
-xnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\%V
+nnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\v
+xnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\%V\v
 
 " I hate when the rendering occasionally gets messed up.
 nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
@@ -226,6 +229,13 @@ nnoremap <silent> <leader>. :CtrlPTag<CR>
 " Open NERDTree file explorer
 nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
 
+" Dispatch
+nnoremap dm :Make<CR>
+nnoremap dr :Start<CR>
+nnoremap d! :Dispatch!<CR>
+nnoremap d<CR> :Dispatch<CR>
+nnoremap d<Space> :Dispatch<Space>
+
 " Fugitive
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
 nnoremap <silent> <leader>ge :Gedit<cr>
@@ -236,8 +246,14 @@ nnoremap <silent> <leader>gw :Gwrite<cr>
 " Easy filetype switching
 nnoremap =f :setfiletype<Space>
 
+" SuperTab like snippets' behavior.
+imap <expr><TAB> pumvisible()
+      \ ? "\<C-n>"
+      \ : neosnippet#expandable_or_jumpable()
+      \ ? "\<Plug>(neosnippet_expand_or_jump)"
+      \ : "\<TAB>"
+
 " Insert Mode Completion
-" Note that <C-@> is triggered by <C-Space> in many terminals.
 inoremap <C-]> <C-x><C-]>
 inoremap <C-l> <C-x><C-l>
 inoremap <C-@> <C-x><C-o>
@@ -266,6 +282,7 @@ augroup ft_javascript
   au!
   au BufNewFile,BufRead .jshintrc,*.es6 set filetype=javascript
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
+  au FileType javascript let b:switch_custom_definitions = g:switch_javascript_definitions
 augroup END
 
 augroup ft_html
@@ -277,10 +294,11 @@ augroup END
 
 augroup ft_xml
   au!
-  au FileType xml let &equalprg='xmllint --format --recover - 2>/dev/null'
+  au FileType xml let &l:equalprg='xmllint --format --recover - 2>/dev/null'
 augroup END
 
 augroup ft_awk
+  au!
   au FileType awk setlocal commentstring=#\ %s
 augroup END
 
@@ -383,20 +401,20 @@ augroup vimrc
         \ endif
 augroup END
 
-augroup plugin_oblique
+augroup Oblique
   au!
   au User Oblique       normal! zz
   au User ObliqueStar   normal! zz
   au User ObliqueRepeat normal! zz
 augroup END
 
-augroup plugin_over
+augroup Over
   au!
   au User OverCmdLineExecute
-      \ if line("'s") |
-      \   call cursor(line("'s"), col("'s")) |
-      \   delmarks s |
-      \ endif
+        \ if line("'s") |
+        \   call cursor(line("'s"), col("'s")) |
+        \   delmarks s |
+        \ endif
 augroup END
 
 " }}}1
@@ -517,13 +535,10 @@ let g:NERDTreeMapCloseDir = 'h'
 " Switch {{{2
 
 let g:switch_mapping = "-"
-let g:switch_custom_definitions = []
-
-" Dot notation
-call add(switch_custom_definitions, {
+let g:switch_javascript_definitions = [{
       \ '\[["'']\(\k\+\)["'']\]': '\.\1',
       \ '\.\(\k\+\)': '[''\1'']'
-      \ })
+      \ }]
 
 " }}}2
 " Airline {{{2
@@ -544,10 +559,26 @@ let g:airline_theme = 'base16'
 let g:ackprg = "ag --vimgrep"
 
 " }}}2
-" Notes {{{2
+" Neosnippet {{{2
 
-let g:notes_directories = ['~/Dropbox/Notes/']
-let g:notes_suffix = '.txt'
+let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
+let g:neosnippet#snippets_directory = '~/.vim/snippets'
+
+" }}}2
+" Neocomplete {{{2
+
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
+
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#force_omni_input_patterns.groovy = '\%(\h\w*\|)\)\.\w*'
+
+" }}}2
+" DelimitMate {{{2
+
+let g:delimitMate_expand_cr = 1
 
 " }}}2
 

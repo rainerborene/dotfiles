@@ -1,7 +1,7 @@
+tags
 .vim/bundle/*
 !.vim/bundle/.keep
 .vim/spell/*.spl
 .vim/tmp
 .vim/yankring_history_v2.txt
 .vim/unite
-tags

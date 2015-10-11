@@ -18,3 +18,10 @@ custom_plan.rb
 tags
 vagrant_ansible_inventory_default*
 zeus.json
+local.properties
+build/
+.gradle
+.classpath
+.project
+.settings
+workbench.xmi

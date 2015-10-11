@@ -18,6 +18,7 @@ prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
 prepend_to_path "/usr/local/heroku/bin"
 prepend_to_path "/usr/local/share/npm/bin"
+prepend_to_path "$HOME/.composer/vendor/bin/"
 prepend_to_path "$HOME/.gem/ruby/2.2.0/bin"
 prepend_to_path "$HOME/.dotfiles/bin"
 prepend_to_path "$GOPATH/bin"
@@ -62,6 +63,13 @@ alias be 'bundle exec'
 alias rs 'rails s thin'
 alias rc 'rails console'
 alias fore 'foreman start -f Procfile.dev'
+
+function dev_env -d "Prepare VirtualBox environment for development with Xming"
+  xrdb -merge ~/.Xresources
+  pkill xcape
+  xcape
+  urxvt
+end
 
 function docker_clean_container -d "Remove docker container that matches regular expression"
   if count $argv >/dev/null

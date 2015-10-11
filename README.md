@@ -54,6 +54,7 @@ install with `pacman`
 - thunar-archive-plugin
 - thunar-media-tags-plugin
 - thunar-volman
+- tmux
 - tree
 - tumbler
 - urxvt-perls
@@ -74,6 +75,7 @@ install with `yaourt`
 - i3blocks
 - i3-gaps-git
 - j4-dmenu-desktop
+- otf-font-awesome
 - thunar-dropbox
 - ttf-ms-win8
 - ttf-opensans
