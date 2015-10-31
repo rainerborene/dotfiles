@@ -1,98 +1,70 @@
 " .vimrc
-source ~/.dotfiles/.vimrc.bundles
+source ~/.config/nvim/plugged.vim
 
-set autoindent
-set autoread
 set autowrite
-set backspace=indent,eol,start
 set colorcolumn=+1
-set complete-=i
 set completeopt=longest,menuone
-set concealcursor=niv
-set conceallevel=2
 set confirm
-set display+=lastline
-set encoding=utf-8
 set expandtab
 set fillchars=diff:—,vert:│
 set foldlevel=99
 set formatoptions=qrn1j
 set gdefault
 set hidden
-set history=1000
 set ignorecase
-set incsearch
-set laststatus=2
 set lazyredraw
 set linebreak
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set noshowmode
 set noswapfile
+set notimeout
+set nowritebackup
 set nrformats-=octal
 set shiftwidth=2
 set shortmess=aoOtI
 set showbreak=↪
 set showcmd
 set smartcase
-set smarttab
 set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
 set spelllang=pt,en
 set splitbelow
 set splitright
 set tabstop=4
 set textwidth=80
-set notimeout
 set ttimeout
 set ttimeoutlen=100
+set undofile
+set undoreload=10000
 set virtualedit+=block
-set wrap
+set visualbell
 
-" Environments (GUI/Console) {{{1
+" Statusline {{{1
 
-if has("gui_running")
-  set guifont=Tewi\ 9
-  set guioptions=agit
-else
-  set mouse=a
-  set t_Co=256
-  set t_vb=
-  set visualbell
-
-  let &t_SI="\<Esc>[5 q"
-  let &t_EI="\<Esc>[1 q"
-
-  let g:base16colorspace=256
-end
+set statusline=%<[%n]\ %F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %=%-14.(%l,%c%V%)\ %P
 
 " }}}1
 " Color scheme {{{1
 
+let g:base16colorspace=256
 set background=dark
 colorscheme base16-ocean
 
 hi VertSplit ctermbg=NONE guibg=NONE
-
-" Highlight VCS conflict markers
-match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+hi ExtraWhitespace ctermbg=red guibg=red
 
 " }}}1
 " Wilmenu completion {{{1
 
-set wildmenu
 set wildmode=list:longest,full
 set wildignore+=*.DS_Store
 set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=.sass-cache
 
 " }}}1
-" Persistent undo {{{1
+" Neovim {{{1
 
-set undofile
-set undoreload=10000
-set undodir=~/.vim/tmp/undo
-
-if !isdirectory(expand(&undodir))
-  call mkdir(expand(&undodir), "p")
+if has('nvim')
+  tnoremap <Esc> <C-\><C-n>
 endif
 
 " }}}1
@@ -175,10 +147,10 @@ nnoremap gV `[v`]
 " Make Y consistent with C and D.
 nnoremap Y y$
 
-" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
-vmap <Enter> <Plug>(EasyAlign)
+" Start interactive EasyAlign in visual mode
+xmap ga <Plug>(EasyAlign)
 
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+" Start interactive EasyAlign with a Vim movement
 nmap ga <Plug>(EasyAlign)
 
 " Space to toggle folds.
@@ -191,9 +163,13 @@ nnoremap zO zczO
 " Focus the current fold by folding all the others
 nnoremap <leader>z zMzvzz
 
-" Command history navigation
-cnoremap <C-j> <t_kd>
-cnoremap <C-k> <t_ku>
+" Heresy
+inoremap <c-a> <esc>I
+inoremap <c-e> <esc>A
+cnoremap <c-a> <home>
+cnoremap <c-e> <end>
+cnoremap <c-k> <up>
+cnoremap <c-j> <down>
 
 " Send to the black hole register
 noremap x "_x
@@ -213,8 +189,8 @@ inoremap <C-s> <C-o>:update<cr>
 nnoremap <C-s> :update<cr>
 
 " Search
-vnoremap <leader>a "zy:execute "Ack! " . @z<cr>
-nnoremap <leader>a :Ack!<Space>
+vnoremap <leader>a "zy:execute "Ag " . @z<cr>
+nnoremap <leader>a :Ag<Space>
 
 " Rebuild Ctags
 nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
@@ -222,50 +198,37 @@ nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 " Undo tree usable by humans
 nnoremap <silent> <leader>u :UndotreeToggle<CR>
 
-" Open CtrlP on different modes
-nnoremap <silent> <leader>b :CtrlPBuffer<CR>
-nnoremap <silent> <leader>. :CtrlPTag<CR>
+" Fuzzy finder
+nnoremap <silent> <Leader><Leader> :Files<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>. :Tags<CR>
 
 " Open NERDTree file explorer
 nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
-
-" Dispatch
-nnoremap dm :Make<CR>
-nnoremap dr :Start<CR>
-nnoremap d! :Dispatch!<CR>
-nnoremap d<CR> :Dispatch<CR>
-nnoremap d<Space> :Dispatch<Space>
 
 " Fugitive
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
 nnoremap <silent> <leader>ge :Gedit<cr>
 nnoremap <silent> <leader>gl :Glog<cr>
-nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gw :Gwrite<cr>
+nmap <silent> <leader>gs :Gstatus<cr>gg<c-n>
 
 " Easy filetype switching
 nnoremap =f :setfiletype<Space>
 
-" SuperTab like snippets' behavior.
-imap <expr><TAB> pumvisible()
-      \ ? "\<C-n>"
-      \ : neosnippet#expandable_or_jumpable()
-      \ ? "\<Plug>(neosnippet_expand_or_jump)"
-      \ : "\<TAB>"
-
 " Insert Mode Completion
-inoremap <C-]> <C-x><C-]>
-inoremap <C-l> <C-x><C-l>
-inoremap <C-@> <C-x><C-o>
-inoremap <C-j> <C-n>
-inoremap <C-k> <C-p>
+imap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
+imap <c-x><c-j> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+imap <c-j> <c-n>
+imap <c-k> <c-p>
 
 " }}}1
 " Autocommands {{{1
 
 augroup ft_postgres
   au!
-  au BufNewFile,BufRead *.sql,*psql* set filetype=pgsql
+  au BufNewFile,BufRead /tmp/sql*,*.sql,*psql*, set filetype=pgsql
   au FileType pgsql set softtabstop=2 shiftwidth=2
   au FileType pgsql set foldmethod=indent
   au FileType pgsql setlocal commentstring=--\ %s comments=:--
@@ -344,6 +307,7 @@ augroup ft_ruby
   au BufRead *gemrc setlocal filetype=yaml
   au FileType ruby setlocal foldmethod=syntax
   au FileType ruby setlocal keywordprg=ri\ -T
+  au BufNewFile,BufRead .env* set filetype=sh
 augroup END
 
 augroup ft_go
@@ -373,6 +337,10 @@ augroup vimrc
   " No folds closed when editing new files
   au BufNew * setlocal foldlevelstart=99
 
+  " http://vim.wikia.com/wiki/Highlight_unwanted_spaces
+  au BufNewFile,BufRead,InsertLeave * silent! match ExtraWhitespace /\s\+$/
+  au InsertEnter * silent! match ExtraWhitespace /\s\+\%#\@<!$/
+
   " Don't keep undo files in temp directories or shm
   au BufWritePre /tmp/* setlocal noundofile
 
@@ -401,11 +369,21 @@ augroup vimrc
         \ endif
 augroup END
 
+augroup Neomake
+  au!
+  au BufWritePost * Neomake
+augroup END
+
 augroup Oblique
   au!
   au User Oblique       normal! zz
   au User ObliqueStar   normal! zz
   au User ObliqueRepeat normal! zz
+augroup END
+
+augroup AfterObject
+  au!
+  au VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
 augroup END
 
 augroup Over
@@ -469,8 +447,8 @@ autocmd BufWritePre * call s:Mkdir()
 
 " Ruby {{{2
 
-let g:ruby_space_errors = 1
-let g:ruby_operators = 1
+let g:ruby_fold = 1
+let g:ruby_no_expensive = 1
 
 " }}}2
 " HTML5 {{{2
@@ -478,49 +456,9 @@ let g:ruby_operators = 1
 let g:html_indent_tags = 'li\|p'
 
 " }}}2
-" Syntastic {{{2
-
-let g:syntastic_enable_signs = 1
-let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
-let g:syntastic_auto_loc_list = 2
-let g:syntastic_mode_map = {
-      \ 'mode': 'active',
-      \ 'passive_filetypes': ['html', 'yaml']
-      \ }
-
-" }}}2
-" Sparkup {{{2
-
-let g:sparkupNextMapping = '<c-y>'
-
-" }}}2
 " Surround {{{2
 
 let g:surround_no_insert_mappings = 1
-
-" }}}2
-" CtrlP {{{2
-
-let g:ctrlp_map = '<leader>,'
-let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
-let g:ctrlp_reuse_window = 'nerdtree\|help\|quickfix'
-let g:ctrlp_use_caching = 0
-let g:ctrlp_user_command = ['.git', 'git --git-dir=%s/.git ls-files -oc --exclude-standard | egrep -iv "\.(png|jpe?g|bmp|gif|png)"', 'ag %s -l --nocolor -g ""']
-let g:ctrlp_custom_ignore = {
-      \ 'file': '\v\.(jpg|jpe?g|bmp|gif|png)$',
-      \ 'dir': '\v[\/](tmp|tags)$'
-      \ }
-
-function! s:DeleteBuffer()
-  let path = fnamemodify(getline('.')[2:], ':p')
-  let bufn = matchstr(path, '\v\d+\ze\*No Name')
-  exec "bd" bufn ==# "" ? path : bufn
-  exec "norm \<F5>"
-endfunction
-
-function! CtrlPMappings()
-  nnoremap <buffer> <silent> <C-@> :call <sid>DeleteBuffer()<cr>
-endfunction
 
 " }}}2
 " NERDTree {{{2
@@ -530,6 +468,8 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeMapActivateNode = 'l'
 let g:NERDTreeMapCloseDir = 'h'
+let g:NERDTreeMapJumpNextSibling = 'gj'
+let g:NERDTreeMapJumpPrevSibling = 'gk'
 
 " }}}2
 " Switch {{{2
@@ -541,44 +481,27 @@ let g:switch_javascript_definitions = [{
       \ }]
 
 " }}}2
-" Airline {{{2
-
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols = {}
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-let g:airline_theme = 'base16'
-
-" }}}
-" Ack {{{2
-
-let g:ackprg = "ag --vimgrep"
-
-" }}}2
-" Neosnippet {{{2
-
-let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
-let g:neosnippet#snippets_directory = '~/.vim/snippets'
-
-" }}}2
-" Neocomplete {{{2
-
-if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
-endif
-
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#force_omni_input_patterns.groovy = '\%(\h\w*\|)\)\.\w*'
-
-" }}}2
 " DelimitMate {{{2
 
 let g:delimitMate_expand_cr = 1
+
+" }}}2
+" Undotree {{{2
+
+let g:undotree_WindowLayout = 2
+
+" }}}2
+" FZF {{{2
+
+let g:fzf_layout = { 'down': '10%' }
+
+function! s:fzf_statusline()
+  highlight fzf1 ctermfg=19 ctermbg=0
+  highlight fzf2 ctermfg=20 ctermbg=0
+  highlight fzf3 ctermfg=20 ctermbg=0
+  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+endfunction
+autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 " }}}2
 

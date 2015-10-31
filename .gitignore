@@ -1,7 +1,5 @@
-tags
-.vim/bundle/*
-!.vim/bundle/.keep
-.vim/spell/*.spl
-.vim/tmp
-.vim/yankring_history_v2.txt
-.vim/unite
+.config/nvim/tmp
+.config/nvim/spell/*.spl
+.config/nvim/plugged/*
+.config/nvim/autoload/plug.vim
+!.config/nvim/plugged/.keep

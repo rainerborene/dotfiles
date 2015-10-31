@@ -1,9 +1,6 @@
 filetype plugin indent on
+set rtp+=~/.fzf
 set shell=/bin/bash
-set nocompatible
-
-" Init package manager
-source ~/.vim/bundle/vim-plug/plug.vim
 
 " Disable default plugins
 let g:loaded_netrwPlugin = 1
@@ -15,39 +12,36 @@ let g:loaded_tar = 1
 let g:loaded_zipPlugin = 1
 let g:loaded_zip = 1
 
-call plug#begin('~/.vim/bundle')
+silent! if plug#begin('~/.config/nvim/plugged')
 
 Plug 'AndrewRadev/switch.vim'
-Plug 'bling/vim-airline'
+Plug 'benekastah/neomake'
 Plug 'chriskempson/base16-vim'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'fatih/vim-go'
-Plug 'junegunn/vim-easy-align'
+Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-after-object'
+Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 Plug 'junegunn/vim-oblique'
-Plug 'junegunn/vim-plug'
 Plug 'junegunn/vim-pseudocl'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-user'
-Plug 'mbbill/undotree'
-Plug 'mileszs/ack.vim'
+Plug 'mattn/emmet-vim'
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'osyo-manga/vim-over'
 Plug 'osyo-manga/vim-textobj-multiblock'
 Plug 'PeterRincker/vim-argumentative'
 Plug 'Raimondi/delimitMate'
-Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/syntastic'
 Plug 'sheerun/vim-polyglot'
-Plug 'Shougo/neocomplete.vim'
-Plug 'Shougo/neosnippet.vim'
+Plug 'terryma/vim-multiple-cursors'
 Plug 'thinca/vim-quickrun'
 Plug 'thinca/vim-textobj-comment'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -57,9 +51,8 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'vim-utils/vim-vertical-move'
+
+runtime! macros/matchit.vim
 
 call plug#end()
-
-" Eager-load these plugins so we can override their settings.
-runtime! macros/matchit.vim
+endif

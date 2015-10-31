@@ -9,10 +9,13 @@ function prepend_to_path -d "Prepend the given dir to PATH if it exists and is n
 end
 
 set -gx fish_greeting ''
-set -gx EDITOR vim
-set -gx GOPATH $HOME/.go
+set -gx EDITOR nvim
+set -gx GOPATH $HOME/go
 set -gx BROWSER firefox
 set -gx GEM_HOME $HOME/.gem/ruby/2.2.0/
+set -gx VIMRUNTIME $HOME/Projects/neovim/runtime/
+set -gx FZF_DEFAULT_COMMAND '(git ls-tree -r --name-only HEAD || ag --hidden --ignore .git -g "") 2>/dev/null'
+set -gx FZF_DEFAULT_OPTS '--extended --cycle --inline-info --no-256'
 
 prepend_to_path "/usr/bin"
 prepend_to_path "/usr/local/bin"
@@ -39,8 +42,9 @@ sh ~/.dotfiles/bin/base16-ocean.dark.sh
 # }}}
 # Useful aliases {{{
 
-alias vi 'vim'
-alias v 'vim'
+alias vim 'nvim'
+alias vi 'nvim'
+alias v 'nvim'
 alias j 'z'
 alias g 'git'
 alias c 'clear'

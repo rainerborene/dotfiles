@@ -1,14 +1,14 @@
 # ~dotfiles
 
+I have migrated to NeoVim (see .config/nvim directory).
+
 ## Installation
 
 Make sure you're on home directory before running these commands.
 
 ```bash
-git clone https://github.com/rainerborene/dotfiles.git .dotfiles
-
-# link the config files you want with the command:
-ln -s .dotfiles/.{vimrc,agignore} .
+$ git clone https://github.com/rainerborene/dotfiles.git .dotfiles
+$ ln -s .dotfiles/.{pryrc,agignore,...} .
 ```
 
 ## Defaults
@@ -16,12 +16,16 @@ ln -s .dotfiles/.{vimrc,agignore} .
 If you'd like to switch your shell from the default `bash` to `fish`, you can do
 so with the following command.
 
-    chsh -s $(which fish)
+```bash
+# chsh -s $(which fish)
+```
 
 Now set up your credentials.
 
-    git config --global user.name "Jonh Doe"
-    git config --global user.email jonh@doe.com
+```bash
+$ git config --global user.name "Jonh Doe"
+$ git config --global user.email jonh@doe.com
+```
 
 ## Packages
 
@@ -39,7 +43,6 @@ install with `pacman`
 - fish
 - git
 - gvfs
-- gvim
 - lightdm
 - lightdm-gtk-greeter
 - mpv
@@ -58,6 +61,7 @@ install with `pacman`
 - tree
 - tumbler
 - urxvt-perls
+- words
 - wpa_supplicant
 - xdg-user-dirs
 - xorg-server
@@ -75,6 +79,7 @@ install with `yaourt`
 - i3blocks
 - i3-gaps-git
 - j4-dmenu-desktop
+- neovim-git
 - otf-font-awesome
 - thunar-dropbox
 - ttf-ms-win8
