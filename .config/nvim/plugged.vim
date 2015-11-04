@@ -28,6 +28,7 @@ Plug 'kana/vim-niceblock'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-user'
+Plug 'kassio/neoterm'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'osyo-manga/vim-over'

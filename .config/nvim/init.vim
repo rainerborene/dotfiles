@@ -1,7 +1,6 @@
 " .vimrc
 source ~/.config/nvim/plugged.vim
 
-set autowrite
 set colorcolumn=+1
 set completeopt=longest,menuone
 set confirm
@@ -13,11 +12,11 @@ set gdefault
 set hidden
 set ignorecase
 set lazyredraw
+set visualbell
 set linebreak
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set noshowmode
 set noswapfile
-set notimeout
 set nowritebackup
 set nrformats-=octal
 set shiftwidth=2
@@ -31,12 +30,12 @@ set splitbelow
 set splitright
 set tabstop=4
 set textwidth=80
-set ttimeout
-set ttimeoutlen=100
 set undofile
 set undoreload=10000
 set virtualedit+=block
-set visualbell
+set notimeout
+set ttimeout
+set ttimeoutlen=0
 
 " Statusline {{{1
 
@@ -121,11 +120,6 @@ nnoremap <leader>2 2gt
 nnoremap <leader>3 3gt
 nnoremap <leader>4 4gt
 nnoremap <leader>5 5gt
-nnoremap <leader>t :tabnew<CR>
-
-" Fast scrolling
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
 
 " Sane movement with wrap turned on
 nnoremap j gj
@@ -206,6 +200,18 @@ nnoremap <silent> <Leader>. :Tags<CR>
 " Open NERDTree file explorer
 nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
 
+" Run tests
+nnoremap <silent> <f8> :call neoterm#test#run('all')<cr>
+nnoremap <silent> <f9> :call neoterm#test#run('file')<cr>
+nnoremap <silent> <f10> :call neoterm#test#run('current')<cr>
+nnoremap <silent> <f11> :call neoterm#test#rerun()<cr>
+
+" Terminal control
+nnoremap <silent> <leader>te :Tclose<cr>
+nnoremap <silent> <leader>to :Topen<cr>
+nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
+nnoremap <silent> <leader>tk :call neoterm#kill()<cr>
+
 " Fugitive
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
 nnoremap <silent> <leader>ge :Gedit<cr>
@@ -220,6 +226,7 @@ nnoremap =f :setfiletype<Space>
 imap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
 imap <c-x><c-j> <plug>(fzf-complete-path)
 imap <c-x><c-l> <plug>(fzf-complete-line)
+imap <c-@> <c-x><c-o>
 imap <c-j> <c-n>
 imap <c-k> <c-p>
 
@@ -228,17 +235,10 @@ imap <c-k> <c-p>
 
 augroup ft_postgres
   au!
-  au BufNewFile,BufRead /tmp/sql*,*.sql,*psql*, set filetype=pgsql
+  au BufNewFile,BufRead /tmp/sql*,*.sql,*psql* set filetype=pgsql
   au FileType pgsql set softtabstop=2 shiftwidth=2
   au FileType pgsql set foldmethod=indent
   au FileType pgsql setlocal commentstring=--\ %s comments=:--
-augroup END
-
-augroup ft_fish
-  au!
-  au BufNewFile,BufRead *.fish set filetype=fish
-  au FileType fish setlocal foldmethod=marker foldmarker={{{,}}}
-  au FileType fish setlocal commentstring=#\ %s
 augroup END
 
 augroup ft_javascript
@@ -310,15 +310,14 @@ augroup ft_ruby
   au BufNewFile,BufRead .env* set filetype=sh
 augroup END
 
-augroup ft_go
+augroup ft_nerdtree
   au!
-  au FileType go setlocal commentstring=\/\/\ %s
+  au FileType nerdtree setlocal colorcolumn& nocursorline nolist nowrap tw=0
 augroup END
 
 augroup vimrc
   au!
   au FileType vim setlocal foldmethod=marker
-  au FileType qf,nerdtree setlocal colorcolumn& nocursorline nolist nowrap tw=0
   au FileType qf setlocal nolist nowrap | wincmd J | nnoremap <buffer> q :q<cr>
   au BufWinEnter *.txt if &ft == 'help' | wincmd T | nnoremap <buffer> q :q<cr> | endif
 
@@ -470,6 +469,7 @@ let g:NERDTreeMapActivateNode = 'l'
 let g:NERDTreeMapCloseDir = 'h'
 let g:NERDTreeMapJumpNextSibling = 'gj'
 let g:NERDTreeMapJumpPrevSibling = 'gk'
+let g:NERDTreeMapJumpFirstChild = 'gK'
 
 " }}}2
 " Switch {{{2
@@ -502,6 +502,19 @@ function! s:fzf_statusline()
   setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
 endfunction
 autocmd! User FzfStatusLine call <SID>fzf_statusline()
+
+" }}}2
+" Rails {{{2
+
+let g:rails_abbreviations = {
+    \ "it": "it { ",
+    \ "ivp": "is_expected.to validate_presence_of :"
+    \ }
+
+" }}}2
+" Neoterm {{{2
+
+let g:neoterm_size = 15
 
 " }}}2
 

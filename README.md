@@ -1,6 +1,6 @@
 # ~dotfiles
 
-I have migrated to NeoVim (see .config/nvim directory).
+See NeoVim configuration on `.config/nvim` directory.
 
 ## Installation
 
@@ -9,15 +9,6 @@ Make sure you're on home directory before running these commands.
 ```bash
 $ git clone https://github.com/rainerborene/dotfiles.git .dotfiles
 $ ln -s .dotfiles/.{pryrc,agignore,...} .
-```
-
-## Defaults
-
-If you'd like to switch your shell from the default `bash` to `fish`, you can do
-so with the following command.
-
-```bash
-# chsh -s $(which fish)
 ```
 
 Now set up your credentials.
@@ -40,7 +31,6 @@ install with `pacman`
 - dropbox
 - feh
 - firefox
-- fish
 - git
 - gvfs
 - lightdm
@@ -69,6 +59,7 @@ install with `pacman`
 - xorg-xev
 - zathura
 - zathura-pdf-poppler
+- zsh
 
 install with `yaourt`
 
