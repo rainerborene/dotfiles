@@ -1,4 +1,3 @@
-.zsh/antigen.zsh
 .config/nvim/tmp
 .config/nvim/spell/*.spl
 .config/nvim/plugged/*

@@ -1,7 +1,6 @@
 [core]
 	excludesfile = ~/.dotfiles/.cvsignore
 	attributesfile = ~/.dotfiles/.gitattributes
-	editor = vim
 [user]
 	name = Rainer Borene
 	email = rainerborene@gmail.com

@@ -1,5 +1,62 @@
-" .vimrc
-source ~/.config/nvim/plugged.vim
+" .vimrc of Rainer Borene
+" =======================
+" Plugged {{{1
+
+" Disable default plugins
+let g:loaded_netrwPlugin = 1
+let g:loaded_vimballPlugin = "v35"
+let g:loaded_getscriptPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_tarPlugin = 1
+let g:loaded_tar = 1
+let g:loaded_zipPlugin = 1
+let g:loaded_zip = 1
+
+call plug#begin('~/.config/nvim/plugged')
+
+Plug 'AndrewRadev/switch.vim'
+Plug 'benekastah/neomake', { 'on': ['Neomake'] }
+Plug 'chriskempson/base16-vim'
+Plug 'cohama/lexima.vim'
+Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-after-object'
+Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
+Plug 'junegunn/vim-oblique'
+Plug 'junegunn/vim-pseudocl'
+Plug 'kana/vim-niceblock'
+Plug 'kana/vim-textobj-entire'
+Plug 'kana/vim-textobj-indent'
+Plug 'kana/vim-textobj-user'
+Plug 'kassio/neoterm'
+Plug 'mattn/emmet-vim'
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+Plug 'osyo-manga/vim-over'
+Plug 'osyo-manga/vim-textobj-multiblock'
+Plug 'PeterRincker/vim-argumentative'
+Plug 'scrooloose/nerdtree'
+Plug 'sheerun/vim-polyglot'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'thinca/vim-quickrun'
+Plug 'thinca/vim-textobj-comment'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-ragtag'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+
+runtime! macros/matchit.vim
+call plug#end()
+
+" }}}1
+" Basic options {{{1
 
 set colorcolumn=+1
 set completeopt=longest,menuone
@@ -18,13 +75,12 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set noshowmode
 set noswapfile
 set nowritebackup
-set nrformats-=octal
 set shiftwidth=2
 set shortmess=aoOtI
 set showbreak=↪
 set showcmd
 set smartcase
-set spellfile=~/.vim/spell/custom-dictionary.utf-8.add
+set spellfile=~/.config/nvim/spell/custom-dictionary.utf-8.add
 set spelllang=pt,en
 set splitbelow
 set splitright
@@ -37,6 +93,7 @@ set notimeout
 set ttimeout
 set ttimeoutlen=0
 
+" }}}1
 " Statusline {{{1
 
 set statusline=%<[%n]\ %F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %=%-14.(%l,%c%V%)\ %P
@@ -44,6 +101,7 @@ set statusline=%<[%n]\ %F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#status
 " }}}1
 " Color scheme {{{1
 
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let g:base16colorspace=256
 set background=dark
 colorscheme base16-ocean
@@ -58,13 +116,6 @@ set wildmode=list:longest,full
 set wildignore+=*.DS_Store
 set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=.sass-cache
-
-" }}}1
-" Neovim {{{1
-
-if has('nvim')
-  tnoremap <Esc> <C-\><C-n>
-endif
 
 " }}}1
 " Mappings {{{1
@@ -186,6 +237,9 @@ nnoremap <C-s> :update<cr>
 vnoremap <leader>a "zy:execute "Ag " . @z<cr>
 nnoremap <leader>a :Ag<Space>
 
+" Paste clipboard selection
+nnoremap <silent> <leader>p :r!xclip -selection clipbard -o<cr>
+
 " Rebuild Ctags
 nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
@@ -207,10 +261,12 @@ nnoremap <silent> <f10> :call neoterm#test#run('current')<cr>
 nnoremap <silent> <f11> :call neoterm#test#rerun()<cr>
 
 " Terminal control
-nnoremap <silent> <leader>te :Tclose<cr>
+tnoremap <Esc> <C-\><C-n>
 nnoremap <silent> <leader>to :Topen<cr>
+nnoremap <silent> <leader>tc :Tclose<cr>
 nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
 nnoremap <silent> <leader>tk :call neoterm#kill()<cr>
+nnoremap sf :TREPLSendFile<cr>
 
 " Fugitive
 nnoremap <silent> <leader>gd :Gvdiff -<cr>
@@ -226,6 +282,7 @@ nnoremap =f :setfiletype<Space>
 imap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
 imap <c-x><c-j> <plug>(fzf-complete-path)
 imap <c-x><c-l> <plug>(fzf-complete-line)
+imap <c-]> <c-x><c-]>
 imap <c-@> <c-x><c-o>
 imap <c-j> <c-n>
 imap <c-k> <c-p>
@@ -241,11 +298,15 @@ augroup ft_postgres
   au FileType pgsql setlocal commentstring=--\ %s comments=:--
 augroup END
 
+augroup ft_zsh
+  au!
+  au FileType zsh setlocal foldmethod=marker
+augroup END
+
 augroup ft_javascript
   au!
   au BufNewFile,BufRead .jshintrc,*.es6 set filetype=javascript
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
-  au FileType javascript let b:switch_custom_definitions = g:switch_javascript_definitions
 augroup END
 
 augroup ft_html
@@ -310,16 +371,10 @@ augroup ft_ruby
   au BufNewFile,BufRead .env* set filetype=sh
 augroup END
 
-augroup ft_nerdtree
-  au!
-  au FileType nerdtree setlocal colorcolumn& nocursorline nolist nowrap tw=0
-augroup END
-
 augroup vimrc
   au!
   au FileType vim setlocal foldmethod=marker
-  au FileType qf setlocal nolist nowrap | wincmd J | nnoremap <buffer> q :q<cr>
-  au BufWinEnter *.txt if &ft == 'help' | wincmd T | nnoremap <buffer> q :q<cr> | endif
+  au FileType qf setlocal nowrap | wincmd J | nnoremap <buffer> q :q<cr>
 
   " Automatically opens the quickfix window after :Ggrep.
   au QuickFixCmdPost *grep* cwindow
@@ -368,30 +423,19 @@ augroup vimrc
         \ endif
 augroup END
 
-augroup Neomake
-  au!
-  au BufWritePost * Neomake
-augroup END
+" }}}1
+" Help in new tabs {{{1
 
-augroup Oblique
-  au!
-  au User Oblique       normal! zz
-  au User ObliqueStar   normal! zz
-  au User ObliqueRepeat normal! zz
-augroup END
+function! s:helptab()
+  if &buftype == 'help'
+    wincmd T
+    nnoremap <buffer> q :q<cr>
+  endif
+endfunction
 
-augroup AfterObject
+augroup vimrc_help
   au!
-  au VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
-augroup END
-
-augroup Over
-  au!
-  au User OverCmdLineExecute
-        \ if line("'s") |
-        \   call cursor(line("'s"), col("'s")) |
-        \   delmarks s |
-        \ endif
+  au BufEnter *.txt call s:helptab()
 augroup END
 
 " }}}1
@@ -471,6 +515,11 @@ let g:NERDTreeMapJumpNextSibling = 'gj'
 let g:NERDTreeMapJumpPrevSibling = 'gk'
 let g:NERDTreeMapJumpFirstChild = 'gK'
 
+augroup ft_nerdtree
+  au!
+  au FileType nerdtree setlocal colorcolumn& nowrap tw=0
+augroup END
+
 " }}}2
 " Switch {{{2
 
@@ -480,10 +529,17 @@ let g:switch_javascript_definitions = [{
       \ '\.\(\k\+\)': '[''\1'']'
       \ }]
 
-" }}}2
-" DelimitMate {{{2
+function! s:load_switch_definitions()
+  let varname = "g:switch_".&filetype."_definitions"
+  if exists(varname)
+    exec 'let b:switch_custom_definitions = '.varname
+  endif
+endfunction
 
-let g:delimitMate_expand_cr = 1
+augroup Switch
+  au!
+  au BufEnter * call s:load_switch_definitions()
+augroup END
 
 " }}}2
 " Undotree {{{2
@@ -491,7 +547,7 @@ let g:delimitMate_expand_cr = 1
 let g:undotree_WindowLayout = 2
 
 " }}}2
-" FZF {{{2
+" Fuzzy Finder {{{2
 
 let g:fzf_layout = { 'down': '10%' }
 
@@ -501,20 +557,62 @@ function! s:fzf_statusline()
   highlight fzf3 ctermfg=20 ctermbg=0
   setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
 endfunction
-autocmd! User FzfStatusLine call <SID>fzf_statusline()
+
+augroup ft_fzf
+  au!
+  au FileType fzf nnoremap <silent> <buffer> <c-g> :q<cr>
+  au User FzfStatusLine call s:fzf_statusline()
+augroup END
 
 " }}}2
 " Rails {{{2
 
 let g:rails_abbreviations = {
-    \ "it": "it { ",
-    \ "ivp": "is_expected.to validate_presence_of :"
-    \ }
+      \ "it": "it { ",
+      \ "ivp": "is_expected.to validate_presence_of :",
+      \ "pry": "binding.pry"
+      \ }
 
 " }}}2
 " Neoterm {{{2
 
 let g:neoterm_size = 15
+
+" }}}2
+" QuickRun {{{2
+
+let g:quickrun_config = {
+      \ 'lua/redis': {
+      \   'command': 'redis-cli',
+      \   'exec': '%c --eval %s %a',
+      \   'tempfile': '%{tempname()}.lua'
+      \ }}
+
+" }}}2
+" Neomake {{{2
+
+augroup Neomake
+  au!
+  au BufWritePost * Neomake
+augroup END
+
+" }}}2
+" Oblique {{{2
+
+augroup Oblique
+  au!
+  au User Oblique       normal! zz
+  au User ObliqueStar   normal! zz
+  au User ObliqueRepeat normal! zz
+augroup END
+
+" }}}2
+" After Text Object {{{2
+
+augroup AfterObject
+  au!
+  au VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
+augroup END
 
 " }}}2
 

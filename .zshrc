@@ -1,12 +1,11 @@
-# vim: set foldmethod=marker :
-# Basic setup {{{
+# Essentials {{{
 
 BASE=$HOME/.dotfiles
-ZSH=$HOME/.antigen/repos/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh.git
-ZSH_THEME="robbyrussell"
+DISABLE_AUTO_TITLE="true"
 DISABLE_AUTO_UPDATE="true"
 UPDATE_ZSH_DAYS=13
-DISABLE_AUTO_TITLE="true"
+ZSH=$HOME/.antigen/repos/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh.git
+ZSH_THEME="robbyrussell"
 
 plugins=(git git-extras z history-substring-search)
 
@@ -41,14 +40,23 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
-alias ls='ls --color=auto --group-directories-first'
+alias g='git'
+alias j='z'
+alias la='ls -la'
+alias ls='exa --group-directories-first'
 alias l='tree --dirsfirst -ChaFL 1'
 alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
-alias g='git'
-alias j='z'
+
+alias o='command xdg-open $ARGV >/dev/null 2>&1'
+alias oo='xdg-open (pwd) >/dev/null 2>&1'
+alias pbc='xclip -selection clipboard'
+alias pbp='xclip -selection clipboard -o'
+
 alias be='bundle exec'
+alias rc='rails console'
+alias rs='rails server'
 alias fore='foreman start -f Procfile.dev'
 
 # }}}

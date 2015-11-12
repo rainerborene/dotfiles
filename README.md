@@ -36,6 +36,7 @@ install with `pacman`
 - lightdm
 - lightdm-gtk-greeter
 - mpv
+- nodejs
 - openssh
 - pass
 - redshift
@@ -66,12 +67,14 @@ install with `yaourt`
 - bdf-tewi-git
 - compton
 - dmenu2
+- exa-git
 - gtk-theme-arc-git
 - i3blocks
 - i3-gaps-git
 - j4-dmenu-desktop
 - neovim-git
 - otf-font-awesome
+- rust-nightly-bin
 - thunar-dropbox
 - ttf-ms-win8
 - ttf-opensans
