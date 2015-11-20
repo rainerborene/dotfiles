@@ -1,6 +1,6 @@
 # ~dotfiles
 
-See NeoVim configuration on `.config/nvim` directory.
+See NeoVim config on `.config/nvim/init.vim` file.
 
 ## Installation
 
@@ -16,6 +16,14 @@ Now set up your credentials.
 ```bash
 $ git config --global user.name "Jonh Doe"
 $ git config --global user.email jonh@doe.com
+```
+
+## Run URxvt directly from VBS
+
+```VisualBasic
+dim objShell
+set objShell=wscript.createObject("WScript.Shell")
+iReturnCode=objShell.Run("plink -load virtualbox -pw borene -t /home/rainerborene/.dotfiles/bin/terminal",0,TRUE)
 ```
 
 ## Packages
@@ -41,15 +49,14 @@ install with `pacman`
 - pass
 - redshift
 - ristretto
-- rxvt-unicode
 - skype
 - the_silver_searcher
 - thunar
 - thunar-archive-plugin
 - thunar-media-tags-plugin
 - thunar-volman
-- tmux
 - tree
+- ttf-ubuntu-font-family
 - tumbler
 - urxvt-perls
 - words
@@ -75,7 +82,9 @@ install with `yaourt`
 - neovim-git
 - otf-font-awesome
 - rust-nightly-bin
+- rxvt-unicode-24bit
 - thunar-dropbox
+- tmux-24bit-color
 - ttf-ms-win8
 - ttf-opensans
 - urxvt-vtwheel

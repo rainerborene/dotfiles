@@ -1,3 +1,6 @@
 ---
 Documentation:
   Enabled: false
+
+Style/SpaceBeforeComma:
+  Enabled: false

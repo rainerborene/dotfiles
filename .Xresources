@@ -9,8 +9,7 @@ Xft.hintstyle: hintslight
 URxvt.saveLines: 12000
 URxvt.internalBorder: 5
 URxvt.perl-ext-common: default,matcher,vtwheel,selection-to-clipboard,clipboard
-URxvt.font:xft:Tewi:style=normal:pixelsize=12
-URxvt.boldFont:xft:Tewi:style=bold:pixelsize=12
+URxvt.font: xft:Ubuntu Mono:pixelsize=12
 URxvt.iso14755: False
 URxvt.iso14755_52: False
 URxvt.scrollBar: false
@@ -28,25 +27,25 @@ URxvt.underlineURLs: true
 URxvt.url-launcher: /usr/bin/firefox
 URxvt.matcher.button: 1
 
-! Base16 Default
-! Scheme: Chris Kempson (http://chriskempson.com)
+! Base16 Twilight
+! Scheme: David Hart (http://hart-dev.com)
 
-#define base00 #2b303b
-#define base01 #343d46
-#define base02 #4f5b66
-#define base03 #65737e
-#define base04 #a7adba
-#define base05 #c0c5ce
-#define base06 #dfe1e8
-#define base07 #eff1f5
-#define base08 #bf616a
-#define base09 #d08770
-#define base0A #ebcb8b
-#define base0B #a3be8c
-#define base0C #96b5b4
-#define base0D #8fa1b3
-#define base0E #b48ead
-#define base0F #ab7967
+#define base00 #1e1e1e
+#define base01 #323537
+#define base02 #464b50
+#define base03 #5f5a60
+#define base04 #838184
+#define base05 #a7a7a7
+#define base06 #c3c3c3
+#define base07 #ffffff
+#define base08 #cf6a4c
+#define base09 #cda869
+#define base0A #f9ee98
+#define base0B #8f9d6a
+#define base0C #afc4db
+#define base0D #7587a6
+#define base0E #9b859d
+#define base0F #9b703f
 
 urxvt*foreground: base05
 urxvt*background: base00

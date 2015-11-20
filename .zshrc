@@ -10,19 +10,21 @@ ZSH_THEME="robbyrussell"
 plugins=(git git-extras z history-substring-search)
 
 source $ZSH/oh-my-zsh.sh
-source $BASE/.zsh/base16-ocean.dark.sh
 
 # }}}
 # Environment variables {{{
 
 export EDITOR=nvim
-export NEOVIM=$HOME/Projects/neovim
-export PATH=$BASE/bin:$HOME/.gem/ruby/2.2.0/bin:$NEOVIM/build/bin:./bin/:$PATH
-export VIMRUNTIME=$NEOVIM/runtime/
-export GEM_HOME=$HOME/.gem/ruby/2.2.0/
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g "" 2>/dev/null'
-export FZF_DEFAULT_OPTS='--extended --cycle --inline-info --no-256 --bind "ctrl-z:toggle"'
+export FZF_DEFAULT_OPTS='--extended --cycle --no-256 --bind "ctrl-z:toggle"'
+export GEM_HOME=$HOME/.gem/ruby/2.2.0/
+export GOPATH=$HOME/go
 export LESS='-R --silent'
+export NVIM_PATH=$HOME/Projects/neovim
+export NVIM_TUI_ENABLE_TRUE_COLOR=1
+export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+export PATH=$BASE/bin:$HOME/.gem/ruby/2.2.0/bin:$NVIM_PATH/build/bin:./bin/:$PATH:$GOPATH/bin
+export VIMRUNTIME=$NVIM_PATH/runtime/
 
 # }}}
 # Options {{{
@@ -60,13 +62,16 @@ alias rs='rails server'
 alias fore='foreman start -f Procfile.dev'
 
 # }}}
+# Functions {{{
+
+# }}}
 # Key mappings {{{
 
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
 # }}}
-# Fuzzy finder {{{
+# FZF {{{
 
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 

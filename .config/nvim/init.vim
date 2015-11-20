@@ -1,6 +1,6 @@
 " .vimrc of Rainer Borene
 " =======================
-" Plugged {{{1
+" Plugged {{{
 
 " Disable default plugins
 let g:loaded_netrwPlugin = 1
@@ -55,8 +55,8 @@ Plug 'tpope/vim-unimpaired'
 runtime! macros/matchit.vim
 call plug#end()
 
-" }}}1
-" Basic options {{{1
+" }}}
+" Basic options {{{
 
 set colorcolumn=+1
 set completeopt=longest,menuone
@@ -93,32 +93,47 @@ set notimeout
 set ttimeout
 set ttimeoutlen=0
 
-" }}}1
-" Statusline {{{1
+" }}}
+" Statusline {{{
 
 set statusline=%<[%n]\ %F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %=%-14.(%l,%c%V%)\ %P
 
-" }}}1
-" Color scheme {{{1
+" }}}
+" Color scheme {{{
 
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-let g:base16colorspace=256
+let g:terminal_color_0  = '#1e1e1e'
+let g:terminal_color_1  = '#cf6a4c'
+let g:terminal_color_2  = '#8f9d6a'
+let g:terminal_color_3  = '#f9ee98'
+let g:terminal_color_4  = '#7587a6'
+let g:terminal_color_5  = '#9b859d'
+let g:terminal_color_6  = '#afc4db'
+let g:terminal_color_7  = '#a7a7a7'
+let g:terminal_color_8  = '#5f5a60'
+let g:terminal_color_9  = '#cf6a4c'
+let g:terminal_color_10 = '#8f9d6a'
+let g:terminal_color_11 = '#f9ee98'
+let g:terminal_color_12 = '#7587a6'
+let g:terminal_color_13 = '#9b859d'
+let g:terminal_color_14 = '#afc4db'
+let g:terminal_color_15 = '#ffffff'
+
 set background=dark
-colorscheme base16-ocean
+colorscheme base16-twilight
 
 hi VertSplit ctermbg=NONE guibg=NONE
 hi ExtraWhitespace ctermbg=red guibg=red
 
-" }}}1
-" Wilmenu completion {{{1
+" }}}
+" Wilmenu completion {{{
 
 set wildmode=list:longest,full
 set wildignore+=*.DS_Store
 set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=.sass-cache
 
-" }}}1
-" Mappings {{{1
+" }}}
+" Mappings {{{
 
 let mapleader = ","
 let maplocalleader = "\\"
@@ -146,10 +161,6 @@ nnoremap <silent> =w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
-" Search-replace.
-nnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\v
-xnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\%V\v
-
 " I hate when the rendering occasionally gets messed up.
 nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
 
@@ -158,14 +169,18 @@ nnoremap gs vip:!sort<cr>
 vnoremap gs :!sort<cr>
 
 " Speed up window switching
-nnoremap <C-h> <C-W>h
+nnoremap <BS> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
 nnoremap <leader>s <C-W>s
 nnoremap <leader>v <C-W>v
 
+" Map m-] to be the inverse of c-]
+nnoremap <m-]> <c-t>
+
 " Fast tab switching
+nnoremap <C-t> :tabnew<cr>
 nnoremap <leader>1 1gt
 nnoremap <leader>2 2gt
 nnoremap <leader>3 3gt
@@ -192,12 +207,6 @@ nnoremap gV `[v`]
 " Make Y consistent with C and D.
 nnoremap Y y$
 
-" Start interactive EasyAlign in visual mode
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign with a Vim movement
-nmap ga <Plug>(EasyAlign)
-
 " Space to toggle folds.
 nnoremap <Space> za
 vnoremap <Space> za
@@ -215,6 +224,7 @@ cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 cnoremap <c-k> <up>
 cnoremap <c-j> <down>
+cnoremap <C-g> <C-c>
 
 " Send to the black hole register
 noremap x "_x
@@ -223,19 +233,9 @@ noremap X "_X
 " Preserve previous paste
 vnoremap p pgvy
 
-" Multiblock
-omap ab <Plug>(textobj-multiblock-a)
-omap ib <Plug>(textobj-multiblock-i)
-xmap ab <Plug>(textobj-multiblock-a)
-xmap ib <Plug>(textobj-multiblock-i)
-
 " Save
 inoremap <C-s> <C-o>:update<cr>
 nnoremap <C-s> :update<cr>
-
-" Search
-vnoremap <leader>a "zy:execute "Ag " . @z<cr>
-nnoremap <leader>a :Ag<Space>
 
 " Paste clipboard selection
 nnoremap <silent> <leader>p :r!xclip -selection clipbard -o<cr>
@@ -243,52 +243,26 @@ nnoremap <silent> <leader>p :r!xclip -selection clipbard -o<cr>
 " Rebuild Ctags
 nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
-" Undo tree usable by humans
-nnoremap <silent> <leader>u :UndotreeToggle<CR>
-
-" Fuzzy finder
-nnoremap <silent> <Leader><Leader> :Files<CR>
-nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>. :Tags<CR>
-
-" Open NERDTree file explorer
-nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
-
-" Run tests
-nnoremap <silent> <f8> :call neoterm#test#run('all')<cr>
-nnoremap <silent> <f9> :call neoterm#test#run('file')<cr>
-nnoremap <silent> <f10> :call neoterm#test#run('current')<cr>
-nnoremap <silent> <f11> :call neoterm#test#rerun()<cr>
-
-" Terminal control
-tnoremap <Esc> <C-\><C-n>
-nnoremap <silent> <leader>to :Topen<cr>
-nnoremap <silent> <leader>tc :Tclose<cr>
-nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
-nnoremap <silent> <leader>tk :call neoterm#kill()<cr>
-nnoremap sf :TREPLSendFile<cr>
-
-" Fugitive
-nnoremap <silent> <leader>gd :Gvdiff -<cr>
-nnoremap <silent> <leader>ge :Gedit<cr>
-nnoremap <silent> <leader>gl :Glog<cr>
-nnoremap <silent> <leader>gw :Gwrite<cr>
-nmap <silent> <leader>gs :Gstatus<cr>gg<c-n>
-
 " Easy filetype switching
 nnoremap =f :setfiletype<Space>
 
 " Insert Mode Completion
-imap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
-imap <c-x><c-j> <plug>(fzf-complete-path)
-imap <c-x><c-l> <plug>(fzf-complete-line)
 imap <c-]> <c-x><c-]>
 imap <c-@> <c-x><c-o>
 imap <c-j> <c-n>
 imap <c-k> <c-p>
 
-" }}}1
-" Autocommands {{{1
+" Terminal controlling
+tnoremap <Esc> <C-\><C-n>
+tnoremap <c-w>j <c-\><c-n><c-w>j
+tnoremap <c-w>k <c-\><c-n><c-w>k
+tnoremap <c-w>h <c-\><c-n><c-w>h
+tnoremap <c-w>l <c-\><c-n><c-w>l
+tnoremap <pageup> <c-\><c-n><pageup>
+tnoremap <pagedown> <c-\><c-n><pagedown>
+
+" }}}
+" Autocommands {{{
 
 augroup ft_postgres
   au!
@@ -331,18 +305,6 @@ augroup ft_i3
   au BufRead,BufNewFile *i3/config setlocal ft=i3 commentstring=#\ %s
 augroup END
 
-augroup ft_git
-  au!
-  au FileType git,gitcommit setlocal foldmethod=syntax colorcolumn& nolist
-  au FileType gitcommit nmap <silent> <buffer> U :call system("git checkout -- <C-r><C-g>")<CR>R
-  au FileType gitcommit setlocal spell | wincmd K
-  au BufReadPost fugitive://* set bufhidden=delete
-  au User fugitive
-        \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
-        \   nnoremap <buffer> .. :edit %:h<CR> |
-        \ endif
-augroup END
-
 augroup ft_markdown
   au!
   au BufNewFile,BufRead *.m*down setlocal filetype=markdown foldlevel=1
@@ -371,10 +333,14 @@ augroup ft_ruby
   au BufNewFile,BufRead .env* set filetype=sh
 augroup END
 
+augroup ft_qf
+  au!
+  au FileType qf setlocal nowrap | wincmd J | nnoremap <buffer> q :q<cr>
+augroup END
+
 augroup vimrc
   au!
   au FileType vim setlocal foldmethod=marker
-  au FileType qf setlocal nowrap | wincmd J | nnoremap <buffer> q :q<cr>
 
   " Automatically opens the quickfix window after :Ggrep.
   au QuickFixCmdPost *grep* cwindow
@@ -423,8 +389,18 @@ augroup vimrc
         \ endif
 augroup END
 
-" }}}1
-" Help in new tabs {{{1
+" }}}
+" Grep {{{
+
+if executable('ag')
+  let &grepprg = 'ag --nogroup --nocolor --column'
+else
+  let &grepprg = 'grep -rn $* *'
+endif
+command -nargs=+ -complete=file -bar Grep silent! grep! <args> | cwindow | redraw!
+
+" }}}
+" Help in new tabs {{{
 
 function! s:helptab()
   if &buftype == 'help'
@@ -438,8 +414,8 @@ augroup vimrc_help
   au BufEnter *.txt call s:helptab()
 augroup END
 
-" }}}1
-" Quickfix niceties {{{1
+" }}}
+" Quickfix niceties {{{
 
 function! QuickFixDo(cmd)
   let bufnam = {}
@@ -454,8 +430,8 @@ function! QuickFixDo(cmd)
 endfunction
 command! -nargs=+ Qfixdo call QuickFixDo(<q-args>)
 
-" }}}1
-" Folding {{{1
+" }}}
+" Folding {{{
 
 function! MyFoldText()
   let line = getline(v:foldstart)
@@ -473,8 +449,8 @@ function! MyFoldText()
 endfunction
 set foldtext=MyFoldText()
 
-" }}}1
-" Automatically create any non-existent directories before writing the buffer {{{1
+" }}}
+" Automatically create any non-existent directories before writing the buffer {{{
 
 function! s:Mkdir()
   let dir = expand('%:p:h')
@@ -485,26 +461,25 @@ function! s:Mkdir()
 endfunction
 autocmd BufWritePre * call s:Mkdir()
 
-" }}}1
-" Plugin configuration {{{1
+" }}}
+" Plugins {{{
 
-" Ruby {{{2
+" Ruby {{{
 
-let g:ruby_fold = 1
-let g:ruby_no_expensive = 1
+let g:ruby_operators = 1
 
-" }}}2
-" HTML5 {{{2
+" }}}
+" HTML5 {{{
 
 let g:html_indent_tags = 'li\|p'
 
-" }}}2
-" Surround {{{2
+" }}}
+" Surround {{{
 
 let g:surround_no_insert_mappings = 1
 
-" }}}2
-" NERDTree {{{2
+" }}}
+" NERDTree {{{
 
 let g:NERDTreeHijackNetrw = 1
 let g:NERDTreeShowHidden = 1
@@ -520,8 +495,11 @@ augroup ft_nerdtree
   au FileType nerdtree setlocal colorcolumn& nowrap tw=0
 augroup END
 
-" }}}2
-" Switch {{{2
+" Open NERDTree file explorer
+nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
+
+" }}}
+" Switch {{{
 
 let g:switch_mapping = "-"
 let g:switch_javascript_definitions = [{
@@ -530,10 +508,7 @@ let g:switch_javascript_definitions = [{
       \ }]
 
 function! s:load_switch_definitions()
-  let varname = "g:switch_".&filetype."_definitions"
-  if exists(varname)
-    exec 'let b:switch_custom_definitions = '.varname
-  endif
+  silent! let b:switch_custom_definitions = g:switch_{&filetype}_definitions
 endfunction
 
 augroup Switch
@@ -541,20 +516,24 @@ augroup Switch
   au BufEnter * call s:load_switch_definitions()
 augroup END
 
-" }}}2
-" Undotree {{{2
+" }}}
+" Undotree {{{
 
 let g:undotree_WindowLayout = 2
 
-" }}}2
-" Fuzzy Finder {{{2
+nnoremap <silent> <leader>u :UndotreeToggle<CR>
+
+" }}}
+" FZF {{{
+
+let $FZF_DEFAULT_OPTS .= ' --inline-info'
 
 let g:fzf_layout = { 'down': '10%' }
 
 function! s:fzf_statusline()
-  highlight fzf1 ctermfg=19 ctermbg=0
-  highlight fzf2 ctermfg=20 ctermbg=0
-  highlight fzf3 ctermfg=20 ctermbg=0
+  highlight fzf1 ctermfg=12 ctermbg=NONE
+  highlight fzf2 ctermfg=8 ctermbg=NONE
+  highlight fzf3 ctermfg=8 ctermbg=NONE
   setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
 endfunction
 
@@ -564,8 +543,22 @@ augroup ft_fzf
   au User FzfStatusLine call s:fzf_statusline()
 augroup END
 
-" }}}2
-" Rails {{{2
+nnoremap <silent> <Leader><Leader> :Files<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>. :Tags<CR>
+vnoremap <leader>a "zy:execute "Ag " . @z<cr>
+nnoremap <leader>a :Ag<Space>
+
+imap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
+imap <c-x><c-j> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" }}}
+" Rails {{{
 
 let g:rails_abbreviations = {
       \ "it": "it { ",
@@ -573,31 +566,57 @@ let g:rails_abbreviations = {
       \ "pry": "binding.pry"
       \ }
 
-" }}}2
-" Neoterm {{{2
+" }}}
+" Fugitive {{{
+
+nnoremap <silent> <leader>gd :Gvdiff -<cr>
+nnoremap <silent> <leader>ge :Gedit<cr>
+nnoremap <silent> <leader>gl :Glog<cr>
+nnoremap <silent> <leader>gw :Gwrite<cr>
+nmap <silent> <leader>gs :Gstatus<cr>gg<c-n>
+
+augroup ft_git
+  au!
+  au FileType git,gitcommit setlocal foldmethod=syntax colorcolumn& nolist
+  au FileType gitcommit nmap <silent> <buffer> U :call system("git checkout -- <C-r><C-g>")<CR>R
+  au FileType gitcommit setlocal spell | wincmd K
+  au BufReadPost fugitive://* set bufhidden=delete
+  au User fugitive
+        \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+        \   nnoremap <buffer> .. :edit %:h<CR> |
+        \ endif
+augroup END
+
+" }}}}
+" Neoterm {{{
 
 let g:neoterm_size = 15
 
-" }}}2
-" QuickRun {{{2
+" Run tests
+vnoremap <silent> <f6> :TREPLSend<cr>
+nnoremap <silent> <f6> :TREPLSendFile<cr>
+nnoremap <silent> <f8> :call neoterm#test#run('all')<cr>
+nnoremap <silent> <f9> :call neoterm#test#run('file')<cr>
+nnoremap <silent> <f10> :call neoterm#test#run('current')<cr>
+nnoremap <silent> <f11> :call neoterm#test#rerun()<cr>
 
-let g:quickrun_config = {
-      \ 'lua/redis': {
-      \   'command': 'redis-cli',
-      \   'exec': '%c --eval %s %a',
-      \   'tempfile': '%{tempname()}.lua'
-      \ }}
+nnoremap <silent> <leader>to :Topen<cr>
+nnoremap <silent> <leader>tc :Tclose<cr>
+nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
+nnoremap <silent> <leader>tk :call neoterm#kill()<cr>
 
-" }}}2
-" Neomake {{{2
+" }}}
+" Neomake {{{
+
+let g:neomake_verbose = 0
 
 augroup Neomake
   au!
   au BufWritePost * Neomake
 augroup END
 
-" }}}2
-" Oblique {{{2
+" }}}
+" Oblique {{{
 
 augroup Oblique
   au!
@@ -606,14 +625,34 @@ augroup Oblique
   au User ObliqueRepeat normal! zz
 augroup END
 
-" }}}2
-" After Text Object {{{2
+" }}}
+" Text Objects {{{
+
+omap ab <Plug>(textobj-multiblock-a)
+omap ib <Plug>(textobj-multiblock-i)
+xmap ab <Plug>(textobj-multiblock-a)
+xmap ib <Plug>(textobj-multiblock-i)
 
 augroup AfterObject
   au!
   au VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
 augroup END
 
-" }}}2
+" }}}
+" EasyAlign {{{
 
-" }}}1
+" Start interactive EasyAlign in visual mode
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign with a Vim movement
+nmap ga <Plug>(EasyAlign)
+
+" }}}
+" Over {{{
+
+nnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\v
+xnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\%V\v
+
+" }}}
+
+" }}}
