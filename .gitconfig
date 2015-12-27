@@ -34,7 +34,7 @@
 	prompt = false
 	tool = fugitive
 [mergetool "fugitive"]
-	cmd = "vim -f -c 'Gdiff' $MERGED"
+	cmd = "nvim -f -c 'Gdiff' $MERGED"
 [alias]
 	a				= add
 	s				= status

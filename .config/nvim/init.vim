@@ -17,24 +17,26 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'AndrewRadev/switch.vim'
 Plug 'benekastah/neomake', { 'on': ['Neomake'] }
 Plug 'chriskempson/base16-vim'
-Plug 'cohama/lexima.vim'
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-after-object'
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 Plug 'junegunn/vim-oblique'
 Plug 'junegunn/vim-pseudocl'
 Plug 'kana/vim-niceblock'
+Plug 'kana/vim-operator-user'
+Plug 'kana/vim-smartinput'
 Plug 'kana/vim-textobj-entire'
+Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-user'
 Plug 'kassio/neoterm'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-Plug 'osyo-manga/vim-over'
-Plug 'osyo-manga/vim-textobj-multiblock'
 Plug 'PeterRincker/vim-argumentative'
+Plug 'rhysd/clever-f.vim'
+Plug 'rhysd/vim-operator-surround'
+Plug 'rhysd/vim-textobj-anyblock'
 Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
@@ -43,13 +45,14 @@ Plug 'thinca/vim-textobj-comment'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-surround'
+Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 
 runtime! macros/matchit.vim
@@ -148,14 +151,14 @@ silent! unmap ]%
 nnoremap Q gqip
 vnoremap Q gq
 
+" @: repeats macro on every line
+xnoremap @ :normal@
+
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
 
 " Move to last change
-nnoremap gI `.
-
-" Clean trailing whitespace
-nnoremap <silent> =w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
+nnoremap gI `.zz
 
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
@@ -176,16 +179,18 @@ nnoremap <C-l> <C-W>l
 nnoremap <leader>s <C-W>s
 nnoremap <leader>v <C-W>v
 
-" Map m-] to be the inverse of c-]
-nnoremap <m-]> <c-t>
+" Resize window
+nnoremap <silent><Down>  5<C-w>-
+nnoremap <silent><Up>    5<C-w>+
+nnoremap <silent><Left>  5<C-w><
+nnoremap <silent><Right> 5<C-w>>
 
 " Fast tab switching
-nnoremap <C-t> :tabnew<cr>
-nnoremap <leader>1 1gt
-nnoremap <leader>2 2gt
-nnoremap <leader>3 3gt
-nnoremap <leader>4 4gt
-nnoremap <leader>5 5gt
+nnoremap gn :<C-u>tabnew<CR>
+nnoremap ge :<C-u>tabedit<Space>
+nnoremap gx :<C-u>tabclose<CR>
+nnoremap <silent><A-h> gT
+nnoremap <silent><A-l> gt
 
 " Sane movement with wrap turned on
 nnoremap j gj
@@ -198,8 +203,14 @@ noremap H ^
 noremap L $
 vnoremap L g_
 
-" Kill window
-nnoremap K :q<cr>
+" Quit
+inoremap <C-Q> <esc>:q<cr>
+nnoremap <C-Q> :q<cr>
+vnoremap <C-Q> <esc>
+
+" Save
+inoremap <C-s> <C-o>:update<cr>
+nnoremap <C-s> :update<cr>
 
 " Select just-pasted text
 nnoremap gV `[v`]
@@ -217,6 +228,16 @@ nnoremap zO zczO
 " Focus the current fold by folding all the others
 nnoremap <leader>z zMzvzz
 
+" Source
+vnoremap <leader>S y:@"<CR>
+nnoremap <leader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
+
+" Ctrl-g: Prints current file name (TODO Not very useful)
+nnoremap <c-g> 2<c-g>
+
+" Ctrl-b: Go (b)ack. Go to previously buffer
+nnoremap <c-b> <c-^>
+
 " Heresy
 inoremap <c-a> <esc>I
 inoremap <c-e> <esc>A
@@ -225,23 +246,30 @@ cnoremap <c-e> <end>
 cnoremap <c-k> <up>
 cnoremap <c-j> <down>
 cnoremap <C-g> <C-c>
+cnoremap <c-@> <c-f>
 
 " Send to the black hole register
 noremap x "_x
 noremap X "_X
 
-" Preserve previous paste
-vnoremap p pgvy
+" Replace currently selected text with default register without yanking it
+vnoremap p "_dP
 
-" Save
-inoremap <C-s> <C-o>:update<cr>
-nnoremap <C-s> :update<cr>
+" Goto older/newer position in change list
+nnoremap <silent> ( g;zvzz
+nnoremap <silent> ) g,zvzz
 
 " Paste clipboard selection
 nnoremap <silent> <leader>p :r!xclip -selection clipbard -o<cr>
 
 " Rebuild Ctags
 nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
+
+" Clean trailing whitespace
+nnoremap <silent> =w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
+
+" Reindent entire file
+nnoremap == mqHmwgg=G`wzt`q
 
 " Easy filetype switching
 nnoremap =f :setfiletype<Space>
@@ -275,6 +303,11 @@ augroup END
 augroup ft_zsh
   au!
   au FileType zsh setlocal foldmethod=marker
+augroup END
+
+augroup ft_nginx
+  au!
+  au FileType nginx setlocal foldmethod=marker foldmarker={,}
 augroup END
 
 augroup ft_javascript
@@ -335,12 +368,20 @@ augroup END
 
 augroup ft_qf
   au!
-  au FileType qf setlocal nowrap | wincmd J | nnoremap <buffer> q :q<cr>
+  au FileType qf setlocal nowrap | wincmd J
+  au FileType qf nnoremap <buffer> <silent> q :cclose<cr>
 augroup END
 
 augroup vimrc
   au!
-  au FileType vim setlocal foldmethod=marker
+  au FileType vim setlocal foldmethod=marker keywordprg=:help
+
+  " File type detection
+  au BufWritePost
+        \ * if &l:filetype ==# '' || exists('b:ftdetect')
+        \ |   unlet! b:ftdetect
+        \ |   filetype detect
+        \ | endif
 
   " Automatically opens the quickfix window after :Ggrep.
   au QuickFixCmdPost *grep* cwindow
@@ -367,27 +408,39 @@ augroup vimrc
   " Don't keep viminfo for files in temp directories or shm
   au BufNewFile,BufReadPre /tmp/* setlocal viminfo=
 
-  " Don't screw up folds when inserting text that might affect them, until
-  " leaving insert mode. Foldmethod is local to the window. Protect against
-  " screwing up folding when switching between windows.
-  au InsertEnter *
-        \ if !exists('w:last_fdm') |
-        \   let w:last_fdm=&foldmethod |
-        \   setlocal foldmethod=manual |
-        \ endif
-
-  au InsertLeave,WinLeave *
-        \ if exists('w:last_fdm') |
-        \   let &l:foldmethod=w:last_fdm |
-        \   unlet w:last_fdm |
-        \ endif
-
   " Restore cursor position
   au BufReadPost *
         \ if line("'\"") > 1 && line("'\"") <= line("$") |
         \   exe "normal! g`\"" |
         \ endif
 augroup END
+
+" }}}
+" Speed up Ruby syntax highlighting {{{
+
+function! s:manual_foldmethod()
+  let w:last_localtime = localtime()
+  if !exists('w:last_fdm')
+    let w:last_fdm=&foldmethod
+    setlocal foldmethod=manual
+  endif
+endfunction
+
+function! s:restore_foldmethod()
+  if exists('w:last_localtime') && localtime() - w:last_localtime == 0
+    return
+  endif
+  if exists('w:last_fdm')
+    let &l:foldmethod=w:last_fdm
+    unlet w:last_fdm
+  endif
+endfunction
+
+" Don't screw up folds when inserting text that might affect them, until
+" leaving insert mode. Foldmethod is local to the window. Protect against
+" screwing up folding when switching between windows.
+au InsertEnter * call s:manual_foldmethod()
+au InsertLeave,WinLeave * call s:restore_foldmethod()
 
 " }}}
 " Grep {{{
@@ -413,22 +466,6 @@ augroup vimrc_help
   au!
   au BufEnter *.txt call s:helptab()
 augroup END
-
-" }}}
-" Quickfix niceties {{{
-
-function! QuickFixDo(cmd)
-  let bufnam = {}
-  for q in getqflist()
-    let bufnam[q.bufnr] = bufname(q.bufnr)
-  endfor
-  for n in keys(bufnam)
-    exe 'buffer' n
-    exe a:cmd
-    update
-  endfor
-endfunction
-command! -nargs=+ Qfixdo call QuickFixDo(<q-args>)
 
 " }}}
 " Folding {{{
@@ -474,11 +511,6 @@ let g:ruby_operators = 1
 let g:html_indent_tags = 'li\|p'
 
 " }}}
-" Surround {{{
-
-let g:surround_no_insert_mappings = 1
-
-" }}}
 " NERDTree {{{
 
 let g:NERDTreeHijackNetrw = 1
@@ -507,6 +539,11 @@ let g:switch_javascript_definitions = [{
       \ '\.\(\k\+\)': '[''\1'']'
       \ }]
 
+let g:switch_ruby_definitions = [{
+      \ 'has_key?': 'key?',
+      \ 'key?': 'has_key?'
+      \ }]
+
 function! s:load_switch_definitions()
   silent! let b:switch_custom_definitions = g:switch_{&filetype}_definitions
 endfunction
@@ -528,7 +565,7 @@ nnoremap <silent> <leader>u :UndotreeToggle<CR>
 
 let $FZF_DEFAULT_OPTS .= ' --inline-info'
 
-let g:fzf_layout = { 'down': '10%' }
+let g:fzf_layout = { 'down': '20%' }
 
 function! s:fzf_statusline()
   highlight fzf1 ctermfg=12 ctermbg=NONE
@@ -628,15 +665,12 @@ augroup END
 " }}}
 " Text Objects {{{
 
-omap ab <Plug>(textobj-multiblock-a)
-omap ib <Plug>(textobj-multiblock-i)
-xmap ab <Plug>(textobj-multiblock-a)
-xmap ib <Plug>(textobj-multiblock-i)
+map <silent>sa <Plug>(operator-surround-append)
+map <silent>sd <Plug>(operator-surround-delete)
+map <silent>sr <Plug>(operator-surround-replace)
 
-augroup AfterObject
-  au!
-  au VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
-augroup END
+nmap <silent>sdd <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
+nmap <silent>srr <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
 
 " }}}
 " EasyAlign {{{
@@ -646,12 +680,6 @@ xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign with a Vim movement
 nmap ga <Plug>(EasyAlign)
-
-" }}}
-" Over {{{
-
-nnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\v
-xnoremap g/ ms:<c-u>OverCommandLine<cr>%s/\%V\v
 
 " }}}
 

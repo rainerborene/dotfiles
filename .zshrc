@@ -1,6 +1,5 @@
 # Essentials {{{
 
-BASE=$HOME/.dotfiles
 DISABLE_AUTO_TITLE="true"
 DISABLE_AUTO_UPDATE="true"
 UPDATE_ZSH_DAYS=13
@@ -21,9 +20,10 @@ export GEM_HOME=$HOME/.gem/ruby/2.2.0/
 export GOPATH=$HOME/go
 export LESS='-R --silent'
 export NVIM_PATH=$HOME/Projects/neovim
-export NVIM_TUI_ENABLE_TRUE_COLOR=1
 export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-export PATH=$BASE/bin:$HOME/.gem/ruby/2.2.0/bin:$NVIM_PATH/build/bin:./bin/:$PATH:$GOPATH/bin
+export NVIM_TUI_ENABLE_TRUE_COLOR=1
+export PATH=$HOME/.dotfiles/bin:$HOME/.gem/ruby/2.2.0/bin:$PATH
+export PATH=$NVIM_PATH/build/bin:./bin/:$GOPATH/bin:$PATH
 export VIMRUNTIME=$NVIM_PATH/runtime/
 
 # }}}
@@ -32,6 +32,12 @@ export VIMRUNTIME=$NVIM_PATH/runtime/
 setopt no_beep
 setopt hist_ignore_dups
 setopt histignorealldups
+
+# }}}
+# Key mappings {{{
+
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
 
 # }}}
 # Aliases {{{
@@ -62,16 +68,61 @@ alias rs='rails server'
 alias fore='foreman start -f Procfile.dev'
 
 # }}}
-# Functions {{{
-
-# }}}
-# Key mappings {{{
-
-bindkey -M emacs '^P' history-substring-search-up
-bindkey -M emacs '^N' history-substring-search-down
-
-# }}}
 # FZF {{{
+
+# Z integration
+unalias z 2> /dev/null
+z() {
+  if [[ -z "$*" ]]; then
+    cd "$(_z -l 2>&1 | fzf-tmux +s --tac | sed 's/^[0-9,.]* *//')"
+  else
+    _z "$@" || z
+  fi
+}
+
+# fd - cd to selected directory
+fd() {
+  DIR=`find ${1:-.} -type d -not -iwholename "*.git*" 2> /dev/null | fzf-tmux` && cd "$DIR"
+}
+
+# fbr - checkout git branch
+fbr() {
+  local branches branch
+  branches=$(git branch --all | grep -v HEAD) &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+# fshow - git commit browser
+fshow() {
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --bind "ctrl-m:execute:
+                echo '{}' | grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | less -R'"
+}
+
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fe() {
+  local file
+  file=$(fzf-tmux --query="$1" --select-1 --exit-0)
+  [ -n "$file" ] && ${EDITOR:-vim} "$file"
+}
+
+# ftags - search ctags
+ftags() {
+  local line
+  [ -e tags ] &&
+  line=$(
+    awk 'BEGIN { FS="\t" } !/^!/ {print toupper($4)"\t"$1"\t"$2"\t"$3}' tags |
+    cut -c1-80 | fzf --nth=1,2
+  ) && $EDITOR $(cut -f3 <<< "$line") -c "set nocst" \
+                                      -c "silent tag $(cut -f2 <<< "$line")"
+}
 
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
