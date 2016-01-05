@@ -3,7 +3,7 @@
 DISABLE_AUTO_TITLE="true"
 DISABLE_AUTO_UPDATE="true"
 UPDATE_ZSH_DAYS=13
-ZSH=$HOME/.antigen/repos/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh.git
+ZSH=/home/rainerborene/.oh-my-zsh
 ZSH_THEME="robbyrussell"
 
 plugins=(git git-extras z history-substring-search)
@@ -23,6 +23,7 @@ export NVIM_PATH=$HOME/Projects/neovim
 export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 export NVIM_TUI_ENABLE_TRUE_COLOR=1
 export PATH=$HOME/.dotfiles/bin:$HOME/.gem/ruby/2.2.0/bin:$PATH
+export PATH=$HOME/.rbenv/bin:$PATH
 export PATH=$NVIM_PATH/build/bin:./bin/:$GOPATH/bin:$PATH
 export VIMRUNTIME=$NVIM_PATH/runtime/
 
@@ -50,8 +51,8 @@ alias ......='cd ../../../../..'
 
 alias g='git'
 alias j='z'
-alias la='ls -la'
-alias ls='exa --group-directories-first'
+# alias la='ls -la'
+# alias ls='exa --group-directories-first'
 alias l='tree --dirsfirst -ChaFL 1'
 alias vim='nvim'
 alias vi='nvim'
@@ -124,6 +125,21 @@ ftags() {
                                       -c "silent tag $(cut -f2 <<< "$line")"
 }
 
+# fh - repeat history
+fh() {
+  eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+}
+
+# fp - password
+fp() {
+  find ~/.password-store/*.gpg -type f \
+    | sed -e "s#$HOME/.password-store/##" -e 's#.gpg$##' \
+    | fzf-tmux \
+    | xargs -r -Iz pass show -c 'z'
+}
+
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+
+[[ -x $(which rbenv 2>/dev/null) ]] && eval "$(rbenv init -)"
 
 # }}}
