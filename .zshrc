@@ -3,7 +3,7 @@
 DISABLE_AUTO_TITLE="true"
 DISABLE_AUTO_UPDATE="true"
 UPDATE_ZSH_DAYS=13
-ZSH=/home/rainerborene/.oh-my-zsh
+ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="robbyrussell"
 
 plugins=(git git-extras z history-substring-search)
@@ -16,14 +16,12 @@ source $ZSH/oh-my-zsh.sh
 export EDITOR=nvim
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g "" 2>/dev/null'
 export FZF_DEFAULT_OPTS='--extended --cycle --no-256 --bind "ctrl-z:toggle"'
-export GEM_HOME=$HOME/.gem/ruby/2.2.0/
 export GOPATH=$HOME/go
 export LESS='-R --silent'
 export NVIM_PATH=$HOME/Projects/neovim
 export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 export NVIM_TUI_ENABLE_TRUE_COLOR=1
-export PATH=$HOME/.dotfiles/bin:$HOME/.gem/ruby/2.2.0/bin:$PATH
-export PATH=$HOME/.rbenv/bin:$PATH
+export PATH=$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH
 export PATH=$NVIM_PATH/build/bin:./bin/:$GOPATH/bin:$PATH
 export VIMRUNTIME=$NVIM_PATH/runtime/
 
@@ -140,6 +138,14 @@ fp() {
 
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
-[[ -x $(which rbenv 2>/dev/null) ]] && eval "$(rbenv init -)"
+# }}}
+# Ruby {{{
+
+if [[ -x $(which rbenv 2>/dev/null) ]]; then
+  eval "$(rbenv init -)"
+else
+  export GEM_HOME=$HOME/.gem/ruby/2.2.0/
+  export PATH=$HOME/.gem/ruby/2.2.0/bin:$PATH
+fi
 
 # }}}
