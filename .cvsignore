@@ -15,7 +15,7 @@
 Gemfile.lock.tags
 Thumbs.db
 custom_plan.rb
-tags
+/tags
 vagrant_ansible_inventory_default*
 zeus.json
 local.properties

@@ -8,13 +8,15 @@ ZSH_THEME="robbyrussell"
 
 plugins=(git git-extras z history-substring-search)
 
+autoload zmv
+
 source $ZSH/oh-my-zsh.sh
 
 # }}}
 # Environment variables {{{
 
 export EDITOR=nvim
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g "" 2>/dev/null'
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_DEFAULT_OPTS='--extended --cycle --no-256 --bind "ctrl-z:toggle"'
 export GOPATH=$HOME/go
 export LESS='-R --silent'
@@ -23,6 +25,7 @@ export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 export NVIM_TUI_ENABLE_TRUE_COLOR=1
 export PATH=$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH
 export PATH=$NVIM_PATH/build/bin:./bin/:$GOPATH/bin:$PATH
+export PATH=/usr/local/heroku/bin:$PATH
 export VIMRUNTIME=$NVIM_PATH/runtime/
 
 # }}}
@@ -49,8 +52,8 @@ alias ......='cd ../../../../..'
 
 alias g='git'
 alias j='z'
-# alias la='ls -la'
-# alias ls='exa --group-directories-first'
+alias la='ls -la'
+alias ls='exa --group-directories-first'
 alias l='tree --dirsfirst -ChaFL 1'
 alias vim='nvim'
 alias vi='nvim'
@@ -72,11 +75,8 @@ alias fore='foreman start -f Procfile.dev'
 # Z integration
 unalias z 2> /dev/null
 z() {
-  if [[ -z "$*" ]]; then
-    cd "$(_z -l 2>&1 | fzf-tmux +s --tac | sed 's/^[0-9,.]* *//')"
-  else
-    _z "$@" || z
-  fi
+  [ $# -gt 0 ] && _z "$*" && return
+  cd "$(_z -l 2>&1 | fzf-tmux +s --tac --query "$*" | sed 's/^[0-9,.]* *//')"
 }
 
 # fd - cd to selected directory
@@ -101,6 +101,16 @@ fshow() {
       --bind "ctrl-m:execute:
                 echo '{}' | grep -o '[a-f0-9]\{7\}' | head -1 |
                 xargs -I % sh -c 'git show --color=always % | less -R'"
+}
+
+# fstash - git stash browser
+fstash() {
+  git --no-pager stash list --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --bind "ctrl-m:execute:
+                echo '{}' | grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git stash show -p --color=always %'"
 }
 
 # fe [FUZZY PATTERN] - Open the selected file with the default editor

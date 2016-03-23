@@ -14,6 +14,7 @@ let g:loaded_zip = 1
 
 call plug#begin('~/.config/nvim/plugged')
 
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'benekastah/neomake', { 'on': ['Neomake'] }
 Plug 'chriskempson/base16-vim'
@@ -24,7 +25,6 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 Plug 'junegunn/vim-oblique'
 Plug 'junegunn/vim-pseudocl'
 Plug 'kana/vim-niceblock'
-Plug 'kana/vim-operator-user'
 Plug 'kana/vim-smartinput'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-fold'
@@ -35,8 +35,6 @@ Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'PeterRincker/vim-argumentative'
 Plug 'rhysd/clever-f.vim'
-Plug 'rhysd/vim-operator-surround'
-Plug 'rhysd/vim-textobj-anyblock'
 Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
@@ -52,6 +50,7 @@ Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 
@@ -168,11 +167,11 @@ nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
 
 " Sort lines
-nnoremap gs vip:!sort<cr>
-vnoremap gs :!sort<cr>
+nmap gs vii:!sort<cr>
+vmap gs :!sort<cr>
 
 " Speed up window switching
-nnoremap <C-h> <C-W>h
+nnoremap <BS> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
@@ -197,6 +196,10 @@ nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
+
+" { and } skip over closed folds instead of openning them
+nnoremap <expr> } foldclosed(search('^$', 'Wn'))  == -1 ? '}' : '}j}'
+nnoremap <expr> { foldclosed(search('^$', 'Wnb')) == -1 ? '{' : '{k{'
 
 " Easier to type, and I never use the default behavior.
 noremap H ^
@@ -232,7 +235,10 @@ nnoremap <leader>z zMzvzz
 vnoremap <leader>S y:@"<CR>
 nnoremap <leader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
 
-" Ctrl-g: Prints current file name (TODO Not very useful)
+" Close quickfix/location window
+nnoremap <leader>c :cclose<bar>lclose<cr>
+
+" Ctrl-g: Prints current file name
 nnoremap <c-g> 2<c-g>
 
 " Ctrl-b: Go (b)ack. Go to previously buffer
@@ -280,7 +286,7 @@ imap <c-@> <c-x><c-o>
 imap <c-j> <c-n>
 imap <c-k> <c-p>
 
-" Terminal controlling
+" Terminal mappings
 tnoremap <Esc> <C-\><C-n>
 tnoremap <c-w>j <c-\><c-n><c-w>j
 tnoremap <c-w>k <c-\><c-n><c-w>k
@@ -333,11 +339,6 @@ augroup ft_awk
   au FileType awk setlocal commentstring=#\ %s
 augroup END
 
-augroup ft_i3
-  au!
-  au BufRead,BufNewFile *i3/config setlocal ft=i3 commentstring=#\ %s
-augroup END
-
 augroup ft_markdown
   au!
   au BufNewFile,BufRead *.m*down setlocal filetype=markdown foldlevel=1
@@ -364,6 +365,11 @@ augroup ft_ruby
   au FileType ruby setlocal foldmethod=syntax
   au FileType ruby setlocal keywordprg=ri\ -T
   au BufNewFile,BufRead .env* set filetype=sh
+augroup END
+
+augroup ft_tmux
+  au!
+  au FileType tmux setlocal foldmethod=marker
 augroup END
 
 augroup ft_qf
@@ -413,6 +419,16 @@ augroup vimrc
         \ if line("'\"") > 1 && line("'\"") <= line("$") |
         \   exe "normal! g`\"" |
         \ endif
+
+
+  " Automatic rename of tmux window
+  if exists('$TMUX') && !exists('$NORENAME')
+    au VimLeave * call system('tmux set-window automatic-rename on')
+    au BufEnter *
+          \ if empty(&buftype) |
+          \   call system('tmux rename-window '.expand('%:t:S')) |
+          \ endif
+  endif
 augroup END
 
 " }}}
@@ -539,10 +555,13 @@ let g:switch_javascript_definitions = [{
       \ '\.\(\k\+\)': '[''\1'']'
       \ }]
 
-let g:switch_ruby_definitions = [{
-      \ 'has_key?': 'key?',
-      \ 'key?': 'has_key?'
-      \ }]
+let g:switch_scss_definitions = [
+      \ ['right', 'left']
+      \ ]
+
+let g:switch_ruby_definitions = [
+      \ ['has_key?', 'key?']
+      \ ]
 
 function! s:load_switch_definitions()
   silent! let b:switch_custom_definitions = g:switch_{&filetype}_definitions
@@ -586,6 +605,7 @@ nnoremap <silent> <Leader>. :Tags<CR>
 vnoremap <leader>a "zy:execute "Ag " . @z<cr>
 nnoremap <leader>a :Ag<Space>
 
+inoremap <expr> <c-x><c-t> fzf#complete('tmuxwords.rb --all-but-current --scroll 500 --min 5')
 imap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
 imap <c-x><c-j> <plug>(fzf-complete-path)
 imap <c-x><c-l> <plug>(fzf-complete-line)
@@ -661,16 +681,6 @@ augroup Oblique
   au User ObliqueStar   normal! zz
   au User ObliqueRepeat normal! zz
 augroup END
-
-" }}}
-" Text Objects {{{
-
-map <silent>sa <Plug>(operator-surround-append)
-map <silent>sd <Plug>(operator-surround-delete)
-map <silent>sr <Plug>(operator-surround-replace)
-
-nmap <silent>sdd <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
-nmap <silent>srr <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
 
 " }}}
 " EasyAlign {{{
