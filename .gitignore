@@ -1,5 +1,8 @@
+.config/htop
+.config/configstore
 .config/nvim/tmp
 .config/nvim/spell/*.spl
 .config/nvim/plugged/*
 .config/nvim/autoload/plug.vim
 !.config/nvim/plugged/.keep
+.config/nvim/.init.vim-rplugin~

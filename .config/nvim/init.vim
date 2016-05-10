@@ -12,10 +12,17 @@ let g:loaded_tar = 1
 let g:loaded_zipPlugin = 1
 let g:loaded_zip = 1
 
+function! DoRemote(arg)
+  UpdateRemotePlugins
+endfunction
+
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
+Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+Plug 'Shougo/neosnippet-snippets'
+Plug 'Shougo/neosnippet.vim'
 Plug 'benekastah/neomake', { 'on': ['Neomake'] }
 Plug 'chriskempson/base16-vim'
 Plug 'fatih/vim-go', { 'for': 'go' }
@@ -30,10 +37,8 @@ Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-user'
-Plug 'kassio/neoterm'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-Plug 'PeterRincker/vim-argumentative'
 Plug 'rhysd/clever-f.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
@@ -61,6 +66,8 @@ call plug#end()
 " Basic options {{{
 
 set colorcolumn=+1
+set conceallevel=2
+set concealcursor=niv
 set completeopt=longest,menuone
 set confirm
 set expandtab
@@ -120,6 +127,7 @@ let g:terminal_color_13 = '#9b859d'
 let g:terminal_color_14 = '#afc4db'
 let g:terminal_color_15 = '#ffffff'
 
+let base16colorspace=256
 set background=dark
 colorscheme base16-twilight
 
@@ -265,9 +273,6 @@ vnoremap p "_dP
 nnoremap <silent> ( g;zvzz
 nnoremap <silent> ) g,zvzz
 
-" Paste clipboard selection
-nnoremap <silent> <leader>p :r!xclip -selection clipbard -o<cr>
-
 " Rebuild Ctags
 nnoremap <silent> g<cr> :!ctags -R . 2>/dev/null &<CR><CR>:redraw!<CR>
 
@@ -281,8 +286,6 @@ nnoremap == mqHmwgg=G`wzt`q
 nnoremap =f :setfiletype<Space>
 
 " Insert Mode Completion
-imap <c-]> <c-x><c-]>
-imap <c-@> <c-x><c-o>
 imap <c-j> <c-n>
 imap <c-k> <c-p>
 
@@ -420,7 +423,6 @@ augroup vimrc
         \   exe "normal! g`\"" |
         \ endif
 
-
   " Automatic rename of tmux window
   if exists('$TMUX') && !exists('$NORENAME')
     au VimLeave * call system('tmux set-window automatic-rename on')
@@ -530,13 +532,14 @@ let g:html_indent_tags = 'li\|p'
 " NERDTree {{{
 
 let g:NERDTreeHijackNetrw = 1
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeMinimalUI = 1
+let g:NERDTreeIgnore = ['\.DS_Store$']
 let g:NERDTreeMapActivateNode = 'l'
 let g:NERDTreeMapCloseDir = 'h'
+let g:NERDTreeMapJumpFirstChild = 'gK'
 let g:NERDTreeMapJumpNextSibling = 'gj'
 let g:NERDTreeMapJumpPrevSibling = 'gk'
-let g:NERDTreeMapJumpFirstChild = 'gK'
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeShowHidden = 1
 
 augroup ft_nerdtree
   au!
@@ -605,15 +608,6 @@ nnoremap <silent> <Leader>. :Tags<CR>
 vnoremap <leader>a "zy:execute "Ag " . @z<cr>
 nnoremap <leader>a :Ag<Space>
 
-inoremap <expr> <c-x><c-t> fzf#complete('tmuxwords.rb --all-but-current --scroll 500 --min 5')
-imap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
-imap <c-x><c-j> <plug>(fzf-complete-path)
-imap <c-x><c-l> <plug>(fzf-complete-line)
-
-nmap <leader><tab> <plug>(fzf-maps-n)
-xmap <leader><tab> <plug>(fzf-maps-x)
-omap <leader><tab> <plug>(fzf-maps-o)
-
 " }}}
 " Rails {{{
 
@@ -645,24 +639,6 @@ augroup ft_git
 augroup END
 
 " }}}}
-" Neoterm {{{
-
-let g:neoterm_size = 15
-
-" Run tests
-vnoremap <silent> <f6> :TREPLSend<cr>
-nnoremap <silent> <f6> :TREPLSendFile<cr>
-nnoremap <silent> <f8> :call neoterm#test#run('all')<cr>
-nnoremap <silent> <f9> :call neoterm#test#run('file')<cr>
-nnoremap <silent> <f10> :call neoterm#test#run('current')<cr>
-nnoremap <silent> <f11> :call neoterm#test#rerun()<cr>
-
-nnoremap <silent> <leader>to :Topen<cr>
-nnoremap <silent> <leader>tc :Tclose<cr>
-nnoremap <silent> <leader>tl :call neoterm#clear()<cr>
-nnoremap <silent> <leader>tk :call neoterm#kill()<cr>
-
-" }}}
 " Neomake {{{
 
 let g:neomake_verbose = 0
@@ -690,6 +666,18 @@ xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign with a Vim movement
 nmap ga <Plug>(EasyAlign)
+
+" }}}
+" Deoplete {{{
+
+let g:deoplete#enable_at_startup = 1
+
+" }}}
+" Neosnippet {{{
+
+imap <C-@> <Plug>(neosnippet_expand_or_jump)
+smap <C-@> <Plug>(neosnippet_expand_or_jump)
+xmap <C-@> <Plug>(neosnippet_expand_target)
 
 " }}}
 

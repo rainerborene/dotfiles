@@ -3,7 +3,6 @@
 *.swp
 *.test
 .DS_Store
-.bundle
 .netrwhist
 .projections.json
 .rails_generators~

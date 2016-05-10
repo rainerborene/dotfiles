@@ -1,4 +1,10 @@
 ---
+AllCops:
+  TargetRubyVersion: 2.3
+
+FrozenStringLiteralComment:
+  Enabled: false
+
 Documentation:
   Enabled: false
 

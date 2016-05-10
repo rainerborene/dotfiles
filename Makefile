@@ -1,19 +1,20 @@
 GITHUB=https://raw.githubusercontent.com
 CURL=@curl --create-dirs -fLo
 
-bin/tmuxwords.rb:
-	$(CURL) $@ $(GITHUB)/junegunn/dotfiles/master/bin/tmuxwords.rb
+clean:
+	@rm -v .config/nvim/autoload/plug.vim
+	@rm -v .config/nvim/spell/pt.utf-8.spl
+	@rm -v .config/nvim/spell/en.utf-8.spl
 
 .config/nvim/autoload/plug.vim:
 	$(CURL) $@ $(GITHUB)/junegunn/vim-plug/master/plug.vim
 
-clean:
-	@rm -v .config/nvim/autoload/plug.vim
-	@rm -v bin/tmuxwords.rb
+.config/nvim/spell/pt.utf-8.spl:
+	$(CURL) $@ http://ftp.vim.org/pub/vim/runtime/spell/pt.utf-8.spl
 
-zsh:
-	@sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+.config/nvim/spell/en.utf-8.spl:
+	$(CURL) $@ http://ftp.vim.org/pub/vim/runtime/spell/en.utf-8.spl
 
-dependencies: .config/nvim/autoload/plug.vim bin/tmuxwords.rb
+dependencies: .config/nvim/autoload/plug.vim .config/nvim/spell/en.utf-8.spl .config/nvim/spell/pt.utf-8.spl
 
-.PHONY: dependencies clean zsh
+.PHONY: dependencies clean

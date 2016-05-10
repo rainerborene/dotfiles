@@ -12,6 +12,8 @@ autoload zmv
 
 source $ZSH/oh-my-zsh.sh
 
+eval $HOME/.dotfiles/bin/base16-twilight.dark.sh
+
 # }}}
 # Environment variables {{{
 
@@ -20,13 +22,9 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_DEFAULT_OPTS='--extended --cycle --no-256 --bind "ctrl-z:toggle"'
 export GOPATH=$HOME/go
 export LESS='-R --silent'
-export NVIM_PATH=$HOME/Projects/neovim
 export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-export NVIM_TUI_ENABLE_TRUE_COLOR=1
-export PATH=$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH
-export PATH=$NVIM_PATH/build/bin:./bin/:$GOPATH/bin:$PATH
-export PATH=/usr/local/heroku/bin:$PATH
-export VIMRUNTIME=$NVIM_PATH/runtime/
+export PATH=$HOME/.cargo/bin:$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH
+export PATH=./bin/:$GOPATH/bin:$PATH
 
 # }}}
 # Options {{{
@@ -149,13 +147,10 @@ fp() {
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
 # }}}
-# Ruby {{{
+# Rbenv {{{
 
 if [[ -x $(which rbenv 2>/dev/null) ]]; then
   eval "$(rbenv init -)"
-else
-  export GEM_HOME=$HOME/.gem/ruby/2.2.0/
-  export PATH=$HOME/.gem/ruby/2.2.0/bin:$PATH
 fi
 
 # }}}
