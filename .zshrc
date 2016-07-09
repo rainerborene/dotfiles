@@ -57,15 +57,15 @@ alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
 
-alias o='command xdg-open $ARGV >/dev/null 2>&1'
-alias oo='xdg-open (pwd) >/dev/null 2>&1'
-alias pbc='xclip -selection clipboard'
-alias pbp='xclip -selection clipboard -o'
-
 alias be='bundle exec'
 alias rc='rails console'
 alias rs='rails server'
 alias fore='foreman start -f Procfile.dev'
+
+alias o='command xdg-open $ARGV >/dev/null 2>&1'
+alias oo='xdg-open (pwd) >/dev/null 2>&1'
+alias pbc='xclip -selection clipboard'
+alias pbp='xclip -selection clipboard -o'
 
 # }}}
 # FZF {{{
@@ -96,28 +96,11 @@ fshow() {
   git log --graph --color=always \
       --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-      --bind "ctrl-m:execute:
-                echo '{}' | grep -o '[a-f0-9]\{7\}' | head -1 |
-                xargs -I % sh -c 'git show --color=always % | less -R'"
-}
-
-# fstash - git stash browser
-fstash() {
-  git --no-pager stash list --color=always \
-      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" |
-  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-      --bind "ctrl-m:execute:
-                echo '{}' | grep -o '[a-f0-9]\{7\}' | head -1 |
-                xargs -I % sh -c 'git stash show -p --color=always %'"
-}
-
-# fe [FUZZY PATTERN] - Open the selected file with the default editor
-#   - Bypass fuzzy finder if there's only one match (--select-1)
-#   - Exit if there's no match (--exit-0)
-fe() {
-  local file
-  file=$(fzf-tmux --query="$1" --select-1 --exit-0)
-  [ -n "$file" ] && ${EDITOR:-vim} "$file"
+      --header "Press CTRL-S to toggle sort" \
+      --preview "echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
+                 xargs -I % sh -c 'git show --color=always % | head -$LINES '" \
+      --bind "enter:execute:echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
+              xargs -I % sh -c 'nvim fugitive://\$(git rev-parse --show-toplevel)/.git//% < /dev/tty'"
 }
 
 # ftags - search ctags
@@ -131,9 +114,13 @@ ftags() {
                                       -c "silent tag $(cut -f2 <<< "$line")"
 }
 
-# fh - repeat history
-fh() {
-  eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fe() {
+  local file
+  file=$(fzf-tmux --query="$1" --select-1 --exit-0)
+  [ -n "$file" ] && ${EDITOR:-vim} "$file"
 }
 
 # fp - password
@@ -141,7 +128,7 @@ fp() {
   find ~/.password-store/*.gpg -type f \
     | sed -e "s#$HOME/.password-store/##" -e 's#.gpg$##' \
     | fzf-tmux \
-    | xargs -r -Iz pass show -c 'z'
+    | xargs -I % pass show -c '%'
 }
 
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh

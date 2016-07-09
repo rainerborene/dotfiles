@@ -6,3 +6,5 @@
 .config/nvim/autoload/plug.vim
 !.config/nvim/plugged/.keep
 .config/nvim/.init.vim-rplugin~
+.bundle/cache
+bin/ngrok

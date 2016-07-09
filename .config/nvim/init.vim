@@ -28,6 +28,8 @@ Plug 'chriskempson/base16-vim'
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 Plug 'junegunn/vim-oblique'
 Plug 'junegunn/vim-pseudocl'
@@ -40,6 +42,7 @@ Plug 'kana/vim-textobj-user'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'rhysd/clever-f.vim'
+Plug 'rhysd/vim-textobj-anyblock'
 Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
@@ -375,6 +378,12 @@ augroup ft_tmux
   au FileType tmux setlocal foldmethod=marker
 augroup END
 
+augroup ft_fuse
+  au!
+  au BufNewFile,BufRead *.ux setlocal filetype=xml
+  au BufNewFile,BufRead *.unoproj setlocal filetype=json
+augroup END
+
 augroup ft_qf
   au!
   au FileType qf setlocal nowrap | wincmd J
@@ -459,16 +468,6 @@ endfunction
 " screwing up folding when switching between windows.
 au InsertEnter * call s:manual_foldmethod()
 au InsertLeave,WinLeave * call s:restore_foldmethod()
-
-" }}}
-" Grep {{{
-
-if executable('ag')
-  let &grepprg = 'ag --nogroup --nocolor --column'
-else
-  let &grepprg = 'grep -rn $* *'
-endif
-command -nargs=+ -complete=file -bar Grep silent! grep! <args> | cwindow | redraw!
 
 " }}}
 " Help in new tabs {{{
@@ -600,6 +599,8 @@ augroup ft_fzf
   au!
   au FileType fzf nnoremap <silent> <buffer> <c-g> :q<cr>
   au User FzfStatusLine call s:fzf_statusline()
+  au VimEnter * command! -nargs=+ -complete=file Ag
+        \ call fzf#vim#ag_raw('--hidden ' . <q-args>)
 augroup END
 
 nnoremap <silent> <Leader><Leader> :Files<CR>
@@ -675,9 +676,20 @@ let g:deoplete#enable_at_startup = 1
 " }}}
 " Neosnippet {{{
 
+let g:neosnippet#snippets_directory = '~/.config/nvim/snippets'
+
 imap <C-@> <Plug>(neosnippet_expand_or_jump)
 smap <C-@> <Plug>(neosnippet_expand_or_jump)
 xmap <C-@> <Plug>(neosnippet_expand_target)
+
+" }}}
+" Goyo {{{
+
+augroup Goyo
+  au!
+  au User GoyoEnter Limelight
+  au User GoyoLeave Limelight!
+augroup END
 
 " }}}
 
