@@ -1,5 +1,5 @@
 GITHUB=https://raw.githubusercontent.com
-CURL=@curl --create-dirs -fLo
+CURL=@curl --create-dirs --progress-bar -fLo
 
 clean:
 	@rm -v .config/nvim/autoload/plug.vim
@@ -17,4 +17,4 @@ clean:
 
 dependencies: .config/nvim/autoload/plug.vim .config/nvim/spell/en.utf-8.spl .config/nvim/spell/pt.utf-8.spl
 
-.PHONY: dependencies clean
+.PHONY: clean dependencies

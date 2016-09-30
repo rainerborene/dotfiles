@@ -69,8 +69,6 @@ call plug#end()
 " Basic options {{{
 
 set colorcolumn=+1
-set conceallevel=2
-set concealcursor=niv
 set completeopt=longest,menuone
 set confirm
 set expandtab
@@ -441,33 +439,6 @@ augroup vimrc
           \ endif
   endif
 augroup END
-
-" }}}
-" Speed up Ruby syntax highlighting {{{
-
-function! s:manual_foldmethod()
-  let w:last_localtime = localtime()
-  if !exists('w:last_fdm')
-    let w:last_fdm=&foldmethod
-    setlocal foldmethod=manual
-  endif
-endfunction
-
-function! s:restore_foldmethod()
-  if exists('w:last_localtime') && localtime() - w:last_localtime == 0
-    return
-  endif
-  if exists('w:last_fdm')
-    let &l:foldmethod=w:last_fdm
-    unlet w:last_fdm
-  endif
-endfunction
-
-" Don't screw up folds when inserting text that might affect them, until
-" leaving insert mode. Foldmethod is local to the window. Protect against
-" screwing up folding when switching between windows.
-au InsertEnter * call s:manual_foldmethod()
-au InsertLeave,WinLeave * call s:restore_foldmethod()
 
 " }}}
 " Help in new tabs {{{
