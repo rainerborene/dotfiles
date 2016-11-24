@@ -31,8 +31,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
-Plug 'junegunn/vim-oblique'
-Plug 'junegunn/vim-pseudocl'
+Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/vim-slash'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartinput'
 Plug 'kana/vim-textobj-entire'
@@ -45,22 +45,24 @@ Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-anyblock'
 Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
+Plug 'sjl/clam.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'thinca/vim-quickrun'
 Plug 'thinca/vim-textobj-comment'
+Plug 'thinca/vim-textobj-function-javascript'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
+Plug 'wellle/tmux-complete.vim'
 
 runtime! macros/matchit.vim
 call plug#end()
@@ -102,6 +104,7 @@ set virtualedit+=block
 set notimeout
 set ttimeout
 set ttimeoutlen=0
+set synmaxcol=120
 
 " }}}
 " Statusline {{{
@@ -134,6 +137,7 @@ colorscheme base16-twilight
 
 hi VertSplit ctermbg=NONE guibg=NONE
 hi ExtraWhitespace ctermbg=red guibg=red
+hi Number ctermfg=14
 
 " }}}
 " Wilmenu completion {{{
@@ -155,9 +159,8 @@ map <C-o> <nop>
 silent! unmap [%
 silent! unmap ]%
 
-" Formatting, TextMate-style
-nnoremap Q gqip
-vnoremap Q gq
+" qq to record, Q to replay (recursive map due to peekaboo)
+nmap Q @q
 
 " @: repeats macro on every line
 xnoremap @ :normal@
@@ -322,8 +325,11 @@ augroup END
 
 augroup ft_javascript
   au!
-  au BufNewFile,BufRead .jshintrc,*.es6 set filetype=javascript
+  au BufNewFile,BufRead *.es6 set filetype=javascript
+  au BufNewFile,BufRead .jshintrc,.babelrc,.eslintrc set filetype=json
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
+  au FileType json setlocal formatprg=jq\ .
+  au FileType json nnoremap <buffer> == gggqG
 augroup END
 
 augroup ft_html
@@ -574,7 +580,17 @@ augroup ft_fzf
         \ call fzf#vim#ag_raw('--hidden ' . <q-args>)
 augroup END
 
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
 nnoremap <silent> <Leader><Leader> :Files<CR>
+nnoremap <silent> <Leader>h :Helptags<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
 nnoremap <silent> <Leader>. :Tags<CR>
 vnoremap <leader>a "zy:execute "Ag " . @z<cr>
@@ -600,9 +616,10 @@ nmap <silent> <leader>gs :Gstatus<cr>gg<c-n>
 
 augroup ft_git
   au!
-  au FileType git,gitcommit setlocal foldmethod=syntax colorcolumn& nolist
-  au FileType gitcommit nmap <silent> <buffer> U :call system("git checkout -- <C-r><C-g>")<CR>R
+  au FileType gitcommit,git setlocal foldmethod=syntax colorcolumn& nolist
   au FileType gitcommit setlocal spell | wincmd K
+  au FileType gitcommit nnoremap <silent> <buffer> U :call system("git checkout -- <C-r><C-g>")<CR>R
+  au FileType gitcommit nnoremap <silent> <buffer> cA :<C-U>Gcommit --amend --date="$(date)"<CR>
   au BufReadPost fugitive://* set bufhidden=delete
   au User fugitive
         \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
@@ -615,19 +632,17 @@ augroup END
 
 let g:neomake_verbose = 0
 
+function! Lint()
+  if &filetype =~ 'javascript'
+    exe 'Neomake ' len(glob('.eslint*')) ? 'eslint' : 'xo'
+  else
+    Neomake
+  end
+endfunction
+
 augroup Neomake
   au!
-  au BufWritePost * Neomake
-augroup END
-
-" }}}
-" Oblique {{{
-
-augroup Oblique
-  au!
-  au User Oblique       normal! zz
-  au User ObliqueStar   normal! zz
-  au User ObliqueRepeat normal! zz
+  au BufWritePost * call Lint()
 augroup END
 
 " }}}
@@ -643,6 +658,16 @@ nmap ga <Plug>(EasyAlign)
 " Deoplete {{{
 
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#ignore_sources = {}
+let g:deoplete#ignore_sources.ruby = ['omni']
+
+function g:Multiple_cursors_before()
+  let g:deoplete#disable_auto_complete = 1
+endfunction
+
+function g:Multiple_cursors_after()
+  let g:deoplete#disable_auto_complete = 0
+endfunction
 
 " }}}
 " Neosnippet {{{
@@ -661,6 +686,50 @@ augroup Goyo
   au User GoyoEnter Limelight
   au User GoyoLeave Limelight!
 augroup END
+
+" }}}
+" Emmet {{{
+
+let g:user_emmet_expandabbr_key = '<C-_>'
+" let g:user_emmet_prev_key = '<C-[>'
+" let g:user_emmet_next_key = '<C-]>'
+let g:user_emmet_settings = {
+      \  'javascript' : {
+      \      'extends' : 'jsx',
+      \  },
+      \}
+
+" }}}
+" Slash {{{
+
+" zz after search
+noremap <plug>(slash-after) zz
+
+" }}}
+" Tmux {{{
+
+function! s:tmux_load_buffer()
+  let [lnum1, col1] = getpos("'<")[1:2]
+  let [lnum2, col2] = getpos("'>")[1:2]
+  let lines = getline(lnum1, lnum2)
+  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
+  let lines[0] = lines[0][col1 - 1:]
+  let tempfile = tempname()
+  call writefile(lines, tempfile, 'a')
+  call system('tmux load-buffer '.tempfile)
+  call delete(tempfile)
+endfunction
+vnoremap <silent> <leader>y :call <sid>tmux_load_buffer()<cr>
+nnoremap <silent> <leader>y :Tyank<cr>
+nnoremap <silent> <leader>p :Tput<cr>
+
+" }}}
+" Clam {{{
+
+nnoremap ! :Clam<space>
+vnoremap ! :ClamVisual<space>
+let g:clam_autoreturn = 1
+let g:clam_debug = 1
 
 " }}}
 

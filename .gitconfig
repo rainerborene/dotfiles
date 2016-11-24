@@ -33,8 +33,11 @@
 	summary = true
 	prompt = false
 	tool = fugitive
+[mergetool]
+	keepBackup = false
+	keepTemporaries = false
 [mergetool "fugitive"]
-	cmd = "nvim -f -c 'Gdiff' $MERGED"
+	cmd = "nvim -f -c 'Gvdiff' $MERGED"
 [alias]
 	a				= add
 	s				= status

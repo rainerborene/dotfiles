@@ -20,11 +20,12 @@ eval $HOME/.dotfiles/bin/base16-twilight.dark.sh
 export EDITOR=nvim
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_DEFAULT_OPTS='--extended --cycle --no-256 --bind "ctrl-z:toggle"'
+export FZF_CTRL_R_OPTS='--bind "ctrl-z:execute:histrm {}"'
 export GOPATH=$HOME/go
 export LESS='-R --silent'
 export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 export PATH=$HOME/.cargo/bin:$HOME/.dotfiles/bin:$HOME/.rbenv/bin:$PATH
-export PATH=./bin/:$GOPATH/bin:$PATH
+export PATH=./bin/:./node_modules/.bin/:$GOPATH/bin:$PATH
 
 # }}}
 # Options {{{
@@ -98,7 +99,7 @@ fshow() {
   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
       --header "Press CTRL-S to toggle sort" \
       --preview "echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
-                 xargs -I % sh -c 'git show --color=always % | head -$LINES '" \
+                 xargs -I % sh -c 'git show --color=always % | head -200 '" \
       --bind "enter:execute:echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
               xargs -I % sh -c 'nvim fugitive://\$(git rev-parse --show-toplevel)/.git//% < /dev/tty'"
 }
@@ -109,7 +110,7 @@ ftags() {
   [ -e tags ] &&
   line=$(
     awk 'BEGIN { FS="\t" } !/^!/ {print toupper($4)"\t"$1"\t"$2"\t"$3}' tags |
-    cut -c1-80 | fzf --nth=1,2
+    cut -c1-$COLUMNS | fzf --nth=2 --tiebreak=begin
   ) && $EDITOR $(cut -f3 <<< "$line") -c "set nocst" \
                                       -c "silent tag $(cut -f2 <<< "$line")"
 }
