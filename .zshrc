@@ -4,7 +4,7 @@ DISABLE_AUTO_TITLE="true"
 DISABLE_AUTO_UPDATE="true"
 UPDATE_ZSH_DAYS=13
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="robbyrussell"
+ZSH_THEME="lambda"
 
 plugins=(git git-extras z history-substring-search)
 
@@ -62,11 +62,6 @@ alias be='bundle exec'
 alias rc='rails console'
 alias rs='rails server'
 alias fore='foreman start -f Procfile.dev'
-
-alias o='command xdg-open $ARGV >/dev/null 2>&1'
-alias oo='xdg-open (pwd) >/dev/null 2>&1'
-alias pbc='xclip -selection clipboard'
-alias pbp='xclip -selection clipboard -o'
 
 # }}}
 # FZF {{{

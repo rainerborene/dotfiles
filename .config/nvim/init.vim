@@ -20,12 +20,11 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
-Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
-Plug 'Shougo/neosnippet-snippets'
-Plug 'Shougo/neosnippet.vim'
-Plug 'benekastah/neomake', { 'on': ['Neomake'] }
+Plug 'benekastah/neomake'
 Plug 'chriskempson/base16-vim'
 Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'felixjung/vim-base16-lightline'
+Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
@@ -45,6 +44,9 @@ Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-anyblock'
 Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
+Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+Plug 'Shougo/neosnippet-snippets'
+Plug 'Shougo/neosnippet.vim'
 Plug 'sjl/clam.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'thinca/vim-quickrun'
@@ -70,7 +72,6 @@ call plug#end()
 " }}}
 " Basic options {{{
 
-set colorcolumn=+1
 set completeopt=longest,menuone
 set confirm
 set expandtab
@@ -105,11 +106,6 @@ set notimeout
 set ttimeout
 set ttimeoutlen=0
 set synmaxcol=120
-
-" }}}
-" Statusline {{{
-
-set statusline=%<[%n]\ %F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %=%-14.(%l,%c%V%)\ %P
 
 " }}}
 " Color scheme {{{
@@ -183,7 +179,7 @@ nmap gs vii:!sort<cr>
 vmap gs :!sort<cr>
 
 " Speed up window switching
-nnoremap <BS> <C-W>h
+nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
@@ -632,8 +628,9 @@ augroup END
 
 let g:neomake_verbose = 0
 
-function! Lint()
-  if &filetype =~ 'javascript'
+function! s:lint()
+  let has_linters = executable('eslint') || executable('xo')
+  if &filetype =~ 'javascript' && has_linters
     exe 'Neomake ' len(glob('.eslint*')) ? 'eslint' : 'xo'
   else
     Neomake
@@ -642,7 +639,7 @@ endfunction
 
 augroup Neomake
   au!
-  au BufWritePost * call Lint()
+  au BufWritePost * call <sid>lint()
 augroup END
 
 " }}}
@@ -694,10 +691,9 @@ let g:user_emmet_expandabbr_key = '<C-_>'
 " let g:user_emmet_prev_key = '<C-[>'
 " let g:user_emmet_next_key = '<C-]>'
 let g:user_emmet_settings = {
-      \  'javascript' : {
-      \      'extends' : 'jsx',
-      \  },
-      \}
+      \ 'javascript' : {
+      \   'extends' : 'jsx'
+      \ }}
 
 " }}}
 " Slash {{{
@@ -730,6 +726,20 @@ nnoremap ! :Clam<space>
 vnoremap ! :ClamVisual<space>
 let g:clam_autoreturn = 1
 let g:clam_debug = 1
+
+" }}}
+" Lightline {{{
+
+let g:lightline = {
+      \ 'colorscheme': 'base16_twilight',
+      \ 'active': {
+      \   'left': [['mode', 'paste'], ['fugitive', 'filename', 'modified']]
+      \ },
+      \ 'component': {
+      \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
+      \ },
+      \ 'subseparator': { 'left': '', 'right': '' }
+      \ }
 
 " }}}
 

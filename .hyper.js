@@ -1,28 +1,31 @@
 module.exports = {
   config: {
     // default font size in pixels for all tabs
-    fontSize: 12,
+    fontSize: 11,
 
     // font family with optional fallbacks
     fontFamily: 'Menlo, "DejaVu Sans Mono", "Lucida Console", monospace',
 
     // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or cmyk)
-    cursorColor: 'rgba(248,28,229,0.8)',
+    cursorColor: '#7587a6',
 
     // `BEAM` for |, `UNDERLINE` for _, `BLOCK` for █
     cursorShape: 'BLOCK',
 
     // color of the text
-    foregroundColor: '#fff',
+    foregroundColor: '#a7a7a7',
 
     // terminal background color
-    backgroundColor: '#000',
+    backgroundColor: '#1e1e1e',
 
     // border color (window, tabs)
     borderColor: '#333',
 
     // custom css to embed in the main window
-    css: '',
+    css: `
+      .header_header { display: none }
+      .terms_terms { margin-top: 5px }
+    `,
 
     // custom css to embed in the terminal window
     termCSS: '',
@@ -44,21 +47,21 @@ module.exports = {
     // including the 6 x 6 color cubes and the grayscale map, just provide
     // an array here instead of a color map object
     colors: {
-      black: '#000000',
-      red: '#ff0000',
-      green: '#33ff00',
-      yellow: '#ffff00',
-      blue: '#0066ff',
-      magenta: '#cc00ff',
-      cyan: '#00ffff',
-      white: '#d0d0d0',
-      lightBlack: '#808080',
-      lightRed: '#ff0000',
-      lightGreen: '#33ff00',
-      lightYellow: '#ffff00',
-      lightBlue: '#0066ff',
-      lightMagenta: '#cc00ff',
-      lightCyan: '#00ffff',
+      black: '#1e1e1e',
+      red: '#cf6a4d',
+      green: '#8f9d6a',
+      yellow: '#f9ee98',
+      blue: '#7587a6',
+      magenta: '#9b859d',
+      cyan: '#afc4db',
+      white: '#a7a7a7',
+      lightBlack: '#5f5a60',
+      lightRed: '#cda869',
+      lightGreen: '#323537',
+      lightYellow: '#464b50',
+      lightBlue: '#838184',
+      lightMagenta: '#c3c3c3',
+      lightCyan: '#9b703f',
       lightWhite: '#ffffff'
     },
 
@@ -74,7 +77,7 @@ module.exports = {
     env: {},
 
     // set to false for no bell
-    bell: 'SOUND',
+    bell: false,
 
     // if true, selected text will automatically be copied to the clipboard
     copyOnSelect: false
@@ -91,7 +94,7 @@ module.exports = {
   //   `hyperpower`
   //   `@company/project`
   //   `project#1.0.1`
-  plugins: ['hyper-tomorrow-night'],
+  plugins: [],
 
   // in development, you can create a directory under
   // `~/.hyper_plugins/local/` and include it here
