@@ -4,7 +4,7 @@ module.exports = {
     fontSize: 11,
 
     // font family with optional fallbacks
-    fontFamily: 'Menlo, "DejaVu Sans Mono", "Lucida Console", monospace',
+    fontFamily: 'Menlo, "Literation Mono Powerline", monospace',
 
     // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or cmyk)
     cursorColor: '#7587a6',
@@ -23,8 +23,8 @@ module.exports = {
 
     // custom css to embed in the main window
     css: `
-      .header_header { display: none }
-      .terms_terms { margin-top: 5px }
+      .terms_terms { border-top: 1px solid #333 }
+      .header_header * { font: bold 10px 'DejaVu Sans Mono'; }
     `,
 
     // custom css to embed in the terminal window
@@ -41,7 +41,7 @@ module.exports = {
     showWindowControls: '',
 
     // custom padding (css format, i.e.: `top right bottom left`)
-    padding: '12px 14px',
+    padding: '0px 4px',
 
     // the full list. if you're going to provide the full color palette,
     // including the 6 x 6 color cubes and the grayscale map, just provide
@@ -94,7 +94,7 @@ module.exports = {
   //   `hyperpower`
   //   `@company/project`
   //   `project#1.0.1`
-  plugins: [],
+  plugins: ['disableweb'],
 
   // in development, you can create a directory under
   // `~/.hyper_plugins/local/` and include it here

@@ -1,19 +1,29 @@
 # ~dotfiles
 
-See NeoVim config on `.config/nvim/init.vim` file.
+Enter on the .dotfiles directory and execute the following commands:
 
-## Installation
-
-Make sure you're on home directory before running these commands.
-
-```bash
-$ git clone https://github.com/rainerborene/dotfiles.git .dotfiles
-$ ln -s .dotfiles/.{pryrc,agignore,...} .
+```
+$ make deps
+$ make install
 ```
 
 Now set up your credentials.
 
-```bash
+```
 $ git config --global user.name "Jonh Doe"
 $ git config --global user.email jonh@doe.com
+```
+
+### disableweb
+
+```javascript
+// ~/.hyper_plugins/disableweb/index.js
+
+exports.middleware = (store) => (next) => (action) => {
+  if (action.type !== 'SESSION_URL_SET') {
+    next(action)
+  } else {
+    console.log('Intercepted SESSION_URL_SET')
+  }
+}
 ```

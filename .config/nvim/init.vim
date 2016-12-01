@@ -72,6 +72,7 @@ call plug#end()
 " }}}
 " Basic options {{{
 
+set colorcolumn=+1
 set completeopt=longest,menuone
 set confirm
 set expandtab
@@ -691,7 +692,7 @@ let g:user_emmet_expandabbr_key = '<C-_>'
 " let g:user_emmet_prev_key = '<C-[>'
 " let g:user_emmet_next_key = '<C-]>'
 let g:user_emmet_settings = {
-      \ 'javascript' : {
+      \ 'javascript.jsx' : {
       \   'extends' : 'jsx'
       \ }}
 
@@ -738,7 +739,8 @@ let g:lightline = {
       \ 'component': {
       \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
       \ },
-      \ 'subseparator': { 'left': '', 'right': '' }
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' }
       \ }
 
 " }}}
