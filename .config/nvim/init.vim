@@ -79,6 +79,7 @@ set expandtab
 set fillchars=diff:—,vert:│
 set foldlevel=99
 set formatoptions=qrn1j
+set inccommand=nosplit
 set gdefault
 set hidden
 set ignorecase
