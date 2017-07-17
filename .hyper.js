@@ -4,7 +4,7 @@ module.exports = {
     fontSize: 11,
 
     // font family with optional fallbacks
-    fontFamily: 'Menlo, "Literation Mono Powerline", monospace',
+    fontFamily: '"Menlo for Powerline", "Literation Mono Powerline", monospace',
 
     // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or cmyk)
     cursorColor: '#7587a6',
@@ -24,7 +24,7 @@ module.exports = {
     // custom css to embed in the main window
     css: `
       .terms_terms { border-top: 1px solid #333 }
-      .header_header * { font: bold 10px 'DejaVu Sans Mono'; }
+      .header_header * { font: bold 10px/34px "Menlo for Powerline", "DejaVu Sans Mono" }
     `,
 
     // custom css to embed in the terminal window
@@ -94,7 +94,7 @@ module.exports = {
   //   `hyperpower`
   //   `@company/project`
   //   `project#1.0.1`
-  plugins: ['disableweb'],
+  plugins: [],
 
   // in development, you can create a directory under
   // `~/.hyper_plugins/local/` and include it here

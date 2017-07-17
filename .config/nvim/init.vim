@@ -106,7 +106,6 @@ set virtualedit+=block
 set notimeout
 set ttimeout
 set ttimeoutlen=0
-set synmaxcol=120
 
 " }}}
 " Color scheme {{{
@@ -325,7 +324,6 @@ augroup ft_javascript
   au BufNewFile,BufRead *.es6 set filetype=javascript
   au BufNewFile,BufRead .jshintrc,.babelrc,.eslintrc set filetype=json
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
-  au FileType json setlocal formatprg=jq\ .
   au FileType json nnoremap <buffer> == gggqG
 augroup END
 
@@ -672,9 +670,9 @@ endfunction
 
 let g:neosnippet#snippets_directory = '~/.config/nvim/snippets'
 
-imap <C-@> <Plug>(neosnippet_expand_or_jump)
-smap <C-@> <Plug>(neosnippet_expand_or_jump)
-xmap <C-@> <Plug>(neosnippet_expand_target)
+imap <C-Space> <Plug>(neosnippet_expand_or_jump)
+smap <C-Space> <Plug>(neosnippet_expand_or_jump)
+xmap <C-Space> <Plug>(neosnippet_expand_target)
 
 " }}}
 " Goyo {{{

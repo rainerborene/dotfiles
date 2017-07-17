@@ -20,7 +20,9 @@ eval $HOME/.dotfiles/bin/base16-twilight.dark.sh
 export EDITOR=nvim
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_DEFAULT_OPTS='--extended --cycle --no-256 --bind "ctrl-z:toggle"'
-export FZF_CTRL_R_OPTS='--bind "ctrl-z:execute:histrm {}"'
+export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
+export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)' --header 'Press CTRL-Y to copy command into clipboard' --border"
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 export GOPATH=$HOME/go
 export LESS='-R --silent'
 export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
@@ -70,12 +72,12 @@ alias fore='foreman start -f Procfile.dev'
 unalias z 2> /dev/null
 z() {
   [ $# -gt 0 ] && _z "$*" && return
-  cd "$(_z -l 2>&1 | fzf-tmux +s --tac --query "$*" | sed 's/^[0-9,.]* *//')"
+  cd "$(_z -l 2>&1 | fzf --height 50% --border +s --tac --query "$*" | sed 's/^[0-9,.]* *//')"
 }
 
 # fd - cd to selected directory
 fd() {
-  DIR=`find ${1:-.} -type d -not -iwholename "*.git*" 2> /dev/null | fzf-tmux` && cd "$DIR"
+  DIR=`find ${1:-.} -type d -not -iwholename "*.git*" 2> /dev/null | fzf --height 50% --border` && cd "$DIR"
 }
 
 # fbr - checkout git branch
@@ -83,7 +85,7 @@ fbr() {
   local branches branch
   branches=$(git branch --all | grep -v HEAD) &&
   branch=$(echo "$branches" |
-           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+           fzf --height 50% --border -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
   git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
 
@@ -115,16 +117,8 @@ ftags() {
 #   - Exit if there's no match (--exit-0)
 fe() {
   local file
-  file=$(fzf-tmux --query="$1" --select-1 --exit-0)
+  file=$(fzf --height 50% --border --query="$1" --select-1 --exit-0)
   [ -n "$file" ] && ${EDITOR:-vim} "$file"
-}
-
-# fp - password
-fp() {
-  find ~/.password-store/*.gpg -type f \
-    | sed -e "s#$HOME/.password-store/##" -e 's#.gpg$##' \
-    | fzf-tmux \
-    | xargs -I % pass show -c '%'
 }
 
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
