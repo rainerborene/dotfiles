@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+if [ ! $(which git) ]; then
+  echo 'did you install git?'
+  exit
+fi
+
+download() {
+  if [ -f "$1" ]; then
+    echo "$1 already exists."
+  else
+    curl --create-dirs --progress-bar -fLo $1 $2
+  fi
+}
+
+install() {
+  cd ~
+
+  # link
+  ln -sf ~/.dotfiles/.config/* .config/
+  ln -sf ~/.dotfiles/.{agignore,ctags,curlrc,gemrc,gitconfig,hushlogin,irbrc,pryrc,psqlrc,railsrc,rubocop.yml,tmux.conf,bashrc,inputrc} .
+  mkdir ~/.config/nvim/autoload 2>/dev/null
+
+  # nvim dependencies
+  download .config/nvim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  download .config/nvim/spell/pt.utf-8.spl http://ftp.vim.org/pub/vim/runtime/spell/pt.utf-8.spl
+  download .config/nvim/spell/en.utf-8.spl http://ftp.vim.org/pub/vim/runtime/spell/en.utf-8.spl
+
+  # tmux plugin manager
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 2>/dev/null
+
+  # base16 shell theme
+  git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell 2>/dev/null
+}
+
+rust() {
+  curl https://sh.rustup.rs -sSf | sh
+  cargo install --git https://github.com/ogham/exa
+  cargo install ripgrep
+}
+
+# run
+install;

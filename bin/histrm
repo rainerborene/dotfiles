@@ -1,4 +1,0 @@
-#!/usr/bin/env zsh
-HISTFILE=$HOME/.zsh_history
-LINE=$(echo $@ | sed -E 's/^[ ]*[0-9]+[ ]*//g')
-LC_ALL=C sed -i -e "/$LINE/d" $HISTFILE

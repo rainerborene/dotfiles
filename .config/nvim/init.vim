@@ -12,15 +12,10 @@ let g:loaded_tar = 1
 let g:loaded_zipPlugin = 1
 let g:loaded_zip = 1
 
-function! DoRemote(arg)
-  UpdateRemotePlugins
-endfunction
-
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
-Plug 'benekastah/neomake'
 Plug 'chriskempson/base16-vim'
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'felixjung/vim-base16-lightline'
@@ -44,7 +39,7 @@ Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-anyblock'
 Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
-Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
 Plug 'sjl/clam.vim'
@@ -64,6 +59,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
+Plug 'w0rp/ale'
 Plug 'wellle/tmux-complete.vim'
 
 runtime! macros/matchit.vim
@@ -87,6 +83,7 @@ set lazyredraw
 set visualbell
 set linebreak
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 set noshowmode
 set noswapfile
 set nowritebackup
@@ -491,16 +488,6 @@ autocmd BufWritePre * call s:Mkdir()
 " }}}
 " Plugins {{{
 
-" Ruby {{{
-
-let g:ruby_operators = 1
-
-" }}}
-" HTML5 {{{
-
-let g:html_indent_tags = 'li\|p'
-
-" }}}
 " NERDTree {{{
 
 let g:NERDTreeHijackNetrw = 1
@@ -572,14 +559,15 @@ augroup ft_fzf
   au!
   au FileType fzf nnoremap <silent> <buffer> <c-g> :q<cr>
   au User FzfStatusLine call s:fzf_statusline()
-  au VimEnter * command! -nargs=+ -complete=file Ag
-        \ call fzf#vim#ag_raw('--hidden ' . <q-args>)
 augroup END
+
+command! -nargs=+ -complete=file Rg call
+      \ fzf#vim#grep('rg --vimgrep --hidden --color always ' . <q-args>, 1)
 
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
+imap <expr> <c-x><c-j> fzf#vim#complete#path('rg --files --hidden')
 
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
@@ -589,8 +577,8 @@ nnoremap <silent> <Leader><Leader> :Files<CR>
 nnoremap <silent> <Leader>h :Helptags<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
 nnoremap <silent> <Leader>. :Tags<CR>
-vnoremap <leader>a "zy:execute "Ag " . @z<cr>
-nnoremap <leader>a :Ag<Space>
+vnoremap <leader>a "zy:execute "Rg " . @z<cr>
+nnoremap <leader>a :Rg<Space>
 
 " }}}
 " Rails {{{
@@ -624,25 +612,6 @@ augroup ft_git
 augroup END
 
 " }}}}
-" Neomake {{{
-
-let g:neomake_verbose = 0
-
-function! s:lint()
-  let has_linters = executable('eslint') || executable('xo')
-  if &filetype =~ 'javascript' && has_linters
-    exe 'Neomake ' len(glob('.eslint*')) ? 'eslint' : 'xo'
-  else
-    Neomake
-  end
-endfunction
-
-augroup Neomake
-  au!
-  au BufWritePost * call <sid>lint()
-augroup END
-
-" }}}
 " EasyAlign {{{
 
 " Start interactive EasyAlign in visual mode
@@ -737,10 +706,18 @@ let g:lightline = {
       \ },
       \ 'component': {
       \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
-      \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
       \ }
+      \ }
+
+" }}}
+" Peekaboo {{{
+
+let g:peekaboo_window = 'vert bo 50new'
+
+" }}}
+" Ale {{{
+
+let g:ale_linters = { 'eruby': [] }
 
 " }}}
 
