@@ -30,6 +30,12 @@ shopt -s checkwinsize
 ### Cargo
 [ -f $HOME/.cargo/env ] && . $HOME/.cargo/env
 
+### Changes the current Ruby
+if [ -d /usr/local/share/chruby ]; then
+  . /usr/local/share/chruby/chruby.sh
+  . /usr/local/share/chruby/auto.sh
+fi
+
 ### Disable CTRL-S and CTRL-Q
 [[ $- =~ i ]] && stty -ixoff -ixon
 

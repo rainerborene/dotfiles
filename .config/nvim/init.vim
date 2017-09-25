@@ -62,7 +62,6 @@ Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'wellle/tmux-complete.vim'
 
-runtime! macros/matchit.vim
 call plug#end()
 
 " }}}
@@ -561,8 +560,12 @@ augroup ft_fzf
   au User FzfStatusLine call s:fzf_statusline()
 augroup END
 
-command! -nargs=+ -complete=file Rg call
-      \ fzf#vim#grep('rg --vimgrep --hidden --color always ' . <q-args>, 1)
+command! -nargs=+ -complete=file Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
 
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
