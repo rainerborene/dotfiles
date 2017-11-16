@@ -27,14 +27,15 @@ shopt -s checkwinsize
 ### Bash completion
 [ -f /etc/bash_completion ] && . /etc/bash_completion
 
+### Direnv
+eval "$(direnv hook bash)"
+
 ### Cargo
 [ -f $HOME/.cargo/env ] && . $HOME/.cargo/env
 
-### Changes the current Ruby
-if [ -d /usr/local/share/chruby ]; then
-  . /usr/local/share/chruby/chruby.sh
-  . /usr/local/share/chruby/auto.sh
-fi
+### Extendable version manager
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
 
 ### Disable CTRL-S and CTRL-Q
 [[ $- =~ i ]] && stty -ixoff -ixon
@@ -58,7 +59,7 @@ export HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S:   "
 export GOPATH=~/gosrc
 mkdir -p $GOPATH
 if [ -z "$PATH_EXPANDED" ]; then
-  export PATH=~/bin:/usr/local/bin:/usr/local/share/python:$GOPATH/bin:$HOME/.cargo/bin/:$PATH
+  export PATH=~/bin:/usr/local/bin:/usr/lib/chromium-browser/:$GOPATH/bin:$HOME/.cargo/bin/:$PATH
   export PATH_EXPANDED=1
 fi
 export EDITOR=nvim
@@ -83,6 +84,7 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
 alias g='git'
+alias gv='vim +GV +"autocmd BufWipeout <buffer> qall"'
 alias j='z'
 alias la='ls -la'
 alias ls='exa --group-directories-first'
@@ -90,7 +92,10 @@ alias l='tree --dirsfirst -ChaFL 1'
 alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
-alias tmux="tmux -2"
+alias tmux='tmux -2'
+alias dkk='docker kill $(docker ps -q)'
+alias open='xdg-open &>/dev/null'
+alias bs='browser-sync start --no-notify --proxy localhost:3000 --files "app/assets/**/* , app/views/**/*.html.*, \!tmp, \!log"'
 
 alias be='bundle exec'
 alias rc='rails console'
@@ -173,7 +178,7 @@ c() {
   export cols=$(( COLUMNS / 3 ))
   export sep='{::}'
 
-  cp -f /mnt/c/Users/Rainer\ Borene/AppData/Local/Google/Chrome/User\ Data/Default/History /tmp/h
+  cp -f ~/.config/google-chrome/Default/History /tmp/h
   sqlite3 -separator $sep /tmp/h \
     "select title, url from urls order by last_visit_time desc" |
   ruby -ne '
@@ -186,7 +191,7 @@ c() {
       end
     }.join + " " * (2 + cols - len) + "\x1b[m" + url' |
   fzf --ansi --multi --no-hscroll --tiebreak=index |
-  sed 's#.*\(https*://\)#\1#' | xargs chrome
+  sed 's#.*\(https*://\)#\1#' | xargs google-chrome
 }
 
 

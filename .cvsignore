@@ -24,3 +24,4 @@ build/
 .project
 .settings
 workbench.xmi
+.git-old

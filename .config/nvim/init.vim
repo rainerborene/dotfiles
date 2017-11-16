@@ -16,37 +16,40 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
+Plug 'bfredl/nvim-miniyank'
 Plug 'chriskempson/base16-vim'
-Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'dyng/ctrlsf.vim', { 'on': 'CtrlSF' }
+Plug 'easymotion/vim-easymotion'
 Plug 'felixjung/vim-base16-lightline'
 Plug 'itchyny/lightline.vim'
+Plug 'jreybert/vimagit'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/goyo.vim'
-Plug 'junegunn/limelight.vim'
+Plug 'junegunn/gv.vim', { 'on': 'GV' }
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/vim-slash'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartinput'
+Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
+Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
+Plug 'kassio/neoterm'
+Plug 'machakann/vim-sandwich'
+Plug 'machakann/vim-textobj-delimited'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'rhysd/clever-f.vim'
-Plug 'rhysd/vim-textobj-anyblock'
+Plug 'rhysd/vim-textobj-word-column'
 Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
-Plug 'sjl/clam.vim'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'thinca/vim-quickrun'
-Plug 'thinca/vim-textobj-comment'
-Plug 'thinca/vim-textobj-function-javascript'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
@@ -56,11 +59,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
-Plug 'wellle/tmux-complete.vim'
+Plug 'wellle/targets.vim'
 
 call plug#end()
 
@@ -82,7 +83,6 @@ set lazyredraw
 set visualbell
 set linebreak
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
-set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 set noshowmode
 set noswapfile
 set nowritebackup
@@ -124,8 +124,10 @@ let g:terminal_color_13 = '#9b859d'
 let g:terminal_color_14 = '#afc4db'
 let g:terminal_color_15 = '#ffffff'
 
-let base16colorspace=256
+set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 set background=dark
+set termguicolors
+
 colorscheme base16-twilight
 
 hi VertSplit ctermbg=NONE guibg=NONE
@@ -164,6 +166,10 @@ nnoremap J mzJ`z
 " Move to last change
 nnoremap gI `.zz
 
+" Reselect last selection
+xnoremap <  <gv
+xnoremap >  >gv
+
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
@@ -184,10 +190,10 @@ nnoremap <leader>s <C-W>s
 nnoremap <leader>v <C-W>v
 
 " Resize window
-nnoremap <silent><Down>  5<C-w>-
-nnoremap <silent><Up>    5<C-w>+
-nnoremap <silent><Left>  5<C-w><
-nnoremap <silent><Right> 5<C-w>>
+nnoremap <left>   <c-w>>
+nnoremap <right>  <c-w><
+nnoremap <up>     <c-w>-
+nnoremap <down>   <c-w>+
 
 " Fast tab switching
 nnoremap gn :<C-u>tabnew<CR>
@@ -203,8 +209,8 @@ vnoremap j gj
 vnoremap k gk
 
 " { and } skip over closed folds instead of openning them
-nnoremap <expr> } foldclosed(search('^$', 'Wn'))  == -1 ? '}' : '}j}'
-nnoremap <expr> { foldclosed(search('^$', 'Wnb')) == -1 ? '{' : '{k{'
+nnoremap <expr> } foldclosed(search('^$', 'Wn'))  == -1 ? '}zz' : '}j}zz'
+nnoremap <expr> { foldclosed(search('^$', 'Wnb')) == -1 ? '{zz' : '{k{zz'
 
 " Easier to type, and I never use the default behavior.
 noremap H ^
@@ -240,8 +246,11 @@ nnoremap <leader>z zMzvzz
 vnoremap <leader>S y:@"<CR>
 nnoremap <leader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
 
-" Close quickfix/location window
-nnoremap <leader>c :cclose<bar>lclose<cr>
+" Show the stack of syntax highlighting classes under the cursor.
+function! SynStack()
+  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), " > ")
+endfunc
+nnoremap zS :call SynStack()<CR>
 
 " Ctrl-g: Prints current file name
 nnoremap <c-g> 2<c-g>
@@ -256,15 +265,15 @@ cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 cnoremap <c-k> <up>
 cnoremap <c-j> <down>
-cnoremap <C-g> <C-c>
-cnoremap <c-@> <c-f>
+cnoremap <c-g> <C-c>
+cnoremap <c-@> <C-f>
 
 " Send to the black hole register
 noremap x "_x
 noremap X "_X
 
-" Replace currently selected text with default register without yanking it
-vnoremap p "_dP
+" Do not override the register after paste in select mode
+xnoremap <expr> p 'pgv"'.v:register.'y`>'
 
 " Goto older/newer position in change list
 nnoremap <silent> ( g;zvzz
@@ -286,14 +295,113 @@ nnoremap =f :setfiletype<Space>
 imap <c-j> <c-n>
 imap <c-k> <c-p>
 
-" Terminal mappings
+" }}}
+" Zoom {{{
+
+function! s:zoom()
+  if winnr('$') > 1
+    tab split
+  elseif len(filter(map(range(tabpagenr('$')), 'tabpagebuflist(v:val + 1)'),
+                  \ 'index(v:val, '.bufnr('').') >= 0')) > 1
+    tabclose
+  endif
+endfunction
+nnoremap <silent> <leader>z :call <sid>zoom()<cr>
+
+" }}}
+" Terminal mode {{{
+
+let g:neoterm_position = 'vertical'
+
+function! s:terminit()
+  nnoremap <buffer> I I<C-a>
+  nnoremap <buffer> A A<C-e>
+  nnoremap <buffer> C i<C-k>
+  nnoremap <buffer> D i<C-k><C-\><C-n>
+  nnoremap <buffer> cc i<C-e><C-u>
+  nnoremap <buffer> dd i<C-e><C-u><C-\><C-n>
+
+  if match(b:term_title, 'fzf') > -1
+    tmap <buffer> <c-j> <c-j>
+    tmap <buffer> <c-k> <c-k>
+    tmap <buffer> <c-l> <c-l>
+    tmap <buffer> <c-h> <c-h>
+  endif
+endfunction
+
+function! s:move(dir)
+  let previous = bufnr('%')
+  let fallback = {
+        \ 'h': "\<C-h>",
+        \ 'j': "\<C-j>",
+        \ 'k': "\<C-k>",
+        \ 'l': "\<C-l>"
+        \ }
+  exec 'wincmd '.a:dir
+  if bufnr('%') == previous && exists('b:terminal_job_id')
+    call jobsend(b:terminal_job_id, get(fallback, a:dir))
+    startinsert
+  endif
+endfunction
+
+au TermOpen * call s:terminit()
+au BufEnter term://* startinsert
+
 tnoremap <Esc> <C-\><C-n>
-tnoremap <c-w>j <c-\><c-n><c-w>j
-tnoremap <c-w>k <c-\><c-n><c-w>k
-tnoremap <c-w>h <c-\><c-n><c-w>h
-tnoremap <c-w>l <c-\><c-n><c-w>l
+tnoremap <c-q> <c-\><c-n>:bw!<cr>
 tnoremap <pageup> <c-\><c-n><pageup>
 tnoremap <pagedown> <c-\><c-n><pagedown>
+
+tnoremap <silent> <c-j> <c-\><c-n>:call <sid>move('j')<cr>
+tnoremap <silent> <c-k> <c-\><c-n>:call <sid>move('k')<cr>
+tnoremap <silent> <c-h> <c-\><c-n>:call <sid>move('h')<cr>
+tnoremap <silent> <c-l> <c-\><c-n>:call <sid>move('l')<cr>
+
+" for moving between chars and words
+tnoremap <A-a> <esc>a
+tnoremap <A-b> <esc>b
+tnoremap <A-d> <esc>d
+tnoremap <A-f> <esc>f
+
+nnoremap <silent> <C-c><C-c> :TREPLSendFile<cr>
+nnoremap <silent> <C-c><C-l> :call neoterm#clear()<cr>
+nnoremap <silent> <C-c><C-k> :call neoterm#kill()<cr>
+nnoremap <silent> <C-c><C-j> :call neoterm#toggle()<cr>
+
+nnoremap <leader>s :botright new<bar>term<cr>
+nnoremap <leader>v :vertical botright split<bar>term<cr>
+nnoremap <leader>r :T bin/rails test %<cr>
+
+" }}}
+" Quickfix mode {{{
+
+function! s:qf_toggle()
+  let nr = winnr("$")
+  if len(getqflist()) > 0
+    copen
+  end
+  if nr == winnr("$")
+    cclose
+  endif
+endfunction
+
+" Close quickfix/location window
+nnoremap <silent> <leader>c :call <sid>qf_toggle()<cr>
+
+function! s:qf_define_mappings() abort
+  nnoremap <buffer><silent> q :<C-u>cclose<CR>
+  nnoremap <buffer><silent> j :<C-u>cnext<CR>:copen<CR>
+  nnoremap <buffer><silent> k :<C-u>cprevious<CR>:copen<CR>
+  nnoremap <buffer><silent> J :<C-u>cnfile<CR>:copen<CR>
+  nnoremap <buffer><silent> K :<C-u>cpfile<CR>:copen<CR>
+  nnoremap <buffer><silent> l :<C-u>clist<CR>
+endfunction
+
+augroup ft_qf
+  au!
+  au FileType qf setlocal nowrap | wincmd J
+  au FileType qf call s:qf_define_mappings()
+augroup END
 
 " }}}
 " Autocommands {{{
@@ -304,11 +412,6 @@ augroup ft_postgres
   au FileType pgsql set softtabstop=2 shiftwidth=2
   au FileType pgsql set foldmethod=indent
   au FileType pgsql setlocal commentstring=--\ %s comments=:--
-augroup END
-
-augroup ft_zsh
-  au!
-  au FileType zsh setlocal foldmethod=marker
 augroup END
 
 augroup ft_nginx
@@ -374,21 +477,14 @@ augroup ft_tmux
   au FileType tmux setlocal foldmethod=marker
 augroup END
 
-augroup ft_fuse
-  au!
-  au BufNewFile,BufRead *.ux setlocal filetype=xml
-  au BufNewFile,BufRead *.unoproj setlocal filetype=json
-augroup END
-
-augroup ft_qf
-  au!
-  au FileType qf setlocal nowrap | wincmd J
-  au FileType qf nnoremap <buffer> <silent> q :cclose<cr>
-augroup END
-
 augroup vimrc
   au!
+  au BufWritePost init.vim nested if expand('%') !~ 'fugitive' | source % | endif
   au FileType vim setlocal foldmethod=marker keywordprg=:help
+
+  " Highlight cursor when inactive
+  au CursorMoved,CursorMovedI,WinLeave * setlocal nocursorline
+  au CursorHold,CursorHoldI,WinEnter * setlocal cursorline
 
   " File type detection
   au BufWritePost
@@ -511,18 +607,12 @@ nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
 " Switch {{{
 
 let g:switch_mapping = "-"
+let g:switch_scss_definitions = [['right', 'left']]
+let g:switch_ruby_definitions = [['has_key?', 'key?']]
 let g:switch_javascript_definitions = [{
       \ '\[["'']\(\k\+\)["'']\]': '\.\1',
       \ '\.\(\k\+\)': '[''\1'']'
       \ }]
-
-let g:switch_scss_definitions = [
-      \ ['right', 'left']
-      \ ]
-
-let g:switch_ruby_definitions = [
-      \ ['has_key?', 'key?']
-      \ ]
 
 function! s:load_switch_definitions()
   silent! let b:switch_custom_definitions = g:switch_{&filetype}_definitions
@@ -543,9 +633,13 @@ nnoremap <silent> <leader>u :UndotreeToggle<CR>
 " }}}
 " FZF {{{
 
-let $FZF_DEFAULT_OPTS .= ' --inline-info'
-
-let g:fzf_layout = { 'down': '20%' }
+function! s:fzf_remove(lines)
+  for line in a:lines
+    if input('Delete '. line .'? [y/n]: ') == 'y'
+      call delete(line)
+    endif
+  endfor
+endfunction
 
 function! s:fzf_statusline()
   highlight fzf1 ctermfg=12 ctermbg=NONE
@@ -553,6 +647,16 @@ function! s:fzf_statusline()
   highlight fzf3 ctermfg=8 ctermbg=NONE
   setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
 endfunction
+
+let g:fzf_layout = { 'down': '20%' }
+let g:fzf_action = {
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-x': 'split',
+      \ 'ctrl-v': 'vsplit',
+      \ 'del': function('s:fzf_remove')
+      \ }
+
+let $FZF_DEFAULT_OPTS .= ' --inline-info'
 
 augroup ft_fzf
   au!
@@ -562,7 +666,7 @@ augroup END
 
 command! -nargs=+ -complete=file Rg
       \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+      \   'rg --hidden --vimgrep --smart-case --color=always '. <q-args>, 1,
       \   <bang>0 ? fzf#vim#with_preview('up:60%')
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
@@ -582,15 +686,6 @@ nnoremap <silent> <Leader>b :Buffers<CR>
 nnoremap <silent> <Leader>. :Tags<CR>
 vnoremap <leader>a "zy:execute "Rg " . @z<cr>
 nnoremap <leader>a :Rg<Space>
-
-" }}}
-" Rails {{{
-
-let g:rails_abbreviations = {
-      \ "it": "it { ",
-      \ "ivp": "is_expected.to validate_presence_of :",
-      \ "pry": "binding.pry"
-      \ }
 
 " }}}
 " Fugitive {{{
@@ -615,6 +710,11 @@ augroup ft_git
 augroup END
 
 " }}}}
+" Magit {{{
+
+nnoremap <silent> <leader>m :Magit<cr>
+
+" }}}
 " EasyAlign {{{
 
 " Start interactive EasyAlign in visual mode
@@ -630,12 +730,14 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#ignore_sources = {}
 let g:deoplete#ignore_sources.ruby = ['omni']
 
-function g:Multiple_cursors_before()
+function! g:Multiple_cursors_before()
   let g:deoplete#disable_auto_complete = 1
+  exec 'ALEDisable'
 endfunction
 
-function g:Multiple_cursors_after()
+function! g:Multiple_cursors_after()
   let g:deoplete#disable_auto_complete = 0
+  exec 'ALEEnable'
 endfunction
 
 " }}}
@@ -648,18 +750,10 @@ smap <C-Space> <Plug>(neosnippet_expand_or_jump)
 xmap <C-Space> <Plug>(neosnippet_expand_target)
 
 " }}}
-" Goyo {{{
-
-augroup Goyo
-  au!
-  au User GoyoEnter Limelight
-  au User GoyoLeave Limelight!
-augroup END
-
-" }}}
 " Emmet {{{
 
-let g:user_emmet_expandabbr_key = '<C-_>'
+" let g:user_emmet_leader_key = '<C-g>'
+" let g:user_emmet_expandabbr_key = '<C-_>'
 " let g:user_emmet_prev_key = '<C-[>'
 " let g:user_emmet_next_key = '<C-]>'
 let g:user_emmet_settings = {
@@ -672,32 +766,6 @@ let g:user_emmet_settings = {
 
 " zz after search
 noremap <plug>(slash-after) zz
-
-" }}}
-" Tmux {{{
-
-function! s:tmux_load_buffer()
-  let [lnum1, col1] = getpos("'<")[1:2]
-  let [lnum2, col2] = getpos("'>")[1:2]
-  let lines = getline(lnum1, lnum2)
-  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
-  let lines[0] = lines[0][col1 - 1:]
-  let tempfile = tempname()
-  call writefile(lines, tempfile, 'a')
-  call system('tmux load-buffer '.tempfile)
-  call delete(tempfile)
-endfunction
-vnoremap <silent> <leader>y :call <sid>tmux_load_buffer()<cr>
-nnoremap <silent> <leader>y :Tyank<cr>
-nnoremap <silent> <leader>p :Tput<cr>
-
-" }}}
-" Clam {{{
-
-nnoremap ! :Clam<space>
-vnoremap ! :ClamVisual<space>
-let g:clam_autoreturn = 1
-let g:clam_debug = 1
 
 " }}}
 " Lightline {{{
@@ -721,6 +789,60 @@ let g:peekaboo_window = 'vert bo 50new'
 " Ale {{{
 
 let g:ale_linters = { 'eruby': [] }
+
+" }}}
+" Clever-f {{{
+
+let g:clever_f_smart_case = 1
+let g:clever_f_across_no_line = 1
+
+" }}}
+" EasyMotion {{{
+
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_smartcase = 1
+
+nmap m <Plug>(easymotion-overwin-f2)
+vmap m <Plug>(easymotion-s2)
+omap z <Plug>(easymotion-s2)
+
+" hjkl
+map ;h <Plug>(easymotion-linebackward)
+map ;j <Plug>(easymotion-j)
+map ;k <Plug>(easymotion-k)
+map ;l <Plug>(easymotion-lineforward)
+
+" goto
+map go <Plug>(easymotion-overwin-f2)
+
+" }}}
+" CtrlSF {{{
+
+nnoremap <leader>f :CtrlSF<Space>
+vnoremap <silent> <leader>f "zy:execute "CtrlSF " . @z<cr>
+
+" }}}
+" Smartword {{{
+
+nmap w <Plug>(smartword-w)
+nmap b <Plug>(smartword-b)
+nmap e <Plug>(smartword-e)
+nmap ge <Plug>(smartword-ge)
+xmap w <Plug>(smartword-w)
+xmap b <Plug>(smartword-b)
+xmap e <Plug>(smartword-e)
+xmap ge <Plug>(smartword-ge)
+
+" }}}
+" Smartinput {{{
+
+call smartinput#map_to_trigger('i', '=', '=', '=')
+call smartinput#define_rule({
+      \ 'at': '\v\w+:\s+%#',
+      \ 'char': '=',
+      \ 'input': '<%=  %><Left><Left><Left>',
+      \ 'filetype': ['eruby.yaml']
+      \ })
 
 " }}}
 
