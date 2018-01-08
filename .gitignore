@@ -1,5 +1,6 @@
 .config/asciinema
 .config/htop
+.config/direnv
 .config/configstore
 .config/nvim/tmp
 .config/nvim/spell/*.spl

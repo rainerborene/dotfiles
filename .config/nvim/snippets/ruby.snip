@@ -1,15 +1,24 @@
 snippet desc
 abbr    desc
-  describe '${1:#:description}' do
+  describe '${1:description}' do
     ${2:TARGET}
   end
 
 snippet it
 abbr    it
-  it '${1:#:description}' do
+  it '${1:description}' do
     ${2:TARGET}
   end
 
 snippet before_action
 abbr    ba
   before_action :${1:action}
+
+snippet testm
+abbr    testm
+  require 'test_helper'
+
+  module ${1:name}
+    class ${2}Test < ActiveSupport::TestCase
+    end
+  end

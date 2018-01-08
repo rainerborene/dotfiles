@@ -4,29 +4,28 @@
 
 " Disable default plugins
 let g:loaded_netrwPlugin = 1
-let g:loaded_vimballPlugin = "v35"
+let g:loaded_vimballPlugin = 1
+let g:loaded_rrhelper = 1
 let g:loaded_getscriptPlugin = 1
 let g:loaded_2html_plugin = 1
 let g:loaded_tarPlugin = 1
-let g:loaded_tar = 1
 let g:loaded_zipPlugin = 1
-let g:loaded_zip = 1
+let g:loaded_gzip = 1
+let g:loaded_tutor_mode_plugin = 1
 
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'bfredl/nvim-miniyank'
-Plug 'chriskempson/base16-vim'
 Plug 'dyng/ctrlsf.vim', { 'on': 'CtrlSF' }
 Plug 'easymotion/vim-easymotion'
-Plug 'felixjung/vim-base16-lightline'
 Plug 'itchyny/lightline.vim'
-Plug 'jreybert/vimagit'
+Plug 'jreybert/vimagit', { 'on': 'Magit' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/gv.vim', { 'on': 'GV' }
-Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
+Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(LiveEasyAlign)' }
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/vim-slash'
 Plug 'kana/vim-niceblock'
@@ -38,19 +37,21 @@ Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
 Plug 'kassio/neoterm'
+Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
-Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
+Plug 'mhinz/vim-startify'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'sheerun/vim-polyglot'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-abolish', { 'on': ['Abolish', 'Subvert', 'S'] }
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise'
@@ -60,6 +61,7 @@ Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
+Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
 
@@ -68,7 +70,6 @@ call plug#end()
 " }}}
 " Basic options {{{
 
-set colorcolumn=+1
 set completeopt=longest,menuone
 set confirm
 set expandtab
@@ -123,16 +124,23 @@ let g:terminal_color_12 = '#7587a6'
 let g:terminal_color_13 = '#9b859d'
 let g:terminal_color_14 = '#afc4db'
 let g:terminal_color_15 = '#ffffff'
+let g:quantum_black = 1
 
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 set background=dark
 set termguicolors
 
-colorscheme base16-twilight
+function! s:extend_colorscheme() abort
+  hi! ExtraWhitespace ctermbg=red guibg=red
+  hi! EndOfBuffer guibg=bg guifg=bg
+endfunction
 
-hi VertSplit ctermbg=NONE guibg=NONE
-hi ExtraWhitespace ctermbg=red guibg=red
-hi Number ctermfg=14
+augroup vimrc_colorscheme
+  au!
+  au! ColorScheme quantum call s:extend_colorscheme()
+augroup END
+
+colorscheme quantum
 
 " }}}
 " Wilmenu completion {{{
@@ -186,8 +194,7 @@ nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
-nnoremap <leader>s <C-W>s
-nnoremap <leader>v <C-W>v
+inoremap <C-l> <C-o><C-w>l
 
 " Resize window
 nnoremap <left>   <c-w>>
@@ -218,9 +225,8 @@ noremap L $
 vnoremap L g_
 
 " Quit
-inoremap <C-Q> <esc>:q<cr>
-nnoremap <C-Q> :q<cr>
-vnoremap <C-Q> <esc>
+inoremap <C-Q> <esc>:Sayonara<cr>
+nnoremap <C-Q> :Sayonara<cr>
 
 " Save
 inoremap <C-s> <C-o>:update<cr>
@@ -348,7 +354,7 @@ au TermOpen * call s:terminit()
 au BufEnter term://* startinsert
 
 tnoremap <Esc> <C-\><C-n>
-tnoremap <c-q> <c-\><c-n>:bw!<cr>
+tnoremap <c-q> <c-\><c-n>:Sayonara<cr>
 tnoremap <pageup> <c-\><c-n><pageup>
 tnoremap <pagedown> <c-\><c-n><pagedown>
 
@@ -357,7 +363,7 @@ tnoremap <silent> <c-k> <c-\><c-n>:call <sid>move('k')<cr>
 tnoremap <silent> <c-h> <c-\><c-n>:call <sid>move('h')<cr>
 tnoremap <silent> <c-l> <c-\><c-n>:call <sid>move('l')<cr>
 
-" for moving between chars and words
+" moving between chars and words
 tnoremap <A-a> <esc>a
 tnoremap <A-b> <esc>b
 tnoremap <A-d> <esc>d
@@ -368,9 +374,9 @@ nnoremap <silent> <C-c><C-l> :call neoterm#clear()<cr>
 nnoremap <silent> <C-c><C-k> :call neoterm#kill()<cr>
 nnoremap <silent> <C-c><C-j> :call neoterm#toggle()<cr>
 
-nnoremap <leader>s :botright new<bar>term<cr>
-nnoremap <leader>v :vertical botright split<bar>term<cr>
-nnoremap <leader>r :T bin/rails test %<cr>
+nnoremap <silent> <leader>s :botright new<bar>term<cr>:startinsert<cr>
+nnoremap <silent> <leader>v :vertical botright split<bar>term<cr>:startinsert<cr>
+nnoremap <silent> <leader>r :T bin/rails test %<cr>
 
 " }}}
 " Quickfix mode {{{
@@ -401,6 +407,9 @@ augroup ft_qf
   au!
   au FileType qf setlocal nowrap | wincmd J
   au FileType qf call s:qf_define_mappings()
+
+  " Automatically opens the quickfix window after :Ggrep.
+  au QuickFixCmdPost *grep* cwindow
 augroup END
 
 " }}}
@@ -425,6 +434,11 @@ augroup ft_javascript
   au BufNewFile,BufRead .jshintrc,.babelrc,.eslintrc set filetype=json
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
   au FileType json nnoremap <buffer> == gggqG
+augroup END
+
+augroup ft_coffee
+  au!
+  au BufNewFile,BufRead *.coffee set filetype=coffee
 augroup END
 
 augroup ft_html
@@ -492,9 +506,6 @@ augroup vimrc
         \ |   unlet! b:ftdetect
         \ |   filetype detect
         \ | endif
-
-  " Automatically opens the quickfix window after :Ggrep.
-  au QuickFixCmdPost *grep* cwindow
 
   " Unset paste on InsertLeave
   au InsertLeave * silent! set nopaste
@@ -583,6 +594,15 @@ autocmd BufWritePre * call s:Mkdir()
 " }}}
 " Plugins {{{
 
+" Ruby {{{
+
+let g:ruby_operators = 1
+let g:ruby_space_errors = 1
+let g:ruby_fold = 1
+let g:ruby_no_expensive = 1
+let g:ruby_spellcheck_strings = 1
+
+" }}}
 " NERDTree {{{
 
 let g:NERDTreeHijackNetrw = 1
@@ -595,9 +615,14 @@ let g:NERDTreeMapJumpPrevSibling = 'gk'
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeShowHidden = 1
 
-augroup ft_nerdtree
+augroup nerd_loader
   au!
   au FileType nerdtree setlocal colorcolumn& nowrap tw=0
+  au BufEnter,BufNew *
+        \ if isdirectory(expand('<amatch>')) |
+        \   call plug#load('nerdtree') |
+        \   execute 'autocmd! nerd_loader' |
+        \ endif
 augroup END
 
 " Open NERDTree file explorer
@@ -641,12 +666,7 @@ function! s:fzf_remove(lines)
   endfor
 endfunction
 
-function! s:fzf_statusline()
-  highlight fzf1 ctermfg=12 ctermbg=NONE
-  highlight fzf2 ctermfg=8 ctermbg=NONE
-  highlight fzf3 ctermfg=8 ctermbg=NONE
-  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-endfunction
+let $FZF_DEFAULT_OPTS .= ' --inline-info'
 
 let g:fzf_layout = { 'down': '20%' }
 let g:fzf_action = {
@@ -656,12 +676,28 @@ let g:fzf_action = {
       \ 'del': function('s:fzf_remove')
       \ }
 
-let $FZF_DEFAULT_OPTS .= ' --inline-info'
+let g:fzf_colors = {
+      \ 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'border':  ['fg', 'Ignore'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header': ['fg', 'Comment']
+      \ }
 
 augroup ft_fzf
   au!
   au FileType fzf nnoremap <silent> <buffer> <c-g> :q<cr>
-  au User FzfStatusLine call s:fzf_statusline()
+
+  " Hide statusline of terminal buffer
+  au FileType fzf set laststatus=0 | au BufLeave <buffer> set laststatus=2
 augroup END
 
 command! -nargs=+ -complete=file Rg
@@ -683,6 +719,7 @@ omap <leader><tab> <plug>(fzf-maps-o)
 nnoremap <silent> <Leader><Leader> :Files<CR>
 nnoremap <silent> <Leader>h :Helptags<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>l :Lines<CR>
 nnoremap <silent> <Leader>. :Tags<CR>
 vnoremap <leader>a "zy:execute "Rg " . @z<cr>
 nnoremap <leader>a :Rg<Space>
@@ -718,26 +755,31 @@ nnoremap <silent> <leader>m :Magit<cr>
 " EasyAlign {{{
 
 " Start interactive EasyAlign in visual mode
-xmap ga <Plug>(EasyAlign)
+xmap <cr> <plug>(LiveEasyAlign)
 
 " Start interactive EasyAlign with a Vim movement
-nmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(LiveEasyAlign)
 
 " }}}
 " Deoplete {{{
 
-let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 0
 let g:deoplete#ignore_sources = {}
 let g:deoplete#ignore_sources.ruby = ['omni']
 
+augroup deoplete_loader
+  au!
+  au InsertEnter * call deoplete#enable()
+augroup END
+
 function! g:Multiple_cursors_before()
   let g:deoplete#disable_auto_complete = 1
-  exec 'ALEDisable'
+  ALEDisable
 endfunction
 
 function! g:Multiple_cursors_after()
   let g:deoplete#disable_auto_complete = 0
-  exec 'ALEEnable'
+  ALEEnable
 endfunction
 
 " }}}
@@ -750,18 +792,6 @@ smap <C-Space> <Plug>(neosnippet_expand_or_jump)
 xmap <C-Space> <Plug>(neosnippet_expand_target)
 
 " }}}
-" Emmet {{{
-
-" let g:user_emmet_leader_key = '<C-g>'
-" let g:user_emmet_expandabbr_key = '<C-_>'
-" let g:user_emmet_prev_key = '<C-[>'
-" let g:user_emmet_next_key = '<C-]>'
-let g:user_emmet_settings = {
-      \ 'javascript.jsx' : {
-      \   'extends' : 'jsx'
-      \ }}
-
-" }}}
 " Slash {{{
 
 " zz after search
@@ -771,12 +801,12 @@ noremap <plug>(slash-after) zz
 " Lightline {{{
 
 let g:lightline = {
-      \ 'colorscheme': 'base16_twilight',
+      \ 'colorscheme': 'quantum',
       \ 'active': {
       \   'left': [['mode', 'paste'], ['fugitive', 'filename', 'modified']]
       \ },
-      \ 'component': {
-      \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
+      \ 'component_function': {
+      \   'fugitive': 'fugitive#head'
       \ }
       \ }
 
@@ -789,6 +819,12 @@ let g:peekaboo_window = 'vert bo 50new'
 " Ale {{{
 
 let g:ale_linters = { 'eruby': [] }
+let g:ale_sign_error = '•'
+let g:ale_sign_warning = '•'
+let g:ale_lint_delay = 1000
+
+nmap ]a <Plug>(ale_next_wrap)
+nmap [a <Plug>(ale_previous_wrap)
 
 " }}}
 " Clever-f {{{
@@ -818,6 +854,8 @@ map go <Plug>(easymotion-overwin-f2)
 " }}}
 " CtrlSF {{{
 
+let g:ctrlsf_case_sensitive = 'no'
+
 nnoremap <leader>f :CtrlSF<Space>
 vnoremap <silent> <leader>f "zy:execute "CtrlSF " . @z<cr>
 
@@ -843,6 +881,32 @@ call smartinput#define_rule({
       \ 'input': '<%=  %><Left><Left><Left>',
       \ 'filetype': ['eruby.yaml']
       \ })
+
+call smartinput#map_to_trigger('i', '#', '#', '#')
+call smartinput#define_rule({
+      \ 'at': '\%#',
+      \ 'char': '#',
+      \ 'input': '#{}<Left>',
+      \ 'filetype': ['ruby', 'coffee'],
+      \ 'syntax': ['String']
+      \ })
+
+" }}}
+" Highlightedyank {{{
+
+let g:highlightedyank_highlight_duration = 500
+
+hi HighlightedyankRegion ctermfg=2 ctermbg=10 guifg=#8f9d6a guibg=#323537
+
+" }}}
+" Startify {{{
+
+let g:startify_change_to_vcs_root = 1
+
+" }}}
+" Sayonara {{{
+
+let g:sayonara_confirm_quit = 0
 
 " }}}
 

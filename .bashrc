@@ -8,8 +8,7 @@ if [ "$(umask)" = "0000" ]; then
   umask 022
 fi
 
-BASE=$(dirname $(readlink $BASH_SOURCE))
-BASE16_SHELL=$HOME/.config/base16-shell/
+BASE=$HOME/.dotfiles/
 
 
 # Options
@@ -40,10 +39,6 @@ eval "$(direnv hook bash)"
 ### Disable CTRL-S and CTRL-Q
 [[ $- =~ i ]] && stty -ixoff -ixon
 
-### Base 16 colors
-[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
-base16_twilight
-
 
 # Environment variables
 # --------------------------------------------------------------------
@@ -59,7 +54,7 @@ export HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S:   "
 export GOPATH=~/gosrc
 mkdir -p $GOPATH
 if [ -z "$PATH_EXPANDED" ]; then
-  export PATH=~/bin:/usr/local/bin:/usr/lib/chromium-browser/:$GOPATH/bin:$HOME/.cargo/bin/:$PATH
+  export PATH="./bin:~/bin:/usr/local/bin:/usr/lib/chromium-browser/:$GOPATH/bin:~/.cargo/bin/:$PATH"
   export PATH_EXPANDED=1
 fi
 export EDITOR=nvim
@@ -140,13 +135,6 @@ z() {
 
 fzf-down() {
   fzf --height 50% "$@" --border
-}
-
-# fd - cd to selected directory
-fd() {
-  local dir
-  dir=$(find . -maxdepth 1 -path './.*' -prune -o -type d -print | sed '1d;s#^./##' |
-        fzf --height 20 --reverse --query "$1" --select-1 --exit-0) && cd "$dir"
 }
 
 # fco - checkout git branch/tag
