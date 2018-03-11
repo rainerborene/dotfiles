@@ -28,16 +28,13 @@ install() {
   # tmux plugin manager
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 2>/dev/null
 
-  # base16 shell theme
-  git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell 2>/dev/null
-
   # rust dependencies
   curl https://sh.rustup.rs -sSf | sh
   cargo install --git https://github.com/ogham/exa
   cargo install ripgrep
 
   # asdf
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.4.0
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.4.1
 }
 
 # run

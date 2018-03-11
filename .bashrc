@@ -79,7 +79,6 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
 alias g='git'
-alias gv='vim +GV +"autocmd BufWipeout <buffer> qall"'
 alias j='z'
 alias la='ls -la'
 alias ls='exa --group-directories-first'
