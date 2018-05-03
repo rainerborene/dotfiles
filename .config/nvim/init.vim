@@ -16,32 +16,37 @@ let g:did_install_default_menus = 1
 
 call plug#begin('~/.config/nvim/plugged')
 
+Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'christoomey/vim-sort-motion'
-Plug 'cohama/agit.vim', { 'on': 'Agit' }
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-runner'
 Plug 'cohama/lexima.vim'
 Plug 'dyng/ctrlsf.vim', { 'on': 'CtrlSF' }
 Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/is.vim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'janko-m/vim-test'
+Plug 'joker1007/vim-ruby-heredoc-syntax'
 Plug 'jreybert/vimagit', { 'on': 'Magit' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-sneak'
+Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
-Plug 'kassio/neoterm'
+Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
-Plug 'mattn/emmet-vim', { 'for': ['sass', 'scss'] }
+Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mhinz/vim-startify'
 Plug 'osyo-manga/vim-anzu'
+Plug 'rhysd/vim-textobj-ruby'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
@@ -105,7 +110,6 @@ set smartcase
 set hidden
 set splitbelow
 set splitright
-set scrolloff=4
 set sidescroll=5
 set nostartofline
 
@@ -207,13 +211,7 @@ nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
 " I hate when the rendering occasionally gets messed up.
-nnoremap <silent> U :syntax sync fromstart<cr>:redraw!<cr>
-
-" Speed up window switching
-nnoremap <C-h> <C-W>h
-nnoremap <C-j> <C-W>j
-nnoremap <C-k> <C-W>k
-nnoremap <C-l> <C-W>l
+nnoremap <silent> U :syntax sync fromstart<cr>:nohlsearch<cr>:redraw!<cr>
 
 " Tab switching
 nnoremap <C-p> gT
@@ -232,10 +230,6 @@ nnoremap <left>   <c-w>>
 nnoremap <right>  <c-w><
 nnoremap <up>     <c-w>-
 nnoremap <down>   <c-w>+
-
-" Bad habbit!
-nnoremap V <nop>
-nnoremap v <nop>
 
 " Sane movement with wrap turned on
 nnoremap j gj
@@ -295,6 +289,10 @@ cnoremap <c-g> <C-c>
 
 " Command-line abbreviations
 cnoreabbrev Wqa wqa
+cnoreabbrev W w
+
+" Write everything and quit
+nnoremap ZX :wall \| qall!<CR>
 
 " Send to the black hole register
 noremap x "_x
@@ -362,63 +360,6 @@ function! s:generate_ctags() abort
   redraw!
 endfunction
 nnoremap <silent> g<cr> :call <sid>generate_ctags()<cr>
-
-" }}}
-" Terminal mode {{{
-
-function! s:terminit()
-  nnoremap <buffer> I I<C-a>
-  nnoremap <buffer> A A<C-e>
-  nnoremap <buffer> C i<C-k>
-  nnoremap <buffer> D i<C-k><C-\><C-n>
-  nnoremap <buffer> cc i<C-e><C-u>
-  nnoremap <buffer> dd i<C-e><C-u><C-\><C-n>
-
-  if match(b:term_title, 'fzf') > -1
-    tmap <buffer> <c-j> <c-j>
-    tmap <buffer> <c-k> <c-k>
-    tmap <buffer> <c-l> <c-l>
-    tmap <buffer> <c-h> <c-h>
-  endif
-
-  setlocal nonumber norelativenumber
-endfunction
-
-function! s:move(dir)
-  let previous = bufnr('%')
-  let fallback = {
-        \ 'h': "\<C-h>",
-        \ 'j': "\<C-j>",
-        \ 'k': "\<C-k>",
-        \ 'l': "\<C-l>"
-        \ }
-  exec 'wincmd '.a:dir
-  if bufnr('%') == previous && exists('b:terminal_job_id')
-    call jobsend(b:terminal_job_id, get(fallback, a:dir))
-    startinsert
-  endif
-endfunction
-
-au TermOpen * call s:terminit()
-
-nnoremap <silent> <localleader>s :botright new<bar>term<cr>:startinsert<cr>
-nnoremap <silent> <localleader>v :vertical botright split<bar>term<cr>:startinsert<cr>
-
-tnoremap <Esc> <C-\><C-n>
-tnoremap <c-q> <c-\><c-n>:bw!<cr>
-tnoremap <pageup> <c-\><c-n><pageup>
-tnoremap <pagedown> <c-\><c-n><pagedown>
-
-tnoremap <silent> <c-j> <c-\><c-n>:call <sid>move('j')<cr>
-tnoremap <silent> <c-k> <c-\><c-n>:call <sid>move('k')<cr>
-tnoremap <silent> <c-h> <c-\><c-n>:call <sid>move('h')<cr>
-tnoremap <silent> <c-l> <c-\><c-n>:call <sid>move('l')<cr>
-
-" moving between chars and words
-tnoremap <A-a> <esc>a
-tnoremap <A-b> <esc>b
-tnoremap <A-d> <esc>d
-tnoremap <A-f> <esc>f
 
 " }}}
 " Quickfix mode {{{
@@ -769,7 +710,6 @@ nmap <silent> <leader>gs :Gstatus<cr>gg<c-n>
 
 augroup ft_git
   au!
-  au BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
   au FileType git nnoremap <buffer> <c-n> zMzjzOzt
   au FileType git nnoremap <buffer> <c-p> zMzkzO[zzt
   au FileType gitcommit,git setlocal foldmethod=syntax nolist nonumber norelativenumber
@@ -872,6 +812,8 @@ let g:startify_change_to_vcs_root = 1
 " }}}
 " Emmet {{{
 
+let g:user_emmet_mode = 'i'
+
 augroup emmet
   au!
   au FileType sass,scss imap <buffer> <expr> <tab> emmet#isExpandable() ?
@@ -911,7 +853,7 @@ map T <Plug>Sneak_T
 " }}}
 " Highlighted Yank {{{
 
-" let g:highlightedyank_highlight_duration = 200
+let g:highlightedyank_highlight_duration = 200
 
 " }}}
 " Lexima {{{
@@ -926,13 +868,12 @@ function! s:my_cr_function() abort
   return deoplete#close_popup() . lexima#expand('<CR>', 'i')
 endfunction
 
-" }}}
-" Neoterm {{{
-
-let g:neoterm_autoscroll = 1
-
-nnoremap <leader>tl :Tclear<cr>
-nnoremap <leader>tk :Tkill<cr>
+call lexima#add_rule({
+      \ 'at': '\v\w+:\s+%#',
+      \ 'char': '=',
+      \ 'input': '<%=  %><Left><Left><Left>',
+      \ 'filetype': 'eruby.yaml'
+      \ })
 
 " }}}
 " Test {{{
@@ -943,12 +884,18 @@ nmap <silent> <leader>ra :TestSuite<CR>
 nmap <silent> <leader>rl :TestLast<CR>
 nmap <silent> <leader>rg :TestVisit<CR>
 
-function! test#strategy#neoterm(cmd) abort
-  silent! call neoterm#clear({})
-  call neoterm#do({ 'cmd': a:cmd })
-endfunction
+let test#strategy = "vtr"
 
-let test#strategy = "neoterm"
+" }}}
+" Sideways {{{
+
+nnoremap <silent> sh :SidewaysLeft<cr>
+nnoremap <silent> sl :SidewaysRight<cr>
+
+omap <silent> aa <Plug>SidewaysArgumentTextobjA
+xmap <silent> aa <Plug>SidewaysArgumentTextobjA
+omap <silent> ia <Plug>SidewaysArgumentTextobjI
+xmap <silent> ia <Plug>SidewaysArgumentTextobjI
 
 " }}}
 
