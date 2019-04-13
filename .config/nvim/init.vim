@@ -18,20 +18,21 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/switch.vim'
+Plug 'SirVer/ultisnips'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
+Plug 'cocopon/iceberg.vim'
+Plug 'cocopon/shadeline.vim'
 Plug 'cohama/lexima.vim'
-Plug 'dyng/ctrlsf.vim', { 'on': 'CtrlSF' }
 Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/is.vim'
 Plug 'haya14busa/vim-asterisk'
+Plug 'honza/vim-snippets'
+Plug 'jalvesaq/vimcmdline'
 Plug 'janko-m/vim-test'
-Plug 'joker1007/vim-ruby-heredoc-syntax'
-Plug 'jreybert/vimagit', { 'on': 'Magit' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'justinmk/vim-sneak'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
@@ -45,29 +46,32 @@ Plug 'machakann/vim-textobj-delimited'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mhinz/vim-startify'
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+Plug 'neworld/vim-git-hunk-editor'
 Plug 'osyo-manga/vim-anzu'
+Plug 'rainerborene/nodejs.vim'
+Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-ruby'
 Plug 'rhysd/vim-textobj-word-column'
+Plug 'roxma/vim-tmux-clipboard'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'sheerun/vim-polyglot'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/neosnippet-snippets'
-Plug 'Shougo/neosnippet.vim'
+Plug 'thinca/vim-quickrun'
 Plug 'tommcdo/vim-exchange'
 Plug 'tommcdo/vim-lion'
-Plug 'tpope/vim-abolish', { 'on': ['Abolish', 'Subvert', 'S'] }
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'w0ng/vim-hybrid'
 Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
 
@@ -79,7 +83,7 @@ call plug#end()
 " misc
 set confirm
 set lazyredraw
-set shortmess=aoOtI
+set shortmess+=c
 set noswapfile
 set nowritebackup
 set spellfile=~/.config/nvim/spell/custom-dictionary.utf-8.add
@@ -89,6 +93,7 @@ set undoreload=10000
 set notimeout
 set ttimeout
 set ttimeoutlen=0
+set regexpengine=1
 
 " text manipulation
 set expandtab
@@ -98,7 +103,7 @@ set shiftwidth=2
 set tabstop=4
 set textwidth=80
 set virtualedit+=block
-set completeopt=longest,menuone
+set completeopt=noinsert,menuone,noselect
 set inccommand=nosplit
 set nojoinspaces
 
@@ -122,66 +127,43 @@ set wildignore+=.sass-cache
 " ui customization
 set list
 set listchars=tab:»\ ,trail:·,extends:❯,precedes:❮
-set fillchars=diff:─,vert:│
+set fillchars=diff:─,vert:│,msgsep:─
 set showbreak=↪\ "
 set noshowmode
-set numberwidth=1
 set relativenumber
 set number
 set conceallevel=2
 set concealcursor=niv
+set cmdheight=2
 
 " }}}
 " Color scheme {{{
 
-let g:terminal_color_0  = '#1e1e1e'
-let g:terminal_color_1  = '#cf6a4c'
-let g:terminal_color_2  = '#8f9d6a'
-let g:terminal_color_3  = '#f9ee98'
-let g:terminal_color_4  = '#7587a6'
-let g:terminal_color_5  = '#9b859d'
-let g:terminal_color_6  = '#afc4db'
-let g:terminal_color_7  = '#a7a7a7'
-let g:terminal_color_8  = '#5f5a60'
-let g:terminal_color_9  = '#cf6a4c'
-let g:terminal_color_10 = '#8f9d6a'
-let g:terminal_color_11 = '#f9ee98'
-let g:terminal_color_12 = '#7587a6'
-let g:terminal_color_13 = '#9b859d'
-let g:terminal_color_14 = '#afc4db'
-let g:terminal_color_15 = '#ffffff'
-
-set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 set background=dark
 set termguicolors
 
-function! s:extend_colorscheme() abort
-  hi! SignColumn guibg=bg
-  hi! ExtraWhitespace ctermbg=red guibg=red
-  hi! EndOfBuffer guibg=bg guifg=bg
-  hi! def link neosnippetExpandSnippets NonText
-  hi! def link neosnippetConcealExpandSnippets NonText
-  hi! Sneak gui=bold,underline cterm=bold,underline ctermfg=221 guifg=#f0c674
-  hi! link SneakLabel Search
-endfunction
+" function! s:extend_colorscheme() abort
+  " hi! SignColumn guibg=bg
+  " hi! EndOfBuffer guibg=bg guifg=bg
+  " hi! MsgSeparator ctermbg=black ctermfg=white
+" endfunction
 
-augroup vimrc_colorscheme
-  au!
-  au ColorScheme * call s:extend_colorscheme()
-augroup END
+" augroup vimrc_colorscheme
+"   au!
+"   au ColorScheme * call s:extend_colorscheme()
+" augroup END
 
-colorscheme hybrid
-
-" }}}
-" Statusline {{{
-
-set statusline=%F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %=%-14.(%l,%c%V%)\ %P
+" colorscheme space-vim-dark
+colorscheme iceberg
 
 " }}}
 " Mappings {{{
 
 let mapleader = ","
 let maplocalleader = "\\"
+
+" Easy command-line mode
+map ; :
 
 " Easier bracket matching
 map <Tab> %
@@ -208,14 +190,15 @@ nnoremap G Gzv
 
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
-nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
+nnoremap <localleader>\ <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
 " I hate when the rendering occasionally gets messed up.
 nnoremap <silent> U :syntax sync fromstart<cr>:nohlsearch<cr>:redraw!<cr>
 
 " Tab switching
-nnoremap <C-p> gT
-nnoremap <C-n> gt
+nnoremap <nowait> <a-h> <esc>gT
+nnoremap <nowait> <a-l> <esc>gt
+nnoremap <nowait> <a-t> <esc>:tabnew<CR>
 
 " Split windows
 nnoremap <leader>s <C-W>s
@@ -245,15 +228,6 @@ nnoremap <expr> { foldclosed(search('^$', 'Wnb')) == -1 ? '{zz' : '{k{zz'
 noremap H ^
 noremap L $
 vnoremap L g_
-
-" Quit
-inoremap <silent> <C-Q> <esc>:q<cr>
-nnoremap <silent> <C-Q> :q<cr>
-nnoremap <silent> <C-W>q :q!<cr>
-
-" Save
-inoremap <silent> <C-s> <C-o>:update<cr>
-nnoremap <silent> <C-s> :update<cr>
 
 " Make Y consistent with C and D.
 nnoremap Y y$
@@ -286,13 +260,20 @@ inoremap <c-e> <esc>A
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 cnoremap <c-g> <C-c>
+vnoremap <c-c> "+y
+
+" Quit
+inoremap <silent> <C-Q> <esc>:q<cr>
+nnoremap <silent> <C-Q> :q<cr>
+nnoremap <silent> <C-W>q :q!<cr>
+
+" Save
+inoremap <silent> <C-s> <C-o>:update<cr>
+nnoremap <silent> <C-s> :update<cr>
 
 " Command-line abbreviations
 cnoreabbrev Wqa wqa
 cnoreabbrev W w
-
-" Write everything and quit
-nnoremap ZX :wall \| qall!<CR>
 
 " Send to the black hole register
 noremap x "_x
@@ -305,15 +286,15 @@ nnoremap <silent> ) g,zvzz
 " Clean trailing whitespace
 nnoremap <silent> =w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
 
-" Goto line/column instead
-noremap ' `
-
 " Fast access to some registers
 noremap! <c-r>/ <c-r>=substitute(getreg('/'), '[<>\\]', '', 'g')<cr>
 noremap! <c-r>w <c-r>=expand("<cword>")<cr>
 
 " Change current word and prepare to repeat next occurence (like *cgn)
 nnoremap c* :<C-U>let @/='\<'.expand("<cword>").'\>'<CR>:set hlsearch<CR>cgn
+
+" Goto line/column instead
+noremap ' `
 
 " Mark position before search
 nnoremap / ms/
@@ -330,10 +311,6 @@ nnoremap == mqHmwgg=G`wzt`q
 
 " Easy filetype switching
 nnoremap =f :setfiletype<Space>
-
-" Insert Mode Completion
-imap <c-j> <c-n>
-imap <c-k> <c-p>
 
 " }}}
 " Zoom {{{
@@ -490,17 +467,13 @@ augroup vimrc
   autocmd InsertLeave * set listchars+=trail:⣿
 
   " Save when losing focus
-  au FocusLost * :silent! wall
+  " au FocusLost * :silent! wall
 
   " Resize splits when the window is resized
   au VimResized * :wincmd =
 
   " No folds closed when editing new files
   au BufNew * setlocal foldlevelstart=99
-
-  " http://vim.wikia.com/wiki/Highlight_unwanted_spaces
-  au BufNewFile,BufRead,InsertLeave * silent! match ExtraWhitespace /\s\+$/
-  au InsertEnter * silent! match ExtraWhitespace /\s\+\%#\@<!$/
 
   " Don't keep undo files in temp directories or shm
   au BufWritePre /tmp/* setlocal noundofile
@@ -529,6 +502,12 @@ augroup vimrc
           \|   call system('tmux rename-window '.expand('%:t:S'))
           \| endif
   endif
+
+  " Setup default omnifunc
+  au FileType *
+        \ if &omnifunc == "" |
+        \    setlocal omnifunc=syntaxcomplete#Complete |
+        \ endif
 augroup END
 
 " }}}
@@ -565,6 +544,16 @@ function! MyFoldText()
   return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
 endfunction
 set foldtext=MyFoldText()
+
+" }}}
+" Terminal {{{
+
+tnoremap <a-a> <esc>a
+tnoremap <a-b> <esc>b
+tnoremap <a-d> <esc>d
+tnoremap <a-f> <esc>f
+
+tnoremap <Esc> <C-\><C-n>
 
 " }}}
 " Automatically create any non-existent directories before writing the buffer {{{
@@ -608,8 +597,9 @@ augroup nerd_loader
         \ endif
 augroup END
 
-" Open NERDTree file explorer
 nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
+cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
+cnoremap <expr> %< getcmdtype() == ':' ? fnameescape(expand('%:t:r')).'.' : '%<'
 
 " }}}
 " Switch {{{
@@ -672,6 +662,7 @@ augroup ft_fzf
   " Hide statusline of terminal buffer
   au FileType fzf set laststatus=0 | au BufLeave <buffer> set laststatus=2
 
+  au TermOpen term://* setlocal nonumber norelativenumber
   au TermOpen term://*FZF tnoremap <silent> <buffer> <nowait> <esc> <c-c>
 augroup END
 
@@ -724,41 +715,6 @@ augroup ft_git
 augroup END
 
 " }}}}
-" Magit {{{
-
-nnoremap <silent> <leader>m :Magit<cr>
-
-" }}}
-" Deoplete {{{
-
-let g:deoplete#enable_at_startup = 0
-let g:deoplete#ignore_sources = {}
-let g:deoplete#ignore_sources.ruby = ['omni']
-
-function! s:lazy_load() abort
-  call deoplete#enable()
-  augroup deoplete_loader
-    au!
-  augroup END
-endfunction
-
-augroup deoplete_loader
-  au!
-  au InsertEnter * call s:lazy_load()
-augroup END
-
-" }}}
-" Neosnippet {{{
-
-let g:neosnippet#snippets_directory = '~/.config/nvim/snippets'
-
-imap <expr> <tab> neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
-
-smap <expr> <tab> neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
-
-" }}}
 " Anzu + Asterisk + is.vim {{{
 
 let g:asterisk#keeppos = 1
@@ -774,23 +730,17 @@ map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)zz
 " }}}
 " Ale {{{
 
-let g:ale_linters = { 'eruby': [] }
+let g:ale_linters = { 'eruby': [], 'javascript': ['xo'], 'vue': [] }
 let g:ale_sign_error = '•'
 let g:ale_sign_warning = '•'
 let g:ale_lint_delay = 1000
 let g:ale_set_highlights = 0
 
 hi link ALEErrorSign ErrorMsg
+hi ALEErrorSign guibg=NONE
 
 nmap ]r <Plug>(ale_next_wrap)
 nmap [r <Plug>(ale_previous_wrap)
-
-" }}}
-" CtrlSF {{{
-
-let g:ctrlsf_case_sensitive = 'no'
-
-nnoremap <leader>f :CtrlSF<Space>
 
 " }}}
 " Smartword {{{
@@ -821,39 +771,14 @@ augroup emmet
 augroup END
 
 " }}}
-" Sort Motion {{{
-
-let g:sort_motion_flags = "ui"
-
-" }}}
 " Pasted Text Object {{{
 
 let g:pastedtext_select_key = "gp"
 
 " }}}
-" Sneak {{{
-
-let g:sneak#label = 1
-let g:sneak#s_next = 1
-let g:sneak#target_labels = "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"
-let g:sneak#use_ic_scs = 1
-
-nmap ç <Plug>Sneak_s
-nmap Ç <Plug>Sneak_S
-omap ç <Plug>Sneak_s
-omap Ç <Plug>Sneak_S
-xmap ç <Plug>Sneak_s
-xmap Ç <Plug>Sneak_S
-
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
-
-" }}}
 " Highlighted Yank {{{
 
-let g:highlightedyank_highlight_duration = 200
+let g:highlightedyank_highlight_duration = 100
 
 " }}}
 " Lexima {{{
@@ -865,7 +790,7 @@ call lexima#insmode#map_hook('before', '<CR>', '')
 
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function() abort
-  return deoplete#close_popup() . lexima#expand('<CR>', 'i')
+  return pumvisible() ? "\<c-y>\<cr>" : "\<CR>"
 endfunction
 
 call lexima#add_rule({
@@ -886,6 +811,8 @@ nmap <silent> <leader>rg :TestVisit<CR>
 
 let test#strategy = "vtr"
 
+noremap ss :%VtrSendLinesToRunner<cr>
+
 " }}}
 " Sideways {{{
 
@@ -896,6 +823,105 @@ omap <silent> aa <Plug>SidewaysArgumentTextobjA
 xmap <silent> aa <Plug>SidewaysArgumentTextobjA
 omap <silent> ia <Plug>SidewaysArgumentTextobjI
 xmap <silent> ia <Plug>SidewaysArgumentTextobjI
+
+" }}}
+" UltiSnips {{{
+
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpForwardTrigger = '<tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<S-tab>'
+let g:UltiSnipsEditSplit = 'vertical'
+let g:UltiSnipsSnippetDirectories = [$HOME . '/.config/nvim/UltiSnips/']
+
+" }}}
+" Polyglot {{{
+
+" let g:jsx_ext_required = 1
+let g:vue_disable_pre_processors = 1
+
+" }}}
+" Clever-f {{{
+
+let g:clever_f_across_no_line = 1
+let g:clever_f_smart_case = 1
+
+" }}}
+" Coc.vim {{{
+
+" Insert Mode Completion
+imap <c-j> <c-n>
+imap <c-k> <c-p>
+
+" Use <c-space> for trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use `[c` and `]c` for navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gm <Plug>(coc-implementation)
+nmap <silent> gn <Plug>(coc-references)
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" }}}
+" Hunk Toggle {{{
+
+augroup hunk
+  au!
+  autocmd BufEnter *hunk*diff nnoremap <buffer> <space> :HunkLineToggle<CR>
+augroup END
+
+" }}}
+" Ragtag {{{
+
+augroup ragtag_plugin
+  au!
+  au FileType vue call RagtagInit()
+augroup END
+
+" }}}
+" Shadeline {{{
+
+let g:shadeline = {}
+let g:shadeline.active = {
+      \   'left': [
+      \     'fname',
+      \     'flags',
+      \     'ShadelineItemGitBranch'
+      \   ],
+      \   'right': [
+      \     '<',
+      \     ['ff', 'fenc', 'ft'],
+      \     'ruler'
+      \   ]
+      \ }
+
+let g:shadeline.inactive = {
+      \   'left': [
+      \    'fname',
+      \     'flags',
+      \   ]
+      \ }
+
+function! ShadelineItemGitBranch()
+  let name = exists('*fugitive#head') ? fugitive#head() : ''
+  return empty(name) ? '' : printf('(%s)', name)
+endfunction
+
+" }}}
+" Cmdline {{{
+
+let cmdline_map_send = '<localleader>r'
+
+" }}}
+" QuickRun {{{
+
+map <leader>rq <Plug>(quickrun)
 
 " }}}
 

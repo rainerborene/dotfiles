@@ -62,7 +62,9 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 ### fzf
-export FZF_DEFAULT_COMMAND='rg --files --hidden'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND='fd --type f --type d --hidden --follow --exclude .git'
 export FZF_CTRL_T_OPTS="--preview '~/.config/nvim/plugged/fzf.vim/bin/preview.rb {} | head -200'"
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --border"
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
@@ -79,6 +81,7 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
 alias g='git'
+alias lg='lazygit'
 alias j='z'
 alias la='ls -la'
 alias ls='exa --group-directories-first'
@@ -87,14 +90,15 @@ alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
 alias tmux='tmux -2'
-alias dkk='docker kill $(docker ps -q)'
 alias open='xdg-open &>/dev/null'
-alias bs='browser-sync start --no-notify --proxy localhost:3000 --files "app/assets/**/* , app/views/**/*.html.*, \!tmp, \!log"'
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
 
 alias be='bundle exec'
 alias rc='rails console'
 alias rs='rails server'
 alias fore='foreman start -f Procfile.dev'
+alias dkk='docker kill $(docker ps -q)'
 
 temp() {
   nvim +"set buftype=nofile bufhidden=wipe nobuflisted noswapfile tw=${1:-0}"
@@ -157,28 +161,6 @@ fe() {
   local file
   file=$(fzf-tmux --query="$1" --select-1 --exit-0)
   [ -n "$file" ] && ${EDITOR:-nvim} "$file"
-}
-
-# c - browse chrome history
-c() {
-  local cols sep
-  export cols=$(( COLUMNS / 3 ))
-  export sep='{::}'
-
-  cp -f ~/.config/google-chrome/Default/History /tmp/h
-  sqlite3 -separator $sep /tmp/h \
-    "select title, url from urls order by last_visit_time desc" |
-  ruby -ne '
-    cols = ENV["cols"].to_i
-    title, url = $_.split(ENV["sep"])
-    len = 0
-    puts "\x1b[36m" + title.each_char.take_while { |e|
-      if len < cols
-        len += e =~ /\p{Han}|\p{Katakana}|\p{Hiragana}|\p{Hangul}/ ? 2 : 1
-      end
-    }.join + " " * (2 + cols - len) + "\x1b[m" + url' |
-  fzf --ansi --multi --no-hscroll --tiebreak=index |
-  sed 's#.*\(https*://\)#\1#' | xargs google-chrome
 }
 
 
