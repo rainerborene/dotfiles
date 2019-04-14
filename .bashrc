@@ -26,9 +26,6 @@ shopt -s checkwinsize
 ### Bash completion
 [ -f /etc/bash_completion ] && . /etc/bash_completion
 
-### Direnv
-eval "$(direnv hook bash)"
-
 ### Cargo
 [ -f $HOME/.cargo/env ] && . $HOME/.cargo/env
 

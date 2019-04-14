@@ -72,6 +72,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'w0ng/vim-hybrid'
 Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
 
@@ -142,19 +143,18 @@ set cmdheight=2
 set background=dark
 set termguicolors
 
-" function! s:extend_colorscheme() abort
-  " hi! SignColumn guibg=bg
-  " hi! EndOfBuffer guibg=bg guifg=bg
-  " hi! MsgSeparator ctermbg=black ctermfg=white
-" endfunction
+function! s:extend_colorscheme() abort
+  hi! SignColumn guibg=bg
+  hi! EndOfBuffer guibg=bg guifg=bg
+  hi! MsgSeparator ctermbg=black ctermfg=white
+endfunction
 
-" augroup vimrc_colorscheme
-"   au!
-"   au ColorScheme * call s:extend_colorscheme()
-" augroup END
+augroup vimrc_colorscheme
+  au!
+  au ColorScheme * call s:extend_colorscheme()
+augroup END
 
-" colorscheme space-vim-dark
-colorscheme iceberg
+colorscheme hybrid
 
 " }}}
 " Mappings {{{
