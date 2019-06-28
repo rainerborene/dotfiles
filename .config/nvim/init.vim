@@ -46,7 +46,7 @@ Plug 'machakann/vim-textobj-delimited'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mhinz/vim-startify'
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', { 'do': { -> coc#util#install() } }
 Plug 'neworld/vim-git-hunk-editor'
 Plug 'osyo-manga/vim-anzu'
 Plug 'rainerborene/nodejs.vim'
@@ -116,8 +116,9 @@ set smartcase
 set hidden
 set splitbelow
 set splitright
-set sidescroll=5
+set sidescroll=1
 set nostartofline
+set switchbuf=useopen
 
 " wild stuff
 set wildmode=list:longest,full
@@ -136,6 +137,12 @@ set number
 set conceallevel=2
 set concealcursor=niv
 set cmdheight=2
+set pumheight=20
+
+if executable('rg')
+  set grepprg=rg\ --vimgrep
+  set grepformat=%f:%l:%c:%m,%f:%l:%m,%f:%l%m,%f\ %l%m
+endif
 
 " }}}
 " Color scheme {{{
@@ -209,10 +216,10 @@ nnoremap <c-e> 5<c-e>
 nnoremap <c-y> 5<c-y>
 
 " Resize window
-nnoremap <left>   <c-w>>
-nnoremap <right>  <c-w><
-nnoremap <up>     <c-w>-
-nnoremap <down>   <c-w>+
+nnoremap <left>  <c-w>>
+nnoremap <right> <c-w><
+nnoremap <up>    <c-w>-
+nnoremap <down>  <c-w>+
 
 " Sane movement with wrap turned on
 nnoremap j gj
@@ -916,7 +923,8 @@ endfunction
 " }}}
 " Cmdline {{{
 
-let cmdline_map_send = '<localleader>r'
+let g:cmdline_map_send = '<localleader>r'
+let g:cmdline_app = { 'ruby': 'bundle exec rails console' }
 
 " }}}
 " QuickRun {{{
