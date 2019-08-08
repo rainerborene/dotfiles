@@ -17,6 +17,7 @@ let g:did_install_default_menus = 1
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'AndrewRadev/sideways.vim'
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'SirVer/ultisnips'
 Plug 'christoomey/vim-sort-motion'
@@ -150,18 +151,11 @@ endif
 set background=dark
 set termguicolors
 
-function! s:extend_colorscheme() abort
+function! init#colorscheme() abort
   hi! SignColumn guibg=bg
   hi! EndOfBuffer guibg=bg guifg=bg
   hi! MsgSeparator ctermbg=black ctermfg=white
 endfunction
-
-augroup vimrc_colorscheme
-  au!
-  au ColorScheme * call s:extend_colorscheme()
-augroup END
-
-colorscheme hybrid
 
 " }}}
 " Mappings {{{
@@ -700,7 +694,7 @@ nnoremap <leader>a :Rg<Space>
 " }}}
 " Fugitive {{{
 
-nnoremap <silent> <leader>gd :Gvdiff -<cr>
+nnoremap <silent> <leader>gd :Gvdiff<cr>
 nnoremap <silent> <leader>ge :Gedit<cr>
 nnoremap <silent> <leader>gl :Glog<cr>
 nnoremap <silent> <leader>gw :Gwrite<cr>
@@ -710,10 +704,9 @@ augroup ft_git
   au!
   au FileType git nnoremap <buffer> <c-n> zMzjzOzt
   au FileType git nnoremap <buffer> <c-p> zMzkzO[zzt
+  au FileType gitrebase nnoremap <buffer> <silent> S :Cycle<cr>
   au FileType gitcommit,git setlocal foldmethod=syntax nolist nonumber norelativenumber
-  au FileType gitcommit setlocal spell | wincmd K
-  au FileType gitcommit nnoremap <silent> <buffer> U :call system("git checkout -- <C-r><C-g>")<CR>R
-  au FileType gitcommit nnoremap <silent> <buffer> cA :<C-U>Gcommit --amend --date="$(date)"<CR>
+  au FileType gitcommit setlocal spell
   au BufReadPost fugitive://* set bufhidden=delete
   au User fugitive
         \  if fugitive#buffer().type() =~# '^\%(tree\|blob\)$'
@@ -929,8 +922,15 @@ let g:cmdline_app = { 'ruby': 'bundle exec rails console' }
 " }}}
 " QuickRun {{{
 
-map <leader>rq <Plug>(quickrun)
+map ! <Plug>(quickrun)
 
 " }}}
+
+" }}}
+" Outro {{{
+
+if filereadable(fnamemodify('~/.vimrc.local', ':p'))
+  source ~/.vimrc.local
+endif
 
 " }}}
