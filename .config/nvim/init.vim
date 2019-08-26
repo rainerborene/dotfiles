@@ -34,6 +34,8 @@ Plug 'jalvesaq/vimcmdline'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
@@ -923,6 +925,12 @@ let g:cmdline_app = { 'ruby': 'bundle exec rails console' }
 " QuickRun {{{
 
 map ! <Plug>(quickrun)
+
+" }}}
+" Goyo {{{
+
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
 
 " }}}
 

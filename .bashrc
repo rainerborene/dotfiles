@@ -51,7 +51,8 @@ export HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S:   "
 export GOPATH=~/gosrc
 mkdir -p $GOPATH
 if [ -z "$PATH_EXPANDED" ]; then
-  export PATH="./bin:~/bin:/usr/local/bin:/usr/lib/chromium-browser/:$GOPATH/bin:~/.cargo/bin/:$PATH"
+  export PATH="./bin:~/bin:/usr/local/bin:/usr/lib/chromium-browser/:$GOPATH/bin:$PATH"
+  export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
   export PATH_EXPANDED=1
 fi
 export EDITOR=nvim
