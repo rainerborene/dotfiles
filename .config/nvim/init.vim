@@ -29,6 +29,7 @@ Plug 'cohama/lexima.vim'
 Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/is.vim'
 Plug 'haya14busa/vim-asterisk'
+Plug 'haya14busa/vim-edgemotion'
 Plug 'honza/vim-snippets'
 Plug 'jalvesaq/vimcmdline'
 Plug 'janko-m/vim-test'
@@ -78,6 +79,7 @@ Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'w0ng/vim-hybrid'
 Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
+Plug 'whatyouhide/vim-textobj-erb'
 
 call plug#end()
 
@@ -199,9 +201,11 @@ nnoremap <localleader>\ <c-w>v<c-]>mzzMzvzz15<c-e>`z
 nnoremap <silent> U :syntax sync fromstart<cr>:nohlsearch<cr>:redraw!<cr>
 
 " Tab switching
-nnoremap <nowait> <a-h> <esc>gT
-nnoremap <nowait> <a-l> <esc>gt
-nnoremap <nowait> <a-t> <esc>:tabnew<CR>
+nnoremap <silent> <a-h> gT
+nnoremap <silent> <a-l> gt
+nnoremap <silent> <a-t> :tabnew<CR>
+nnoremap <silent> <a-}> :+tabmove<cr>
+nnoremap <silent> <a-{> :-tabmove<cr>
 
 " Split windows
 nnoremap <leader>s <C-W>s
@@ -920,6 +924,12 @@ endfunction
 
 let g:cmdline_map_send = '<localleader>r'
 let g:cmdline_app = { 'ruby': 'bundle exec rails console' }
+
+" }}}
+" EdgeMotion {{{
+
+map <localleader>j <Plug>(edgemotion-j)
+map <localleader>k <Plug>(edgemotion-k)
 
 " }}}
 " QuickRun {{{
