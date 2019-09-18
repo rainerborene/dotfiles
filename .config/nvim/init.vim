@@ -49,6 +49,7 @@ Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+Plug 'mhinz/vim-rfc'
 Plug 'mhinz/vim-startify'
 Plug 'neoclide/coc.nvim', { 'do': { -> coc#util#install() } }
 Plug 'neworld/vim-git-hunk-editor'
@@ -61,6 +62,7 @@ Plug 'roxma/vim-tmux-clipboard'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'sheerun/vim-polyglot'
+Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'thinca/vim-quickrun'
 Plug 'tommcdo/vim-exchange'
 Plug 'tommcdo/vim-lion'
@@ -809,15 +811,15 @@ call lexima#add_rule({
 " }}}
 " Test {{{
 
+let test#strategy = "vtr"
+let test#ruby#use_spring_binstub = 1
+
 nmap <silent> <leader>rr :TestNearest<CR>
 nmap <silent> <leader>rf :TestFile<CR>
 nmap <silent> <leader>ra :TestSuite<CR>
 nmap <silent> <leader>rl :TestLast<CR>
 nmap <silent> <leader>rg :TestVisit<CR>
-
-let test#strategy = "vtr"
-
-noremap ss :%VtrSendLinesToRunner<cr>
+noremap <silent> ss :%VtrSendLinesToRunner<cr>
 
 " }}}
 " Sideways {{{
@@ -877,7 +879,7 @@ nmap <leader>rn <Plug>(coc-rename)
 " }}}
 " Hunk Toggle {{{
 
-augroup hunk
+augroup hunk_plugin
   au!
   autocmd BufEnter *hunk*diff nnoremap <buffer> <space> :HunkLineToggle<CR>
 augroup END
