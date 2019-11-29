@@ -20,11 +20,10 @@ Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'SirVer/ultisnips'
+Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
-Plug 'cocopon/iceberg.vim'
-Plug 'cocopon/shadeline.vim'
 Plug 'cohama/lexima.vim'
 Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/is.vim'
@@ -37,6 +36,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
+Plug 'junegunn/vim-peekaboo'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
@@ -44,6 +44,8 @@ Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
+Plug 'liuchengxu/eleline.vim'
+Plug 'liuchengxu/space-vim-dark'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
@@ -54,7 +56,6 @@ Plug 'mhinz/vim-startify'
 Plug 'neoclide/coc.nvim', { 'do': { -> coc#util#install() } }
 Plug 'neworld/vim-git-hunk-editor'
 Plug 'osyo-manga/vim-anzu'
-Plug 'rainerborene/nodejs.vim'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-ruby'
 Plug 'rhysd/vim-textobj-word-column'
@@ -66,9 +67,9 @@ Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'thinca/vim-quickrun'
 Plug 'tommcdo/vim-exchange'
 Plug 'tommcdo/vim-lion'
+Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
-Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -78,7 +79,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'w0ng/vim-hybrid'
 Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
 Plug 'whatyouhide/vim-textobj-erb'
@@ -158,9 +158,13 @@ set background=dark
 set termguicolors
 
 function! init#colorscheme() abort
-  hi! SignColumn guibg=bg
-  hi! EndOfBuffer guibg=bg guifg=bg
+  hi! SignColumn   guibg=bg
+  hi! EndOfBuffer  guibg=bg      guifg=bg
   hi! MsgSeparator ctermbg=black ctermfg=white
+  hi! CursorLineNr ctermbg=NONE  guibg=NONE
+  hi! LineNr       ctermbg=NONE  guibg=NONE
+  hi! SignColumn   ctermbg=NONE  guibg=NONE
+  hi! Comment      guifg=#5C6370 ctermfg=59
 endfunction
 
 " }}}
@@ -202,12 +206,37 @@ nnoremap <localleader>\ <c-w>v<c-]>mzzMzvzz15<c-e>`z
 " I hate when the rendering occasionally gets messed up.
 nnoremap <silent> U :syntax sync fromstart<cr>:nohlsearch<cr>:redraw!<cr>
 
-" Tab switching
-nnoremap <silent> <a-h> gT
-nnoremap <silent> <a-l> gt
-nnoremap <silent> <a-t> :tabnew<CR>
-nnoremap <silent> <a-}> :+tabmove<cr>
-nnoremap <silent> <a-{> :-tabmove<cr>
+" Useful mappings for managing tabs
+nnoremap          <leader>te <esc>:tabedit <tab>
+nnoremap <silent> <leader>tn <esc>:tabnew<cr>:silent! Startify<cr>
+nnoremap <silent> <leader>to <esc>:tabonly<cr>
+nnoremap <silent> <leader>td <esc>:tabclose<cr>
+nnoremap          <leader>tm <esc>:tabmove<Space>
+nnoremap <silent> <leader>tb <esc>:tab ball<cr>
+nnoremap <silent> <leader>tl <esc>:tabs<cr>
+
+" [w ]w - Forward and backwards tabs
+nnoremap <silent> [w <esc>:tabprevious<cr>
+nnoremap <silent> ]w <esc>:tabnext<cr>
+
+" [W ]W - Move tabs
+nnoremap <silent> [W <esc>:tabmove -1<cr>
+nnoremap <silent> ]W <esc>:tabmove +1<cr>
+
+" ,[1-9] - Switch to tab #
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+nnoremap <leader>4 4gt
+nnoremap <leader>5 5gt
+nnoremap <leader>6 6gt
+nnoremap <leader>7 7gt
+nnoremap <leader>8 8gt
+nnoremap <leader>9 9gt
+
+ " ,t(g)t - Open tag in tab
+nnoremap <silent> <leader>tt  <esc>:tab split<cr>:exe("tag ".expand("<cword>"))<cr>
+nnoremap <silent> <leader>tgt <esc>:tab split<cr>:exe("tjump ".expand("<cword>"))<cr>
 
 " Split windows
 nnoremap <leader>s <C-W>s
@@ -287,6 +316,7 @@ cnoreabbrev W w
 " Send to the black hole register
 noremap x "_x
 noremap X "_X
+noremap _ "_d
 
 " Goto older/newer position in change list
 nnoremap <silent> ( g;zvzz
@@ -399,7 +429,13 @@ augroup ft_javascript
   au BufNewFile,BufRead *.es6 set filetype=javascript
   au BufNewFile,BufRead .jshintrc,.babelrc,.eslintrc set filetype=json
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
+augroup END
+
+augroup ft_json
+  au!
   au FileType json nnoremap <buffer> == gggqG
+  au FileType json setlocal equalprg=python\ -m\ json.tool
+  au FileType json setlocal formatprg=python\ -m\ json.tool
 augroup END
 
 augroup ft_html
@@ -577,6 +613,23 @@ endfunction
 autocmd BufWritePre * call s:Mkdir()
 
 " }}}
+" Open NPM package in a new tab {{{
+
+function! s:nodejs_packages(A, L, P)
+  return map(split(globpath("node_modules", a:A . "*"), "\n"), 'v:val[strlen("node_modules/"): -1]')
+endfunction
+
+function! s:nodejs_topen(package)
+  let l:path = 'node_modules/'.a:package
+  if filewritable(l:path) == 2
+    silent exe 'tabedit '.l:path
+    silent exe 'tcd '.l:path
+  end
+endf
+
+command! -nargs=1 -complete=customlist,<sid>nodejs_packages Nopen call <sid>nodejs_topen(<q-args>)
+
+" }}}
 " Plugins {{{
 
 " Ruby {{{
@@ -639,48 +692,81 @@ augroup END
 " Undotree {{{
 
 let g:undotree_WindowLayout = 2
+let g:undotree_SetFocusWhenToggle = 1
+let g:undotree_ShortIndicators = 1
 
 nnoremap <silent> <leader>u :UndotreeToggle<CR>
 
 " }}}
 " FZF {{{
 
-let $FZF_DEFAULT_OPTS .= ' --inline-info'
+" An action can be a reference to a function that processes selected lines
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
 
-let g:fzf_layout = { 'down': '20%' }
+let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,2'
+
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
 let g:fzf_colors = {
-      \ 'fg':      ['fg', 'Normal'],
-      \ 'bg':      ['bg', 'Normal'],
       \ 'hl':      ['fg', 'Comment'],
       \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'bg+':     ['bg', 'Folded'],
       \ 'hl+':     ['fg', 'Statement'],
       \ 'info':    ['fg', 'PreProc'],
-      \ 'border':  ['fg', 'Ignore'],
-      \ 'prompt':  ['fg', 'Conditional'],
-      \ 'pointer': ['fg', 'Exception'],
-      \ 'marker':  ['fg', 'Keyword'],
-      \ 'spinner': ['fg', 'Label'],
-      \ 'header':  ['fg', 'Comment']
+      \ 'pointer': ['bg', 'Folded']
       \ }
 
-augroup ft_fzf
-  au!
-  au FileType fzf nnoremap <silent> <buffer> <c-g> :q<cr>
+function! FloatingFZF()
+  let height = &lines - 3
+  let width = float2nr(&columns - (&columns * 2 / 10))
+  let col = float2nr((&columns - width) / 2)
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': height * 0.3,
+        \ 'col': col + 30,
+        \ 'width': width * 2 / 3,
+        \ 'height': height / 2
+        \ }
 
-  " Hide statusline of terminal buffer
-  au FileType fzf set laststatus=0 | au BufLeave <buffer> set laststatus=2
+  let buf = nvim_create_buf(v:false, v:true)
+  let win = nvim_open_win(buf, v:true, opts)
 
-  au TermOpen term://* setlocal nonumber norelativenumber
-  au TermOpen term://*FZF tnoremap <silent> <buffer> <nowait> <esc> <c-c>
-augroup END
+  call setwinvar(win, '&winhl', 'Normal:Pmenu')
+endfunction
 
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let options = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, options, a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RF call RipgrepFzf(<q-args>, <bang>0)
 command! -nargs=+ -complete=file Rg
       \ call fzf#vim#grep(
       \   'rg --hidden --vimgrep --smart-case --color=always '. <q-args>, 1,
       \   <bang>0 ? fzf#vim#with_preview('up:60%')
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
+
+
+augroup ft_fzf
+  au!
+  au FileType fzf nnoremap <silent> <buffer> <c-g> :q<cr>
+  au TermOpen term://* setlocal nonumber norelativenumber
+  au TermOpen term://*FZF tnoremap <silent> <buffer> <nowait> <esc> <c-c>
+augroup END
 
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
@@ -698,6 +784,7 @@ nnoremap <silent> <Leader>l :Lines<CR>
 nnoremap <silent> <Leader>' :Marks<CR>
 nnoremap <silent> <Leader>. :Tags<CR>
 nnoremap <leader>a :Rg<Space>
+nnoremap <leader>A :RF<enter>
 
 " }}}
 " Fugitive {{{
@@ -738,17 +825,24 @@ map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)zz
 " }}}
 " Ale {{{
 
-let g:ale_linters = { 'eruby': [], 'javascript': ['xo'], 'vue': [] }
 let g:ale_sign_error = '•'
 let g:ale_sign_warning = '•'
-let g:ale_lint_delay = 1000
 let g:ale_set_highlights = 0
+let g:ale_fixers = { 'ruby': ['rubocop'] }
+let g:ale_linters = {
+      \ 'ruby': ['ruby', 'rubocop'],
+      \ 'eruby': []
+      \ }
 
 hi link ALEErrorSign ErrorMsg
 hi ALEErrorSign guibg=NONE
 
-nmap ]r <Plug>(ale_next_wrap)
-nmap [r <Plug>(ale_previous_wrap)
+nmap <silent> [s <Plug>(ale_previous_wrap)
+nmap <silent> ]s <Plug>(ale_next_wrap)
+
+" Bind F8 to fixing problems with ALE
+nmap <F8> <Plug>(ale_fix)
+
 
 " }}}
 " Smartword {{{
@@ -893,35 +987,6 @@ augroup ragtag_plugin
 augroup END
 
 " }}}
-" Shadeline {{{
-
-let g:shadeline = {}
-let g:shadeline.active = {
-      \   'left': [
-      \     'fname',
-      \     'flags',
-      \     'ShadelineItemGitBranch'
-      \   ],
-      \   'right': [
-      \     '<',
-      \     ['ff', 'fenc', 'ft'],
-      \     'ruler'
-      \   ]
-      \ }
-
-let g:shadeline.inactive = {
-      \   'left': [
-      \    'fname',
-      \     'flags',
-      \   ]
-      \ }
-
-function! ShadelineItemGitBranch()
-  let name = exists('*fugitive#head') ? fugitive#head() : ''
-  return empty(name) ? '' : printf('(%s)', name)
-endfunction
-
-" }}}
 " Cmdline {{{
 
 let g:cmdline_map_send = '<localleader>r'
@@ -943,6 +1008,28 @@ map ! <Plug>(quickrun)
 
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
+
+" }}}
+" Gitgutter {{{
+
+let g:gitgutter_map_keys = 0
+let g:gitgutter_sign_added = '┃'
+let g:gitgutter_sign_modified = '┃'
+let g:gitgutter_sign_removed = '◢'
+let g:gitgutter_sign_removed_first_line = '◥'
+let g:gitgutter_sign_modified_removed = '◢'
+
+nmap [g <Plug>(GitGutterPrevHunk)
+nmap ]g <Plug>(GitGutterNextHunk)
+
+nmap <leader>ga <Plug>GitGutterStageHunk
+nmap <leader>gu <Plug>GitGutterUndoHunk
+nmap <leader>go <Plug>GitGutterPreviewHunk
+
+omap ig <Plug>GitGutterTextObjectInnerPending
+omap ag <Plug>GitGutterTextObjectOuterPending
+xmap ig <Plug>GitGutterTextObjectInnerVisual
+xmap ag <Plug>GitGutterTextObjectOuterVisual
 
 " }}}
 
