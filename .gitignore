@@ -5,6 +5,7 @@
 .config/nvim/spell/*.spl
 .config/nvim/plugged/*
 .config/nvim/autoload/plug.vim
+.config/nvim/autoload/plug.vim.old
 !.config/nvim/plugged/.keep
 .config/nvim/.init.vim-rplugin~
 .bundle/cache

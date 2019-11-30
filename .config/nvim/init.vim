@@ -19,7 +19,6 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
-Plug 'SirVer/ultisnips'
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
@@ -34,8 +33,6 @@ Plug 'jalvesaq/vimcmdline'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/goyo.vim'
-Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
@@ -54,7 +51,6 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mhinz/vim-rfc'
 Plug 'mhinz/vim-startify'
 Plug 'neoclide/coc.nvim', { 'do': { -> coc#util#install() } }
-Plug 'neworld/vim-git-hunk-editor'
 Plug 'osyo-manga/vim-anzu'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-ruby'
@@ -101,6 +97,7 @@ set undoreload=10000
 set notimeout
 set ttimeout
 set ttimeoutlen=0
+set updatetime=300
 set regexpengine=1
 
 " text manipulation
@@ -253,8 +250,8 @@ nnoremap <up>    <c-w>-
 nnoremap <down>  <c-w>+
 
 " Sane movement with wrap turned on
-nnoremap j gj
-nnoremap k gk
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
 vnoremap j gj
 vnoremap k gk
 
@@ -350,6 +347,10 @@ nnoremap == mqHmwgg=G`wzt`q
 
 " Easy filetype switching
 nnoremap =f :setfiletype<Space>
+
+" Insert Mode Completion
+imap <c-j> <c-n>
+imap <c-k> <c-p>
 
 " }}}
 " Zoom {{{
@@ -927,15 +928,6 @@ omap <silent> ia <Plug>SidewaysArgumentTextobjI
 xmap <silent> ia <Plug>SidewaysArgumentTextobjI
 
 " }}}
-" UltiSnips {{{
-
-let g:UltiSnipsExpandTrigger = '<tab>'
-let g:UltiSnipsJumpForwardTrigger = '<tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<S-tab>'
-let g:UltiSnipsEditSplit = 'vertical'
-let g:UltiSnipsSnippetDirectories = [$HOME . '/.config/nvim/UltiSnips/']
-
-" }}}
 " Polyglot {{{
 
 " let g:jsx_ext_required = 1
@@ -948,11 +940,12 @@ let g:clever_f_across_no_line = 1
 let g:clever_f_smart_case = 1
 
 " }}}
-" Coc.vim {{{
+" Coc {{{
 
-" Insert Mode Completion
-imap <c-j> <c-n>
-imap <c-k> <c-p>
+let g:coc_global_extensions = [
+      \ 'coc-snippets',
+      \ 'coc-solargraph'
+      \ ]
 
 " Use <c-space> for trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -971,12 +964,21 @@ nmap <silent> gn <Plug>(coc-references)
 nmap <leader>rn <Plug>(coc-rename)
 
 " }}}
-" Hunk Toggle {{{
+" Coc snippets {{{
 
-augroup hunk_plugin
-  au!
-  autocmd BufEnter *hunk*diff nnoremap <buffer> <space> :HunkLineToggle<CR>
-augroup END
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
+let g:coc_snippet_prev = '<s-tab>'
 
 " }}}
 " Ragtag {{{
@@ -1004,12 +1006,6 @@ map <localleader>k <Plug>(edgemotion-k)
 map ! <Plug>(quickrun)
 
 " }}}
-" Goyo {{{
-
-autocmd! User GoyoEnter Limelight
-autocmd! User GoyoLeave Limelight!
-
-" }}}
 " Gitgutter {{{
 
 let g:gitgutter_map_keys = 0
@@ -1022,14 +1018,14 @@ let g:gitgutter_sign_modified_removed = '◢'
 nmap [g <Plug>(GitGutterPrevHunk)
 nmap ]g <Plug>(GitGutterNextHunk)
 
-nmap <leader>ga <Plug>GitGutterStageHunk
-nmap <leader>gu <Plug>GitGutterUndoHunk
-nmap <leader>go <Plug>GitGutterPreviewHunk
+nmap ghs <Plug>(GitGutterStageHunk)
+nmap ghu <Plug>(GitGutterUndoHunk)
+nmap ghp <Plug>(GitGutterPreviewHunk)
 
-omap ig <Plug>GitGutterTextObjectInnerPending
-omap ag <Plug>GitGutterTextObjectOuterPending
-xmap ig <Plug>GitGutterTextObjectInnerVisual
-xmap ag <Plug>GitGutterTextObjectOuterVisual
+omap ih <Plug>(GitGutterTextObjectInnerPending)
+omap ah <Plug>(GitGutterTextObjectOuterPending)
+xmap ih <Plug>(GitGutterTextObjectInnerVisual)
+xmap ah <Plug>(GitGutterTextObjectOuterVisual)
 
 " }}}
 
