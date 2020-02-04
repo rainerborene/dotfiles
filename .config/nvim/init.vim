@@ -23,13 +23,13 @@ Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
+Plug 'cocopon/shadeline.vim'
 Plug 'cohama/lexima.vim'
 Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/is.vim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'haya14busa/vim-edgemotion'
 Plug 'honza/vim-snippets'
-Plug 'jalvesaq/vimcmdline'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -41,18 +41,17 @@ Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
-Plug 'liuchengxu/eleline.vim'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-Plug 'mhinz/vim-rfc'
 Plug 'mhinz/vim-startify'
-Plug 'neoclide/coc.nvim', { 'do': { -> coc#util#install() } }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'osyo-manga/vim-anzu'
 Plug 'rhysd/clever-f.vim'
+Plug 'rhysd/reply.vim', { 'on': ['Repl', 'ReplAuto'] }
 Plug 'rhysd/vim-textobj-ruby'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'roxma/vim-tmux-clipboard'
@@ -98,7 +97,7 @@ set notimeout
 set ttimeout
 set ttimeoutlen=0
 set updatetime=300
-set regexpengine=1
+" set regexpengine=1
 
 " text manipulation
 set expandtab
@@ -205,7 +204,7 @@ nnoremap <silent> U :syntax sync fromstart<cr>:nohlsearch<cr>:redraw!<cr>
 
 " Useful mappings for managing tabs
 nnoremap          <leader>te <esc>:tabedit <tab>
-nnoremap <silent> <leader>tn <esc>:tabnew<cr>:silent! Startify<cr>
+nnoremap <silent> <leader>tn <esc>:tabnew<cr>
 nnoremap <silent> <leader>to <esc>:tabonly<cr>
 nnoremap <silent> <leader>td <esc>:tabclose<cr>
 nnoremap          <leader>tm <esc>:tabmove<Space>
@@ -338,6 +337,14 @@ nnoremap / ms/
 " Replace alias
 nnoremap s/ mr:%s/
 
+" inVerse search: line NOT containing pattern
+cnoremap <m-/> \v^(()@!.)*$<Left><Left><Left><Left><Left><Left><Left>
+
+" Easier dir/file manipulation
+nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
+cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
+cnoremap <expr> %< getcmdtype() == ':' ? fnameescape(expand('%:t')).'<C-f><C-f>^' : '%<'
+
 " Repeat last substitution
 nnoremap & n:&&<cr>
 xnoremap & n:&&<cr>
@@ -430,13 +437,6 @@ augroup ft_javascript
   au BufNewFile,BufRead *.es6 set filetype=javascript
   au BufNewFile,BufRead .jshintrc,.babelrc,.eslintrc set filetype=json
   au FileType javascript setlocal foldmethod=marker foldmarker={,}
-augroup END
-
-augroup ft_json
-  au!
-  au FileType json nnoremap <buffer> == gggqG
-  au FileType json setlocal equalprg=python\ -m\ json.tool
-  au FileType json setlocal formatprg=python\ -m\ json.tool
 augroup END
 
 augroup ft_html
@@ -660,10 +660,6 @@ augroup nerd_loader
         \ endif
 augroup END
 
-nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
-cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
-cnoremap <expr> %< getcmdtype() == ':' ? fnameescape(expand('%:t:r')).'.' : '%<'
-
 " }}}
 " Switch {{{
 
@@ -708,7 +704,7 @@ function! s:build_quickfix_list(lines)
   cc
 endfunction
 
-let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,2'
+let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,1'
 
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_layout = { 'window': 'call FloatingFZF()' }
@@ -721,31 +717,44 @@ let g:fzf_action = {
 let g:fzf_colors = {
       \ 'hl':      ['fg', 'Comment'],
       \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'Folded'],
+      \ 'bg+':     ['bg', 'VertSplit'],
       \ 'hl+':     ['fg', 'Statement'],
       \ 'info':    ['fg', 'PreProc'],
       \ 'pointer': ['bg', 'Folded']
       \ }
 
-function! FloatingFZF()
-  let height = &lines - 3
-  let width = float2nr(&columns - (&columns * 2 / 10))
-  let col = float2nr((&columns - width) / 2)
-  let opts = {
-        \ 'relative': 'editor',
-        \ 'row': height * 0.3,
-        \ 'col': col + 30,
-        \ 'width': width * 2 / 3,
-        \ 'height': height / 2
-        \ }
-
+function! s:create_float(hl, opts)
   let buf = nvim_create_buf(v:false, v:true)
+  let opts = extend({'relative': 'editor', 'style': 'minimal'}, a:opts)
   let win = nvim_open_win(buf, v:true, opts)
-
-  call setwinvar(win, '&winhl', 'Normal:Pmenu')
+  call setwinvar(win, '&winhighlight', 'NormalFloat:'.a:hl)
+  call setwinvar(win, '&colorcolumn', '')
+  return buf
 endfunction
 
-function! RipgrepFzf(query, fullscreen)
+function! FloatingFZF()
+  " Size and position
+  let width = float2nr(&columns * 0.9)
+  let height = float2nr(&lines * 0.6)
+  let row = float2nr((&lines - height) / 2)
+  let col = float2nr((&columns - width) / 2)
+
+  " Border
+  let top = '╭' . repeat('─', width - 2) . '╮'
+  let mid = '│' . repeat(' ', width - 2) . '│'
+  let bot = '╰' . repeat('─', width - 2) . '╯'
+  let border = [top] + repeat([mid], height - 2) + [bot]
+
+  " Draw frame
+  let s:frame = s:create_float('Comment', {'row': row, 'col': col, 'width': width, 'height': height})
+  call nvim_buf_set_lines(s:frame, 0, -1, v:true, border)
+
+  " Draw viewport
+  call s:create_float('Normal', {'row': row + 1, 'col': col + 2, 'width': width - 4, 'height': height - 2})
+  autocmd BufWipeout <buffer> execute 'bwipeout' s:frame
+endfunction
+
+function! s:ripgrep_fzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
@@ -753,13 +762,23 @@ function! RipgrepFzf(query, fullscreen)
   call fzf#vim#grep(initial_command, 1, options, a:fullscreen)
 endfunction
 
-command! -nargs=* -bang RF call RipgrepFzf(<q-args>, <bang>0)
+function! s:ruby_grep(query)
+  let gemdir = substitute(system('gem env gemdir'), "\n", '/gems', '')
+  let command_fmt = 'rg --hidden --vimgrep --smart-case --color=always %s'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  call fzf#vim#grep(initial_command, 1, extend({ 'dir': gemdir }, g:fzf_layout), 0)
+endfunction
+
+command! -nargs=* -bang RG call s:ripgrep_fzf(<q-args>, <bang>0)
+
 command! -nargs=+ -complete=file Rg
       \ call fzf#vim#grep(
       \   'rg --hidden --vimgrep --smart-case --color=always '. <q-args>, 1,
       \   <bang>0 ? fzf#vim#with_preview('up:60%')
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
+
+command! -nargs=+ -complete=file Rgrep call s:ruby_grep(<q-args>)
 
 
 augroup ft_fzf
@@ -785,7 +804,7 @@ nnoremap <silent> <Leader>l :Lines<CR>
 nnoremap <silent> <Leader>' :Marks<CR>
 nnoremap <silent> <Leader>. :Tags<CR>
 nnoremap <leader>a :Rg<Space>
-nnoremap <leader>A :RF<enter>
+nnoremap <leader>A :RG<enter>
 
 " }}}
 " Fugitive {{{
@@ -798,8 +817,6 @@ nmap <silent> <leader>gs :Gstatus<cr>gg<c-n>
 
 augroup ft_git
   au!
-  au FileType git nnoremap <buffer> <c-n> zMzjzOzt
-  au FileType git nnoremap <buffer> <c-p> zMzkzO[zzt
   au FileType gitrebase nnoremap <buffer> <silent> S :Cycle<cr>
   au FileType gitcommit,git setlocal foldmethod=syntax nolist nonumber norelativenumber
   au FileType gitcommit setlocal spell
@@ -829,7 +846,12 @@ map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)zz
 let g:ale_sign_error = '•'
 let g:ale_sign_warning = '•'
 let g:ale_set_highlights = 0
-let g:ale_fixers = { 'ruby': ['rubocop'] }
+let g:ale_fixers = {
+      \ 'ruby': ['rubocop'],
+      \ 'html': ['prettier'],
+      \ 'json': ['jq']
+      \ }
+
 let g:ale_linters = {
       \ 'ruby': ['ruby', 'rubocop'],
       \ 'eruby': []
@@ -861,6 +883,7 @@ xmap ge <Plug>(smartword-ge)
 " Startify {{{
 
 let g:startify_change_to_vcs_root = 1
+let g:startify_session_persistence = 1
 
 " }}}
 " Emmet {{{
@@ -989,12 +1012,6 @@ augroup ragtag_plugin
 augroup END
 
 " }}}
-" Cmdline {{{
-
-let g:cmdline_map_send = '<localleader>r'
-let g:cmdline_app = { 'ruby': 'bundle exec rails console' }
-
-" }}}
 " EdgeMotion {{{
 
 map <localleader>j <Plug>(edgemotion-j)
@@ -1004,6 +1021,11 @@ map <localleader>k <Plug>(edgemotion-k)
 " QuickRun {{{
 
 map ! <Plug>(quickrun)
+
+" }}}
+" Reply {{{
+
+let g:reply_repl_pry_command_options = ['-r', './config/environment.rb']
 
 " }}}
 " Gitgutter {{{

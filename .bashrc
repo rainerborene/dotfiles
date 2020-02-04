@@ -57,7 +57,7 @@ export LC_ALL=en_US.UTF-8
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND='fd --type f --type d --hidden --follow --exclude .git'
-export FZF_CTRL_T_OPTS="--preview '~/.config/nvim/plugged/fzf.vim/bin/preview.rb {} | head -200'"
+export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}' | head -200'"
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --border"
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 [ -n "$NVIM_LISTEN_ADDRESS" ] && export FZF_DEFAULT_OPTS='--no-height'
@@ -194,6 +194,15 @@ gr() {
   cut -d$'\t' -f1
 }
 
+gp() {
+  ps -ef | fzf-down --header-lines 1 --info inline --layout reverse --multi |
+    awk '{print $2}'
+}
+
+gg() {
+  _z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info --tac | sed 's/^[0-9,.]* *//'
+}
+
 if [[ $- =~ i ]]; then
   bind '"\er": redraw-current-line'
   bind '"\C-g\C-f": "$(gf)\e\C-e\er"'
@@ -201,6 +210,8 @@ if [[ $- =~ i ]]; then
   bind '"\C-g\C-t": "$(gt)\e\C-e\er"'
   bind '"\C-g\C-h": "$(gh)\e\C-e\er"'
   bind '"\C-g\C-r": "$(gr)\e\C-e\er"'
+  bind '"\C-g\C-p": "$(gp)\e\C-e\er"'
+  bind '"\C-g\C-g": "$(gg)\e\C-e\er"'
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
