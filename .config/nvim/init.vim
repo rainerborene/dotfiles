@@ -707,7 +707,7 @@ endfunction
 let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,1'
 
 let g:fzf_history_dir = '~/.local/share/fzf-history'
-let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 let g:fzf_action = {
   \ 'ctrl-q': function('s:build_quickfix_list'),
   \ 'ctrl-t': 'tab split',
@@ -723,37 +723,6 @@ let g:fzf_colors = {
       \ 'pointer': ['bg', 'Folded']
       \ }
 
-function! s:create_float(hl, opts)
-  let buf = nvim_create_buf(v:false, v:true)
-  let opts = extend({'relative': 'editor', 'style': 'minimal'}, a:opts)
-  let win = nvim_open_win(buf, v:true, opts)
-  call setwinvar(win, '&winhighlight', 'NormalFloat:'.a:hl)
-  call setwinvar(win, '&colorcolumn', '')
-  return buf
-endfunction
-
-function! FloatingFZF()
-  " Size and position
-  let width = float2nr(&columns * 0.9)
-  let height = float2nr(&lines * 0.6)
-  let row = float2nr((&lines - height) / 2)
-  let col = float2nr((&columns - width) / 2)
-
-  " Border
-  let top = '╭' . repeat('─', width - 2) . '╮'
-  let mid = '│' . repeat(' ', width - 2) . '│'
-  let bot = '╰' . repeat('─', width - 2) . '╯'
-  let border = [top] + repeat([mid], height - 2) + [bot]
-
-  " Draw frame
-  let s:frame = s:create_float('Comment', {'row': row, 'col': col, 'width': width, 'height': height})
-  call nvim_buf_set_lines(s:frame, 0, -1, v:true, border)
-
-  " Draw viewport
-  call s:create_float('Normal', {'row': row + 1, 'col': col + 2, 'width': width - 4, 'height': height - 2})
-  autocmd BufWipeout <buffer> execute 'bwipeout' s:frame
-endfunction
-
 function! s:ripgrep_fzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
@@ -762,24 +731,13 @@ function! s:ripgrep_fzf(query, fullscreen)
   call fzf#vim#grep(initial_command, 1, options, a:fullscreen)
 endfunction
 
-function! s:ruby_grep(query)
-  let gemdir = substitute(system('gem env gemdir'), "\n", '/gems', '')
-  let command_fmt = 'rg --hidden --vimgrep --smart-case --color=always %s'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  call fzf#vim#grep(initial_command, 1, extend({ 'dir': gemdir }, g:fzf_layout), 0)
-endfunction
-
 command! -nargs=* -bang RG call s:ripgrep_fzf(<q-args>, <bang>0)
-
 command! -nargs=+ -complete=file Rg
       \ call fzf#vim#grep(
       \   'rg --hidden --vimgrep --smart-case --color=always '. <q-args>, 1,
       \   <bang>0 ? fzf#vim#with_preview('up:60%')
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
-
-command! -nargs=+ -complete=file Rgrep call s:ruby_grep(<q-args>)
-
 
 augroup ft_fzf
   au!
