@@ -76,6 +76,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
+Plug 'wellle/tmux-complete.vim'
 Plug 'whatyouhide/vim-textobj-erb'
 
 call plug#end()
