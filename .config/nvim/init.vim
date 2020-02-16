@@ -51,7 +51,6 @@ Plug 'mhinz/vim-startify'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'osyo-manga/vim-anzu'
 Plug 'rhysd/clever-f.vim'
-Plug 'rhysd/reply.vim', { 'on': ['Repl', 'ReplAuto'] }
 Plug 'rhysd/vim-textobj-ruby'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'roxma/vim-tmux-clipboard'
@@ -59,6 +58,8 @@ Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'sheerun/vim-polyglot'
 Plug 'stefandtw/quickfix-reflector.vim'
+Plug 'svermeulen/vim-subversive'
+Plug 'svermeulen/vim-yoink'
 Plug 'thinca/vim-quickrun'
 Plug 'tommcdo/vim-exchange'
 Plug 'tommcdo/vim-lion'
@@ -73,7 +74,6 @@ Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
-Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
 Plug 'whatyouhide/vim-textobj-erb'
@@ -895,7 +895,7 @@ nmap <silent> <leader>rf :TestFile<CR>
 nmap <silent> <leader>ra :TestSuite<CR>
 nmap <silent> <leader>rl :TestLast<CR>
 nmap <silent> <leader>rg :TestVisit<CR>
-noremap <silent> ss :%VtrSendLinesToRunner<cr>
+nmap <localleader>s :%VtrSendLinesToRunner<cr>
 
 " }}}
 " Sideways {{{
@@ -981,11 +981,6 @@ map <localleader>k <Plug>(edgemotion-k)
 map ! <Plug>(quickrun)
 
 " }}}
-" Reply {{{
-
-let g:reply_repl_pry_command_options = ['-r', './config/environment.rb']
-
-" }}}
 " Gitgutter {{{
 
 let g:gitgutter_map_keys = 0
@@ -1006,6 +1001,29 @@ omap ih <Plug>(GitGutterTextObjectInnerPending)
 omap ah <Plug>(GitGutterTextObjectOuterPending)
 xmap ih <Plug>(GitGutterTextObjectInnerVisual)
 xmap ah <Plug>(GitGutterTextObjectOuterVisual)
+
+" }}}
+" Yoink {{{
+
+nmap <c-n> <plug>(YoinkPostPasteSwapBack)
+nmap <c-p> <plug>(YoinkPostPasteSwapForward)
+
+nmap p <plug>(YoinkPaste_p)
+nmap P <plug>(YoinkPaste_P)
+
+nmap y <plug>(YoinkYankPreserveCursorPosition)
+xmap y <plug>(YoinkYankPreserveCursorPosition)
+
+" }}}
+" Subversive {{{
+
+nmap gr <plug>(SubversiveSubstitute)
+nmap grr <plug>(SubversiveSubstituteLine)
+nmap grl <plug>(SubversiveSubstituteToEndOfLine)
+
+nmap <leader>gr <plug>(SubversiveSubstituteRange)
+xmap <leader>gr <plug>(SubversiveSubstituteRange)
+nmap <leader>grw <plug>(SubversiveSubstituteWordRange)
 
 " }}}
 
