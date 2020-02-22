@@ -66,6 +66,7 @@ Plug 'tommcdo/vim-lion'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -1025,6 +1026,18 @@ nmap grl <plug>(SubversiveSubstituteToEndOfLine)
 nmap <leader>gr <plug>(SubversiveSubstituteRange)
 xmap <leader>gr <plug>(SubversiveSubstituteRange)
 nmap <leader>grw <plug>(SubversiveSubstituteWordRange)
+
+" }}}
+" Dadbod {{{
+
+xnoremap <expr> <Plug>(DBExe)     db#op_exec()
+nnoremap <expr> <Plug>(DBExe)     db#op_exec()
+nnoremap <expr> <Plug>(DBExeLine) db#op_exec() . '_'
+
+xmap <leader>db  <Plug>(DBExe)
+nmap <leader>db  <Plug>(DBExe)
+omap <leader>db  <Plug>(DBExe)
+nmap <leader>dbb <Plug>(DBExeLine)
 
 " }}}
 

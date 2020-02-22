@@ -18,7 +18,7 @@ install() {
 
   # link
   ln -sf ~/.dotfiles/.config/* .config/
-  ln -sf ~/.dotfiles/.{rgignore,ctags,curlrc,gemrc,gitconfig,hushlogin,irbrc,pryrc,psqlrc,railsrc,rubocop.yml,reek.yml,tmux.conf,bashrc,inputrc} .
+  ln -sf ~/.dotfiles/.{fdignore,ctags,curlrc,gemrc,gitconfig,hushlogin,irbrc,pryrc,psqlrc,railsrc,rubocop.yml,reek.yml,tmux.conf,bashrc,inputrc} .
 
   # nvim dependencies
   download .config/nvim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

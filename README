@@ -1,2 +1,2 @@
-nvim + tmux + bash + ripgrep + exa
+nvim + tmux + bash + ripgrep + exa + fd
 this is my development environment
