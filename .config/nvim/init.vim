@@ -26,14 +26,12 @@ Plug 'christoomey/vim-tmux-runner'
 Plug 'cocopon/shadeline.vim'
 Plug 'cohama/lexima.vim'
 Plug 'glts/vim-textobj-comment'
-Plug 'haya14busa/is.vim'
-Plug 'haya14busa/vim-asterisk'
-Plug 'haya14busa/vim-edgemotion'
 Plug 'honza/vim-snippets'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/vim-slash'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
@@ -41,15 +39,14 @@ Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
-Plug 'liuchengxu/space-vim-dark'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mhinz/vim-startify'
+Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'osyo-manga/vim-anzu'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-ruby'
 Plug 'rhysd/vim-textobj-word-column'
@@ -63,9 +60,9 @@ Plug 'svermeulen/vim-yoink'
 Plug 'thinca/vim-quickrun'
 Plug 'tommcdo/vim-exchange'
 Plug 'tommcdo/vim-lion'
-Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
@@ -73,6 +70,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
@@ -164,6 +162,14 @@ function! init#colorscheme() abort
   hi! SignColumn   ctermbg=NONE  guibg=NONE
   hi! Comment      guifg=#5C6370 ctermfg=59
 endfunction
+
+augroup vimrc_colorscheme
+  au!
+  au ColorScheme * call init#colorscheme()
+augroup END
+
+let g:gruvbox_contrast_dark = 'soft'
+colorscheme gruvbox
 
 " }}}
 " Mappings {{{
@@ -289,14 +295,6 @@ nnoremap <c-g> 2<c-g>
 
 " Ctrl-b: Go (b)ack. Go to previously buffer
 nnoremap <c-b> <c-^>
-
-" Heresy
-inoremap <c-a> <esc>I
-inoremap <c-e> <esc>A
-cnoremap <c-a> <home>
-cnoremap <c-e> <end>
-cnoremap <c-g> <C-c>
-vnoremap <c-c> "+y
 
 " Quit
 inoremap <silent> <C-Q> <esc>:q<cr>
@@ -781,26 +779,9 @@ augroup ft_git
   au FileType gitcommit,git setlocal foldmethod=syntax nolist nonumber norelativenumber
   au FileType gitcommit setlocal spell
   au BufReadPost fugitive://* set bufhidden=delete
-  au User fugitive
-        \  if fugitive#buffer().type() =~# '^\%(tree\|blob\)$'
-        \|   nnoremap <buffer> .. :edit %:h<CR>
-        \| endif
 augroup END
 
 " }}}}
-" Anzu + Asterisk + is.vim {{{
-
-let g:asterisk#keeppos = 1
-
-map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
-map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
-map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
-map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
-
-map n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)zz
-map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)zz
-
-" }}}
 " Ale {{{
 
 let g:ale_sign_error = '•'
@@ -972,12 +953,6 @@ augroup ragtag_plugin
 augroup END
 
 " }}}
-" EdgeMotion {{{
-
-map <localleader>j <Plug>(edgemotion-j)
-map <localleader>k <Plug>(edgemotion-k)
-
-" }}}
 " QuickRun {{{
 
 map ! <Plug>(quickrun)
@@ -1040,12 +1015,10 @@ omap <leader>db  <Plug>(DBExe)
 nmap <leader>dbb <Plug>(DBExeLine)
 
 " }}}
+" Slash {{{
+
+noremap <expr> <plug>(slash-after) slash#blink(2, 50)
 
 " }}}
-" Outro {{{
-
-if filereadable(fnamemodify('~/.vimrc.local', ':p'))
-  source ~/.vimrc.local
-endif
 
 " }}}
