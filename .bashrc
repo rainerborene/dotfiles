@@ -74,7 +74,6 @@ alias ......='cd ../../../../..'
 
 alias g='git'
 alias lg='lazygit'
-alias j='z'
 alias la='ls -la'
 alias ls='exa --group-directories-first'
 alias l='tree --dirsfirst -ChaFL 1'
@@ -103,16 +102,10 @@ temp() {
 eval "$(starship init bash)"
 
 
-# Shortcut functions
+# Jump integration
 # --------------------------------------------------------------------
 
-# Z integration
-source "$BASE/z.sh"
-unalias z 2> /dev/null
-z() {
-  [ $# -gt 0 ] && _z "$*" && return
-  cd "$(_z -l 2>&1 | fzf --height 40% --reverse --inline-info +s --tac --query "$*" | sed 's/^[0-9,.]* *//')"
-}
+eval "$(jump shell)"
 
 
 # fzf (https://github.com/junegunn/fzf)
@@ -197,10 +190,6 @@ gr() {
 gp() {
   ps -ef | fzf-down --header-lines 1 --info inline --layout reverse --multi |
     awk '{print $2}'
-}
-
-gg() {
-  _z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info --tac | sed 's/^[0-9,.]* *//'
 }
 
 if [[ $- =~ i ]]; then

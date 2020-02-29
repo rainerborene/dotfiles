@@ -1,2 +1,7 @@
-nvim + tmux + bash + ripgrep + exa + fd
-this is my development environment
+nvim + tmux + bash + ripgrep + exa + fd + jump
+
+Sources:
+
+- exa https://github.com/ogham/exa
+- fd https://github.com/sharkdp/fd
+- jump https://github.com/gsamokovarov/jump

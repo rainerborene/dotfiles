@@ -16,9 +16,12 @@ download() {
 install() {
   cd ~
 
+  mkdir -p ~/.ctags.d
+
   # link
   ln -sf ~/.dotfiles/.config/* .config/
-  ln -sf ~/.dotfiles/.{fdignore,ctags,curlrc,gemrc,gitconfig,hushlogin,irbrc,pryrc,psqlrc,railsrc,rubocop.yml,reek.yml,tmux.conf,bashrc,inputrc} .
+  ln -sf ~/.dotfiles/.{alacritty.yml,fdignore,curlrc,gemrc,gitconfig,hushlogin,irbrc,pryrc,psqlrc,railsrc,rubocop.yml,reek.yml,tmux.conf,bashrc,inputrc} .
+  ln -P ~/.dotfiles/.ctags.d/default.ctags ~/.ctags.d/default.ctags
 
   # nvim dependencies
   download .config/nvim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
