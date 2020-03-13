@@ -160,7 +160,6 @@ function! init#colorscheme() abort
   hi! CursorLineNr ctermbg=NONE  guibg=NONE
   hi! LineNr       ctermbg=NONE  guibg=NONE
   hi! SignColumn   ctermbg=NONE  guibg=NONE
-  hi! Comment      guifg=#5C6370 ctermfg=59
 endfunction
 
 augroup vimrc_colorscheme
@@ -169,6 +168,7 @@ augroup vimrc_colorscheme
 augroup END
 
 let g:gruvbox_contrast_dark = 'soft'
+let g:gruvbox_sign_column = 'bg0'
 colorscheme gruvbox
 
 " }}}
@@ -715,12 +715,19 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 let g:fzf_colors = {
+      \ 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
       \ 'hl':      ['fg', 'Comment'],
       \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'VertSplit'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
       \ 'hl+':     ['fg', 'Statement'],
       \ 'info':    ['fg', 'PreProc'],
-      \ 'pointer': ['bg', 'Folded']
+      \ 'border':  ['fg', 'Ignore'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment']
       \ }
 
 function! s:ripgrep_fzf(query, fullscreen)

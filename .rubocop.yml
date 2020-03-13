@@ -35,6 +35,9 @@ Style/AndOr:
 Layout/CaseIndentation:
   Enabled: true
 
+Layout/ClosingHeredocIndentation:
+  Enabled: true
+
 # Align comments with method definitions.
 Layout/CommentIndentation:
   Enabled: true
@@ -75,7 +78,7 @@ Layout/EmptyLinesAroundModuleBody:
 Style/HashSyntax:
   Enabled: true
 
-Layout/IndentFirstArgument:
+Layout/FirstArgumentIndentation:
   Enabled: true
 
 # Method definitions after `private` or `protected` isolated calls need one
@@ -157,8 +160,8 @@ Style/StringLiterals:
 Layout/Tab:
   Enabled: true
 
-# Blank lines should not have any spaces.
-Layout/TrailingBlankLines:
+# Empty lines should not have any spaces.
+Layout/TrailingEmptyLines:
   Enabled: true
 
 # No trailing whitespace.
@@ -185,7 +188,7 @@ Lint/RequireParentheses:
 Lint/ShadowingOuterLocalVariable:
   Enabled: true
 
-Lint/StringConversionInInterpolation:
+Lint/RedundantStringCoercion:
   Enabled: true
 
 Lint/UriEscapeUnescape:
@@ -198,6 +201,12 @@ Lint/DeprecatedClassMethods:
   Enabled: true
 
 Style/ParenthesesAroundCondition:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
   Enabled: true
 
 Style/RedundantBegin:
