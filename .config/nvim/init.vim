@@ -706,6 +706,7 @@ endfunction
 
 let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,1'
 
+let g:fzf_preview_window = ''
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 let g:fzf_action = {
