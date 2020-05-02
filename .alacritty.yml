@@ -245,8 +245,35 @@ schemes:
       cyan:    '#8ec07c'
       white:   '#ebdbb2'
 
+  miramare: &miramare
+    primary:
+      background: '#2A2426'
+      foreground: '#e6d6ac'
+
+    # Normal colors
+    normal:
+      black:   '#2A2426'
+      red:     '#e68183'
+      green:   '#a7c080'
+      yellow:  '#d9bb80'
+      blue:    '#7d7d7d'
+      magenta: '#659ba8'
+      cyan:    '#a7c080'
+      white:   '#a7c080'
+
+    # Bright colors
+    bright:
+      black:   '#2a2426'
+      red:     '#e68183'
+      green:   '#a7c080'
+      yellow:  '#d9bb80'
+      blue:    '#7d7d7d'
+      magenta: '#659ba8'
+      cyan:    '#a7c080'
+      white:   '#a7c080'
+
 # Colors (Gruvbox)
-colors: *dark
+colors: *miramare
 
 # Visual Bell
 #

@@ -25,6 +25,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'cocopon/shadeline.vim'
 Plug 'cohama/lexima.vim'
+Plug 'franbach/miramare'
 Plug 'glts/vim-textobj-comment'
 Plug 'honza/vim-snippets'
 Plug 'janko-m/vim-test'
@@ -48,6 +49,7 @@ Plug 'mhinz/vim-startify'
 Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'rhysd/clever-f.vim'
+Plug 'rhysd/conflict-marker.vim'
 Plug 'rhysd/vim-textobj-ruby'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'roxma/vim-tmux-clipboard'
@@ -169,7 +171,7 @@ augroup END
 
 let g:gruvbox_contrast_dark = 'soft'
 let g:gruvbox_sign_column = 'bg0'
-colorscheme gruvbox
+colorscheme miramare
 
 " }}}
 " Mappings {{{
