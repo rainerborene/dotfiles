@@ -32,7 +32,7 @@
 [merge]
 	summary = true
 	prompt = false
-	tool = fugitive
+	tool = diffconflicts
 [mergetool]
 	keepBackup = false
 	keepTemporaries = false
@@ -57,3 +57,6 @@
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
+[mergetool "diffconflicts"]
+	cmd = nvim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
+	trustExitCode = true

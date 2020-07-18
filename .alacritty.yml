@@ -109,7 +109,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: Cascadia Mono
+    family: CaskaydiaCove Nerd Font Mono
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -120,7 +120,7 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Cascadia Mono
+    family: CaskaydiaCove Nerd Font Mono
 
     # The `style` can be specified to pick a specific face.
     style: Bold
@@ -245,35 +245,8 @@ schemes:
       cyan:    '#8ec07c'
       white:   '#ebdbb2'
 
-  miramare: &miramare
-    primary:
-      background: '#2A2426'
-      foreground: '#e6d6ac'
-
-    # Normal colors
-    normal:
-      black:   '#2A2426'
-      red:     '#e68183'
-      green:   '#a7c080'
-      yellow:  '#d9bb80'
-      blue:    '#7d7d7d'
-      magenta: '#659ba8'
-      cyan:    '#a7c080'
-      white:   '#a7c080'
-
-    # Bright colors
-    bright:
-      black:   '#2a2426'
-      red:     '#e68183'
-      green:   '#a7c080'
-      yellow:  '#d9bb80'
-      blue:    '#7d7d7d'
-      magenta: '#659ba8'
-      cyan:    '#a7c080'
-      white:   '#a7c080'
-
 # Colors (Gruvbox)
-colors: *miramare
+colors: *dark
 
 # Visual Bell
 #

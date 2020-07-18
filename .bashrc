@@ -72,6 +72,7 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
+alias j='z'
 alias g='git'
 alias lg='lazygit'
 alias la='ls -la'
@@ -102,10 +103,10 @@ temp() {
 eval "$(starship init bash)"
 
 
-# Jump integration
+# Zoxide
 # --------------------------------------------------------------------
 
-eval "$(jump shell)"
+eval "$(zoxide init bash)"
 
 
 # fzf (https://github.com/junegunn/fzf)

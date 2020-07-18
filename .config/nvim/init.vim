@@ -19,20 +19,19 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
-Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'cocopon/shadeline.vim'
 Plug 'cohama/lexima.vim'
-Plug 'franbach/miramare'
+Plug 'dhruvasagar/vim-zoom'
 Plug 'glts/vim-textobj-comment'
+Plug 'gruvbox-community/gruvbox'
+Plug 'haya14busa/vim-asterisk'
 Plug 'honza/vim-snippets'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-peekaboo'
-Plug 'junegunn/vim-slash'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
@@ -40,32 +39,29 @@ Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
-Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mhinz/vim-startify'
-Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'rhysd/clever-f.vim'
-Plug 'rhysd/conflict-marker.vim'
 Plug 'rhysd/vim-textobj-ruby'
 Plug 'rhysd/vim-textobj-word-column'
+Plug 'romainl/vim-cool'
 Plug 'roxma/vim-tmux-clipboard'
+Plug 'ryanoasis/vim-devicons'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'sheerun/vim-polyglot'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'svermeulen/vim-subversive'
-Plug 'svermeulen/vim-yoink'
 Plug 'thinca/vim-quickrun'
 Plug 'tommcdo/vim-exchange'
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -79,6 +75,7 @@ Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
 Plug 'wellle/tmux-complete.vim'
 Plug 'whatyouhide/vim-textobj-erb'
+Plug 'whiteinge/diffconflicts'
 
 call plug#end()
 
@@ -99,7 +96,6 @@ set notimeout
 set ttimeout
 set ttimeoutlen=0
 set updatetime=300
-" set regexpengine=1
 
 " text manipulation
 set expandtab
@@ -133,6 +129,7 @@ set wildignore+=.sass-cache
 
 " ui customization
 set list
+set diffopt+=algorithm:patience
 set listchars=tab:»\ ,trail:·,extends:❯,precedes:❮
 set fillchars=diff:─,vert:│,msgsep:─
 set showbreak=↪\ "
@@ -171,7 +168,7 @@ augroup END
 
 let g:gruvbox_contrast_dark = 'soft'
 let g:gruvbox_sign_column = 'bg0'
-colorscheme miramare
+colorscheme gruvbox
 
 " }}}
 " Mappings {{{
@@ -204,6 +201,9 @@ nnoremap gI `.zz
 " Center screen
 nnoremap gg ggzv
 nnoremap G Gzv
+
+" jj | Escaping!
+inoremap jj <Esc>
 
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
@@ -275,6 +275,9 @@ vnoremap L g_
 
 " Make Y consistent with C and D.
 nnoremap Y y$
+
+" No overwrite paste
+xnoremap p "_dP
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -360,19 +363,6 @@ nnoremap =f :setfiletype<Space>
 " Insert Mode Completion
 imap <c-j> <c-n>
 imap <c-k> <c-p>
-
-" }}}
-" Zoom {{{
-
-function! s:zoom()
-  if winnr('$') > 1
-    tab split
-  elseif len(filter(map(range(tabpagenr('$')), 'tabpagebuflist(v:val + 1)'),
-                  \ 'index(v:val, '.bufnr('').') >= 0')) > 1
-    tabclose
-  endif
-endfunction
-nnoremap <silent> <leader>z :call <sid>zoom()<cr>
 
 " }}}
 " Ctags generation {{{
@@ -596,12 +586,11 @@ set foldtext=MyFoldText()
 " }}}
 " Terminal {{{
 
+tnoremap <Esc> <C-\><C-n>
 tnoremap <a-a> <esc>a
 tnoremap <a-b> <esc>b
 tnoremap <a-d> <esc>d
 tnoremap <a-f> <esc>f
-
-tnoremap <Esc> <C-\><C-n>
 
 " }}}
 " Automatically create any non-existent directories before writing the buffer {{{
@@ -633,6 +622,17 @@ endf
 command! -nargs=1 -complete=customlist,<sid>nodejs_packages Nopen call <sid>nodejs_topen(<q-args>)
 
 " }}}
+" Makes working with Rails i18n locale files a little easier {{{
+
+function! s:Localizing()
+  set dictionary=/usr/share/dict/brazilian,/usr/share/dict/american-english
+  set clipboard=unnamedplus
+  windo norm gg
+  windo setlocal scb! scrollbind spell
+endfunction
+command! Localizing call s:Localizing()
+
+" }}}
 " Plugins {{{
 
 " Ruby {{{
@@ -661,6 +661,7 @@ augroup nerd_loader
         \   execute 'autocmd! nerd_loader' |
         \ endif
 augroup END
+
 
 " }}}
 " Switch {{{
@@ -749,18 +750,6 @@ command! -nargs=+ -complete=file Rg
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
 
-augroup ft_fzf
-  au!
-  au FileType fzf nnoremap <silent> <buffer> <c-g> :q<cr>
-  au TermOpen term://* setlocal nonumber norelativenumber
-  au TermOpen term://*FZF tnoremap <silent> <buffer> <nowait> <esc> <c-c>
-augroup END
-
-imap <c-x><c-k> <plug>(fzf-complete-word)
-imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-l> <plug>(fzf-complete-line)
-imap <expr> <c-x><c-j> fzf#vim#complete#path('rg --files --hidden')
-
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
@@ -777,11 +766,11 @@ nnoremap <leader>A :RG<enter>
 " }}}
 " Fugitive {{{
 
-nnoremap <silent> <leader>gd :Gvdiff<cr>
+nnoremap <silent> <leader>gd :Gvdiffsplit<cr>
 nnoremap <silent> <leader>ge :Gedit<cr>
-nnoremap <silent> <leader>gl :Glog<cr>
+nnoremap <silent> <leader>gl :Gclog<cr>
 nnoremap <silent> <leader>gw :Gwrite<cr>
-nmap <silent> <leader>gs :Gstatus<cr>gg<c-n>
+nmap <silent> <leader>gs :Git<cr>gg<c-n>
 
 augroup ft_git
   au!
@@ -800,7 +789,9 @@ let g:ale_set_highlights = 0
 let g:ale_fixers = {
       \ 'ruby': ['rubocop'],
       \ 'html': ['prettier'],
-      \ 'json': ['jq']
+      \ 'json': ['jq'],
+      \ 'javascript': ['prettier'],
+      \ 'xml': ['xmllint']
       \ }
 
 let g:ale_linters = {
@@ -889,6 +880,7 @@ nmap <silent> <leader>ra :TestSuite<CR>
 nmap <silent> <leader>rl :TestLast<CR>
 nmap <silent> <leader>rg :TestVisit<CR>
 nmap <localleader>s :%VtrSendLinesToRunner<cr>
+vmap <localleader>s :VtrSendLinesToRunner<cr>
 
 " }}}
 " Sideways {{{
@@ -918,7 +910,16 @@ let g:clever_f_smart_case = 1
 
 let g:coc_global_extensions = [
       \ 'coc-snippets',
-      \ 'coc-solargraph'
+      \ 'coc-solargraph',
+      \ 'coc-yank',
+      \ 'coc-json',
+      \ 'coc-yaml',
+      \ 'coc-git',
+      \ 'coc-tag',
+      \ 'coc-highlight',
+      \ 'coc-dictionary',
+      \ 'coc-syntax',
+      \ 'coc-lines'
       \ ]
 
 " Use <c-space> for trigger completion.
@@ -955,6 +956,30 @@ let g:coc_snippet_next = '<tab>'
 let g:coc_snippet_prev = '<s-tab>'
 
 " }}}
+" Coc yank {{{
+
+nnoremap <silent> <leader>y :<C-u>CocList -A --normal yank<cr>
+
+" }}}
+" Coc git {{{
+
+" navigate chunks of current buffer
+nmap [g <Plug>(coc-git-prevchunk)
+nmap ]g <Plug>(coc-git-nextchunk)
+
+" show chunk diff at current position
+nmap ghs <Plug>(coc-git-chunkinfo)
+
+" show commit contains current position
+nmap ghc <Plug>(coc-git-commit)
+
+" create text object for git chunks
+omap ih <Plug>(coc-git-chunk-inner)
+xmap ih <Plug>(coc-git-chunk-inner)
+omap ah <Plug>(coc-git-chunk-outer)
+xmap ah <Plug>(coc-git-chunk-outer)
+
+" }}}
 " Ragtag {{{
 
 augroup ragtag_plugin
@@ -968,40 +993,6 @@ augroup END
 map ! <Plug>(quickrun)
 
 " }}}
-" Gitgutter {{{
-
-let g:gitgutter_map_keys = 0
-let g:gitgutter_sign_added = '┃'
-let g:gitgutter_sign_modified = '┃'
-let g:gitgutter_sign_removed = '◢'
-let g:gitgutter_sign_removed_first_line = '◥'
-let g:gitgutter_sign_modified_removed = '◢'
-
-nmap [g <Plug>(GitGutterPrevHunk)
-nmap ]g <Plug>(GitGutterNextHunk)
-
-nmap ghs <Plug>(GitGutterStageHunk)
-nmap ghu <Plug>(GitGutterUndoHunk)
-nmap ghp <Plug>(GitGutterPreviewHunk)
-
-omap ih <Plug>(GitGutterTextObjectInnerPending)
-omap ah <Plug>(GitGutterTextObjectOuterPending)
-xmap ih <Plug>(GitGutterTextObjectInnerVisual)
-xmap ah <Plug>(GitGutterTextObjectOuterVisual)
-
-" }}}
-" Yoink {{{
-
-nmap <c-n> <plug>(YoinkPostPasteSwapBack)
-nmap <c-p> <plug>(YoinkPostPasteSwapForward)
-
-nmap p <plug>(YoinkPaste_p)
-nmap P <plug>(YoinkPaste_P)
-
-nmap y <plug>(YoinkYankPreserveCursorPosition)
-xmap y <plug>(YoinkYankPreserveCursorPosition)
-
-" }}}
 " Subversive {{{
 
 nmap gr <plug>(SubversiveSubstitute)
@@ -1013,21 +1004,40 @@ xmap <leader>gr <plug>(SubversiveSubstituteRange)
 nmap <leader>grw <plug>(SubversiveSubstituteWordRange)
 
 " }}}
-" Dadbod {{{
+" Asterisk {{{
 
-xnoremap <expr> <Plug>(DBExe)     db#op_exec()
-nnoremap <expr> <Plug>(DBExe)     db#op_exec()
-nnoremap <expr> <Plug>(DBExeLine) db#op_exec() . '_'
+let g:asterisk#keeppos = 1
 
-xmap <leader>db  <Plug>(DBExe)
-nmap <leader>db  <Plug>(DBExe)
-omap <leader>db  <Plug>(DBExe)
-nmap <leader>dbb <Plug>(DBExeLine)
+map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
+map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
+map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
+map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
 
 " }}}
-" Slash {{{
+" Cool {{{
 
-noremap <expr> <plug>(slash-after) slash#blink(2, 50)
+let g:CoolTotalMatches = 1
+
+" }}}
+" Shadeline {{{
+
+function! WrapFugitiveHead()
+  let name = exists('*FugitiveHead') ? FugitiveHead() : ''
+  return empty(name) ? '' : printf('(%s)', name)
+endfunction
+
+let g:shadeline = {}
+let g:shadeline.active = {
+      \ 'left':  ['fname', 'WrapFugitiveHead', 'coc#status', 'flags'],
+      \ 'right': [
+      \   ['ff', 'fenc', 'ft'],
+      \   'ruler'
+      \ ],
+      \ }
+
+let g:shadeline.inactive = {
+      \ 'left': ['fname', 'flags'],
+      \ }
 
 " }}}
 

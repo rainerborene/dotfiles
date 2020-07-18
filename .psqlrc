@@ -8,3 +8,6 @@
 
 -- always show how long a query takes
 \timing
+
+-- wrap long lines selecting text columns
+\pset format wrapped
