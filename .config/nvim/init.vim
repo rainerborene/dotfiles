@@ -707,7 +707,7 @@ function! s:build_quickfix_list(lines)
   cc
 endfunction
 
-let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse --margin=1,1'
+let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse'
 
 let g:fzf_preview_window = ''
 let g:fzf_history_dir = '~/.local/share/fzf-history'
@@ -726,7 +726,7 @@ let g:fzf_colors = {
       \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
       \ 'hl+':     ['fg', 'Statement'],
       \ 'info':    ['fg', 'PreProc'],
-      \ 'border':  ['fg', 'Ignore'],
+      \ 'border':  ['fg', 'VertSplit'],
       \ 'prompt':  ['fg', 'Conditional'],
       \ 'pointer': ['fg', 'Exception'],
       \ 'marker':  ['fg', 'Keyword'],
@@ -734,21 +734,20 @@ let g:fzf_colors = {
       \ 'header':  ['fg', 'Comment']
       \ }
 
-function! s:ripgrep_fzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let options = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  let options = fzf#vim#with_preview(options, 'right', 'ctrl-/')
   call fzf#vim#grep(initial_command, 1, options, a:fullscreen)
 endfunction
 
-command! -nargs=* -bang RG call s:ripgrep_fzf(<q-args>, <bang>0)
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 command! -nargs=+ -complete=file Rg
       \ call fzf#vim#grep(
-      \   'rg --hidden --vimgrep --smart-case --color=always '. <q-args>, 1,
-      \   <bang>0 ? fzf#vim#with_preview('up:60%')
-      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \   <bang>0)
+      \   'rg --column --line-number --no-heading --color=always --smart-case --hidden '. <q-args>, 1,
+      \   fzf#vim#with_preview('right', 'ctrl-/'), <bang>0)
 
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
@@ -786,6 +785,7 @@ augroup END
 let g:ale_sign_error = '•'
 let g:ale_sign_warning = '•'
 let g:ale_set_highlights = 0
+let g:ale_ruby_rubocop_auto_correct_all = 1
 let g:ale_fixers = {
       \ 'ruby': ['rubocop'],
       \ 'html': ['prettier'],
@@ -1008,10 +1008,10 @@ nmap <leader>grw <plug>(SubversiveSubstituteWordRange)
 
 let g:asterisk#keeppos = 1
 
-map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
-map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
-map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
-map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
+map *  <Plug>(asterisk-z*)
+map g* <Plug>(asterisk-gz*)
+map #  <Plug>(asterisk-z#)
+map g# <Plug>(asterisk-gz#)
 
 " }}}
 " Cool {{{

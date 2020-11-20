@@ -45,7 +45,7 @@ export HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S:   "
 export GOPATH=~/gosrc
 mkdir -p $GOPATH
 if [ -z "$PATH_EXPANDED" ]; then
-  export PATH="./bin:~/bin:/usr/local/bin:/usr/lib/chromium-browser/:$GOPATH/bin:$PATH"
+  export PATH="./bin:~/.local/bin:/usr/local/bin:$GOPATH/bin:$PATH"
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
   export PATH_EXPANDED=1
 fi
@@ -147,7 +147,7 @@ is_in_git_repo() {
   git rev-parse HEAD > /dev/null 2>&1
 }
 
-gf() {
+_gf() {
   is_in_git_repo || return
   git -c color.status=always status --short |
   fzf-down -m --ansi --nth 2..,.. \
@@ -155,7 +155,7 @@ gf() {
   cut -c4- | sed 's/.* -> //'
 }
 
-gb() {
+_gb() {
   is_in_git_repo || return
   git branch -a --color=always | grep -v '/HEAD\s' | sort |
   fzf-down --ansi --multi --tac --preview-window right:70% \
@@ -164,14 +164,14 @@ gb() {
   sed 's#^remotes/##'
 }
 
-gt() {
+_gt() {
   is_in_git_repo || return
   git tag --sort -version:refname |
   fzf-down --multi --preview-window right:70% \
     --preview 'git show --color=always {} | head -200'
 }
 
-gh() {
+_gh() {
   is_in_git_repo || return
   git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
   fzf-down --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
@@ -180,7 +180,7 @@ gh() {
   grep -o "[a-f0-9]\{7,\}"
 }
 
-gr() {
+_gr() {
   is_in_git_repo || return
   git remote -v | awk '{print $1 "\t" $2}' | uniq |
   fzf-down --tac \
@@ -188,20 +188,20 @@ gr() {
   cut -d$'\t' -f1
 }
 
-gp() {
+_gp() {
   ps -ef | fzf-down --header-lines 1 --info inline --layout reverse --multi |
     awk '{print $2}'
 }
 
 if [[ $- =~ i ]]; then
   bind '"\er": redraw-current-line'
-  bind '"\C-g\C-f": "$(gf)\e\C-e\er"'
-  bind '"\C-g\C-b": "$(gb)\e\C-e\er"'
-  bind '"\C-g\C-t": "$(gt)\e\C-e\er"'
-  bind '"\C-g\C-h": "$(gh)\e\C-e\er"'
-  bind '"\C-g\C-r": "$(gr)\e\C-e\er"'
-  bind '"\C-g\C-p": "$(gp)\e\C-e\er"'
-  bind '"\C-g\C-g": "$(gg)\e\C-e\er"'
+  bind '"\C-g\C-f": "$(_gf)\e\C-e\er"'
+  bind '"\C-g\C-b": "$(_gb)\e\C-e\er"'
+  bind '"\C-g\C-t": "$(_gt)\e\C-e\er"'
+  bind '"\C-g\C-h": "$(_gh)\e\C-e\er"'
+  bind '"\C-g\C-r": "$(_gr)\e\C-e\er"'
+  bind '"\C-g\C-p": "$(_gp)\e\C-e\er"'
+  bind '"\C-g\C-g": "$(_gg)\e\C-e\er"'
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
