@@ -1,62 +1,71 @@
 [core]
-	excludesfile = ~/.dotfiles/.cvsignore
-	attributesfile = ~/.dotfiles/.gitattributes
+  excludesfile = ~/.dotfiles/.cvsignore
+  attributesfile = ~/.dotfiles/.gitattributes
+
 [user]
-	name = Rainer Borene
-	email = rainerborene@gmail.com
+  name = Rainer Borene
+  email = rainerborene@gmail.com
+
 [grep]
-	extendedRegexp = true
-	lineNumber = true
+  extendedRegexp = true
+  lineNumber = true
+
 [github]
-	user = rainerborene
+  user = rainerborene
+
 [push]
-	default = current
+  default = current
+
 [pull]
-	rebase = true
-[web]
-	browser = open
+  rebase = true
+
 [color]
-	ui = auto
+  ui = auto
+
 [diff "ruby"]
-	funcname = "^ *\\(\\(def\\) .*\\)"
+  funcname = "^ *\\(\\(def\\) .*\\)"
+
 [diff "nodiff"]
-	command = /usr/bin/true
+  command = /usr/bin/true
+
 [url "git://github.com/"]
-	insteadOf = gh:
+  insteadOf = gh:
+
 [url "git@github.com:"]
-	insteadOf = wgh:
-[url "git@heroku.com:"]
-	insteadOf = heroku:
+  insteadOf = wgh:
+
 [url "git@bitbucket.org:"]
-	insteadOf = bb:
+  insteadOf = bb:
+
 [merge]
-	summary = true
-	prompt = false
-	tool = diffconflicts
+  summary = true
+  prompt = false
+  tool = diffconflicts
+
 [mergetool]
-	keepBackup = false
-	keepTemporaries = false
+  keepBackup = false
+  keepTemporaries = false
+
 [mergetool "fugitive"]
-	cmd = "nvim -f -c 'Gvdiff' $MERGED"
+  cmd = "nvim -f -c 'Gvdiff' $MERGED"
+
 [alias]
-	a				= add
-	s				= status
-	p				= push
-	d				= diff
-	ba				= branch -a
-	dc				= diff --cached
-	co				= checkout
-	ci				= commit
-	uns				= reset HEAD
-	unstage			= reset HEAD
-	l				= log -16 --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
-	ll				= log --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
-	gl				= log -10 --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
-	gll				= log --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
-	changed			= git diff-tree --no-commit-id --name-only -r
-[filter "media"]
-	clean = git-media-clean %f
-	smudge = git-media-smudge %f
+  a                 = add
+  s                 = status
+  p                 = push
+  d                 = diff
+  ba                = branch -a
+  dc                = diff --cached
+  co                = checkout
+  ci                = commit
+  uns               = reset HEAD
+  unstage           = reset HEAD
+  l                 = log -16 --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
+  ll                = log --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
+  gl                = log -10 --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
+  gll               = log --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
+  changed           = git diff-tree --no-commit-id --name-only -r
+
 [mergetool "diffconflicts"]
-	cmd = nvim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
-	trustExitCode = true
+  cmd = nvim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
+  trustExitCode = true
