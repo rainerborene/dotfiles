@@ -30,6 +30,8 @@ shopt -s checkwinsize
 ### Disable CTRL-S and CTRL-Q
 [[ $- =~ i ]] && stty -ixoff -ixon
 
+### Luarocks
+# eval "$(luarocks path --bin)"
 
 # Environment variables
 # --------------------------------------------------------------------
@@ -75,6 +77,7 @@ alias ......='cd ../../../../..'
 alias j='z'
 alias g='git'
 alias lg='lazygit'
+alias xp='xplr'
 alias la='ls -la'
 alias ls='exa --group-directories-first'
 alias l='tree --dirsfirst -ChaFL 1'

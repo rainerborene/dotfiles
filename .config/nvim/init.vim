@@ -19,19 +19,17 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
+Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'cocopon/shadeline.vim'
 Plug 'cohama/lexima.vim'
-Plug 'dhruvasagar/vim-zoom'
 Plug 'glts/vim-textobj-comment'
-Plug 'gruvbox-community/gruvbox'
 Plug 'haya14busa/vim-asterisk'
-Plug 'honza/vim-snippets'
+Plug 'hrsh7th/nvim-compe'
+Plug 'hrsh7th/vim-vsnip'
 Plug 'janko-m/vim-test'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
@@ -44,7 +42,12 @@ Plug 'machakann/vim-textobj-delimited'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mhinz/vim-startify'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'rafamadriz/friendly-snippets'
+Plug 'rainerborene/dracula_pro'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-ruby'
 Plug 'rhysd/vim-textobj-word-column'
@@ -52,8 +55,8 @@ Plug 'romainl/vim-cool'
 Plug 'roxma/vim-tmux-clipboard'
 Plug 'ryanoasis/vim-devicons'
 Plug 'saaguero/vim-textobj-pastedtext'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'sheerun/vim-polyglot'
+Plug 'shoumodip/fm.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'svermeulen/vim-subversive'
 Plug 'thinca/vim-quickrun'
@@ -138,7 +141,6 @@ set relativenumber
 set number
 set conceallevel=2
 set concealcursor=niv
-set cmdheight=2
 set pumheight=20
 
 if executable('rg')
@@ -156,9 +158,6 @@ function! init#colorscheme() abort
   hi! SignColumn   guibg=bg
   hi! EndOfBuffer  guibg=bg      guifg=bg
   hi! MsgSeparator ctermbg=black ctermfg=white
-  hi! CursorLineNr ctermbg=NONE  guibg=NONE
-  hi! LineNr       ctermbg=NONE  guibg=NONE
-  hi! SignColumn   ctermbg=NONE  guibg=NONE
 endfunction
 
 augroup vimrc_colorscheme
@@ -166,9 +165,7 @@ augroup vimrc_colorscheme
   au ColorScheme * call init#colorscheme()
 augroup END
 
-let g:gruvbox_contrast_dark = 'soft'
-let g:gruvbox_sign_column = 'bg0'
-colorscheme gruvbox
+colorscheme dracula_pro
 
 " }}}
 " Mappings {{{
@@ -210,10 +207,19 @@ nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <localleader>\ <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
 " I hate when the rendering occasionally gets messed up.
-nnoremap <silent> U :syntax sync fromstart<cr>:nohlsearch<cr>:redraw!<cr>
+function! s:refresh()
+  syntax sync
+  nohlsearch
+  lua vim.lsp.diagnostic.clear(0)
+  call compe#close()
+  call gitgutter#process_buffer(bufnr(''), 0)
+  redraw!
+  echo
+endfunction
+nnoremap <silent> U :call <sid>refresh()<cr>
 
 " Useful mappings for managing tabs
-nnoremap          <leader>te <esc>:tabedit <tab>
+nnoremap          <leader>te <esc>:tabedit<Space>
 nnoremap <silent> <leader>tn <esc>:tabnew<cr>
 nnoremap <silent> <leader>to <esc>:tabonly<cr>
 nnoremap <silent> <leader>td <esc>:tabclose<cr>
@@ -240,7 +246,7 @@ nnoremap <leader>7 7gt
 nnoremap <leader>8 8gt
 nnoremap <leader>9 9gt
 
- " ,t(g)t - Open tag in tab
+" ,t(g)t - Open tag in tab
 nnoremap <silent> <leader>tt  <esc>:tab split<cr>:exe("tag ".expand("<cword>"))<cr>
 nnoremap <silent> <leader>tgt <esc>:tab split<cr>:exe("tjump ".expand("<cword>"))<cr>
 
@@ -348,7 +354,7 @@ cnoremap <m-/> \v^(()@!.)*$<Left><Left><Left><Left><Left><Left><Left>
 " Easier dir/file manipulation
 nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
 cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
-cnoremap <expr> %< getcmdtype() == ':' ? fnameescape(expand('%:t')).'<C-f><C-f>^' : '%<'
+cnoremap <expr> %< getcmdtype() == ':' ? fnameescape(expand('%:t')) : '%<'
 
 " Repeat last substitution
 nnoremap & n:&&<cr>
@@ -504,9 +510,6 @@ augroup vimrc
   autocmd InsertEnter * set listchars-=trail:⣿
   autocmd InsertLeave * set listchars+=trail:⣿
 
-  " Save when losing focus
-  " au FocusLost * :silent! wall
-
   " Resize splits when the window is resized
   au VimResized * :wincmd =
 
@@ -622,46 +625,12 @@ endf
 command! -nargs=1 -complete=customlist,<sid>nodejs_packages Nopen call <sid>nodejs_topen(<q-args>)
 
 " }}}
-" Makes working with Rails i18n locale files a little easier {{{
-
-function! s:Localizing()
-  set dictionary=/usr/share/dict/brazilian,/usr/share/dict/american-english
-  set clipboard=unnamedplus
-  windo norm gg
-  windo setlocal scb! scrollbind spell
-endfunction
-command! Localizing call s:Localizing()
-
-" }}}
 " Plugins {{{
 
 " Ruby {{{
 
 let g:ruby_operators = 1
 let g:ruby_fold = 1
-
-" }}}
-" NERDTree {{{
-
-let g:NERDTreeHijackNetrw = 1
-let g:NERDTreeMapActivateNode = 'l'
-let g:NERDTreeMapCloseDir = 'h'
-let g:NERDTreeMapJumpFirstChild = 'gK'
-let g:NERDTreeMapJumpNextSibling = 'gj'
-let g:NERDTreeMapJumpPrevSibling = 'gk'
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeShowHidden = 1
-
-augroup nerd_loader
-  au!
-  au FileType nerdtree setlocal colorcolumn& nowrap tw=0
-  au BufEnter,BufNew *
-        \ if isdirectory(expand('<amatch>')) |
-        \   call plug#load('nerdtree') |
-        \   execute 'autocmd! nerd_loader' |
-        \ endif
-augroup END
-
 
 " }}}
 " Switch {{{
@@ -698,69 +667,26 @@ let g:undotree_ShortIndicators = 1
 nnoremap <silent> <leader>u :UndotreeToggle<CR>
 
 " }}}
-" FZF {{{
+" Telescope {{{
 
-" An action can be a reference to a function that processes selected lines
-function! s:build_quickfix_list(lines)
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-  copen
-  cc
-endfunction
+lua require('rainer.telescope')
 
-let $FZF_DEFAULT_OPTS .= ' --inline-info --layout=reverse'
+" Find files using Telescope command-line sugar.
+nnoremap <leader><Leader> :Telescope find_files<cr>
+nnoremap <leader><tab> :Telescope keymaps<cr>
+nnoremap <leader>h :Telescope help_tags<cr>
+nnoremap <leader>b :Telescope buffers<cr>
+nnoremap <leader>a :Telescope live_grep<cr>
+nnoremap <leader>A :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
+nnoremap <leader>f :lua require('telescope.builtin').grep_string { search = vim.fn.input("Grep For > "), use_regex = true }<cr>
+nnoremap <leader>F :lua require('rainer.telescope').bundle_grep_string()<cr>
+nnoremap <leader>' :Telescope marks<cr>
+nnoremap <leader>. :Telescope tags<cr>
 
-let g:fzf_preview_window = ''
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
-let g:fzf_action = {
-  \ 'ctrl-q': function('s:build_quickfix_list'),
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
-
-let g:fzf_colors = {
-      \ 'fg':      ['fg', 'Normal'],
-      \ 'bg':      ['bg', 'Normal'],
-      \ 'hl':      ['fg', 'Comment'],
-      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+':     ['fg', 'Statement'],
-      \ 'info':    ['fg', 'PreProc'],
-      \ 'border':  ['fg', 'VertSplit'],
-      \ 'prompt':  ['fg', 'Conditional'],
-      \ 'pointer': ['fg', 'Exception'],
-      \ 'marker':  ['fg', 'Keyword'],
-      \ 'spinner': ['fg', 'Label'],
-      \ 'header':  ['fg', 'Comment']
-      \ }
-
-function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let options = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  let options = fzf#vim#with_preview(options, 'right', 'ctrl-/')
-  call fzf#vim#grep(initial_command, 1, options, a:fullscreen)
-endfunction
-
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-command! -nargs=+ -complete=file Rg
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --smart-case --hidden '. <q-args>, 1,
-      \   fzf#vim#with_preview('right', 'ctrl-/'), <bang>0)
-
-nmap <leader><tab> <plug>(fzf-maps-n)
-xmap <leader><tab> <plug>(fzf-maps-x)
-omap <leader><tab> <plug>(fzf-maps-o)
-
-nnoremap <silent> <Leader><Leader> :Files<CR>
-nnoremap <silent> <Leader>h :Helptags<CR>
-nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>l :Lines<CR>
-nnoremap <silent> <Leader>' :Marks<CR>
-nnoremap <silent> <Leader>. :Tags<CR>
-nnoremap <leader>a :Rg<Space>
-nnoremap <leader>A :RG<enter>
+augroup ft_telescope
+  au!
+  au FileType TelescopePrompt let b:lexima_disabled = 1
+augroup END
 
 " }}}
 " Fugitive {{{
@@ -769,13 +695,14 @@ nnoremap <silent> <leader>gd :Gvdiffsplit<cr>
 nnoremap <silent> <leader>ge :Gedit<cr>
 nnoremap <silent> <leader>gl :Gclog<cr>
 nnoremap <silent> <leader>gw :Gwrite<cr>
-nmap <silent> <leader>gs :Git<cr>gg<c-n>
+nmap <silent> <leader>gs :Git<cr>gg)
 
 augroup ft_git
   au!
   au FileType gitrebase nnoremap <buffer> <silent> S :Cycle<cr>
   au FileType gitcommit,git setlocal foldmethod=syntax nolist nonumber norelativenumber
   au FileType gitcommit setlocal spell
+  au FileType fugitive,git nnoremap <buffer> <silent> q :q<cr>
   au BufReadPost fugitive://* set bufhidden=delete
 augroup END
 
@@ -796,6 +723,7 @@ let g:ale_fixers = {
 
 let g:ale_linters = {
       \ 'ruby': ['ruby', 'rubocop'],
+      \ 'json': ['jq'],
       \ 'eruby': []
       \ }
 
@@ -807,7 +735,6 @@ nmap <silent> ]s <Plug>(ale_next_wrap)
 
 " Bind F8 to fixing problems with ALE
 nmap <F8> <Plug>(ale_fix)
-
 
 " }}}
 " Smartword {{{
@@ -846,7 +773,10 @@ let g:pastedtext_select_key = "gp"
 " }}}
 " Highlighted Yank {{{
 
-let g:highlightedyank_highlight_duration = 100
+augroup lua_highlight
+  au!
+  au TextYankPost * silent! lua require'vim.highlight'.on_yank()
+augroup END
 
 " }}}
 " Lexima {{{
@@ -867,6 +797,70 @@ call lexima#add_rule({
       \ 'input': '<%=  %><Left><Left><Left>',
       \ 'filetype': 'eruby.yaml'
       \ })
+
+" }}}
+" LSP {{{
+
+lua require'lspconfig'.solargraph.setup{}
+lua require'lspconfig'.tsserver.setup{}
+lua require'lspconfig'.gopls.setup{}
+
+nnoremap <silent> <leader>ld :lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> <leader>li :lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <leader>ls :lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> <leader>le :lua vim.lsp.buf.references()<CR>
+nnoremap <silent> <leader>lr :lua vim.lsp.buf.rename()<CR>
+nnoremap <silent> <leader>lh :lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> <leader>la :lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent> <leader>ll :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+
+" }}}
+" Compe {{{
+
+let g:compe = {}
+let g:compe.enabled = v:true
+let g:compe.autocomplete = v:true
+let g:compe.debug = v:false
+let g:compe.min_length = 1
+let g:compe.preselect = 'enable'
+let g:compe.throttle_time = 80
+let g:compe.source_timeout = 200
+let g:compe.incomplete_delay = 400
+let g:compe.max_abbr_width = 100
+let g:compe.max_kind_width = 100
+let g:compe.max_menu_width = 100
+let g:compe.documentation = v:true
+
+let g:compe.source = {}
+let g:compe.source.path = v:true
+let g:compe.source.buffer = v:true
+let g:compe.source.calc = v:true
+let g:compe.source.tmux = v:true
+let g:compe.source.nvim_lsp = v:true
+let g:compe.source.nvim_lua = v:true
+let g:compe.source.tags = v:true
+let g:compe.source.vsnip = v:true
+
+inoremap <silent> <expr> <C-Space> compe#complete()
+inoremap <silent> <expr> <C-e> compe#close('<C-e>')
+
+" Setup default omnifunc
+augroup vimrc_completion
+  au!
+  au FileType *
+        \  if &omnifunc == ""
+        \|   setlocal omnifunc=syntaxcomplete#Complete
+        \| endif
+augroup END
+
+" }}}
+" Vsnip {{{
+
+let g:vsnip_snippet_dir = expand('~/.config/nvim/vsnip')
+
+imap <expr> <Tab> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : (pumvisible() ? "\<c-n>" : "\<tab>")
+smap <expr> <Tab> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : (pumvisible() ? "\<c-n>" : "\<tab>")
+imap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
 
 " }}}
 " Test {{{
@@ -896,7 +890,6 @@ xmap <silent> ia <Plug>SidewaysArgumentTextobjI
 " }}}
 " Polyglot {{{
 
-" let g:jsx_ext_required = 1
 let g:vue_disable_pre_processors = 1
 
 " }}}
@@ -906,86 +899,26 @@ let g:clever_f_across_no_line = 1
 let g:clever_f_smart_case = 1
 
 " }}}
-" Coc {{{
+" Gitgutter {{{
 
-let g:coc_global_extensions = [
-      \ 'coc-snippets',
-      \ 'coc-solargraph',
-      \ 'coc-yank',
-      \ 'coc-json',
-      \ 'coc-yaml',
-      \ 'coc-git',
-      \ 'coc-tag',
-      \ 'coc-highlight',
-      \ 'coc-dictionary',
-      \ 'coc-syntax',
-      \ 'coc-lines'
-      \ ]
+let g:gitgutter_map_keys = 0
+let g:gitgutter_sign_added = '┃'
+let g:gitgutter_sign_modified = '┃'
+let g:gitgutter_sign_removed = '◢'
+let g:gitgutter_sign_removed_first_line = '◥'
+let g:gitgutter_sign_modified_removed = '◢'
 
-" Use <c-space> for trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
+nmap [g <Plug>(GitGutterPrevHunk)
+nmap ]g <Plug>(GitGutterNextHunk)
 
-" Use `[c` and `]c` for navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+omap ig <Plug>(GitGutterTextObjectInnerPending)
+omap ag <Plug>(GitGutterTextObjectOuterPending)
+xmap ig <Plug>(GitGutterTextObjectInnerVisual)
+xmap ag <Plug>(GitGutterTextObjectOuterVisual)
 
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gm <Plug>(coc-implementation)
-nmap <silent> gn <Plug>(coc-references)
-
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
-
-" }}}
-" Coc snippets {{{
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-let g:coc_snippet_next = '<tab>'
-let g:coc_snippet_prev = '<s-tab>'
-
-" }}}
-" Coc yank {{{
-
-nnoremap <silent> <leader>y :<C-u>CocList -A --normal yank<cr>
-
-" }}}
-" Coc git {{{
-
-" navigate chunks of current buffer
-nmap [g <Plug>(coc-git-prevchunk)
-nmap ]g <Plug>(coc-git-nextchunk)
-
-" show chunk diff at current position
-nmap ghs <Plug>(coc-git-chunkinfo)
-
-" show commit contains current position
-nmap ghc <Plug>(coc-git-commit)
-
-" create text object for git chunks
-omap ih <Plug>(coc-git-chunk-inner)
-xmap ih <Plug>(coc-git-chunk-inner)
-omap ah <Plug>(coc-git-chunk-outer)
-xmap ah <Plug>(coc-git-chunk-outer)
-
-" }}}
-" Ragtag {{{
-
-augroup ragtag_plugin
-  au!
-  au FileType vue call RagtagInit()
-augroup END
+nmap ghp <Plug>(GitGutterPreviewHunk)
+nmap ghs <Plug>(GitGutterStageHunk)
+nmap ghu <Plug>(GitGutterUndoHunk)
 
 " }}}
 " QuickRun {{{
@@ -1028,7 +961,7 @@ endfunction
 
 let g:shadeline = {}
 let g:shadeline.active = {
-      \ 'left':  ['fname', 'WrapFugitiveHead', 'coc#status', 'flags'],
+      \ 'left':  ['fname', 'WrapFugitiveHead', 'flags'],
       \ 'right': [
       \   ['ff', 'fenc', 'ft'],
       \   'ruler'

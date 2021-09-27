@@ -20,7 +20,7 @@ install() {
 
   # link
   ln -sf ~/.dotfiles/.config/* .config/
-  ln -sf ~/.dotfiles/.{alacritty.yml,fdignore,curlrc,gemrc,gitconfig,hushlogin,irbrc,pryrc,psqlrc,railsrc,rubocop.yml,reek.yml,tmux.conf,bashrc,inputrc,tidyrc} .
+  ln -sf ~/.dotfiles/.{alacritty.yml,fdignore,curlrc,gemrc,gitconfig,hushlogin,irbrc,pryrc,psqlrc,railsrc,rubocop.yml,reek.yml,tmux.conf,bashrc,inputrc} .
   ln -P ~/.dotfiles/.ctags.d/default.ctags ~/.ctags.d/default.ctags
 
   # nvim dependencies
@@ -46,6 +46,7 @@ install_rust_packages() {
   cargo install bat
   cargo install zoxide -f
   cargo install hexyl
+  cargo install xplr
 }
 
 install_ruby_gems() {
