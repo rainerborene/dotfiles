@@ -1,8 +1,9 @@
-" .vimrc of Rainer Borene
+" init.vim of Rainer Borene
 " =======================
 " Plugged {{{
 
 " Disable default plugins
+let g:loaded_matchit = 1
 let g:loaded_netrwPlugin = 1
 let g:loaded_vimballPlugin = 1
 let g:loaded_rrhelper = 1
@@ -19,15 +20,21 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
-Plug 'airblade/vim-gitgutter'
+Plug 'andersevenrud/compe-tmux', { 'branch': 'cmp' }
+Plug 'andymass/vim-matchup'
+Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'cocopon/shadeline.vim'
-Plug 'cohama/lexima.vim'
+Plug 'folke/tokyonight.nvim'
 Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/vim-asterisk'
-Plug 'hrsh7th/nvim-compe'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'janko-m/vim-test'
 Plug 'kana/vim-niceblock'
@@ -37,35 +44,36 @@ Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
+Plug 'lewis6991/gitsigns.nvim'
+Plug 'lewis6991/impatient.nvim'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
-Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mhinz/vim-startify'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'onsails/lspkind-nvim'
+Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'rafamadriz/friendly-snippets'
-Plug 'rainerborene/dracula_pro'
 Plug 'rhysd/clever-f.vim'
-Plug 'rhysd/vim-textobj-ruby'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
 Plug 'roxma/vim-tmux-clipboard'
-Plug 'ryanoasis/vim-devicons'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sheerun/vim-polyglot'
-Plug 'shoumodip/fm.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'svermeulen/vim-subversive'
+Plug 'tamago324/lir.nvim'
 Plug 'thinca/vim-quickrun'
 Plug 'tommcdo/vim-exchange'
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-ragtag'
@@ -76,11 +84,13 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
-Plug 'wellle/tmux-complete.vim'
 Plug 'whatyouhide/vim-textobj-erb'
 Plug 'whiteinge/diffconflicts'
+Plug 'windwp/nvim-autopairs'
 
 call plug#end()
+
+lua require('impatient')
 
 " }}}
 " Basic options {{{
@@ -98,7 +108,7 @@ set undoreload=10000
 set notimeout
 set ttimeout
 set ttimeoutlen=0
-set updatetime=300
+set updatetime=1000
 
 " text manipulation
 set expandtab
@@ -109,20 +119,16 @@ set tabstop=4
 set textwidth=80
 set virtualedit+=block
 set completeopt=noinsert,menuone,noselect
-set inccommand=nosplit
-set nojoinspaces
 
 " better navigation
 set foldlevel=99
 set gdefault
 set ignorecase
 set smartcase
-set hidden
 set splitbelow
 set splitright
 set sidescroll=1
 set nostartofline
-set switchbuf=useopen
 
 " wild stuff
 set wildmode=list:longest,full
@@ -142,6 +148,7 @@ set number
 set conceallevel=2
 set concealcursor=niv
 set pumheight=20
+set laststatus=3
 
 if executable('rg')
   set grepprg=rg\ --vimgrep
@@ -155,9 +162,8 @@ set background=dark
 set termguicolors
 
 function! init#colorscheme() abort
-  hi! SignColumn   guibg=bg
-  hi! EndOfBuffer  guibg=bg      guifg=bg
-  hi! MsgSeparator ctermbg=black ctermfg=white
+  hi! MatchWord gui=bold
+  hi! GitSignsDelete guifg=#FF9580
 endfunction
 
 augroup vimrc_colorscheme
@@ -165,7 +171,8 @@ augroup vimrc_colorscheme
   au ColorScheme * call init#colorscheme()
 augroup END
 
-colorscheme dracula_pro
+let g:tokyonight_style = "night"
+colorscheme tokyonight
 
 " }}}
 " Mappings {{{
@@ -199,24 +206,20 @@ nnoremap gI `.zz
 nnoremap gg ggzv
 nnoremap G Gzv
 
-" jj | Escaping!
-inoremap jj <Esc>
-
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
-nnoremap <localleader>\ <c-w>v<c-]>mzzMzvzz15<c-e>`z
+nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
 " I hate when the rendering occasionally gets messed up.
-function! s:refresh()
-  syntax sync
+function! s:redraw()
   nohlsearch
-  lua vim.lsp.diagnostic.clear(0)
-  call compe#close()
-  call gitgutter#process_buffer(bufnr(''), 0)
+  lua vim.lsp.diagnostic.redraw()
+  lua require'cmp'.close()
+  normal! zx
   redraw!
   echo
 endfunction
-nnoremap <silent> U :call <sid>refresh()<cr>
+nnoremap U :call <sid>redraw()<cr>
 
 " Useful mappings for managing tabs
 nnoremap          <leader>te <esc>:tabedit<Space>
@@ -279,9 +282,6 @@ noremap H ^
 noremap L $
 vnoremap L g_
 
-" Make Y consistent with C and D.
-nnoremap Y y$
-
 " No overwrite paste
 xnoremap p "_dP
 
@@ -295,12 +295,6 @@ nnoremap zO zczO
 " Focus the current fold by folding all the others
 nnoremap <leader>z zMzvzz
 
-" Show the stack of syntax highlighting classes under the cursor.
-function! SynStack()
-  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), " > ")
-endfunc
-nnoremap zS :call SynStack()<CR>
-
 " Ctrl-g: Prints current file name
 nnoremap <c-g> 2<c-g>
 
@@ -310,7 +304,6 @@ nnoremap <c-b> <c-^>
 " Quit
 inoremap <silent> <C-Q> <esc>:q<cr>
 nnoremap <silent> <C-Q> :q<cr>
-nnoremap <silent> <C-W>q :q!<cr>
 
 " Save
 inoremap <silent> <C-s> <C-o>:update<cr>
@@ -369,6 +362,9 @@ nnoremap =f :setfiletype<Space>
 " Insert Mode Completion
 imap <c-j> <c-n>
 imap <c-k> <c-p>
+
+" Open notes directory
+nnoremap <silent> <leader>n <esc>:tabedit ~/Dropbox/Notebook/Notes<cr>
 
 " }}}
 " Ctags generation {{{
@@ -479,6 +475,8 @@ augroup ft_ruby
   au BufRead *gemrc setlocal filetype=yaml
   au FileType ruby setlocal iskeyword+=!,?
   au FileType ruby setlocal keywordprg=ri\ -T
+  au FileType ruby setlocal foldmethod=expr
+  au FileType ruby setlocal foldexpr=nvim_treesitter#foldexpr()
   au BufNewFile,BufRead .env* set filetype=sh
 augroup END
 
@@ -524,7 +522,7 @@ augroup vimrc
 
   " Always show sign column
   au BufEnter *
-        \  if !exists("b:signed_column") && filereadable(expand("%")) && &ft !~ "git"
+        \  if !exists("b:signed_column") && filereadable(expand("%")) && &modifiable && &ft !~ "git"
         \|   setlocal signcolumn=yes
         \|   let b:signed_column = 1
         \| endif
@@ -629,8 +627,7 @@ command! -nargs=1 -complete=customlist,<sid>nodejs_packages Nopen call <sid>node
 
 " Ruby {{{
 
-let g:ruby_operators = 1
-let g:ruby_fold = 1
+let g:no_ruby_maps = 1
 
 " }}}
 " Switch {{{
@@ -674,7 +671,7 @@ lua require('rainer.telescope')
 " Find files using Telescope command-line sugar.
 nnoremap <leader><Leader> :Telescope find_files<cr>
 nnoremap <leader><tab> :Telescope keymaps<cr>
-nnoremap <leader>h :Telescope help_tags<cr>
+nnoremap <leader>k :Telescope help_tags<cr>
 nnoremap <leader>b :Telescope buffers<cr>
 nnoremap <leader>a :Telescope live_grep<cr>
 nnoremap <leader>A :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
@@ -682,11 +679,6 @@ nnoremap <leader>f :lua require('telescope.builtin').grep_string { search = vim.
 nnoremap <leader>F :lua require('rainer.telescope').bundle_grep_string()<cr>
 nnoremap <leader>' :Telescope marks<cr>
 nnoremap <leader>. :Telescope tags<cr>
-
-augroup ft_telescope
-  au!
-  au FileType TelescopePrompt let b:lexima_disabled = 1
-augroup END
 
 " }}}
 " Fugitive {{{
@@ -755,17 +747,6 @@ let g:startify_change_to_vcs_root = 1
 let g:startify_session_persistence = 1
 
 " }}}
-" Emmet {{{
-
-let g:user_emmet_mode = 'i'
-
-augroup emmet
-  au!
-  au FileType sass,scss imap <buffer> <expr> <tab> emmet#isExpandable() ?
-        \ "\<Plug>(emmet-expand-abbr)" : "\<tab>"
-augroup END
-
-" }}}
 " Pasted Text Object {{{
 
 let g:pastedtext_select_key = "gp"
@@ -777,26 +758,6 @@ augroup lua_highlight
   au!
   au TextYankPost * silent! lua require'vim.highlight'.on_yank()
 augroup END
-
-" }}}
-" Lexima {{{
-
-let g:lexima_enable_endwise_rules = 0
-let g:lexima_no_default_rules = 1
-call lexima#set_default_rules()
-call lexima#insmode#map_hook('before', '<CR>', '')
-
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function() abort
-  return pumvisible() ? "\<c-y>\<cr>" : "\<CR>"
-endfunction
-
-call lexima#add_rule({
-      \ 'at': '\v\w+:\s+%#',
-      \ 'char': '=',
-      \ 'input': '<%=  %><Left><Left><Left>',
-      \ 'filetype': 'eruby.yaml'
-      \ })
 
 " }}}
 " LSP {{{
@@ -817,56 +778,17 @@ nnoremap <silent> <leader>ll :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
 " }}}
 " Compe {{{
 
-let g:compe = {}
-let g:compe.enabled = v:true
-let g:compe.autocomplete = v:true
-let g:compe.debug = v:false
-let g:compe.min_length = 1
-let g:compe.preselect = 'enable'
-let g:compe.throttle_time = 80
-let g:compe.source_timeout = 200
-let g:compe.incomplete_delay = 400
-let g:compe.max_abbr_width = 100
-let g:compe.max_kind_width = 100
-let g:compe.max_menu_width = 100
-let g:compe.documentation = v:true
-
-let g:compe.source = {}
-let g:compe.source.path = v:true
-let g:compe.source.buffer = v:true
-let g:compe.source.calc = v:true
-let g:compe.source.tmux = v:true
-let g:compe.source.nvim_lsp = v:true
-let g:compe.source.nvim_lua = v:true
-let g:compe.source.tags = v:true
-let g:compe.source.vsnip = v:true
-
-inoremap <silent> <expr> <C-Space> compe#complete()
-inoremap <silent> <expr> <C-e> compe#close('<C-e>')
-
-" Setup default omnifunc
-augroup vimrc_completion
-  au!
-  au FileType *
-        \  if &omnifunc == ""
-        \|   setlocal omnifunc=syntaxcomplete#Complete
-        \| endif
-augroup END
+lua require('rainer.cmp')
 
 " }}}
 " Vsnip {{{
 
 let g:vsnip_snippet_dir = expand('~/.config/nvim/vsnip')
 
-imap <expr> <Tab> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : (pumvisible() ? "\<c-n>" : "\<tab>")
-smap <expr> <Tab> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : (pumvisible() ? "\<c-n>" : "\<tab>")
-imap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
-
 " }}}
 " Test {{{
 
 let test#strategy = "vtr"
-let test#ruby#use_spring_binstub = 1
 
 nmap <silent> <leader>rr :TestNearest<CR>
 nmap <silent> <leader>rf :TestFile<CR>
@@ -888,37 +810,10 @@ omap <silent> ia <Plug>SidewaysArgumentTextobjI
 xmap <silent> ia <Plug>SidewaysArgumentTextobjI
 
 " }}}
-" Polyglot {{{
-
-let g:vue_disable_pre_processors = 1
-
-" }}}
 " Clever-f {{{
 
 let g:clever_f_across_no_line = 1
 let g:clever_f_smart_case = 1
-
-" }}}
-" Gitgutter {{{
-
-let g:gitgutter_map_keys = 0
-let g:gitgutter_sign_added = '┃'
-let g:gitgutter_sign_modified = '┃'
-let g:gitgutter_sign_removed = '◢'
-let g:gitgutter_sign_removed_first_line = '◥'
-let g:gitgutter_sign_modified_removed = '◢'
-
-nmap [g <Plug>(GitGutterPrevHunk)
-nmap ]g <Plug>(GitGutterNextHunk)
-
-omap ig <Plug>(GitGutterTextObjectInnerPending)
-omap ag <Plug>(GitGutterTextObjectOuterPending)
-xmap ig <Plug>(GitGutterTextObjectInnerVisual)
-xmap ag <Plug>(GitGutterTextObjectOuterVisual)
-
-nmap ghp <Plug>(GitGutterPreviewHunk)
-nmap ghs <Plug>(GitGutterStageHunk)
-nmap ghu <Plug>(GitGutterUndoHunk)
 
 " }}}
 " QuickRun {{{
@@ -971,6 +866,36 @@ let g:shadeline.active = {
 let g:shadeline.inactive = {
       \ 'left': ['fname', 'flags'],
       \ }
+
+" }}}
+" Lir {{{
+
+lua require('rainer.lir')
+
+" }}}
+" Gitsigns {{{
+
+lua require('rainer.gitsigns')
+
+" }}}
+" Tmux {{{
+
+let g:tmux_navigator_no_mappings = 1
+
+nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
+
+" }}}
+" Treesitter {{{
+
+lua require('rainer.treesitter')
+
+" }}}
+" Matchup {{{
+
+let g:matchup_matchparen_offscreen = {}
 
 " }}}
 

@@ -56,6 +56,7 @@ install_ruby_gems() {
   gem install rubocop-rails
   gem install solargraph
   gem install i18n-tasks
+  gem install easy_translate
 }
 
 # run

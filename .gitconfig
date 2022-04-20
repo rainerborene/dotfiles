@@ -60,11 +60,12 @@
   ci                = commit
   uns               = reset HEAD
   unstage           = reset HEAD
-  l                 = log -16 --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
-  ll                = log --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(black bold)(by %an)%Creset'
-  gl                = log -10 --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
-  gll               = log --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
+  l                 = log -16 --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(blue bold)(by %an)%Creset'
+  ll                = log --color=always --all --topo-order --pretty='format:%Cgreen%h%Creset %s%Cred%d%Creset %C(blue bold)(by %an)%Creset'
+  gl                = log -10 --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(blue bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
+  gll               = log --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(blue bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
   changed           = git diff-tree --no-commit-id --name-only -r
+  work              = !sh -c 'git fetch && git checkout @{upstream} -tb \"$@\"'
 
 [mergetool "diffconflicts"]
   cmd = nvim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
