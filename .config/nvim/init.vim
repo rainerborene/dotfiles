@@ -20,9 +20,9 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
-Plug 'andersevenrud/compe-tmux', { 'branch': 'cmp' }
+Plug 'L3MON4D3/LuaSnip'
+Plug 'andersevenrud/cmp-tmux'
 Plug 'andymass/vim-matchup'
-Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
@@ -33,9 +33,7 @@ Plug 'haya14busa/vim-asterisk'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/vim-vsnip'
 Plug 'janko-m/vim-test'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
@@ -63,6 +61,7 @@ Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
 Plug 'roxma/vim-tmux-clipboard'
+Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sheerun/vim-polyglot'
 Plug 'stefandtw/quickfix-reflector.vim'
@@ -171,8 +170,7 @@ augroup vimrc_colorscheme
   au ColorScheme * call init#colorscheme()
 augroup END
 
-let g:tokyonight_style = "night"
-colorscheme tokyonight
+colorscheme tokyonight-night
 
 " }}}
 " Mappings {{{
@@ -213,8 +211,8 @@ nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 " I hate when the rendering occasionally gets messed up.
 function! s:redraw()
   nohlsearch
-  lua vim.lsp.diagnostic.redraw()
-  lua require'cmp'.close()
+  " lua vim.lsp.diagnostic.redraw()
+  " lua require'cmp'.close()
   normal! zx
   redraw!
   echo
@@ -366,16 +364,25 @@ imap <c-k> <c-p>
 " Open notes directory
 nnoremap <silent> <leader>n <esc>:tabedit ~/Dropbox/Notebook/Notes<cr>
 
+" Organize Tailwind CSS classes
+command! Tw write
+      \| if &ft == "css"
+      \|   silent exec '!rustywind --custom-regex "@apply ([_a-zA\.-Z0-9\s\-:\[\]]+);" --write %'
+      \| elseif &ft == "ruby"
+      \|   silent exec '!rustywind --custom-regex "\"([_a-zA\.-Z0-9\s\-:\[\]]+)\"" --write %'
+      \| else
+      \|   silent exec '!rustywind --write %'
+      \| end
+
 " }}}
 " Ctags generation {{{
 
 function! s:generate_ctags() abort
   if &ft == "ruby" && executable("ripper-tags")
-    call system("ripper-tags -R &")
+    call jobstart("ripper-tags -R")
   else
-    call system("ctags -R . &")
+    call jobstart("ctags -R .")
   end
-  redraw!
 endfunction
 nnoremap <silent> g<cr> :call <sid>generate_ctags()<cr>
 
@@ -535,10 +542,10 @@ augroup vimrc
 
   " Automatic rename of tmux window
   if exists('$TMUX') && !exists('$NORENAME')
-    au VimLeave * call system('tmux set-window automatic-rename on')
+    au VimLeave * call jobstart('tmux set-window automatic-rename on')
     au BufEnter *
           \  if empty(&buftype)
-          \|   call system('tmux rename-window '.expand('%:t:S'))
+          \|   call jobstart('tmux rename-window '.expand('%:t:S'))
           \| endif
   endif
 
@@ -630,6 +637,11 @@ command! -nargs=1 -complete=customlist,<sid>nodejs_packages Nopen call <sid>node
 let g:no_ruby_maps = 1
 
 " }}}
+" SQL {{{
+
+let g:omni_sql_no_default_maps = 0
+
+" }}}
 " Switch {{{
 
 let g:switch_mapping = "-"
@@ -679,6 +691,12 @@ nnoremap <leader>f :lua require('telescope.builtin').grep_string { search = vim.
 nnoremap <leader>F :lua require('rainer.telescope').bundle_grep_string()<cr>
 nnoremap <leader>' :Telescope marks<cr>
 nnoremap <leader>. :Telescope tags<cr>
+
+" https://github.com/nvim-telescope/telescope.nvim/issues/559
+augroup _fold_bug_solution
+  au!
+  autocmd BufRead * autocmd BufWinEnter * ++once normal! zx
+augroup END
 
 " }}}
 " Fugitive {{{
@@ -781,11 +799,6 @@ nnoremap <silent> <leader>ll :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
 lua require('rainer.cmp')
 
 " }}}
-" Vsnip {{{
-
-let g:vsnip_snippet_dir = expand('~/.config/nvim/vsnip')
-
-" }}}
 " Test {{{
 
 let test#strategy = "vtr"
@@ -795,8 +808,6 @@ nmap <silent> <leader>rf :TestFile<CR>
 nmap <silent> <leader>ra :TestSuite<CR>
 nmap <silent> <leader>rl :TestLast<CR>
 nmap <silent> <leader>rg :TestVisit<CR>
-nmap <localleader>s :%VtrSendLinesToRunner<cr>
-vmap <localleader>s :VtrSendLinesToRunner<cr>
 
 " }}}
 " Sideways {{{
@@ -876,6 +887,13 @@ lua require('rainer.lir')
 " Gitsigns {{{
 
 lua require('rainer.gitsigns')
+
+nnoremap [c :Gitsigns prev_hunk<cr>
+nnoremap ]c :Gitsigns next_hunk<cr>
+nnoremap <leader>hs :Gitsigns stage_buffer<cr>
+nnoremap <leader>hu :Gitsigns undo_stage_hunk<cr>
+nnoremap <leader>hr :Gitsigns reset_buffer<cr>
+nnoremap <leader>hr :Gitsigns preview_hunk<cr>
 
 " }}}
 " Tmux {{{

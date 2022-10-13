@@ -1,6 +1,5 @@
 local Path = require('plenary.path')
 local actions = require('telescope.actions')
-local action_set = require('telescope.actions.set')
 local M = {}
 
 require('telescope').setup {
@@ -16,15 +15,7 @@ require('telescope').setup {
   },
   pickers = {
     find_files = {
-      hidden = true,
-      attach_mappings = function(prompt_bufnr)
-        action_set.select:enhance({
-          post = function()
-            vim.cmd(":normal! zx")
-          end
-        })
-        return true
-      end
+      hidden = true
     },
   }
 }

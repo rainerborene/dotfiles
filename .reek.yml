@@ -1,5 +1,0 @@
----
-detectors:
-  # You can disable smells completely
-  IrresponsibleModule:
-    enabled: false

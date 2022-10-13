@@ -20,7 +20,7 @@ install() {
 
   # link
   ln -sf ~/.dotfiles/.config/* .config/
-  ln -sf ~/.dotfiles/.{alacritty.yml,fdignore,curlrc,gemrc,gitconfig,hushlogin,irbrc,pryrc,psqlrc,railsrc,rubocop.yml,reek.yml,tmux.conf,bashrc,inputrc} .
+  ln -sf ~/.dotfiles/.{alacritty.yml,fdignore,curlrc,gemrc,gitconfig,hushlogin,irbrc,pryrc,psqlrc,railsrc,rubocop.yml,tmux.conf,bashrc,inputrc,xbindkeysrc} .
   ln -P ~/.dotfiles/.ctags.d/default.ctags ~/.ctags.d/default.ctags
 
   # nvim dependencies
@@ -38,7 +38,7 @@ install() {
   git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.8
 }
 
-install_rust_packages() {
+install_rust_crates() {
   cargo install exa
   cargo install ripgrep
   cargo install fd-find
@@ -55,8 +55,10 @@ install_ruby_gems() {
   gem install rubocop-performance
   gem install rubocop-rails
   gem install solargraph
+  gem install solargraph-rails
   gem install i18n-tasks
   gem install easy_translate
+  gem install foreman
 }
 
 # run

@@ -1,4 +1,5 @@
 local cmp = require('cmp')
+local luasnip = require('luasnip')
 local lspkind = require('lspkind')
 local npairs = require('nvim-autopairs')
 
@@ -34,10 +35,13 @@ local escape = function()
   feedkey('<esc>', 'i')
 end
 
+require("luasnip.loaders.from_vscode").lazy_load()
+require("luasnip.loaders.from_vscode").lazy_load({paths = "~/.config/nvim/snippets"})
+
 cmp.setup {
   snippet = {
     expand = function(args)
-      vim.fn['vsnip#anonymous'](args.body)
+      require('luasnip').lsp_expand(args.body)
     end
   },
   mapping = cmp.mapping.preset.insert({
@@ -46,27 +50,30 @@ cmp.setup {
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
     ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
+      if luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      elseif cmp.visible() then
         cmp.select_next_item()
-      elseif vim.fn['vsnip#available'](1) == 1 then
-        feedkey('<Plug>(vsnip-expand-or-jump)', '')
       elseif has_words_before() then
         cmp.complete()
       else
-        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+        fallback()
       end
     end, { 'i', 's' }),
 
-    ['<S-Tab>'] = cmp.mapping(function()
-      if cmp.visible() then
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      elseif cmp.visible() then
         cmp.select_prev_item()
-      elseif vim.fn['vsnip#jumpable'](-1) == 1 then
-        feedkey('<Plug>(vsnip-jump-prev)', '')
+      else
+        fallback()
       end
     end, { 'i', 's' })
   }),
   sources = {
     { name = 'nvim_lsp' },
+    { name = 'luasnip' },
     { name = 'tags' },
     {
       name = 'buffer',
@@ -74,13 +81,12 @@ cmp.setup {
         get_bufnrs = get_bufnrs
       },
     },
-    { name = 'vsnip' },
     { name = 'tmux' },
     { name = 'path' }
   },
   formatting = {
     format = lspkind.cmp_format {
-      with_text = true,
+      mode = 'symbol_text',
       menu = {
         nvim_lsp = '[LSP]',
         tags = '[Tag]',

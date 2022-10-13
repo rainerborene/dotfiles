@@ -1,0 +1,22 @@
+{
+  "test template": {
+    "prefix": "testm",
+    "body": [
+      "# frozen_string_literal: true",
+      "",
+      "require \"test_helper\"",
+      "",
+      "class ${1:Object}Test < ActiveSupport::TestCase",
+      "  $2",
+      "end"
+    ]
+  },
+  "test case": {
+    "prefix": "test",
+    "body": [
+      "test \"$1\" do",
+      "  $2",
+      "end"
+    ]
+  }
+}
