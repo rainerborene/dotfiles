@@ -31,7 +31,7 @@ shopt -s checkwinsize
 [[ $- =~ i ]] && stty -ixoff -ixon
 
 ### Luarocks
-# eval "$(luarocks path --bin)"
+eval "$(luarocks path --bin)"
 
 # Environment variables
 # --------------------------------------------------------------------
@@ -44,10 +44,8 @@ export HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S:   "
 [ -z "$TMPDIR" ] && TMPDIR=/tmp
 
 ### Global
-export GOPATH=~/gosrc
-mkdir -p $GOPATH
 if [ -z "$PATH_EXPANDED" ]; then
-  export PATH="./bin:~/.local/bin:/usr/local/bin:$GOPATH/bin:$PATH"
+  export PATH="./bin:~/.local/bin:/usr/local/bin:$PATH"
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
   export PATH_EXPANDED=1
 fi
@@ -85,6 +83,7 @@ alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
 alias tmux='tmux -2'
+alias tmux-save-pane='tmux capture-pane -pS -'
 alias open='xdg-open &>/dev/null'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'

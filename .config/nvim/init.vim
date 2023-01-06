@@ -1,5 +1,5 @@
 " init.vim of Rainer Borene
-" =======================
+" =========================
 " Plugged {{{
 
 " Disable default plugins
@@ -23,7 +23,6 @@ Plug 'AndrewRadev/switch.vim'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'andersevenrud/cmp-tmux'
 Plug 'andymass/vim-matchup'
-Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'cocopon/shadeline.vim'
@@ -54,6 +53,7 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'nvim-treesitter/playground'
 Plug 'onsails/lspkind-nvim'
 Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'rafamadriz/friendly-snippets'
@@ -61,6 +61,7 @@ Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
 Plug 'roxma/vim-tmux-clipboard'
+Plug 'sQVe/sort.nvim'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sheerun/vim-polyglot'
@@ -360,6 +361,8 @@ nnoremap =f :setfiletype<Space>
 " Insert Mode Completion
 imap <c-j> <c-n>
 imap <c-k> <c-p>
+imap <c-c> <esc>
+imap jj <esc>
 
 " Open notes directory
 nnoremap <silent> <leader>n <esc>:tabedit ~/Dropbox/Notebook/Notes<cr>
@@ -635,6 +638,20 @@ command! -nargs=1 -complete=customlist,<sid>nodejs_packages Nopen call <sid>node
 " Ruby {{{
 
 let g:no_ruby_maps = 1
+
+" }}}
+" Rails {{{
+
+let g:rails_projections = {
+      \ "app/components/*_component.rb": {
+      \   "command": "component",
+      \   "template": ["class {camelcase|capitalize|colons}Component < ApplicationComponent", "end"],
+      \   "related": "app/components/{}_component.html.erb"
+      \ },
+      \ "app/components/*_component.html.erb": {
+      \   "related": "app/components/{}_component.rb",
+      \   "alternate": "test/components/{}_component_test.rb"
+      \ }}
 
 " }}}
 " SQL {{{
@@ -914,6 +931,21 @@ lua require('rainer.treesitter')
 " Matchup {{{
 
 let g:matchup_matchparen_offscreen = {}
+
+" }}}
+" Sort {{{
+
+lua require("sort").setup()
+
+nnoremap <silent> gs :Sort<cr>
+vnoremap <silent> gs <Esc>:Sort<cr>
+
+" }}}
+" Targets {{{
+
+autocmd User targets#mappings#user call targets#mappings#extend({
+    \ '\': {'separator': [{'d': '::'}]},
+    \ })
 
 " }}}
 
