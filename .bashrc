@@ -45,7 +45,7 @@ export HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S:   "
 
 ### Global
 if [ -z "$PATH_EXPANDED" ]; then
-  export PATH="./bin:~/.local/bin:/usr/local/bin:$PATH"
+  export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
   export PATH_EXPANDED=1
 fi
@@ -93,6 +93,10 @@ alias rc='rails console'
 alias rs='rails server'
 alias fore='foreman start -f Procfile.dev'
 alias dkk='docker kill $(docker ps -q)'
+
+drm() {
+  docker images | grep $@ | awk '{ print $1 ":" $2 }' | xargs docker rmi
+}
 
 temp() {
   nvim +"set buftype=nofile bufhidden=wipe nobuflisted noswapfile tw=${1:-0}"

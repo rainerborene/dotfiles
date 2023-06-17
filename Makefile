@@ -15,8 +15,7 @@ tools:
 		ripgrep \
 		starship \
 		xplr \
-		zoxide \
-		stylua
+		zoxide
 
 gems:
 	@gem install easy_translate \

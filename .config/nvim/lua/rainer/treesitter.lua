@@ -14,6 +14,7 @@ treesitter.setup {
     "javascript",
     "query",
     "vim",
+    "css",
     "help",
   },
   indent = {

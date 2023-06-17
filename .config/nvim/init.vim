@@ -284,6 +284,10 @@ vnoremap L g_
 " No overwrite paste
 xnoremap p "_dP
 
+" Copy to clipboard
+nnoremap <leader>y "+yg_
+vnoremap <leader>y "+y
+
 " Space to toggle folds.
 nnoremap <Space> za
 vnoremap <Space> za
@@ -368,21 +372,14 @@ imap jj <esc>
 nnoremap <silent> <leader>n <esc>:tabedit ~/Dropbox/Notebook/Notes<cr>
 
 " Organize Tailwind CSS classes
-command! Tw write
-      \| if &ft == "css"
-      \|   silent exec '!rustywind --custom-regex "@apply ([_a-zA\.-Z0-9\s\-:\[\]]+);" --write %'
-      \| elseif &ft == "ruby"
-      \|   silent exec '!rustywind --custom-regex "\"([_a-zA\.-Z0-9\s\-:\[\]]+)\"" --write %'
-      \| else
-      \|   silent exec '!rustywind --write %'
-      \| end
+command! Tw silent! exec "!windify %"
 
 " }}}
 " Ctags generation {{{
 
 function! s:generate_ctags() abort
   if &ft == "ruby" && executable("ripper-tags")
-    call jobstart("ripper-tags -R")
+    call jobstart("ripper-tags -R --exclude tmp")
   else
     call jobstart("ctags -R .")
   end
