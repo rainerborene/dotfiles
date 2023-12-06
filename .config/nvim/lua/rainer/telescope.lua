@@ -28,7 +28,7 @@ local function gem_paths()
 end
 
 local function gem_path()
-  local sample = gem_paths()[1]
+  local sample = bundler_project()._paths['rails']
   return tostring(Path:new(sample):parent())
 end
 
@@ -43,7 +43,8 @@ function M.bundle_grep_string()
     cwd = gem_path(),
     search = vim.fn.input("Bundle Grep For > "),
     search_dirs = gem_paths(),
-    use_regex = true
+    use_regex = true,
+    path_display = { absolute = false }
   }
 end
 

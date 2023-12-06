@@ -1,4 +1,5 @@
 require:
+  - rubocop-minitest
   - rubocop-performance
   - rubocop-rails
 
@@ -27,6 +28,12 @@ Rails/RefuteMethods:
   Include:
     - '**/test/**/*'
 
+Rails/IndexBy:
+  Enabled: true
+
+Rails/IndexWith:
+  Enabled: true
+
 # Prefer &&/|| over and/or.
 Style/AndOr:
   Enabled: true
@@ -36,6 +43,9 @@ Layout/CaseIndentation:
   Enabled: true
 
 Layout/ClosingHeredocIndentation:
+  Enabled: true
+
+Layout/ClosingParenthesisIndentation:
   Enabled: true
 
 # Align comments with method definitions.
@@ -51,6 +61,9 @@ Layout/EndAlignment:
   Enabled: true
   EnforcedStyleAlignWith: variable
   AutoCorrect: true
+
+Layout/EndOfLine:
+  Enabled: true
 
 Layout/EmptyLineAfterMagicComment:
   Enabled: true
@@ -77,9 +90,7 @@ Layout/EmptyLinesAroundModuleBody:
 # Use Ruby >= 1.9 syntax for hashes. Prefer { a: :b } over { :a => :b }.
 Style/HashSyntax:
   Enabled: true
-
-Layout/FirstArgumentIndentation:
-  Enabled: true
+  EnforcedShorthandSyntax: either
 
 # Method definitions after `private` or `protected` isolated calls need one
 # extra level of indentation.
@@ -109,6 +120,9 @@ Layout/SpaceAroundEqualsInParameterDefault:
 Layout/SpaceAroundKeyword:
   Enabled: true
 
+Layout/SpaceAroundOperators:
+  Enabled: true
+
 Layout/SpaceBeforeComma:
   Enabled: true
 
@@ -125,12 +139,15 @@ Style/DefWithParentheses:
 Style/MethodDefParentheses:
   Enabled: true
 
+Style/ExplicitBlockArgument:
+  Enabled: true
+
 Style/FrozenStringLiteralComment:
   Enabled: true
   EnforcedStyle: always
-  Exclude:
-    - '**/db/migrate/**/*.rb'
-    - '**/config/**/*.rb'
+
+Style/MapToHash:
+  Enabled: true
 
 Style/RedundantFreeze:
   Enabled: true
@@ -178,14 +195,23 @@ Lint/AmbiguousOperator:
 Lint/AmbiguousRegexpLiteral:
   Enabled: true
 
+Lint/DuplicateRequire:
+  Enabled: true
+
+Lint/DuplicateMagicComment:
+  Enabled: true
+
+Lint/DuplicateMethods:
+  Enabled: true
+
 Lint/ErbNewArguments:
+  Enabled: true
+
+Lint/EnsureReturn:
   Enabled: true
 
 # Use my_method(my_arg) not my_method( my_arg ) or my_method my_arg.
 Lint/RequireParentheses:
-  Enabled: true
-
-Lint/ShadowingOuterLocalVariable:
   Enabled: true
 
 Lint/RedundantStringCoercion:
@@ -199,6 +225,11 @@ Lint/UselessAssignment:
 
 Lint/DeprecatedClassMethods:
   Enabled: true
+
+Style/EvalWithLocation:
+  Enabled: true
+  Exclude:
+    - '**/test/**/*'
 
 Style/ParenthesesAroundCondition:
   Enabled: true
@@ -216,6 +247,9 @@ Style/RedundantReturn:
   Enabled: true
   AllowMultipleReturnValues: true
 
+Style/RedundantRegexpEscape:
+  Enabled: true
+
 Style/Semicolon:
   Enabled: true
   AllowAsExpressionSeparator: true
@@ -227,7 +261,20 @@ Style/ColonMethodCall:
 Style/TrivialAccessors:
   Enabled: true
 
+# Prefer a = b || c over a = b ? b : c
+Style/RedundantCondition:
+  Enabled: true
+
+Performance/BindCall:
+  Enabled: true
+
 Performance/FlatMap:
+  Enabled: true
+
+Performance/MapCompact:
+  Enabled: true
+
+Performance/SelectMap:
   Enabled: true
 
 Performance/RedundantMerge:
@@ -245,5 +292,41 @@ Performance/RegexpMatch:
 Performance/ReverseEach:
   Enabled: true
 
+Performance/StringReplacement:
+  Enabled: true
+
 Performance/UnfreezeString:
+  Enabled: true
+
+Performance/DeletePrefix:
+  Enabled: true
+
+Performance/DeleteSuffix:
+  Enabled: true
+
+Performance/OpenStruct:
+  Enabled: true
+
+Performance/InefficientHashSearch:
+  Enabled: true
+
+Performance/ConstantRegexp:
+  Enabled: true
+
+Performance/RedundantStringChars:
+  Enabled: true
+
+Performance/StringInclude:
+  Enabled: true
+
+Minitest/AssertRaisesWithRegexpArgument:
+  Enabled: true
+
+Minitest/AssertWithExpectedArgument:
+  Enabled: true
+
+Minitest/SkipEnsure:
+  Enabled: true
+
+Minitest/UnreachableAssertion:
   Enabled: true

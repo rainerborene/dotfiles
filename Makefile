@@ -7,6 +7,9 @@ asdf:
 kitty:
 	@curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 
+task:
+	@sh -c "`curl --location https://taskfile.dev/install.sh`" -- -d -b ~/.local/bin
+
 tools:
 	@cargo install -f bat \
 		exa \
@@ -15,7 +18,8 @@ tools:
 		ripgrep \
 		starship \
 		xplr \
-		zoxide
+		zoxide \
+		sd
 
 gems:
 	@gem install easy_translate \

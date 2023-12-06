@@ -53,7 +53,6 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-Plug 'nvim-treesitter/playground'
 Plug 'onsails/lspkind-nvim'
 Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'rafamadriz/friendly-snippets'
@@ -372,7 +371,7 @@ imap jj <esc>
 nnoremap <silent> <leader>n <esc>:tabedit ~/Dropbox/Notebook/Notes<cr>
 
 " Organize Tailwind CSS classes
-command! Tw silent! exec "!windify %"
+command! Tw write | silent! exec "!bin/windify %"
 
 " }}}
 " Ctags generation {{{
