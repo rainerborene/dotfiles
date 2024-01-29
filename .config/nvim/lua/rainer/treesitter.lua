@@ -14,6 +14,7 @@ treesitter.setup {
     "javascript",
     "query",
     "vim",
+    "vimdoc",
     "css",
     "help",
   },

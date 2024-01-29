@@ -23,10 +23,10 @@ Plug 'AndrewRadev/switch.vim'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'andersevenrud/cmp-tmux'
 Plug 'andymass/vim-matchup'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'cocopon/shadeline.vim'
-Plug 'folke/tokyonight.nvim'
 Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/vim-asterisk'
 Plug 'hrsh7th/cmp-buffer'
@@ -161,8 +161,9 @@ set background=dark
 set termguicolors
 
 function! init#colorscheme() abort
-  hi! MatchWord gui=bold
+  hi! EndOfBuffer guibg=bg guifg=bg
   hi! GitSignsDelete guifg=#FF9580
+  hi! MatchWord gui=bold
 endfunction
 
 augroup vimrc_colorscheme
@@ -170,7 +171,7 @@ augroup vimrc_colorscheme
   au ColorScheme * call init#colorscheme()
 augroup END
 
-colorscheme tokyonight-night
+colorscheme catppuccin
 
 " }}}
 " Mappings {{{
@@ -413,7 +414,7 @@ augroup ft_qf
   au FileType qf call s:qf_define_mappings()
 
   " Automatically opens the quickfix window after :Ggrep.
-  au QuickFixCmdPost *grep* cwindow
+  au QuickFixCmdPost *grep* cwindow | doautocmd BufReadPost quickfix
 augroup END
 
 " }}}
@@ -736,6 +737,7 @@ let g:ale_sign_error = '•'
 let g:ale_sign_warning = '•'
 let g:ale_set_highlights = 0
 let g:ale_ruby_rubocop_auto_correct_all = 1
+let g:ale_linters_explicit = 1
 let g:ale_fixers = {
       \ 'ruby': ['rubocop'],
       \ 'html': ['prettier'],
@@ -747,7 +749,9 @@ let g:ale_fixers = {
 let g:ale_linters = {
       \ 'ruby': ['ruby', 'rubocop'],
       \ 'json': ['jq'],
-      \ 'eruby': []
+      \ 'javascript': ['eslint'],
+      \ 'eruby': ['erb', 'erblint', 'erubi', 'erubis'],
+      \ 'lua': ['lua_ls', 'luac']
       \ }
 
 hi link ALEErrorSign ErrorMsg
@@ -905,8 +909,8 @@ nnoremap [c :Gitsigns prev_hunk<cr>
 nnoremap ]c :Gitsigns next_hunk<cr>
 nnoremap <leader>hs :Gitsigns stage_buffer<cr>
 nnoremap <leader>hu :Gitsigns undo_stage_hunk<cr>
-nnoremap <leader>hr :Gitsigns reset_buffer<cr>
-nnoremap <leader>hr :Gitsigns preview_hunk<cr>
+nnoremap <leader>hr :Gitsigns reset_hunk<cr>
+nnoremap <leader>hp :Gitsigns preview_hunk<cr>
 
 " }}}
 " Tmux {{{

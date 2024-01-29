@@ -1,8 +1,7 @@
-# System default --------------------------------------------------------------------
+# System default
+# --------------------------------------------------------------------
 
 [ -f /etc/bashrc ] && . /etc/bashrc
-
-BASE=$HOME/.dotfiles/
 
 
 # Options
@@ -13,6 +12,18 @@ shopt -s histappend
 
 ### Check the window size after each command ($LINES, $COLUMNS)
 shopt -s checkwinsize
+
+### Case-insensitive globbing (used in pathname expansion)
+shopt -s nocaseglob
+
+### Correct spelling errors in arguments supplied to cd
+shopt -s cdspell
+
+### Autocorrect on directory names to match a glob.
+shopt -s dirspell
+
+### Turn on recursive globbing (enables ** to recurse all directories)
+shopt -s globstar
 
 ### Better-looking less for binary files
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -31,17 +42,22 @@ shopt -s checkwinsize
 [[ $- =~ i ]] && stty -ixoff -ixon
 
 ### Luarocks
-eval "$(luarocks path --bin)"
+# eval "$(luarocks path --bin)"
+
 
 # Environment variables
 # --------------------------------------------------------------------
 
-### man bash
+### History opts
 export HISTCONTROL=ignoreboth:erasedups
 export HISTSIZE=
 export HISTFILESIZE=
 export HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S:   "
+export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 [ -z "$TMPDIR" ] && TMPDIR=/tmp
+
+### Save and reload the history after each command finishes. Also look for any conflicting prompt_command definitions!!
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 ### Global
 if [ -z "$PATH_EXPANDED" ]; then
@@ -54,12 +70,17 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 ### fzf
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --border"
 export FZF_CTRL_T_COMMAND='fd --type f --type d --hidden --follow --exclude .git'
 export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}' | head -200'"
-export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --border"
-export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_DEFAULT_OPTS=" \
+  --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+  --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+
 [ -n "$NVIM_LISTEN_ADDRESS" ] && export FZF_DEFAULT_OPTS='--no-height'
 
 
@@ -71,7 +92,6 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
-
 alias j='z'
 alias g='git'
 alias lg='lazygit'
@@ -87,19 +107,14 @@ alias tmux-save-pane='tmux capture-pane -pS -'
 alias open='xdg-open &>/dev/null'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
-
 alias be='bundle exec'
 alias rc='rails console'
 alias rs='rails server'
 alias fore='foreman start -f Procfile.dev'
 alias dkk='docker kill $(docker ps -q)'
 
-drm() {
+dkrm() {
   docker images | grep $@ | awk '{ print $1 ":" $2 }' | xargs docker rmi
-}
-
-temp() {
-  nvim +"set buftype=nofile bufhidden=wipe nobuflisted noswapfile tw=${1:-0}"
 }
 
 
@@ -144,70 +159,5 @@ fe() {
   file=$(fzf-tmux --query="$1" --select-1 --exit-0)
   [ -n "$file" ] && ${EDITOR:-nvim} "$file"
 }
-
-
-# GIT heart FZF
-# -------------
-
-is_in_git_repo() {
-  git rev-parse HEAD > /dev/null 2>&1
-}
-
-_gf() {
-  is_in_git_repo || return
-  git -c color.status=always status --short |
-  fzf-down -m --ansi --nth 2..,.. \
-    --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1}) | head -500' |
-  cut -c4- | sed 's/.* -> //'
-}
-
-_gb() {
-  is_in_git_repo || return
-  git branch -a --color=always | grep -v '/HEAD\s' | sort |
-  fzf-down --ansi --multi --tac --preview-window right:70% \
-    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1) | head -200' |
-  sed 's/^..//' | cut -d' ' -f1 |
-  sed 's#^remotes/##'
-}
-
-_gt() {
-  is_in_git_repo || return
-  git tag --sort -version:refname |
-  fzf-down --multi --preview-window right:70% \
-    --preview 'git show --color=always {} | head -200'
-}
-
-_gh() {
-  is_in_git_repo || return
-  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
-  fzf-down --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
-    --header 'Press CTRL-S to toggle sort' \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -200' |
-  grep -o "[a-f0-9]\{7,\}"
-}
-
-_gr() {
-  is_in_git_repo || return
-  git remote -v | awk '{print $1 "\t" $2}' | uniq |
-  fzf-down --tac \
-    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1} | head -200' |
-  cut -d$'\t' -f1
-}
-
-_gp() {
-  ps -ef | fzf-down --header-lines 1 --info inline --layout reverse --multi |
-    awk '{print $2}'
-}
-
-if [[ $- =~ i ]]; then
-  bind '"\er": redraw-current-line'
-  bind '"\C-g\C-f": "$(_gf)\e\C-e\er"'
-  bind '"\C-g\C-b": "$(_gb)\e\C-e\er"'
-  bind '"\C-g\C-t": "$(_gt)\e\C-e\er"'
-  bind '"\C-g\C-h": "$(_gh)\e\C-e\er"'
-  bind '"\C-g\C-r": "$(_gr)\e\C-e\er"'
-  bind '"\C-g\C-p": "$(_gp)\e\C-e\er"'
-  bind '"\C-g\C-g": "$(_gg)\e\C-e\er"'
-fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash

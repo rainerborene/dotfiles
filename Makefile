@@ -16,21 +16,23 @@ tools:
 		fd-find \
 		hexyl \
 		ripgrep \
+		sd \
 		starship \
 		xplr \
-		zoxide \
-		sd
+		zoxide
 
 gems:
 	@gem install easy_translate \
+		erb_lint \
 		foreman \
 		i18n-tasks \
+		ripper-tags \
 		rubocop \
+		rubocop-minitest \
 		rubocop-performance \
 		rubocop-rails \
 		solargraph \
-		solargraph-rails \
-		ripper-tags
+		solargraph-rails
 
 plug.vim:
 	@curl -fLo .config/nvim/autoload/$@ --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/$@

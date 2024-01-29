@@ -1,15 +1,10 @@
-begin
-  require "pry"
-  Pry.start
-  exit
-rescue LoadError
-  warn "=> Unable to load pry"
-end
+# frozen_string_literal: true
 
-Reline::DialogRenderInfo.class_eval do
-  def bg_color = 40
-  def pointer_bg_color = 41
-end if defined? Reline::DialogRenderInfo
+Reline::Face.config(:completion_dialog) do |conf|
+  conf.define :default, foreground: :white, background: :black
+  conf.define :enhanced, foreground: :white, background: :bright_black
+  conf.define :scrollbar, foreground: :blue, background: :bright_black
+end
 
 def copy(str)
   IO.popen("tmux loadb -", "w") { _1 << str.to_s } unless str.nil?
