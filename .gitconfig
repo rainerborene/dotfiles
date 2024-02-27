@@ -1,6 +1,38 @@
 [core]
-  excludesfile = ~/.dotfiles/.cvsignore
-  attributesfile = ~/.dotfiles/.gitattributes
+  excludesfile = ~/.cvsignore
+  attributesfile = ~/.gitattributes
+  pager = delta
+
+[interactive]
+  diffFilter = delta --color-only --features=interactive
+
+[delta]
+  features = decorations catppuccin-mocha
+
+[delta "catppuccin-mocha"]
+  blame-palette = "#1e1e2e #181825 #11111b #313244 #45475a"
+  commit-decoration-style = "box ul"
+  dark = true
+  file-decoration-style = "#cdd6f4"
+  file-style = "#cdd6f4"
+  hunk-header-decoration-style = "box ul"
+  hunk-header-file-style = "bold"
+  hunk-header-line-number-style = "bold #a6adc8"
+  hunk-header-style = "file line-number syntax"
+  line-numbers = true
+  line-numbers-left-style = "#6c7086"
+  line-numbers-minus-style = "bold #f38ba8"
+  line-numbers-plus-style = "bold #a6e3a1"
+  line-numbers-right-style = "#6c7086"
+  line-numbers-zero-style = "#6c7086"
+  minus-emph-style = "bold syntax #734b60"
+  minus-style = "syntax #4a3447"
+  plus-emph-style = "bold syntax #546e5c"
+  plus-style = "syntax #394545"
+  syntax-theme = "Catppuccin-mocha"
+
+[delta "interactive"]
+  keep-plus-minus-markers = false
 
 [user]
   name = Rainer Borene
@@ -10,9 +42,6 @@
   extendedRegexp = true
   lineNumber = true
 
-[github]
-  user = rainerborene
-
 [push]
   default = current
 
@@ -21,21 +50,6 @@
 
 [color]
   ui = auto
-
-[diff "ruby"]
-  funcname = "^ *\\(\\(def\\) .*\\)"
-
-[diff "nodiff"]
-  command = /usr/bin/true
-
-[url "git://github.com/"]
-  insteadOf = gh:
-
-[url "git@github.com:"]
-  insteadOf = wgh:
-
-[url "git@bitbucket.org:"]
-  insteadOf = bb:
 
 [merge]
   summary = true
@@ -48,6 +62,10 @@
 
 [mergetool "fugitive"]
   cmd = "nvim -f -c 'Gvdiff' $MERGED"
+
+[mergetool "diffconflicts"]
+  cmd = nvim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
+  trustExitCode = true
 
 [alias]
   a                 = add
@@ -66,7 +84,3 @@
   gll               = log --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(blue bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
   changed           = git diff-tree --no-commit-id --name-only -r
   work              = !sh -c 'git fetch && git checkout @{upstream} -tb \"$@\"'
-
-[mergetool "diffconflicts"]
-  cmd = nvim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
-  trustExitCode = true

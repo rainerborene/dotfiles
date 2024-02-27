@@ -10,15 +10,19 @@ kitty:
 task:
 	@sh -c "`curl --location https://taskfile.dev/install.sh`" -- -d -b ~/.local/bin
 
+fzf:
+	@git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+
 tools:
 	@cargo install -f bat \
+		bottom \
 		exa \
 		fd-find \
+		git-delta \
 		hexyl \
 		ripgrep \
 		sd \
 		starship \
-		xplr \
 		zoxide
 
 gems:

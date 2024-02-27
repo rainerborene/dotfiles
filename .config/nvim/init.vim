@@ -2,6 +2,8 @@
 " =========================
 " Plugged {{{
 
+lua vim.loader.enable()
+
 " Disable default plugins
 let g:loaded_matchit = 1
 let g:loaded_netrwPlugin = 1
@@ -27,6 +29,7 @@ Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'cocopon/shadeline.vim'
+Plug 'fdschmidt93/telescope-egrepify.nvim'
 Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/vim-asterisk'
 Plug 'hrsh7th/cmp-buffer'
@@ -34,6 +37,7 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'janko-m/vim-test'
+Plug 'junegunn/gv.vim'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
@@ -42,7 +46,6 @@ Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
 Plug 'lewis6991/gitsigns.nvim'
-Plug 'lewis6991/impatient.nvim'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
@@ -88,8 +91,6 @@ Plug 'whiteinge/diffconflicts'
 Plug 'windwp/nvim-autopairs'
 
 call plug#end()
-
-lua require('impatient')
 
 " }}}
 " Basic options {{{
@@ -150,7 +151,7 @@ set pumheight=20
 set laststatus=3
 
 if executable('rg')
-  set grepprg=rg\ --vimgrep
+  set grepprg=rg\ --vimgrep\ --hidden
   set grepformat=%f:%l:%c:%m,%f:%l:%m,%f:%l%m,%f\ %l%m
 endif
 
@@ -208,6 +209,17 @@ nnoremap G Gzv
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
+
+" Use Vim's built-in CTRL-R_CTRL-F when no plugin has claimed <Plug><cfile>
+if empty(maparg('<Plug><cfile>', 'c'))
+  cnoremap <Plug><cfile> <C-R><C-F>
+endif
+
+" Helper map to pass the count (e.g., 2gf) to the underlying command
+nnoremap <SID>: :<C-U><C-R>=v:count ? v:count : ''<CR>
+
+" `gf` opens file under cursor in a new vertical split
+nmap gf <SID>:vert sfind <Plug><cfile><CR>
 
 " I hate when the rendering occasionally gets messed up.
 function! s:redraw()
@@ -468,7 +480,6 @@ augroup END
 
 augroup ft_css
   au!
-  au FileType css,scss setlocal foldmethod=marker foldmarker={,}
   au FileType css,scss,sass setlocal iskeyword+=-
 augroup END
 
@@ -482,14 +493,18 @@ augroup ft_ruby
   au BufRead *gemrc setlocal filetype=yaml
   au FileType ruby setlocal iskeyword+=!,?
   au FileType ruby setlocal keywordprg=ri\ -T
-  au FileType ruby setlocal foldmethod=expr
-  au FileType ruby setlocal foldexpr=nvim_treesitter#foldexpr()
   au BufNewFile,BufRead .env* set filetype=sh
 augroup END
 
 augroup ft_tmux
   au!
   au FileType tmux setlocal foldmethod=marker
+augroup END
+
+augroup custom_foldexpr
+  au!
+  au FileType ruby,css setlocal foldmethod=expr
+  au FileType ruby,css setlocal foldexpr=nvim_treesitter#foldexpr()
 augroup END
 
 augroup vimrc
@@ -699,7 +714,7 @@ nnoremap <leader><Leader> :Telescope find_files<cr>
 nnoremap <leader><tab> :Telescope keymaps<cr>
 nnoremap <leader>k :Telescope help_tags<cr>
 nnoremap <leader>b :Telescope buffers<cr>
-nnoremap <leader>a :Telescope live_grep<cr>
+nnoremap <leader>a :Telescope egrepify<cr>
 nnoremap <leader>A :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
 nnoremap <leader>f :lua require('telescope.builtin').grep_string { search = vim.fn.input("Grep For > "), use_regex = true }<cr>
 nnoremap <leader>F :lua require('rainer.telescope').bundle_grep_string()<cr>
