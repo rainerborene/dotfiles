@@ -23,13 +23,11 @@ Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'L3MON4D3/LuaSnip'
-Plug 'andersevenrud/cmp-tmux'
 Plug 'andymass/vim-matchup'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'christoomey/vim-tmux-runner'
 Plug 'cocopon/shadeline.vim'
 Plug 'fdschmidt93/telescope-egrepify.nvim'
+Plug 'fladson/vim-kitty'
 Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/vim-asterisk'
 Plug 'hrsh7th/cmp-buffer'
@@ -45,11 +43,13 @@ Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
+Plug 'knubie/vim-kitty-navigator', { 'do': 'cp ./*.py ~/.config/kitty/' }
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mhinz/vim-startify'
+Plug 'mikesmithgh/kitty-scrollback.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
@@ -62,7 +62,6 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
-Plug 'roxma/vim-tmux-clipboard'
 Plug 'sQVe/sort.nvim'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'saaguero/vim-textobj-pastedtext'
@@ -119,6 +118,7 @@ set tabstop=4
 set textwidth=80
 set virtualedit+=block
 set completeopt=noinsert,menuone,noselect
+set clipboard+=unnamedplus
 
 " better navigation
 set foldlevel=99
@@ -210,6 +210,10 @@ nnoremap G Gzv
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
+" ,t(g)t - Open tag in tab
+nnoremap <silent> <leader>tt  <esc>:tab split<cr>:exe("tag ".expand("<cword>"))<cr>
+nnoremap <silent> <leader>tgt <esc>:tab split<cr>:exe("tjump ".expand("<cword>"))<cr>
+
 " Use Vim's built-in CTRL-R_CTRL-F when no plugin has claimed <Plug><cfile>
 if empty(maparg('<Plug><cfile>', 'c'))
   cnoremap <Plug><cfile> <C-R><C-F>
@@ -224,8 +228,6 @@ nmap gf <SID>:vert sfind <Plug><cfile><CR>
 " I hate when the rendering occasionally gets messed up.
 function! s:redraw()
   nohlsearch
-  " lua vim.lsp.diagnostic.redraw()
-  " lua require'cmp'.close()
   normal! zx
   redraw!
   echo
@@ -260,10 +262,6 @@ nnoremap <leader>7 7gt
 nnoremap <leader>8 8gt
 nnoremap <leader>9 9gt
 
-" ,t(g)t - Open tag in tab
-nnoremap <silent> <leader>tt  <esc>:tab split<cr>:exe("tag ".expand("<cword>"))<cr>
-nnoremap <silent> <leader>tgt <esc>:tab split<cr>:exe("tjump ".expand("<cword>"))<cr>
-
 " Split windows
 nnoremap <leader>s <C-W>s
 nnoremap <leader>v <C-W>v
@@ -295,10 +293,6 @@ vnoremap L g_
 
 " No overwrite paste
 xnoremap p "_dP
-
-" Copy to clipboard
-nnoremap <leader>y "+yg_
-vnoremap <leader>y "+y
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -496,9 +490,10 @@ augroup ft_ruby
   au BufNewFile,BufRead .env* set filetype=sh
 augroup END
 
-augroup ft_tmux
+augroup ft_kitty
   au!
-  au FileType tmux setlocal foldmethod=marker
+  au BufWritePost *kitty.conf :silent !kill -SIGUSR1 $(pgrep kitty)
+  au BufRead *kitty.conf setlocal fdm=marker
 augroup END
 
 augroup custom_foldexpr
@@ -554,15 +549,6 @@ augroup vimrc
         \  if line("'\"") > 1 && line("'\"") <= line("$")
         \|   exe "normal! g`\""
         \| endif
-
-  " Automatic rename of tmux window
-  if exists('$TMUX') && !exists('$NORENAME')
-    au VimLeave * call jobstart('tmux set-window automatic-rename on')
-    au BufEnter *
-          \  if empty(&buftype)
-          \|   call jobstart('tmux rename-window '.expand('%:t:S'))
-          \| endif
-  endif
 
   " Setup default omnifunc
   au FileType *
@@ -810,6 +796,11 @@ augroup lua_highlight
 augroup END
 
 " }}}
+" Kitty {{{
+
+lua require('kitty-scrollback').setup()
+
+" }}}
 " LSP {{{
 
 lua require'lspconfig'.solargraph.setup{}
@@ -833,7 +824,7 @@ lua require('rainer.cmp')
 " }}}
 " Test {{{
 
-let test#strategy = "vtr"
+let test#strategy = "kitty"
 
 nmap <silent> <leader>rr :TestNearest<CR>
 nmap <silent> <leader>rf :TestFile<CR>
@@ -926,16 +917,6 @@ nnoremap <leader>hs :Gitsigns stage_buffer<cr>
 nnoremap <leader>hu :Gitsigns undo_stage_hunk<cr>
 nnoremap <leader>hr :Gitsigns reset_hunk<cr>
 nnoremap <leader>hp :Gitsigns preview_hunk<cr>
-
-" }}}
-" Tmux {{{
-
-let g:tmux_navigator_no_mappings = 1
-
-nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
-nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
-nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
-nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
 
 " }}}
 " Treesitter {{{

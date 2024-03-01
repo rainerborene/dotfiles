@@ -73,7 +73,6 @@ cmp.setup {
         get_bufnrs = get_bufnrs
       },
     },
-    { name = 'tmux' },
     { name = 'path' }
   },
   formatting = {
@@ -84,7 +83,6 @@ cmp.setup {
         tags = '[Tag]',
         buffer = '[Buf]',
         vsnip = '[Snip]',
-        tmux = '[Tmux]',
         path = '[Path]'
       }
     },

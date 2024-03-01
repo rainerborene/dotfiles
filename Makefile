@@ -1,6 +1,3 @@
-tpm:
-	@git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
 asdf:
 	@git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 
@@ -16,7 +13,7 @@ fzf:
 tools:
 	@cargo install -f bat \
 		bottom \
-		exa \
+		eza \
 		fd-find \
 		git-delta \
 		hexyl \
