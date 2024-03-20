@@ -8,7 +8,7 @@ task:
 	@sh -c "`curl --location https://taskfile.dev/install.sh`" -- -d -b ~/.local/bin
 
 fzf:
-	@git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+	@git -C ~/.fzf pull 2>/dev/null || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
 
 tools:
 	@cargo install -f bat \
@@ -34,6 +34,11 @@ gems:
 		rubocop-rails \
 		solargraph \
 		solargraph-rails
+
+chromedriver:
+	curl -sS -o /tmp/chromedriver_linux64.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/120.0.6099.109/linux64/chrome-headless-shell-linux64.zip"
+	unzip /tmp/chromedriver_linux64.zip -d /tmp/chromedriver
+	sudo mv /tmp/chromedriver/chrome-headless-shell /usr/local/bin/chromedriver
 
 plug.vim:
 	@curl -fLo .config/nvim/autoload/$@ --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/$@

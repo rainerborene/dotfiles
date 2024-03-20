@@ -67,8 +67,8 @@ Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sheerun/vim-polyglot'
 Plug 'stefandtw/quickfix-reflector.vim'
+Plug 'stevearc/oil.nvim'
 Plug 'svermeulen/vim-subversive'
-Plug 'tamago324/lir.nvim'
 Plug 'thinca/vim-quickrun'
 Plug 'tommcdo/vim-exchange'
 Plug 'tommcdo/vim-lion'
@@ -198,6 +198,9 @@ xnoremap @ :normal@
 
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
+
+" Always start inserting at the end of input fields
+noremap gi gi<End>
 
 " Move to last change
 nnoremap gI `.zz
@@ -353,8 +356,7 @@ nnoremap s/ mr:%s/
 " inVerse search: line NOT containing pattern
 cnoremap <m-/> \v^(()@!.)*$<Left><Left><Left><Left><Left><Left><Left>
 
-" Easier dir/file manipulation
-nnoremap <leader>e :e <c-r>=expand('%:p:h') . '/'<cr><cr>
+" Easier dir/file aliases
 cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
 cnoremap <expr> %< getcmdtype() == ':' ? fnameescape(expand('%:t')) : '%<'
 
@@ -606,7 +608,7 @@ tnoremap <a-f> <esc>f
 
 function! s:Mkdir()
   let dir = expand('%:p:h')
-  if !isdirectory(dir)
+  if !isdirectory(dir) && index(["fugitive", "git", "oil"], &ft) == -1
     call mkdir(dir, 'p')
     echo 'Created non-existing directory: '.dir
   endif
@@ -902,9 +904,11 @@ let g:shadeline.inactive = {
       \ }
 
 " }}}
-" Lir {{{
+" Oil {{{
 
-lua require('rainer.lir')
+lua require('rainer.oil')
+
+nnoremap <silent> <leader>e :lua require('oil').open()<cr>
 
 " }}}
 " Gitsigns {{{

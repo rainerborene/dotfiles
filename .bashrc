@@ -56,9 +56,6 @@ export HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S:   "
 export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 [ -z "$TMPDIR" ] && TMPDIR=/tmp
 
-### Save and reload the history after each command finishes. Also look for any conflicting prompt_command definitions!!
-export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
-
 ### Global
 if [ -z "$PATH_EXPANDED" ]; then
   export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
@@ -100,7 +97,6 @@ alias l='tree --dirsfirst -ChaFL 1'
 alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
-alias tmux='tmux -2'
 alias open='xdg-open &>/dev/null'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
@@ -118,7 +114,14 @@ dkrm() {
 # Prompt
 # --------------------------------------------------------------------
 
-eval "$(starship init bash)"
+# Get the necessary tput codes
+blue=$(tput setaf 12)
+red=$(tput setaf 9)
+gray=$(tput setaf 8)
+reset=$(tput sgr0)
+
+# Export minimalist prompt
+export PS1="${blue}\w${red}\$(GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWDIRTYSTATE=1 __git_ps1)${gray} → ${reset}"
 
 
 # Zoxide
