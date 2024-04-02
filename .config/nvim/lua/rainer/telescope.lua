@@ -17,6 +17,9 @@ require('telescope').setup {
     mappings = {
       n = {
         ["<C-g>"] = actions.close
+      },
+      i =  {
+        ["<C-cr>"] = actions.nop
       }
     }
   },
@@ -40,31 +43,14 @@ require('telescope').setup {
 require('telescope').load_extension('fzf')
 require('telescope').load_extension('egrepify')
 
-local function bundler_project()
-  return vim.fn['bundler#project']()
-end
-
-local function gem_paths()
-  return bundler_project()._sorted
-end
-
-local function gem_path()
-  local sample = bundler_project()._paths['rails']
-  return tostring(Path:new(sample):parent())
-end
-
-local function no_bundler()
-  return vim.tbl_isempty(bundler_project())
-end
-
 return {
   bundle_grep_string = function()
-    if no_bundler() then return end
+    if vim.b.bundler_paths == nil then return end
 
     return require('telescope.builtin').grep_string {
-      cwd = gem_path(),
+      cwd = tostring(Path:new(vim.b.bundler_paths[1]):parent()),
       search = vim.fn.input("Bundle Grep For > "),
-      search_dirs = gem_paths(),
+      search_dirs = vim.b.bundler_paths,
       use_regex = true,
       path_display = { absolute = false }
     }

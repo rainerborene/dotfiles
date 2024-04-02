@@ -13,13 +13,13 @@ fzf:
 tools:
 	@cargo install -f bat \
 		bottom \
+		difftastic \
 		eza \
 		fd-find \
-		git-delta \
 		hexyl \
+		jnv \
 		ripgrep \
 		sd \
-		starship \
 		zoxide
 
 gems:

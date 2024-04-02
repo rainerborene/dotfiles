@@ -66,6 +66,7 @@ Plug 'sQVe/sort.nvim'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sheerun/vim-polyglot'
+Plug 'sindrets/diffview.nvim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'stevearc/oil.nvim'
 Plug 'svermeulen/vim-subversive'
@@ -86,7 +87,6 @@ Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
 Plug 'whatyouhide/vim-textobj-erb'
-Plug 'whiteinge/diffconflicts'
 Plug 'windwp/nvim-autopairs'
 
 call plug#end()
@@ -346,9 +346,11 @@ nnoremap c* :<C-U>let @/='\<'.expand("<cword>").'\>'<CR>:set hlsearch<CR>cgn
 
 " Goto line/column instead
 noremap ' `
+noremap M `
 
 " Mark position before search
 nnoremap / ms/
+nnoremap ? ms?
 
 " Replace alias
 nnoremap s/ mr:%s/
@@ -808,6 +810,7 @@ lua require('kitty-scrollback').setup()
 lua require'lspconfig'.solargraph.setup{}
 lua require'lspconfig'.tsserver.setup{}
 lua require'lspconfig'.gopls.setup{}
+lua require'lspconfig'.emmet_language_server.setup{}
 
 nnoremap <silent> <leader>ld :lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <leader>li :lua vim.lsp.buf.implementation()<CR>
