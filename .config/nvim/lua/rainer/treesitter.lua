@@ -15,8 +15,7 @@ treesitter.setup {
     "query",
     "vim",
     "vimdoc",
-    "css",
-    "help",
+    "css"
   },
   indent = {
     enable = false

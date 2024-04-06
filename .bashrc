@@ -31,18 +31,8 @@ shopt -s globstar
 ### Bash completion
 [ -f /etc/bash_completion ] && . /etc/bash_completion
 
-### Cargo
-[ -f $HOME/.cargo/env ] && . $HOME/.cargo/env
-
-### Extendable version manager
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
-
 ### Disable CTRL-S and CTRL-Q
 [[ $- =~ i ]] && stty -ixoff -ixon
-
-### Luarocks
-# eval "$(luarocks path --bin)"
 
 
 # Environment variables
@@ -114,14 +104,35 @@ dkrm() {
 # Prompt
 # --------------------------------------------------------------------
 
-# Get the necessary tput codes
+### Get the necessary tput codes
 blue=$(tput setaf 12)
 red=$(tput setaf 9)
 gray=$(tput setaf 8)
 reset=$(tput sgr0)
 
-# Export minimalist prompt
-export PS1="${blue}\w${red}\$(GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWDIRTYSTATE=1 __git_ps1)${gray} → ${reset}"
+### Export minimalist prompt
+export PS1="\[${blue}\]\w\[${red}\]\$(GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWDIRTYSTATE=1 __git_ps1)\[${gray}\] →\[${reset}\] "
+
+### Enable improved wezterm experience
+eval "$(wezterm shell-completion --shell bash)" && source ~/.config/wezterm/wezterm.sh
+
+# Package managers
+# --------------------------------------------------------------------
+
+### Cargo
+[ -f $HOME/.cargo/env ] && . $HOME/.cargo/env
+
+### Activate default Flox environment only within the current shell
+eval "$(flox activate -d ~)"
+
+### Extendable version manager
+if [ -f $HOME/.asdf/asdf.sh ]; then
+  . $HOME/.asdf/asdf.sh
+  . $HOME/.asdf/completions/asdf.bash
+fi
+
+### Luarocks
+# eval "$(luarocks path --bin)"
 
 
 # Zoxide

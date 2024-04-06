@@ -27,7 +27,6 @@ Plug 'andymass/vim-matchup'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'cocopon/shadeline.vim'
 Plug 'fdschmidt93/telescope-egrepify.nvim'
-Plug 'fladson/vim-kitty'
 Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/vim-asterisk'
 Plug 'hrsh7th/cmp-buffer'
@@ -43,13 +42,12 @@ Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
-Plug 'knubie/vim-kitty-navigator', { 'do': 'cp ./*.py ~/.config/kitty/' }
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mhinz/vim-startify'
-Plug 'mikesmithgh/kitty-scrollback.nvim'
+Plug 'mrjones2014/smart-splits.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
@@ -273,12 +271,6 @@ nnoremap <leader>v <C-W>v
 nnoremap <c-e> 5<c-e>
 nnoremap <c-y> 5<c-y>
 
-" Resize window
-nnoremap <left>  <c-w>>
-nnoremap <right> <c-w><
-nnoremap <up>    <c-w>-
-nnoremap <down>  <c-w>+
-
 " Sane movement with wrap turned on
 nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
@@ -346,7 +338,6 @@ nnoremap c* :<C-U>let @/='\<'.expand("<cword>").'\>'<CR>:set hlsearch<CR>cgn
 
 " Goto line/column instead
 noremap ' `
-noremap M `
 
 " Mark position before search
 nnoremap / ms/
@@ -379,7 +370,7 @@ imap <c-c> <esc>
 imap jj <esc>
 
 " Open notes directory
-nnoremap <silent> <leader>n <esc>:tabedit ~/Dropbox/Notebook/Notes<cr>
+nnoremap <silent> <expr> <leader>n printf(':tabedit %s/Dropbox/Notebook/Notes<cr>', has('wsl') ? '/mnt/c/Users/Rainer Borene/' : '~')
 
 " Organize Tailwind CSS classes
 command! Tw write | silent! exec "!bin/windify %"
@@ -492,12 +483,6 @@ augroup ft_ruby
   au FileType ruby setlocal iskeyword+=!,?
   au FileType ruby setlocal keywordprg=ri\ -T
   au BufNewFile,BufRead .env* set filetype=sh
-augroup END
-
-augroup ft_kitty
-  au!
-  au BufWritePost *kitty.conf :silent !kill -SIGUSR1 $(pgrep kitty)
-  au BufRead *kitty.conf setlocal fdm=marker
 augroup END
 
 augroup custom_foldexpr
@@ -800,16 +785,45 @@ augroup lua_highlight
 augroup END
 
 " }}}
-" Kitty {{{
+" SmartSplits {{{
 
-lua require('kitty-scrollback').setup()
+lua require('smart-splits').setup({})
+
+" Resize splits
+nnoremap <silent> <A-h> :lua require('smart-splits').resize_left()<CR>
+nnoremap <silent> <A-j> :lua require('smart-splits').resize_down()<CR>
+nnoremap <silent> <A-k> :lua require('smart-splits').resize_up()<CR>
+nnoremap <silent> <A-l> :lua require('smart-splits').resize_right()<CR>
+
+" Moving between splits
+nnoremap <silent> <C-h> :lua require('smart-splits').move_cursor_left()<CR>
+nnoremap <silent> <C-j> :lua require('smart-splits').move_cursor_down()<CR>
+nnoremap <silent> <C-k> :lua require('smart-splits').move_cursor_up()<CR>
+nnoremap <silent> <C-l> :lua require('smart-splits').move_cursor_right()<CR>
+
+" }}}
+" Wezterm {{{
+
+function! s:wezterm_set_user_var(name, value)
+  return printf("\033]1337;SetUserVar=%s=%s\007", a:name, system("base64 -", a:value))
+endfunction
+
+augroup wezterm
+  au!
+  autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", v:event.cwd))
+  autocmd BufWritePost *wezterm.lua call chansend(v:stderr, s:wezterm_set_user_var("reload_configuration", "_"))
+  autocmd ExitPre * call system('wezterm cli set-tab-title '.fnamemodify(getcwd(), ":t"))
+  autocmd BufEnter *
+        \  if empty(&buftype)
+        \|   call jobstart('wezterm cli set-tab-title '.expand('%:t:S'))
+        \| endif
+augroup END
 
 " }}}
 " LSP {{{
 
 lua require'lspconfig'.solargraph.setup{}
 lua require'lspconfig'.tsserver.setup{}
-lua require'lspconfig'.gopls.setup{}
 lua require'lspconfig'.emmet_language_server.setup{}
 
 nnoremap <silent> <leader>ld :lua vim.lsp.buf.definition()<CR>
@@ -829,7 +843,7 @@ lua require('rainer.cmp')
 " }}}
 " Test {{{
 
-let test#strategy = "kitty"
+let test#strategy = "wezterm"
 
 nmap <silent> <leader>rr :TestNearest<CR>
 nmap <silent> <leader>rf :TestFile<CR>

@@ -1,9 +1,6 @@
 asdf:
 	@git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 
-kitty:
-	@curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
-
 task:
 	@sh -c "`curl --location https://taskfile.dev/install.sh`" -- -d -b ~/.local/bin
 
@@ -12,7 +9,6 @@ fzf:
 
 tools:
 	@cargo install -f bat \
-		bottom \
 		difftastic \
 		eza \
 		fd-find \
@@ -35,10 +31,8 @@ gems:
 		solargraph \
 		solargraph-rails
 
-chromedriver:
-	curl -sS -o /tmp/chromedriver_linux64.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/120.0.6099.109/linux64/chrome-headless-shell-linux64.zip"
-	unzip /tmp/chromedriver_linux64.zip -d /tmp/chromedriver
-	sudo mv /tmp/chromedriver/chrome-headless-shell /usr/local/bin/chromedriver
+wezterm.sh:
+	@curl -L https://raw.githubusercontent.com/wez/wezterm/main/assets/shell-integration/wezterm.sh -o .config/wezterm/wezterm.sh
 
 plug.vim:
 	@curl -fLo .config/nvim/autoload/$@ --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/$@

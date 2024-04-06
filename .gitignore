@@ -1,10 +1,4 @@
-.bundle/cache
-.config/asciinema
-.config/configstore
-.config/htop
-.config/nvim/.init.vim-rplugin~
 .config/nvim/autoload/plug.vim
-.config/nvim/autoload/plug.vim.old
 .config/nvim/plugged/*
 .config/nvim/spell/*.spl
 .config/nvim/tmp
