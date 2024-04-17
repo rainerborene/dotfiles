@@ -94,17 +94,12 @@ call plug#end()
 
 " misc
 set confirm
-set lazyredraw
 set shortmess+=c
 set noswapfile
 set nowritebackup
 set spellfile=~/.config/nvim/spell/custom-dictionary.utf-8.add
 set spelllang=pt,en
 set undofile
-set undoreload=10000
-set notimeout
-set ttimeout
-set ttimeoutlen=0
 set updatetime=1000
 
 " text manipulation
@@ -280,6 +275,15 @@ vnoremap k gk
 " { and } skip over closed folds instead of openning them
 nnoremap <expr> } foldclosed(search('^$', 'Wn'))  == -1 ? '}zz' : '}j}zz'
 nnoremap <expr> { foldclosed(search('^$', 'Wnb')) == -1 ? '{zz' : '{k{zz'
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Same when moving up and down
+noremap <C-d> <C-d>zz
+noremap <C-u> <C-u>zz
 
 " Easier to type, and I never use the default behavior.
 noremap H ^
@@ -727,13 +731,15 @@ let g:ale_sign_error = '•'
 let g:ale_sign_warning = '•'
 let g:ale_set_highlights = 0
 let g:ale_ruby_rubocop_auto_correct_all = 1
+let g:ale_lua_stylua_options = '--search-parent-directories'
 let g:ale_linters_explicit = 1
 let g:ale_fixers = {
       \ 'ruby': ['rubocop'],
       \ 'html': ['prettier'],
       \ 'json': ['jq'],
       \ 'javascript': ['prettier'],
-      \ 'xml': ['xmllint']
+      \ 'xml': ['xmllint'],
+      \ 'lua': ['stylua']
       \ }
 
 let g:ale_linters = {
@@ -787,7 +793,7 @@ augroup END
 " }}}
 " SmartSplits {{{
 
-lua require('smart-splits').setup({})
+lua require('smart-splits').setup({ at_edge = 'stop' })
 
 " Resize splits
 nnoremap <silent> <A-h> :lua require('smart-splits').resize_left()<CR>
@@ -810,6 +816,7 @@ endfunction
 
 augroup wezterm
   au!
+  autocmd BufNewFile,BufRead *.tmTheme setlocal filetype=xml
   autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", v:event.cwd))
   autocmd BufWritePost *wezterm.lua call chansend(v:stderr, s:wezterm_set_user_var("reload_configuration", "_"))
   autocmd ExitPre * call system('wezterm cli set-tab-title '.fnamemodify(getcwd(), ":t"))
@@ -817,6 +824,11 @@ augroup wezterm
         \  if empty(&buftype)
         \|   call jobstart('wezterm cli set-tab-title '.expand('%:t:S'))
         \| endif
+augroup END
+
+augroup wezterm_fix
+  au!
+  autocmd BufEnter /tmp/psql* au! wezterm
 augroup END
 
 " }}}

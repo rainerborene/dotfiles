@@ -7,5 +7,5 @@ Reline::Face.config(:completion_dialog) do |conf|
 end
 
 def copy(str)
-  IO.popen("xclip -i -selection clipboard", "w") { _1 << str.to_s } unless str.nil?
+  IO.popen("win32yank.exe -i", "w") { _1 << str.to_s } unless str.nil?
 end

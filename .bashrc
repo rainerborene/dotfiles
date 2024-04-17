@@ -116,6 +116,10 @@ export PS1="\[${blue}\]\w\[${red}\]\$(GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWD
 ### Enable improved wezterm experience
 eval "$(wezterm shell-completion --shell bash)" && source ~/.config/wezterm/wezterm.sh
 
+### Nice colorized output
+export LS_COLORS="$(vivid generate catppuccin-mocha)"
+
+
 # Package managers
 # --------------------------------------------------------------------
 
@@ -139,6 +143,12 @@ fi
 # --------------------------------------------------------------------
 
 eval "$(zoxide init bash)"
+
+
+# Broot
+# --------------------------------------------------------------------
+
+[ -f ~/.config/broot/launcher/bash/br ] && source ~/.config/broot/launcher/bash/br
 
 
 # fzf (https://github.com/junegunn/fzf)

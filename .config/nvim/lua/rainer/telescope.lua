@@ -1,7 +1,7 @@
-local Path = require('plenary.path')
-local actions = require('telescope.actions')
+local Path = require "plenary.path"
+local actions = require "telescope.actions"
 
-require('telescope').setup {
+require("telescope").setup {
   defaults = {
     vimgrep_arguments = {
       "rg",
@@ -16,16 +16,16 @@ require('telescope').setup {
     },
     mappings = {
       n = {
-        ["<C-g>"] = actions.close
+        ["<C-g>"] = actions.close,
       },
-      i =  {
-        ["<C-cr>"] = actions.nop
-      }
-    }
+      i = {
+        ["<C-cr>"] = actions.nop,
+      },
+    },
   },
   pickers = {
     find_files = {
-      hidden = true
+      hidden = true,
     },
     buffers = {
       mappings = {
@@ -34,25 +34,27 @@ require('telescope').setup {
         },
         n = {
           ["dd"] = actions.delete_buffer,
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 }
 
-require('telescope').load_extension('fzf')
-require('telescope').load_extension('egrepify')
+require("telescope").load_extension "fzf"
+require("telescope").load_extension "egrepify"
 
 return {
   bundle_grep_string = function()
-    if vim.b.bundler_paths == nil then return end
+    if vim.b.bundler_paths == nil then
+      return
+    end
 
-    return require('telescope.builtin').grep_string {
+    return require("telescope.builtin").grep_string {
       cwd = tostring(Path:new(vim.b.bundler_paths[1]):parent()),
-      search = vim.fn.input("Bundle Grep For > "),
+      search = vim.fn.input "Bundle Grep For > ",
       search_dirs = vim.b.bundler_paths,
       use_regex = true,
-      path_display = { absolute = false }
+      path_display = { absolute = false },
     }
-  end
+  end,
 }

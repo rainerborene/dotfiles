@@ -1,5 +1,5 @@
-require("oil").setup({
-  keymaps =  {
+require("oil").setup {
+  keymaps = {
     ["g?"] = "actions.show_help",
     ["<CR>"] = "actions.select",
     ["l"] = "actions.select",
@@ -15,13 +15,13 @@ require("oil").setup({
     ["gs"] = "actions.change_sort",
     ["gx"] = "actions.open_external",
     ["g."] = "actions.toggle_hidden",
-    ["g\\"] = "actions.toggle_trash"
+    ["g\\"] = "actions.toggle_trash",
   },
   use_default_keymaps = false,
   view_options = {
     show_hidden = true,
     is_always_hidden = function(name, bufnr)
       return vim.startswith(name, "..")
-    end
-  }
-})
+    end,
+  },
+}

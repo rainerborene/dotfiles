@@ -31,6 +31,10 @@ gems:
 		solargraph \
 		solargraph-rails
 
+vivid:
+	@wget "https://github.com/sharkdp/vivid/releases/download/v0.9.0/vivid_0.9.0_amd64.deb"
+	@sudo dpkg -i vivid_0.9.0_amd64.deb
+
 wezterm.sh:
 	@curl -L https://raw.githubusercontent.com/wez/wezterm/main/assets/shell-integration/wezterm.sh -o .config/wezterm/wezterm.sh
 

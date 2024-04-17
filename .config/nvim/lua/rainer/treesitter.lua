@@ -1,4 +1,4 @@
-local treesitter = require("nvim-treesitter.configs")
+local treesitter = require "nvim-treesitter.configs"
 
 -- constants for selection_modes
 local charwise = "v"
@@ -15,13 +15,13 @@ treesitter.setup {
     "query",
     "vim",
     "vimdoc",
-    "css"
+    "css",
   },
   indent = {
-    enable = false
+    enable = false,
   },
   highlight = {
-    enable = true
+    enable = true,
   },
   textobjects = {
     select = {
@@ -40,7 +40,7 @@ treesitter.setup {
         ["@function.outer"] = linewise,
         ["@class.outer"] = linewise,
         ["@block.outer"] = linewise,
-      }
+      },
     },
     move = {
       enable = true,
@@ -64,6 +64,6 @@ treesitter.setup {
     },
   },
   matchup = {
-    enable = true
-  }
+    enable = true,
+  },
 }
