@@ -46,6 +46,7 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+Plug 'mfussenegger/nvim-lint'
 Plug 'mhinz/vim-startify'
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'neovim/nvim-lspconfig'
@@ -66,6 +67,7 @@ Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sheerun/vim-polyglot'
 Plug 'sindrets/diffview.nvim'
 Plug 'stefandtw/quickfix-reflector.vim'
+Plug 'stevearc/conform.nvim'
 Plug 'stevearc/oil.nvim'
 Plug 'svermeulen/vim-subversive'
 Plug 'thinca/vim-quickrun'
@@ -82,7 +84,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
-Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
 Plug 'whatyouhide/vim-textobj-erb'
 Plug 'windwp/nvim-autopairs'
@@ -224,6 +225,7 @@ nmap gf <SID>:vert sfind <Plug><cfile><CR>
 " I hate when the rendering occasionally gets messed up.
 function! s:redraw()
   nohlsearch
+  silent! unlet g:test#wezterm#pane_id
   normal! zx
   redraw!
   echo
@@ -455,6 +457,7 @@ augroup END
 augroup ft_xml
   au!
   au FileType xml let &l:equalprg='xmllint --format --recover - 2>/dev/null'
+  au BufNewFile,BufRead *.tmTheme setlocal filetype=xml
 augroup END
 
 augroup ft_awk
@@ -515,8 +518,8 @@ augroup vimrc
   au InsertLeave * silent! set nopaste
 
   " More focus on trailing white spaces
-  autocmd InsertEnter * set listchars-=trail:⣿
-  autocmd InsertLeave * set listchars+=trail:⣿
+  au InsertEnter * set listchars-=trail:⣿
+  au InsertLeave * set listchars+=trail:⣿
 
   " Resize splits when the window is resized
   au VimResized * :wincmd =
@@ -615,11 +618,11 @@ endfunction
 
 function! s:nodejs_topen(package)
   let l:path = 'node_modules/'.a:package
-  if filewritable(l:path) == 2
+  if isdirectory(l:path)
     silent exe 'tabedit '.l:path
     silent exe 'tcd '.l:path
   end
-endf
+endfunction
 
 command! -nargs=1 -complete=customlist,<sid>nodejs_packages Nopen call <sid>nodejs_topen(<q-args>)
 
@@ -725,39 +728,22 @@ augroup ft_git
 augroup END
 
 " }}}}
-" Ale {{{
+" Conform {{{
 
-let g:ale_sign_error = '•'
-let g:ale_sign_warning = '•'
-let g:ale_set_highlights = 0
-let g:ale_ruby_rubocop_auto_correct_all = 1
-let g:ale_lua_stylua_options = '--search-parent-directories'
-let g:ale_linters_explicit = 1
-let g:ale_fixers = {
-      \ 'ruby': ['rubocop'],
-      \ 'html': ['prettier'],
-      \ 'json': ['jq'],
-      \ 'javascript': ['prettier'],
-      \ 'xml': ['xmllint'],
-      \ 'lua': ['stylua']
-      \ }
+lua require('rainer.conform')
 
-let g:ale_linters = {
-      \ 'ruby': ['ruby', 'rubocop'],
-      \ 'json': ['jq'],
-      \ 'javascript': ['eslint'],
-      \ 'eruby': ['erb', 'erblint', 'erubi', 'erubis'],
-      \ 'lua': ['lua_ls', 'luac']
-      \ }
+map <F8> :Format<cr>
 
-hi link ALEErrorSign ErrorMsg
-hi ALEErrorSign guibg=NONE
+" }}}
+" Lint {{{
 
-nmap <silent> [s <Plug>(ale_previous_wrap)
-nmap <silent> ]s <Plug>(ale_next_wrap)
+lua require('rainer.lint')
 
-" Bind F8 to fixing problems with ALE
-nmap <F8> <Plug>(ale_fix)
+augroup lint
+  au!
+  au BufEnter,BufWritePost * silent! lua require('lint').try_lint()
+  au InsertLeave * silent! lua require('lint').try_lint()
+augroup END
 
 " }}}
 " Smartword {{{
@@ -816,7 +802,6 @@ endfunction
 
 augroup wezterm
   au!
-  autocmd BufNewFile,BufRead *.tmTheme setlocal filetype=xml
   autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", v:event.cwd))
   autocmd BufWritePost *wezterm.lua call chansend(v:stderr, s:wezterm_set_user_var("reload_configuration", "_"))
   autocmd ExitPre * call system('wezterm cli set-tab-title '.fnamemodify(getcwd(), ":t"))
@@ -834,9 +819,10 @@ augroup END
 " }}}
 " LSP {{{
 
-lua require'lspconfig'.solargraph.setup{}
-lua require'lspconfig'.tsserver.setup{}
-lua require'lspconfig'.emmet_language_server.setup{}
+lua require('rainer.lspconfig')
+
+nmap <silent> [d :lua vim.diagnostic.goto_prev()<CR>
+nmap <silent> ]d :lua vim.diagnostic.goto_next()<CR>
 
 nnoremap <silent> <leader>ld :lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <leader>li :lua vim.lsp.buf.implementation()<CR>

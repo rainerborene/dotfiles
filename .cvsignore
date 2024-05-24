@@ -2,6 +2,7 @@
 *.rdb
 *.swp
 *.test
+*:Zone.Identifier
 .DS_Store
 .netrwhist
 .projections.json

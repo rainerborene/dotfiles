@@ -34,6 +34,9 @@ shopt -s globstar
 ### Disable CTRL-S and CTRL-Q
 [[ $- =~ i ]] && stty -ixoff -ixon
 
+### Allow C-W mapping in inputrc to work
+stty werase undef
+
 
 # Environment variables
 # --------------------------------------------------------------------
@@ -95,6 +98,7 @@ alias rc='rails console'
 alias rs='rails server'
 alias fore='foreman start -f Procfile.dev'
 alias dkk='docker kill $(docker ps -q)'
+alias rmzone='find . -name "*:Zone.Identifier" -delete'
 
 dkrm() {
   docker images | grep $@ | awk '{ print $1 ":" $2 }' | xargs docker rmi
@@ -143,12 +147,6 @@ fi
 # --------------------------------------------------------------------
 
 eval "$(zoxide init bash)"
-
-
-# Broot
-# --------------------------------------------------------------------
-
-[ -f ~/.config/broot/launcher/bash/br ] && source ~/.config/broot/launcher/bash/br
 
 
 # fzf (https://github.com/junegunn/fzf)

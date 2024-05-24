@@ -10,3 +10,8 @@ set visible-stats on
 
 "\C-p": history-search-backward
 "\C-n": history-search-forward
+
+# Bash-specific mappings and settings
+$if Bash
+  \C-w: backward-kill-word
+$endif

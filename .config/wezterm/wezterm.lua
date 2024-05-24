@@ -73,6 +73,7 @@ config.default_domain = "WSL:Ubuntu-22.04"
 config.color_scheme = "Catppuccin Mocha"
 config.font = wezterm.font("Berkeley Mono", { weight = "Bold" })
 config.force_reverse_video_cursor = true
+config.canonicalize_pasted_newlines = "None"
 config.font_size = 11
 config.hide_tab_bar_if_only_one_tab = true
 config.audible_bell = "Disabled"

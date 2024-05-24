@@ -16,6 +16,7 @@ tools:
 		jnv \
 		ripgrep \
 		sd \
+		xplr \
 		zoxide
 
 gems:
