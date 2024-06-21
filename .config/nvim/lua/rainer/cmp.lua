@@ -63,7 +63,6 @@ cmp.setup {
   sources = {
     { name = "nvim_lsp" },
     { name = "luasnip" },
-    { name = "tags" },
     {
       name = "buffer",
       option = {
@@ -77,7 +76,6 @@ cmp.setup {
       mode = "symbol_text",
       menu = {
         nvim_lsp = "[LSP]",
-        tags = "[Tag]",
         buffer = "[Buf]",
         vsnip = "[Snip]",
         path = "[Path]",

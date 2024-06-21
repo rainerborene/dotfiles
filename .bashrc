@@ -105,25 +105,6 @@ dkrm() {
 }
 
 
-# Prompt
-# --------------------------------------------------------------------
-
-### Get the necessary tput codes
-blue=$(tput setaf 12)
-red=$(tput setaf 9)
-gray=$(tput setaf 8)
-reset=$(tput sgr0)
-
-### Export minimalist prompt
-export PS1="\[${blue}\]\w\[${red}\]\$(GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWDIRTYSTATE=1 __git_ps1)\[${gray}\] →\[${reset}\] "
-
-### Enable improved wezterm experience
-eval "$(wezterm shell-completion --shell bash)" && source ~/.config/wezterm/wezterm.sh
-
-### Nice colorized output
-export LS_COLORS="$(vivid generate catppuccin-mocha)"
-
-
 # Package managers
 # --------------------------------------------------------------------
 
@@ -141,6 +122,25 @@ fi
 
 ### Luarocks
 # eval "$(luarocks path --bin)"
+
+
+# Prompt
+# --------------------------------------------------------------------
+
+### Get the necessary tput codes
+blue=$(tput setaf 12)
+red=$(tput setaf 9)
+gray=$(tput setaf 8)
+reset=$(tput sgr0)
+
+### Export minimalist prompt
+export PS1="\[${blue}\]\w\[${red}\]\$(GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWDIRTYSTATE=1 __git_ps1)\[${gray}\] →\[${reset}\] "
+
+### Enable improved wezterm experience
+eval "$(wezterm shell-completion --shell bash)" && source ~/.config/wezterm/wezterm.sh
+
+### Nice colorized output
+export LS_COLORS="$(vivid generate catppuccin-mocha)"
 
 
 # Zoxide

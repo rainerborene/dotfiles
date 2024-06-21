@@ -3,7 +3,18 @@ local lspconfig = require "lspconfig"
 lspconfig.solargraph.setup {}
 lspconfig.tsserver.setup {}
 lspconfig.emmet_language_server.setup {}
-lspconfig.tailwindcss.setup {}
+lspconfig.tailwindcss.setup {
+  settings = {
+    tailwindCSS = {
+      experimental = {
+        classRegex = {
+          { [[(?:["'])((?:(?!["']|<%=).|<%=.*?%>)*)(?:["'])]] },
+        },
+      },
+    },
+  },
+}
+
 lspconfig.lua_ls.setup {
   settings = {
     Lua = {

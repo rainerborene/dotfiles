@@ -1,7 +1,0 @@
---exclude=node_modules/*
---exclude=log/*
---exclude=tmp/*
---fields=+l
---fields=-s
---languages=-html
---languages=-javascript

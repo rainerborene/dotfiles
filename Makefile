@@ -24,7 +24,6 @@ gems:
 		erb_lint \
 		foreman \
 		i18n-tasks \
-		ripper-tags \
 		rubocop \
 		rubocop-minitest \
 		rubocop-performance \

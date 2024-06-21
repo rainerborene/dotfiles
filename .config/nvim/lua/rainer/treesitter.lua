@@ -5,6 +5,7 @@ local charwise = "v"
 local linewise = "V"
 local blockwise = "<c-v>"
 
+---@diagnostic disable-next-line: missing-fields
 treesitter.setup {
   ensure_installed = {
     "ruby",

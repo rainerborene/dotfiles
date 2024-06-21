@@ -56,7 +56,6 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'onsails/lspkind-nvim'
-Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
@@ -207,10 +206,6 @@ nnoremap G Gzv
 nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
 nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
 
-" ,t(g)t - Open tag in tab
-nnoremap <silent> <leader>tt  <esc>:tab split<cr>:exe("tag ".expand("<cword>"))<cr>
-nnoremap <silent> <leader>tgt <esc>:tab split<cr>:exe("tjump ".expand("<cword>"))<cr>
-
 " Use Vim's built-in CTRL-R_CTRL-F when no plugin has claimed <Plug><cfile>
 if empty(maparg('<Plug><cfile>', 'c'))
   cnoremap <Plug><cfile> <C-R><C-F>
@@ -226,6 +221,7 @@ nmap gf <SID>:vert sfind <Plug><cfile><CR>
 function! s:redraw()
   nohlsearch
   silent! unlet g:test#wezterm#pane_id
+  silent! lua require'gitsigns'.refresh()
   normal! zx
   redraw!
   echo
@@ -382,18 +378,6 @@ nnoremap <silent> <expr> <leader>n printf(':tabedit %s/Dropbox/Notebook/Notes<cr
 command! Tw write | silent! exec "!bin/windify %"
 
 " }}}
-" Ctags generation {{{
-
-function! s:generate_ctags() abort
-  if &ft == "ruby" && executable("ripper-tags")
-    call jobstart("ripper-tags -R --exclude tmp")
-  else
-    call jobstart("ctags -R .")
-  end
-endfunction
-nnoremap <silent> g<cr> :call <sid>generate_ctags()<cr>
-
-" }}}
 " Quickfix mode {{{
 
 function! s:qf_toggle()
@@ -435,16 +419,10 @@ augroup ft_postgres
   au FileType pgsql setlocal commentstring=--\ %s comments=:--
 augroup END
 
-augroup ft_nginx
-  au!
-  au FileType nginx setlocal foldmethod=marker foldmarker={,}
-augroup END
-
 augroup ft_javascript
   au!
   au BufNewFile,BufRead *.es6 set filetype=javascript
   au BufNewFile,BufRead .jshintrc,.babelrc,.eslintrc set filetype=json
-  au FileType javascript setlocal foldmethod=marker foldmarker={,}
 augroup END
 
 augroup ft_html
@@ -458,11 +436,6 @@ augroup ft_xml
   au!
   au FileType xml let &l:equalprg='xmllint --format --recover - 2>/dev/null'
   au BufNewFile,BufRead *.tmTheme setlocal filetype=xml
-augroup END
-
-augroup ft_awk
-  au!
-  au FileType awk setlocal commentstring=#\ %s
 augroup END
 
 augroup ft_markdown
@@ -479,11 +452,6 @@ augroup ft_css
   au FileType css,scss,sass setlocal iskeyword+=-
 augroup END
 
-augroup ft_haml
-  au!
-  au FileType haml setlocal iskeyword+=-
-augroup END
-
 augroup ft_ruby
   au!
   au BufRead *gemrc setlocal filetype=yaml
@@ -494,8 +462,7 @@ augroup END
 
 augroup custom_foldexpr
   au!
-  au FileType ruby,css setlocal foldmethod=expr
-  au FileType ruby,css setlocal foldexpr=nvim_treesitter#foldexpr()
+  au FileType css,javascript,ruby setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
 augroup END
 
 augroup vimrc
@@ -629,6 +596,11 @@ command! -nargs=1 -complete=customlist,<sid>nodejs_packages Nopen call <sid>node
 " }}}
 " Plugins {{{
 
+" Lua based {{{
+
+lua require("rainer")
+
+" }}}
 " Ruby {{{
 
 let g:no_ruby_maps = 1
@@ -689,19 +661,16 @@ nnoremap <silent> <leader>u :UndotreeToggle<CR>
 " }}}
 " Telescope {{{
 
-lua require('rainer.telescope')
-
 " Find files using Telescope command-line sugar.
 nnoremap <leader><Leader> :Telescope find_files<cr>
 nnoremap <leader><tab> :Telescope keymaps<cr>
 nnoremap <leader>k :Telescope help_tags<cr>
 nnoremap <leader>b :Telescope buffers<cr>
 nnoremap <leader>a :Telescope egrepify<cr>
+nnoremap <leader>. :Telescope lsp_workspace_symbols<cr>
 nnoremap <leader>A :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
 nnoremap <leader>f :lua require('telescope.builtin').grep_string { search = vim.fn.input("Grep For > "), use_regex = true }<cr>
 nnoremap <leader>F :lua require('rainer.telescope').bundle_grep_string()<cr>
-nnoremap <leader>' :Telescope marks<cr>
-nnoremap <leader>. :Telescope tags<cr>
 
 " https://github.com/nvim-telescope/telescope.nvim/issues/559
 augroup _fold_bug_solution
@@ -730,14 +699,10 @@ augroup END
 " }}}}
 " Conform {{{
 
-lua require('rainer.conform')
-
 map <F8> :Format<cr>
 
 " }}}
 " Lint {{{
-
-lua require('rainer.lint')
 
 augroup lint
   au!
@@ -819,8 +784,6 @@ augroup END
 " }}}
 " LSP {{{
 
-lua require('rainer.lspconfig')
-
 nmap <silent> [d :lua vim.diagnostic.goto_prev()<CR>
 nmap <silent> ]d :lua vim.diagnostic.goto_next()<CR>
 
@@ -832,11 +795,6 @@ nnoremap <silent> <leader>lr :lua vim.lsp.buf.rename()<CR>
 nnoremap <silent> <leader>lh :lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <leader>la :lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> <leader>ll :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
-
-" }}}
-" Compe {{{
-
-lua require('rainer.cmp')
 
 " }}}
 " Test {{{
@@ -921,14 +879,10 @@ let g:shadeline.inactive = {
 " }}}
 " Oil {{{
 
-lua require('rainer.oil')
-
 nnoremap <silent> <leader>e :lua require('oil').open()<cr>
 
 " }}}
 " Gitsigns {{{
-
-lua require('rainer.gitsigns')
 
 nnoremap [c :Gitsigns prev_hunk<cr>
 nnoremap ]c :Gitsigns next_hunk<cr>
@@ -938,19 +892,12 @@ nnoremap <leader>hr :Gitsigns reset_hunk<cr>
 nnoremap <leader>hp :Gitsigns preview_hunk<cr>
 
 " }}}
-" Treesitter {{{
-
-lua require('rainer.treesitter')
-
-" }}}
 " Matchup {{{
 
 let g:matchup_matchparen_offscreen = {}
 
 " }}}
 " Sort {{{
-
-lua require("sort").setup()
 
 nnoremap <silent> gs :Sort<cr>
 vnoremap <silent> gs <Esc>:Sort<cr>
