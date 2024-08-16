@@ -1,6 +1,8 @@
 local lspconfig = require "lspconfig"
 
-lspconfig.solargraph.setup {}
+lspconfig.ruby_lsp.setup {
+  filetypes = { "ruby" },
+}
 lspconfig.tsserver.setup {}
 lspconfig.emmet_language_server.setup {}
 lspconfig.tailwindcss.setup {

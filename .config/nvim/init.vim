@@ -27,7 +27,6 @@ Plug 'andymass/vim-matchup'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'cocopon/shadeline.vim'
 Plug 'fdschmidt93/telescope-egrepify.nvim'
-Plug 'glts/vim-textobj-comment'
 Plug 'haya14busa/vim-asterisk'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -74,7 +73,6 @@ Plug 'tommcdo/vim-exchange'
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
-Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-ragtag'
@@ -180,14 +178,8 @@ map ; :
 map <Tab> %
 map <C-o> <nop>
 
-" qq to record, Q to replay
-nmap Q @q
-
 " .: repeats the last command on every line
 xnoremap . :normal.<cr>
-
-" @: repeats macro on every line
-xnoremap @ :normal@
 
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
@@ -203,8 +195,8 @@ nnoremap gg ggzv
 nnoremap G Gzv
 
 " Use c-\ to do c-] but open it in a new split.
-nnoremap <c-]> <c-]>mzzvzz15<c-e>`z
-nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z
+nnoremap <c-]> <c-]>zz
+nnoremap <c-\> <c-w>v<c-]>zz
 
 " Use Vim's built-in CTRL-R_CTRL-F when no plugin has claimed <Plug><cfile>
 if empty(maparg('<Plug><cfile>', 'c'))
@@ -222,6 +214,7 @@ function! s:redraw()
   nohlsearch
   silent! unlet g:test#wezterm#pane_id
   silent! lua require'gitsigns'.refresh()
+  "silent! lua vim.lsp.codelens.clear()
   normal! zx
   redraw!
   echo
@@ -354,10 +347,6 @@ cnoremap <m-/> \v^(()@!.)*$<Left><Left><Left><Left><Left><Left><Left>
 " Easier dir/file aliases
 cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
 cnoremap <expr> %< getcmdtype() == ':' ? fnameescape(expand('%:t')) : '%<'
-
-" Repeat last substitution
-nnoremap & n:&&<cr>
-xnoremap & n:&&<cr>
 
 " Reindent entire file
 nnoremap == mqHmwgg=G`wzt`q
@@ -667,7 +656,7 @@ nnoremap <leader><tab> :Telescope keymaps<cr>
 nnoremap <leader>k :Telescope help_tags<cr>
 nnoremap <leader>b :Telescope buffers<cr>
 nnoremap <leader>a :Telescope egrepify<cr>
-nnoremap <leader>. :Telescope lsp_workspace_symbols<cr>
+nnoremap <leader>. :Telescope lsp_dynamic_workspace_symbols<cr>
 nnoremap <leader>A :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
 nnoremap <leader>f :lua require('telescope.builtin').grep_string { search = vim.fn.input("Grep For > "), use_regex = true }<cr>
 nnoremap <leader>F :lua require('rainer.telescope').bundle_grep_string()<cr>
@@ -783,9 +772,6 @@ augroup END
 
 " }}}
 " LSP {{{
-
-nmap <silent> [d :lua vim.diagnostic.goto_prev()<CR>
-nmap <silent> ]d :lua vim.diagnostic.goto_next()<CR>
 
 nnoremap <silent> <leader>ld :lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <leader>li :lua vim.lsp.buf.implementation()<CR>

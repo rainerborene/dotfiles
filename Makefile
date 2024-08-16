@@ -28,8 +28,9 @@ gems:
 		rubocop-minitest \
 		rubocop-performance \
 		rubocop-rails \
-		solargraph \
-		solargraph-rails
+		rubocop-rails-omakase \
+		ruby-lsp \
+		ruby-lsp-rails
 
 vivid:
 	@wget "https://github.com/sharkdp/vivid/releases/download/v0.9.0/vivid_0.9.0_amd64.deb"
