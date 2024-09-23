@@ -1,9 +1,7 @@
 local lspconfig = require "lspconfig"
 
-lspconfig.ruby_lsp.setup {
-  filetypes = { "ruby" },
-}
-lspconfig.tsserver.setup {}
+lspconfig.ruby_lsp.setup {}
+lspconfig.ts_ls.setup {}
 lspconfig.emmet_language_server.setup {}
 lspconfig.tailwindcss.setup {
   settings = {

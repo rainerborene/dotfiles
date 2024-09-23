@@ -27,11 +27,13 @@ Plug 'andymass/vim-matchup'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'cocopon/shadeline.vim'
 Plug 'fdschmidt93/telescope-egrepify.nvim'
+Plug 'folke/ts-comments.nvim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/nvim-cmp'
+Plug 'isobit/vim-caddyfile'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/gv.vim'
 Plug 'kana/vim-niceblock'
@@ -62,7 +64,6 @@ Plug 'romainl/vim-cool'
 Plug 'sQVe/sort.nvim'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'saaguero/vim-textobj-pastedtext'
-Plug 'sheerun/vim-polyglot'
 Plug 'sindrets/diffview.nvim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'stevearc/conform.nvim'
@@ -75,7 +76,6 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
@@ -136,8 +136,8 @@ set showbreak=↪\ "
 set noshowmode
 set relativenumber
 set number
-set conceallevel=2
-set concealcursor=niv
+"set conceallevel=2
+"set concealcursor=niv
 set pumheight=20
 set laststatus=3
 
@@ -400,14 +400,6 @@ augroup END
 " }}}
 " Autocommands {{{
 
-augroup ft_postgres
-  au!
-  au BufNewFile,BufRead /tmp/sql*,*.sql,*psql* set filetype=pgsql
-  au FileType pgsql set softtabstop=2 shiftwidth=2
-  au FileType pgsql set foldmethod=indent
-  au FileType pgsql setlocal commentstring=--\ %s comments=:--
-augroup END
-
 augroup ft_javascript
   au!
   au BufNewFile,BufRead *.es6 set filetype=javascript
@@ -451,7 +443,7 @@ augroup END
 
 augroup custom_foldexpr
   au!
-  au FileType css,javascript,ruby setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+  au FileType css,javascript,ruby,sql setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
 augroup END
 
 augroup vimrc
