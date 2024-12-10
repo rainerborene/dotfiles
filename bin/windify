@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+
+const fs = require("node:fs")
+const path = require("node:path")
+const resolveConfig = require("tailwindcss/resolveConfig")
+const { createContext } = require("tailwindcss/lib/lib/setupContextUtils")
+
+const filePath = process.argv[2]
+const fileContent = fs.readFileSync(filePath, { encoding: "utf-8", flag: "r" })
+const applicationConfigPath = path.resolve(process.argv[3])
+const applicationConfig = require(applicationConfigPath)
+const ctx = createContext(resolveConfig(applicationConfig))
+
+const classRegexp = new RegExp(ctx.getClassList().join("|"), "i")
+const jitRegexp = /[\w+-]+\[[^\[\]]+\]/i
+const cssRegexp = /(@apply\s*)(.*)(;)/g
+const quotesRegexp = /(["'])((?:(?!\1|<%=)[^']|<%=.*?%>)*)(\1)/g
+
+function bigSign(bigIntValue) {
+  return Number(bigIntValue > 0n) - Number(bigIntValue < 0n)
+}
+
+function sortClassList(classList) {
+  const classNamesWithOrder = ctx.getClassOrder(classList)
+
+  return classNamesWithOrder
+    .sort(([, a], [, z]) => {
+      if (a === z) return 0
+      if (a === null) return -1
+      if (z === null) return 1
+      return bigSign(a - z)
+    })
+    .map(([className]) => className)
+}
+
+function tokenize(classStr) {
+  const parts = classStr.split(/(\s+)/).filter(token => token.trim().length > 0)
+  const classes = []
+  const outliers = []
+  const stack = []
+
+  while (parts.length) {
+    const token = parts.shift()
+
+    switch (true) {
+      case /#\{\w+\}/.test(token):
+        outliers.push(token)
+        break
+      case /<%=?/.test(token):
+        if (stack.length) throw "Cannot parse nested ERB expressions"
+        stack.push(token)
+        break
+      case /%>/.test(token):
+        outliers.push(...stack.splice(0, stack.length), token)
+        break
+      default:
+        if (stack.length)
+          stack.push(token)
+        else
+          classes.push(token)
+    }
+  }
+
+  return [classes, outliers]
+}
+
+function sortClasses(classStr) {
+  if (typeof classStr !== "string" || classStr === "") {
+    return classStr
+  }
+
+  const [classList, outliers] = tokenize(classStr)
+  const classes = sortClassList(classList)
+
+  return classes.concat(outliers).join(" ")
+}
+
+const replaceRegexp = filePath.match(".css") ? cssRegexp : quotesRegexp
+const newContent = fileContent.replace(replaceRegexp, (match, start, classList, end) => {
+  if (classRegexp.test(classList) || jitRegexp.test(classList)) {
+    return `${start}${sortClasses(classList)}${end}`
+  }
+  return match
+})
+
+fs.writeFileSync(filePath, newContent)

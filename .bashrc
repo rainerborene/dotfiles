@@ -180,3 +180,15 @@ fe() {
 }
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+
+# atuin
+# --------------------------------------------------------------------
+
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+
+if [[ -f ~/.atuin/bin/env ]]; then
+  source $HOME/.atuin/bin/env
+  eval "$(atuin init bash)"
+  bind -x '"\C-r": __atuin_history'
+fi

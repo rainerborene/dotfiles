@@ -17,6 +17,7 @@ treesitter.setup {
     "sql",
     "tsx",
     "query",
+    "vue",
     "vim",
     "vimdoc",
     "css",

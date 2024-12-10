@@ -22,17 +22,13 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
-Plug 'L3MON4D3/LuaSnip'
+Plug 'Saghen/blink.cmp', { 'do': 'cargo build --release' }
 Plug 'andymass/vim-matchup'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'cocopon/shadeline.vim'
 Plug 'fdschmidt93/telescope-egrepify.nvim'
 Plug 'folke/ts-comments.nvim'
 Plug 'haya14busa/vim-asterisk'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/nvim-cmp'
 Plug 'isobit/vim-caddyfile'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/gv.vim'
@@ -49,6 +45,7 @@ Plug 'machakann/vim-textobj-delimited'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mfussenegger/nvim-lint'
 Plug 'mhinz/vim-startify'
+Plug 'mikavilpas/blink-ripgrep.nvim'
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
@@ -56,13 +53,11 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-Plug 'onsails/lspkind-nvim'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
 Plug 'sQVe/sort.nvim'
-Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sindrets/diffview.nvim'
 Plug 'stefandtw/quickfix-reflector.vim'
@@ -136,8 +131,6 @@ set showbreak=↪\ "
 set noshowmode
 set relativenumber
 set number
-"set conceallevel=2
-"set concealcursor=niv
 set pumheight=20
 set laststatus=3
 
@@ -363,9 +356,6 @@ imap jj <esc>
 " Open notes directory
 nnoremap <silent> <expr> <leader>n printf(':tabedit %s/Dropbox/Notebook/Notes<cr>', has('wsl') ? '/mnt/c/Users/Rainer Borene/' : '~')
 
-" Organize Tailwind CSS classes
-command! Tw write | silent! exec "!bin/windify %"
-
 " }}}
 " Quickfix mode {{{
 
@@ -450,6 +440,7 @@ augroup vimrc
   au!
   au BufWritePost init.vim nested if expand('%') !~ 'fugitive' | source % | endif
   au FileType vim setlocal foldmethod=marker keywordprg=:help
+  au FileType vim nnoremap <buffer> <expr> <leader>. printf(':Telescope find_files no_ignore_parent=true cwd=%s<cr>', g:plug_home)
 
   " Highlight cursor when inactive
   au CursorMoved,CursorMovedI,WinLeave * setlocal nocursorline
@@ -873,6 +864,11 @@ nnoremap <leader>hp :Gitsigns preview_hunk<cr>
 " Matchup {{{
 
 let g:matchup_matchparen_offscreen = {}
+
+" }}}
+" Lion {{{
+
+let g:lion_squeeze_spaces = 1
 
 " }}}
 " Sort {{{
