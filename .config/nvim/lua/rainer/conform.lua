@@ -5,6 +5,7 @@ require("conform").setup {
     json = { "jq" },
     eruby = { "prettierhtml" },
     javascript = { "biome" },
+    vue = { "biome" },
     xml = { "xmllint" },
     lua = { "stylua" },
   },

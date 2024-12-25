@@ -49,12 +49,19 @@ return {
       return
     end
 
-    return require("telescope.builtin").grep_string {
-      cwd = tostring(Path:new(vim.b.bundler_paths[1]):parent()),
-      search = vim.fn.input "Bundle Grep For > ",
-      search_dirs = vim.b.bundler_paths,
-      use_regex = true,
-      path_display = { absolute = false },
-    }
+    vim.ui.input({ prompt = "Bundle Grep For > " }, function(input)
+      if input == nil then
+        return
+      end
+      vim.schedule(function()
+        require("telescope.builtin").grep_string {
+          cwd = tostring(Path:new(vim.b.bundler_paths[1]):parent()),
+          search = input,
+          search_dirs = vim.b.bundler_paths,
+          use_regex = true,
+          path_display = { absolute = false },
+        }
+      end)
+    end)
   end,
 }

@@ -9,6 +9,7 @@ require("blink.cmp").setup {
     ["<C-e>"] = { "select_and_accept" },
     ["<C-d>"] = { "scroll_documentation_down", "fallback" },
   },
+  signature = { enabled = true },
   completion = {
     list = {
       selection = "auto_insert",
@@ -22,9 +23,7 @@ require("blink.cmp").setup {
     },
   },
   sources = {
-    completion = {
-      enabled_providers = { "lsp", "path", "snippets", "buffer", "ripgrep" },
-    },
+    default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
     providers = {
       snippets = {
         score_offset = 3,
@@ -33,13 +32,12 @@ require("blink.cmp").setup {
         name = "Ripgrep",
         module = "blink-ripgrep",
         score_offset = -3,
-        opts = {}
       },
     },
   },
 }
 
---- https://github.com/L3MON4D3/LuaSnip/issues/656
+-- Inspired by https://github.com/L3MON4D3/LuaSnip/issues/656
 vim.api.nvim_create_autocmd("ModeChanged", {
   group = vim.api.nvim_create_augroup("UnlinkSnippetOnModeChange", { clear = true }),
   pattern = { "s:n", "i:*" },
