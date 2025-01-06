@@ -3,7 +3,6 @@ local treesitter = require "nvim-treesitter.configs"
 -- constants for selection_modes
 local charwise = "v"
 local linewise = "V"
-local blockwise = "<c-v>"
 
 ---@diagnostic disable-next-line: missing-fields
 treesitter.setup {

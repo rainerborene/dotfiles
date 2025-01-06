@@ -9,5 +9,6 @@ require "rainer.conform"
 require "rainer.telescope"
 require "rainer.mdx"
 require "rainer.windify"
+require "rainer.cmdcomp"
 
 require("sort").setup()

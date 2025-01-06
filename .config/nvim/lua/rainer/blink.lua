@@ -24,6 +24,7 @@ require("blink.cmp").setup {
   },
   sources = {
     default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
+    cmdline = {},
     providers = {
       snippets = {
         score_offset = 3,

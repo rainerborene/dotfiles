@@ -26,7 +26,6 @@ Plug 'Saghen/blink.cmp', { 'do': 'cargo build --release' }
 Plug 'andymass/vim-matchup'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'cocopon/shadeline.vim'
-Plug 'fdschmidt93/telescope-egrepify.nvim'
 Plug 'folke/ts-comments.nvim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'isobit/vim-caddyfile'
@@ -117,7 +116,8 @@ set sidescroll=1
 set nostartofline
 
 " wild stuff
-set wildmode=list:longest,full
+set wildmode=longest:full
+set wildcharm=<c-d>
 set wildignore+=*.DS_Store
 set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=.sass-cache
@@ -333,6 +333,10 @@ nnoremap ? ms?
 
 " Replace alias
 nnoremap s/ mr:%s/
+
+" Ease cmdline completion
+cnoremap <expr> <tab> wildmenumode() ? "\<c-n>" : "\<c-z>\<c-n>"
+cnoremap <expr> <c-l> wildmenumode() ? "\<c-y>\<c-l>\<c-z>" : "\<c-l>"
 
 " inVerse search: line NOT containing pattern
 cnoremap <m-/> \v^(()@!.)*$<Left><Left><Left><Left><Left><Left><Left>
@@ -636,10 +640,10 @@ nnoremap <silent> <leader>u :UndotreeToggle<CR>
 " Find files using Telescope command-line sugar.
 nnoremap <leader><Leader> :Telescope find_files<cr>
 nnoremap <leader><tab> :Telescope keymaps<cr>
+nnoremap <leader>. :Telescope lsp_dynamic_workspace_symbols<cr>
 nnoremap <leader>k :Telescope help_tags<cr>
 nnoremap <leader>b :Telescope buffers<cr>
-nnoremap <leader>a :Telescope egrepify<cr>
-nnoremap <leader>. :Telescope lsp_dynamic_workspace_symbols<cr>
+nnoremap <leader>a :lua require('rainer.telescope').multi_ripgrep()<cr>
 nnoremap <leader>A :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
 nnoremap <leader>f :lua require('telescope.builtin').grep_string { search = vim.fn.input("Grep For > "), use_regex = true }<cr>
 nnoremap <leader>F :lua require('rainer.telescope').bundle_grep_string()<cr>
