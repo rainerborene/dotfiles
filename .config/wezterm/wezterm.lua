@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-field
 local wezterm = require "wezterm"
 local config = wezterm.config_builder()
 
@@ -52,18 +53,18 @@ local function tab_title(tab)
 end
 
 -- Set tab title to the current working directory
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+wezterm.on("format-tab-title", function(tab)
   local index = tonumber(tab.tab_index) + 1
   return string.format(" %s: %s ", index, tab_title(tab))
 end)
 
 -- Set window title to the current working directory
-wezterm.on("format-window-title", function(tab, pane, tabs, panes, config)
+wezterm.on("format-window-title", function(tab)
   return tab_title(tab)
 end)
 
 -- Workaround to autoreload config on WSL environment
-wezterm.on("user-var-changed", function(window, pane, name, value)
+wezterm.on("user-var-changed", function(_, _, name)
   if name == "reload_configuration" then
     wezterm.reload_configuration()
   end
@@ -75,9 +76,11 @@ wezterm.on("trigger-vim-with-scrollback", function(window, pane)
 
   -- Create a temporary file to pass to vim
   local tmpfile = io.open([[\\wsl.localhost\Ubuntu-22.04\tmp\wezterm-scrollback]], "w+")
-  tmpfile:write(text)
-  tmpfile:flush()
-  tmpfile:close()
+  if tmpfile then
+    tmpfile:write(text)
+    tmpfile:flush()
+    tmpfile:close()
+  end
 
   -- Open a new window running vim and tell it to open the file
   window:perform_action(
@@ -128,15 +131,15 @@ config.keys = {
     action = wezterm.action_callback(function(win, pane)
       local mux_win = win:mux_window()
       local idx = active_tab_idx(mux_win)
-      local tab = mux_win:spawn_tab {}
+      mux_win:spawn_tab {}
       win:perform_action(wezterm.action.MoveTab(idx + 1), pane)
     end),
   },
   {
     key = "!",
     mods = "LEADER|SHIFT",
-    action = wezterm.action_callback(function(win, pane)
-      local tab, window = pane:move_to_new_tab()
+    action = wezterm.action_callback(function(_, pane)
+      pane:move_to_new_tab()
     end),
   },
   {
@@ -152,7 +155,7 @@ config.keys = {
     mods = "LEADER",
     action = wezterm.action.PromptInputLine {
       description = "Enter new name for tab",
-      action = wezterm.action_callback(function(window, pane, line)
+      action = wezterm.action_callback(function(window, _, line)
         if line then
           window:active_tab():set_title(line)
         end

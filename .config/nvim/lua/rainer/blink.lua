@@ -8,12 +8,13 @@ require("blink.cmp").setup {
     preset = "super-tab",
     ["<C-e>"] = { "select_and_accept" },
     ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+    cmdline = {
+      preset = "super-tab",
+      ["<C-d>"] = { "show" },
+    },
   },
   signature = { enabled = true },
   completion = {
-    list = {
-      selection = "auto_insert",
-    },
     documentation = {
       auto_show = true,
       auto_show_delay_ms = 50,
@@ -24,7 +25,6 @@ require("blink.cmp").setup {
   },
   sources = {
     default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
-    cmdline = {},
     providers = {
       snippets = {
         score_offset = 3,

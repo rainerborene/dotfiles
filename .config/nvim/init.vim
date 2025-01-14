@@ -59,9 +59,9 @@ Plug 'romainl/vim-cool'
 Plug 'sQVe/sort.nvim'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sindrets/diffview.nvim'
-Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'stevearc/conform.nvim'
 Plug 'stevearc/oil.nvim'
+Plug 'stevearc/quicker.nvim'
 Plug 'svermeulen/vim-subversive'
 Plug 'thinca/vim-quickrun'
 Plug 'tommcdo/vim-exchange'
@@ -116,8 +116,6 @@ set sidescroll=1
 set nostartofline
 
 " wild stuff
-set wildmode=longest:full
-set wildcharm=<c-d>
 set wildignore+=*.DS_Store
 set wildignore+=*~,.git,*.pyc,*.o,*.spl,*.rdb
 set wildignore+=.sass-cache
@@ -334,10 +332,6 @@ nnoremap ? ms?
 " Replace alias
 nnoremap s/ mr:%s/
 
-" Ease cmdline completion
-cnoremap <expr> <tab> wildmenumode() ? "\<c-n>" : "\<c-z>\<c-n>"
-cnoremap <expr> <c-l> wildmenumode() ? "\<c-y>\<c-l>\<c-z>" : "\<c-l>"
-
 " inVerse search: line NOT containing pattern
 cnoremap <m-/> \v^(()@!.)*$<Left><Left><Left><Left><Left><Left><Left>
 
@@ -363,29 +357,13 @@ nnoremap <silent> <expr> <leader>n printf(':tabedit %s/Dropbox/Notebook/Notes<cr
 " }}}
 " Quickfix mode {{{
 
-function! s:qf_toggle()
-  let nr = winnr("$")
-  if len(getqflist()) > 0
-    copen
-  end
-  if nr == winnr("$")
-    cclose
-  endif
-endfunction
-
-" Close quickfix/location window
-nnoremap <silent> <leader>c :call <sid>qf_toggle()<cr>
-
-function! s:qf_define_mappings() abort
-  nnoremap <buffer> <silent> q :<C-u>cclose<CR>
-  nnoremap <buffer> <silent> <c-n> :<C-u>cnext<CR>:copen<CR>
-  nnoremap <buffer> <silent> <c-p> :<C-u>cprevious<CR>:copen<CR>
-endfunction
+nnoremap <silent> <leader>c :lua require("quicker").toggle()<cr>
 
 augroup ft_qf
   au!
-  au FileType qf setlocal nowrap nonumber norelativenumber | wincmd J
-  au FileType qf call s:qf_define_mappings()
+  au FileType qf nnoremap <buffer> <silent> q :<C-u>cclose<CR>
+  au FileType qf nnoremap <buffer> <silent> <c-n> :<C-u>cnext<CR>:copen<CR>
+  au FileType qf nnoremap <buffer> <silent> <c-p> :<C-u>cprevious<CR>:copen<CR>
 
   " Automatically opens the quickfix window after :Ggrep.
   au QuickFixCmdPost *grep* cwindow | doautocmd BufReadPost quickfix
@@ -555,11 +533,11 @@ autocmd BufWritePre * call s:Mkdir()
 " }}}
 " Open NPM package in a new tab {{{
 
-function! s:nodejs_packages(A, L, P)
+function! s:node_packages(A, L, P)
   return map(split(globpath("node_modules", a:A . "*"), "\n"), 'v:val[strlen("node_modules/"): -1]')
 endfunction
 
-function! s:nodejs_topen(package)
+function! s:node_topen(package)
   let l:path = 'node_modules/'.a:package
   if isdirectory(l:path)
     silent exe 'tabedit '.l:path
@@ -567,7 +545,7 @@ function! s:nodejs_topen(package)
   end
 endfunction
 
-command! -nargs=1 -complete=customlist,<sid>nodejs_packages Nopen call <sid>nodejs_topen(<q-args>)
+command! -nargs=1 -complete=customlist,s:node_packages Nopen exe s:node_topen(<q-args>)
 
 " }}}
 " Plugins {{{
@@ -638,7 +616,7 @@ nnoremap <silent> <leader>u :UndotreeToggle<CR>
 " Telescope {{{
 
 " Find files using Telescope command-line sugar.
-nnoremap <leader><Leader> :Telescope find_files<cr>
+nnoremap <leader><leader> :Telescope find_files<cr>
 nnoremap <leader><tab> :Telescope keymaps<cr>
 nnoremap <leader>. :Telescope lsp_dynamic_workspace_symbols<cr>
 nnoremap <leader>k :Telescope help_tags<cr>
@@ -852,7 +830,7 @@ let g:shadeline.inactive = {
 " }}}
 " Oil {{{
 
-nnoremap <silent> <leader>e :lua require('oil').open()<cr>
+nnoremap <silent> <leader>e :Oil<cr>
 
 " }}}
 " Gitsigns {{{
