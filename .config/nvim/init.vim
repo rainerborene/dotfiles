@@ -26,6 +26,11 @@ Plug 'Saghen/blink.cmp', { 'do': 'cargo build --release' }
 Plug 'andymass/vim-matchup'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'cocopon/shadeline.vim'
+Plug 'echasnovski/mini.ai'
+Plug 'echasnovski/mini.align'
+Plug 'echasnovski/mini.extra'
+Plug 'echasnovski/mini.operators'
+Plug 'echasnovski/mini.surround'
 Plug 'folke/ts-comments.nvim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'isobit/vim-caddyfile'
@@ -33,13 +38,8 @@ Plug 'janko-m/vim-test'
 Plug 'junegunn/gv.vim'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
-Plug 'kana/vim-textobj-entire'
-Plug 'kana/vim-textobj-fold'
-Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
 Plug 'lewis6991/gitsigns.nvim'
-Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mfussenegger/nvim-lint'
@@ -52,20 +52,16 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'olimorris/codecompanion.nvim'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
-Plug 'sQVe/sort.nvim'
-Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sindrets/diffview.nvim'
 Plug 'stevearc/conform.nvim'
 Plug 'stevearc/oil.nvim'
 Plug 'stevearc/quicker.nvim'
-Plug 'svermeulen/vim-subversive'
 Plug 'thinca/vim-quickrun'
-Plug 'tommcdo/vim-exchange'
-Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-eunuch'
@@ -75,8 +71,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
-Plug 'wellle/targets.vim'
-Plug 'whatyouhide/vim-textobj-erb'
 Plug 'windwp/nvim-autopairs'
 
 call plug#end()
@@ -279,6 +273,9 @@ xnoremap p "_dP
 nnoremap <Space> za
 vnoremap <Space> za
 
+" Undo that includes recalculating folds
+nnoremap u uzx
+
 " Make zO recursively open whatever fold we're in, even if it's partially open.
 nnoremap zO zczO
 
@@ -361,6 +358,7 @@ nnoremap <silent> <leader>c :lua require("quicker").toggle()<cr>
 
 augroup ft_qf
   au!
+  au FileType qf setlocal nowrap nonumber norelativenumber | wincmd J
   au FileType qf nnoremap <buffer> <silent> q :<C-u>cclose<CR>
   au FileType qf nnoremap <buffer> <silent> <c-n> :<C-u>cnext<CR>:copen<CR>
   au FileType qf nnoremap <buffer> <silent> <c-p> :<C-u>cprevious<CR>:copen<CR>
@@ -413,9 +411,9 @@ augroup ft_ruby
   au BufNewFile,BufRead .env* set filetype=sh
 augroup END
 
-augroup custom_foldexpr
+augroup treesitter_folding
   au!
-  au FileType css,javascript,ruby,sql setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+  au FileType css,javascript,lua,ruby,sql setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
 augroup END
 
 augroup vimrc
@@ -683,11 +681,6 @@ let g:startify_change_to_vcs_root = 1
 let g:startify_session_persistence = 1
 
 " }}}
-" Pasted Text Object {{{
-
-let g:pastedtext_select_key = "gp"
-
-" }}}
 " Highlighted Yank {{{
 
 augroup lua_highlight
@@ -781,17 +774,6 @@ let g:clever_f_smart_case = 1
 map ! <Plug>(quickrun)
 
 " }}}
-" Subversive {{{
-
-nmap gr <plug>(SubversiveSubstitute)
-nmap grr <plug>(SubversiveSubstituteLine)
-nmap grl <plug>(SubversiveSubstituteToEndOfLine)
-
-nmap <leader>gr <plug>(SubversiveSubstituteRange)
-xmap <leader>gr <plug>(SubversiveSubstituteRange)
-nmap <leader>grw <plug>(SubversiveSubstituteWordRange)
-
-" }}}
 " Asterisk {{{
 
 let g:asterisk#keeppos = 1
@@ -848,22 +830,18 @@ nnoremap <leader>hp :Gitsigns preview_hunk<cr>
 let g:matchup_matchparen_offscreen = {}
 
 " }}}
-" Lion {{{
+" Codecompanion {{{
 
-let g:lion_squeeze_spaces = 1
+augroup llm_plugin
+  au!
+  au User CodeCompanionDiffAttached nnoremap <silent> <buffer> q :bd!<cr>
+  au User CodeCompanionChatOpened set conceallevel=2
+  au User CodeCompanionChatClosed set conceallevel&
+augroup END
 
-" }}}
-" Sort {{{
+cnoreabbrev cc CodeCompanionChat
 
-nnoremap <silent> gs :Sort<cr>
-vnoremap <silent> gs <Esc>:Sort<cr>
-
-" }}}
-" Targets {{{
-
-autocmd User targets#mappings#user call targets#mappings#extend({
-    \ '\': {'separator': [{'d': '::'}]},
-    \ })
+nnoremap <leader>C :%CodeCompanion<Space>
 
 " }}}
 
