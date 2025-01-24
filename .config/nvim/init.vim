@@ -52,6 +52,7 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'olimorris/codecompanion.nvim'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
@@ -361,6 +362,7 @@ nnoremap <silent> <leader>c :lua require("quicker").toggle()<cr>
 
 augroup ft_qf
   au!
+  au FileType qf setlocal nowrap nonumber norelativenumber | wincmd J
   au FileType qf nnoremap <buffer> <silent> q :<C-u>cclose<CR>
   au FileType qf nnoremap <buffer> <silent> <c-n> :<C-u>cnext<CR>:copen<CR>
   au FileType qf nnoremap <buffer> <silent> <c-p> :<C-u>cprevious<CR>:copen<CR>
@@ -413,9 +415,9 @@ augroup ft_ruby
   au BufNewFile,BufRead .env* set filetype=sh
 augroup END
 
-augroup custom_foldexpr
+augroup treesitter_folding
   au!
-  au FileType css,javascript,ruby,sql setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+  au FileType css,javascript,lua,ruby,sql setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
 augroup END
 
 augroup vimrc

@@ -112,7 +112,7 @@ dkrm() {
 [ -f $HOME/.cargo/env ] && . $HOME/.cargo/env
 
 ### Activate default Flox environment only within the current shell
-eval "$(flox activate -d ~)"
+eval "$(flox activate -d ~)" && unset LD_AUDIT
 
 ### Extendable version manager
 if [ -f $HOME/.asdf/asdf.sh ]; then

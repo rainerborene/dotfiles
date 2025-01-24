@@ -9,10 +9,5 @@ require "rainer.conform"
 require "rainer.telescope"
 require "rainer.mdx"
 require "rainer.windify"
-
-require("sort").setup()
-require("quicker").setup {
-  highlight = {
-    load_buffers = false,
-  },
-}
+require "rainer.quicker"
+require "rainer.codecompanion"
