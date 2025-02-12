@@ -14,7 +14,7 @@ const ctx = createContext(resolveConfig(applicationConfig))
 const classRegexp = new RegExp(ctx.getClassList().join("|"), "i")
 const jitRegexp = /[\w+-]+\[[^\[\]]+\]/i
 const cssRegexp = /(@apply\s*)(.*)(;)/g
-const quotesRegexp = /(["'])((?:(?!\1|<%=)[^']|<%=.*?%>)*)(\1)/g
+const quotesRegexp = /(["'])((?:(?!\1|<%=)[^'\n]|<%=.*?%>)*)(\1)/g
 
 function bigSign(bigIntValue) {
   return Number(bigIntValue > 0n) - Number(bigIntValue < 0n)

@@ -6,6 +6,16 @@ require("codecompanion").setup {
     },
     inline = {
       adapter = "openai",
+      keymaps = {
+        accept_change = {
+          modes = { n = "<localleader>a" },
+          description = "Accept the suggested change",
+        },
+        reject_change = {
+          modes = { n = "<localleader>r" },
+          description = "Reject the suggested change",
+        },
+      },
     },
   },
 }

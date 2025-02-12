@@ -26,6 +26,8 @@ Plug 'Saghen/blink.cmp', { 'do': 'cargo build --release' }
 Plug 'andymass/vim-matchup'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'cocopon/shadeline.vim'
+Plug 'echasnovski/mini.align'
+Plug 'echasnovski/mini.operators'
 Plug 'folke/ts-comments.nvim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'isobit/vim-caddyfile'
@@ -38,8 +40,8 @@ Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
+Plug 'kylechui/nvim-surround'
 Plug 'lewis6991/gitsigns.nvim'
-Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mfussenegger/nvim-lint'
@@ -57,16 +59,12 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
-Plug 'sQVe/sort.nvim'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sindrets/diffview.nvim'
 Plug 'stevearc/conform.nvim'
 Plug 'stevearc/oil.nvim'
 Plug 'stevearc/quicker.nvim'
-Plug 'svermeulen/vim-subversive'
 Plug 'thinca/vim-quickrun'
-Plug 'tommcdo/vim-exchange'
-Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-eunuch'
@@ -437,9 +435,6 @@ augroup vimrc
         \|   filetype detect
         \| endif
 
-  " Unset paste on InsertLeave
-  au InsertLeave * silent! set nopaste
-
   " More focus on trailing white spaces
   au InsertEnter * set listchars-=trail:⣿
   au InsertLeave * set listchars+=trail:⣿
@@ -523,7 +518,7 @@ tnoremap <a-f> <esc>f
 " }}}
 " Automatically create any non-existent directories before writing the buffer {{{
 
-function! s:Mkdir()
+function! s:Mkdir() abort
   let dir = expand('%:p:h')
   if !isdirectory(dir) && index(["fugitive", "git", "oil"], &ft) == -1
     call mkdir(dir, 'p')
@@ -783,17 +778,6 @@ let g:clever_f_smart_case = 1
 map ! <Plug>(quickrun)
 
 " }}}
-" Subversive {{{
-
-nmap gr <plug>(SubversiveSubstitute)
-nmap grr <plug>(SubversiveSubstituteLine)
-nmap grl <plug>(SubversiveSubstituteToEndOfLine)
-
-nmap <leader>gr <plug>(SubversiveSubstituteRange)
-xmap <leader>gr <plug>(SubversiveSubstituteRange)
-nmap <leader>grw <plug>(SubversiveSubstituteWordRange)
-
-" }}}
 " Asterisk {{{
 
 let g:asterisk#keeppos = 1
@@ -850,15 +834,18 @@ nnoremap <leader>hp :Gitsigns preview_hunk<cr>
 let g:matchup_matchparen_offscreen = {}
 
 " }}}
-" Lion {{{
+" Codecompanion {{{
 
-let g:lion_squeeze_spaces = 1
+augroup llm_plugin
+  au!
+  au User CodeCompanionDiffAttached nnoremap <silent> <buffer> q :bd!<cr>
+  au User CodeCompanionChatOpened set conceallevel=2
+  au User CodeCompanionChatClosed set conceallevel&
+augroup END
 
-" }}}
-" Sort {{{
+cnoreabbrev cc CodeCompanionChat
 
-nnoremap <silent> gs :Sort<cr>
-vnoremap <silent> gs <Esc>:Sort<cr>
+nnoremap <leader>C :%CodeCompanion<Space>
 
 " }}}
 " Targets {{{

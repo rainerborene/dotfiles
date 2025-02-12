@@ -32,6 +32,9 @@ gems:
 		ruby-lsp \
 		ruby-lsp-rails
 
+js:
+	@npm install -g prettier
+
 vivid:
 	@wget "https://github.com/sharkdp/vivid/releases/download/v0.9.0/vivid_0.9.0_amd64.deb"
 	@sudo dpkg -i vivid_0.9.0_amd64.deb

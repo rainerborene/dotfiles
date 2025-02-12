@@ -33,6 +33,9 @@ require("blink.cmp").setup {
         name = "Ripgrep",
         module = "blink-ripgrep",
         score_offset = -3,
+        opts = {
+          max_filesize = "100K"
+        }
       },
     },
   },
