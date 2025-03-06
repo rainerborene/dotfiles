@@ -30,10 +30,11 @@ gems:
 		rubocop-rails \
 		rubocop-rails-omakase \
 		ruby-lsp \
-		ruby-lsp-rails
+		ruby-lsp-rails \
+		neovim
 
 js:
-	@npm install -g prettier
+	@npm install -g prettier @tailwindcss/language-server
 
 vivid:
 	@wget "https://github.com/sharkdp/vivid/releases/download/v0.9.0/vivid_0.9.0_amd64.deb"

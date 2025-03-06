@@ -22,6 +22,7 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
+Plug 'MagicDuck/grug-far.nvim'
 Plug 'Saghen/blink.cmp', { 'do': 'cargo build --release' }
 Plug 'andymass/vim-matchup'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
@@ -65,7 +66,6 @@ Plug 'stevearc/conform.nvim'
 Plug 'stevearc/oil.nvim'
 Plug 'stevearc/quicker.nvim'
 Plug 'thinca/vim-quickrun'
-Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -552,6 +552,14 @@ command! -nargs=1 -complete=customlist,s:node_packages Nopen exe s:node_topen(<q
 lua require("rainer")
 
 " }}}
+" Grug Far {{{
+
+lua require("grug-far").setup()
+
+nnoremap <silent> <leader>x <cmd>lua require('grug-far').toggle_instance({ instanceName='far', staticTitle='Search and Replace' })<CR>
+nnoremap <silent> <leader>X <cmd>lua require('grug-far').grug_far({ prefills = { search = vim.fn.expand('<cword>') } })<CR>
+
+" }}}
 " Ruby {{{
 
 let g:no_ruby_maps = 1
@@ -821,8 +829,10 @@ nnoremap <silent> <leader>e :Oil<cr>
 " }}}
 " Gitsigns {{{
 
-nnoremap [c :Gitsigns prev_hunk<cr>
-nnoremap ]c :Gitsigns next_hunk<cr>
+nnoremap <silent> <expr> [c &diff ? '[c' : "\<Cmd>Gitsigns prev_hunk\<CR>"
+nnoremap <silent> <expr> ]c &diff ? ']c' : "\<Cmd>Gitsigns next_hunk\<CR>"
+onoremap <silent> ih :<C-u>Gitsigns select_hunk<CR>
+xnoremap <silent> ih :<C-u>Gitsigns select_hunk<CR>
 nnoremap <leader>hs :Gitsigns stage_buffer<cr>
 nnoremap <leader>hu :Gitsigns undo_stage_hunk<cr>
 nnoremap <leader>hr :Gitsigns reset_hunk<cr>

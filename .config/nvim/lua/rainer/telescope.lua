@@ -74,6 +74,7 @@ return {
     opts.shortcuts = opts.shortcuts or {
       ["rb"] = "*.rb",
       ["erb"] = "*.html.erb",
+      ["js"] = "*.js",
     }
 
     local custom_grep = finders.new_async_job {

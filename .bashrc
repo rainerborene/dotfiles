@@ -51,7 +51,8 @@ export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 
 ### Global
 if [ -z "$PATH_EXPANDED" ]; then
-  export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
+  export ASDF_DATA_DIR="$HOME/.asdf"
+  export PATH="$ASDF_DATA_DIR/shims:$HOME/.local/bin:/usr/local/bin:$PATH"
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
   export PATH_EXPANDED=1
 fi
@@ -113,12 +114,6 @@ dkrm() {
 
 ### Activate default Flox environment only within the current shell
 eval "$(flox activate -d ~)" && unset LD_AUDIT
-
-### Extendable version manager
-if [ -f $HOME/.asdf/asdf.sh ]; then
-  . $HOME/.asdf/asdf.sh
-  . $HOME/.asdf/completions/asdf.bash
-fi
 
 ### Luarocks
 # eval "$(luarocks path --bin)"

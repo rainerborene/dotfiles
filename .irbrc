@@ -6,6 +6,8 @@ Reline::Face.config(:completion_dialog) do |conf|
   conf.define :scrollbar, foreground: :blue, background: :bright_black
 end
 
-def copy(str)
+def cc(str)
   IO.popen("win32yank.exe -i", "w") { _1 << str.to_s } unless str.nil?
 end
+
+IRB.conf[:COPY_COMMAND] = "win32yank.exe -i"

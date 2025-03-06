@@ -8,10 +8,9 @@ require("blink.cmp").setup {
     preset = "super-tab",
     ["<C-e>"] = { "select_and_accept" },
     ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-    cmdline = {
-      preset = "super-tab",
-      ["<C-d>"] = { "show" },
-    },
+  },
+  cmdline = {
+    enabled = false,
   },
   signature = { enabled = true },
   completion = {
@@ -34,8 +33,8 @@ require("blink.cmp").setup {
         module = "blink-ripgrep",
         score_offset = -3,
         opts = {
-          max_filesize = "100K"
-        }
+          max_filesize = "100K",
+        },
       },
     },
   },

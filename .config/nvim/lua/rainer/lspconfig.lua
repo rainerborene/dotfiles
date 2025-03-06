@@ -19,6 +19,14 @@ lspconfig.tailwindcss.setup {
       },
     },
   },
+  on_new_config = function(new_config)
+    local default_config = lspconfig.tailwindcss.config_def.default_config
+    local tw_config_file = vim.fs.find("tailwind.application.js", { type = "file" })
+
+    default_config.on_new_config(new_config)
+
+    new_config.settings.tailwindCSS.experimental.configFile = unpack(tw_config_file)
+  end,
 }
 
 lspconfig.lua_ls.setup {
