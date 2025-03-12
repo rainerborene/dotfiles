@@ -29,11 +29,11 @@ Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'cocopon/shadeline.vim'
 Plug 'echasnovski/mini.align'
 Plug 'echasnovski/mini.operators'
+Plug 'folke/snacks.nvim'
 Plug 'folke/ts-comments.nvim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'isobit/vim-caddyfile'
 Plug 'janko-m/vim-test'
-Plug 'junegunn/gv.vim'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
@@ -51,8 +51,6 @@ Plug 'mikavilpas/blink-ripgrep.nvim'
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'olimorris/codecompanion.nvim'
@@ -72,7 +70,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
 Plug 'wellle/targets.vim'
 Plug 'whatyouhide/vim-textobj-erb'
@@ -422,7 +419,6 @@ augroup vimrc
   au!
   au BufWritePost init.vim nested if expand('%') !~ 'fugitive' | source % | endif
   au FileType vim setlocal foldmethod=marker keywordprg=:help
-  au FileType vim nnoremap <buffer> <expr> <leader>. printf(':Telescope find_files no_ignore_parent=true cwd=%s<cr>', g:plug_home)
 
   " Highlight cursor when inactive
   au CursorMoved,CursorMovedI,WinLeave * setlocal nocursorline
@@ -618,24 +614,19 @@ let g:undotree_ShortIndicators = 1
 nnoremap <silent> <leader>u :UndotreeToggle<CR>
 
 " }}}
-" Telescope {{{
+" Snacks {{{
 
-" Find files using Telescope command-line sugar.
-nnoremap <leader><leader> :Telescope find_files<cr>
-nnoremap <leader><tab> :Telescope keymaps<cr>
-nnoremap <leader>. :Telescope lsp_dynamic_workspace_symbols<cr>
-nnoremap <leader>k :Telescope help_tags<cr>
-nnoremap <leader>b :Telescope buffers<cr>
-nnoremap <leader>a :lua require('rainer.telescope').multi_ripgrep()<cr>
-nnoremap <leader>A :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
-nnoremap <leader>f :lua require('telescope.builtin').grep_string { search = vim.fn.input("Grep For > "), use_regex = true }<cr>
-nnoremap <leader>F :lua require('rainer.telescope').bundle_grep_string()<cr>
+nnoremap <leader><leader> :lua Snacks.picker.files()<cr>
+nnoremap <leader><tab> :lua Snacks.picker.keymaps()<cr>
+nnoremap <leader>. :lua Snacks.picker.lsp_workspace_symbols()<cr>
+nnoremap <leader>k :lua Snacks.picker.help()<cr>
+nnoremap <leader>b :lua Snacks.picker.buffers()<cr>
+nnoremap <leader>a :lua Snacks.picker.grep()<cr>
+noremap <leader>A :lua Snacks.picker.grep_word()<CR>
+nnoremap <leader>f :lua Snacks.picker.grep_word({ search = vim.fn.input("Grep For > "), regex = true })<cr>
+nnoremap <leader>F :lua require('rainer.snacks').bundle_grep_word()<cr>
 
-" https://github.com/nvim-telescope/telescope.nvim/issues/559
-augroup _fold_bug_solution
-  au!
-  autocmd BufRead * autocmd BufWinEnter * ++once normal! zx
-augroup END
+command! GV lua Snacks.lazygit.log()
 
 " }}}
 " Fugitive {{{
