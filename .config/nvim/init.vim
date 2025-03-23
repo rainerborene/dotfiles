@@ -55,6 +55,7 @@ Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'olimorris/codecompanion.nvim'
 Plug 'rafamadriz/friendly-snippets'
+Plug 'rbong/vim-flog'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
@@ -62,7 +63,6 @@ Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sindrets/diffview.nvim'
 Plug 'stevearc/conform.nvim'
 Plug 'stevearc/oil.nvim'
-Plug 'stevearc/quicker.nvim'
 Plug 'thinca/vim-quickrun'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-eunuch'
@@ -348,12 +348,23 @@ imap <c-c> <esc>
 imap jj <esc>
 
 " Open notes directory
-nnoremap <silent> <expr> <leader>n printf(':tabedit %s/Dropbox/Notebook/Notes<cr>', has('wsl') ? '/mnt/c/Users/Rainer Borene/' : '~')
+nnoremap <silent> <leader>n :tabedit /mnt/c/Users/Rainer Borene/Dropbox/Notebook/Notes<cr>
 
 " }}}
 " Quickfix mode {{{
 
-nnoremap <silent> <leader>c :lua require("quicker").toggle()<cr>
+function! s:qf_toggle()
+  let nr = winnr("$")
+  if len(getqflist()) > 0
+    copen
+  end
+  if nr == winnr("$")
+    cclose
+  endif
+endfunction
+
+" Close quickfix/location window
+nnoremap <silent> <leader>c :call <sid>qf_toggle()<cr>
 
 augroup ft_qf
   au!
@@ -553,7 +564,7 @@ lua require("rainer")
 lua require("grug-far").setup()
 
 nnoremap <silent> <leader>x <cmd>lua require('grug-far').toggle_instance({ instanceName='far', staticTitle='Search and Replace' })<CR>
-nnoremap <silent> <leader>X <cmd>lua require('grug-far').grug_far({ prefills = { search = vim.fn.expand('<cword>') } })<CR>
+nnoremap <silent> <leader>X <cmd>lua require('grug-far').open({ prefills = { search = vim.fn.expand('<cword>') } })<CR>
 
 " }}}
 " Ruby {{{
@@ -625,8 +636,6 @@ nnoremap <leader>a :lua Snacks.picker.grep()<cr>
 noremap <leader>A :lua Snacks.picker.grep_word()<CR>
 nnoremap <leader>f :lua Snacks.picker.grep_word({ search = vim.fn.input("Grep For > "), regex = true })<cr>
 nnoremap <leader>F :lua require('rainer.snacks').bundle_grep_word()<cr>
-
-command! GV lua Snacks.lazygit.log()
 
 " }}}
 " Fugitive {{{

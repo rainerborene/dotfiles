@@ -40,12 +40,8 @@ require("blink.cmp").setup {
   },
 }
 
--- Inspired by https://github.com/L3MON4D3/LuaSnip/issues/656
-vim.api.nvim_create_autocmd("ModeChanged", {
-  group = vim.api.nvim_create_augroup("UnlinkSnippetOnModeChange", { clear = true }),
-  pattern = { "s:n", "i:*" },
-  desc = "Forget the current snippet when leaving the insert mode",
-  callback = function()
-    vim.snippet.stop()
-  end,
-})
+-- Forget the current snippet when leaving the insert mode
+vim.keymap.set({ "i", "s" }, "<Esc>", function()
+  vim.snippet.stop()
+  return "<Esc>"
+end, { expr = true })

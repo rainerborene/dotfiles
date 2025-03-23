@@ -14,6 +14,17 @@ require("snacks").setup {
       preset = "telescope",
       cycle = false,
     },
+    win = {
+      input = {
+        keys = {
+          ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+          ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+          ["<PageUp>"] = { "list_scroll_up", mode = { "i", "n" } },
+          ["<PageDown>"] = { "list_scroll_down", mode = { "i", "n" } },
+          ["<c-a>"] = "",
+        },
+      },
+    },
   },
 }
 

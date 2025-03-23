@@ -112,6 +112,19 @@ config.window_padding = {
   bottom = 0,
 }
 
+config.mouse_bindings = {
+  {
+    mods = "NONE",
+    event = { Down = { streak = 1, button = "Right" } },
+    action = wezterm.action.PasteFrom "Clipboard",
+  },
+  {
+    mods = "NONE",
+    event = { Down = { streak = 3, button = "Left" } },
+    action = wezterm.action.SelectTextAtMouseCursor "SemanticZone",
+  },
+}
+
 config.leader = { mods = "CTRL", key = "f" }
 config.keys = {
   { key = "s", mods = "LEADER", action = wezterm.action { SplitVertical = { domain = "CurrentPaneDomain" } } },

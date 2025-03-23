@@ -17,6 +17,8 @@ fish_add_path "$HOME/.yarn/bin"
 fish_add_path "$HOME/.config/yarn/global/node_modules/.bin"
 fish_add_path "$ASDF_DATA_DIR/shims"
 
+source ~/.fish_profile
+
 
 # Aliases
 # --------------------------------------------------------------------
@@ -31,7 +33,6 @@ alias g 'git'
 alias la 'ls -la'
 alias ls 'eza --group-directories-first'
 alias l 'tree --dirsfirst -ChaFL 1'
-alias lg 'lazygit'
 alias vim 'nvim'
 alias vi 'nvim'
 alias v 'nvim'
@@ -55,7 +56,7 @@ end
 
 flox activate -d ~ | source
 
-# unset LD_AUDIT to fix shared library loading error
+### unset LD_AUDIT to fix shared library loading error
 set -e LD_AUDIT
 
 
@@ -81,13 +82,13 @@ set -x FZF_DEFAULT_OPTS " \
 
 function fco -d "Fuzzy-find and checkout a branch"
   git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)" | read -z branches;
-  set branch (printf '%s' $branches | fzf-tmux -d (math 2 + (echo "$branches" | wc -l)) +m)
-  git checkout (echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+  set branch (printf '%s' $branches | fzf -d (math 2 + (echo "$branches" | wc -l)) +m)
+  test -n "$branch"; and git checkout (echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 end
 
 function fe -d "Open the selected file with the default editor"
-  set -l file (fzf-tmux --query="$argv[1]" --select-1 --exit-0)
-  [ -n $file ]; and nvim $file
+  set -l file (fzf --query="$argv[1]" --select-1 --exit-0)
+  test -n "$file"; and nvim $file
 end
 
 fzf --fish | source
@@ -106,7 +107,7 @@ set -g ___fish_git_prompt_color (set_color yellow)
 set -g __fish_git_prompt_showdirtystate true
 set -g fish_prompt_pwd_dir_length 0
 
-function fish_prompt
+function _fishprompt_saved_prompt
   set -l grey (set_color -o grey)
   set -l blue (set_color -o blue)
   set -l normal (set_color normal)
