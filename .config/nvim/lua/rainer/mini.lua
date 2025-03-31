@@ -10,3 +10,5 @@ require("mini.align").setup {
     start_with_preview = "gL",
   },
 }
+
+vim.keymap.del("x", "cx")

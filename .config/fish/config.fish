@@ -1,6 +1,8 @@
 # Environment variables
 # --------------------------------------------------------------------
 
+source ~/.fish_profile
+
 set -gx fish_greeting
 set -gx EDITOR nvim
 set -gx LANG en_US.UTF-8
@@ -16,8 +18,6 @@ fish_add_path "$HOME/.atuin/bin"
 fish_add_path "$HOME/.yarn/bin"
 fish_add_path "$HOME/.config/yarn/global/node_modules/.bin"
 fish_add_path "$ASDF_DATA_DIR/shims"
-
-source ~/.fish_profile
 
 
 # Aliases
@@ -125,3 +125,9 @@ set -x LS_COLORS (vivid generate catppuccin-mocha)
 # --------------------------------------------------------------------
 
 atuin init fish | source
+
+
+# Asdf
+# --------------------------------------------------------------------
+
+asdf completion fish | source

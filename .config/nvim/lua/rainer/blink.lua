@@ -34,6 +34,9 @@ require("blink.cmp").setup {
         score_offset = -3,
         opts = {
           max_filesize = "100K",
+          -- future_features = {
+          --   issue185_workaround = true,
+          -- },
         },
       },
     },

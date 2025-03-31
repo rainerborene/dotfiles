@@ -183,7 +183,7 @@ nnoremap G Gzv
 
 " Use c-\ to do c-] but open it in a new split.
 nnoremap <c-]> <c-]>zz
-nnoremap <c-\> <c-w>v<c-]>zz
+nnoremap <silent> <c-\> :vertical wincmd ]<cr>zz
 
 " Use Vim's built-in CTRL-R_CTRL-F when no plugin has claimed <Plug><cfile>
 if empty(maparg('<Plug><cfile>', 'c'))
