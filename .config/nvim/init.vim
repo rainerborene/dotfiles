@@ -32,8 +32,8 @@ Plug 'echasnovski/mini.operators'
 Plug 'folke/snacks.nvim'
 Plug 'folke/ts-comments.nvim'
 Plug 'haya14busa/vim-asterisk'
-Plug 'isobit/vim-caddyfile'
 Plug 'janko-m/vim-test'
+Plug 'junegunn/gv.vim'
 Plug 'kana/vim-niceblock'
 Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
@@ -55,7 +55,6 @@ Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'olimorris/codecompanion.nvim'
 Plug 'rafamadriz/friendly-snippets'
-Plug 'rbong/vim-flog'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
@@ -108,8 +107,6 @@ set ignorecase
 set smartcase
 set splitbelow
 set splitright
-set sidescroll=1
-set nostartofline
 
 " wild stuff
 set wildignore+=*.DS_Store
@@ -201,9 +198,10 @@ function! s:redraw()
   nohlsearch
   silent! unlet g:test#wezterm#pane_id
   silent! lua require'gitsigns'.refresh()
-  "silent! lua vim.lsp.codelens.clear()
-  normal! zx
+  silent! lua vim.treesitter.get_parser():parse()
+  silent! lua vim.diagnostic.clear()
   redraw!
+  normal zx
   echo
 endfunction
 nnoremap U :call <sid>redraw()<cr>
@@ -213,9 +211,6 @@ nnoremap          <leader>te <esc>:tabedit<Space>
 nnoremap <silent> <leader>tn <esc>:tabnew<cr>
 nnoremap <silent> <leader>to <esc>:tabonly<cr>
 nnoremap <silent> <leader>td <esc>:tabclose<cr>
-nnoremap          <leader>tm <esc>:tabmove<Space>
-nnoremap <silent> <leader>tb <esc>:tab ball<cr>
-nnoremap <silent> <leader>tl <esc>:tabs<cr>
 
 " [w ]w - Forward and backwards tabs
 nnoremap <silent> [w <esc>:tabprevious<cr>
@@ -225,16 +220,12 @@ nnoremap <silent> ]w <esc>:tabnext<cr>
 nnoremap <silent> [W <esc>:tabmove -1<cr>
 nnoremap <silent> ]W <esc>:tabmove +1<cr>
 
-" ,[1-9] - Switch to tab #
+" ,[1-5] - Switch to tab #
 nnoremap <leader>1 1gt
 nnoremap <leader>2 2gt
 nnoremap <leader>3 3gt
 nnoremap <leader>4 4gt
 nnoremap <leader>5 5gt
-nnoremap <leader>6 6gt
-nnoremap <leader>7 7gt
-nnoremap <leader>8 8gt
-nnoremap <leader>9 9gt
 
 " Split windows
 nnoremap <leader>s <C-W>s
@@ -301,8 +292,7 @@ cnoreabbrev W w
 
 " Send to the black hole register
 noremap x "_x
-noremap X "_X
-noremap _ "_d
+noremap X "_d
 
 " Goto older/newer position in change list
 nnoremap <silent> ( g;zvzz
@@ -331,9 +321,19 @@ nnoremap s/ mr:%s/
 " inVerse search: line NOT containing pattern
 cnoremap <m-/> \v^(()@!.)*$<Left><Left><Left><Left><Left><Left><Left>
 
+" Terminal-mode
+tnoremap <Esc> <C-\><C-n>
+tnoremap <a-a> <esc>a
+tnoremap <a-b> <esc>b
+tnoremap <a-d> <esc>d
+tnoremap <a-f> <esc>f
+
 " Easier dir/file aliases
 cnoremap <expr> %% getcmdtype() == ':' ? fnameescape(expand('%:h')).'/' : '%%'
 cnoremap <expr> %< getcmdtype() == ':' ? fnameescape(expand('%:t')) : '%<'
+
+" Open notes directory
+nnoremap <silent> <leader>n :tabedit /mnt/c/Users/Rainer Borene/Dropbox/Notebook/Notes<cr>
 
 " Reindent entire file
 nnoremap == mqHmwgg=G`wzt`q
@@ -346,9 +346,6 @@ imap <c-j> <c-n>
 imap <c-k> <c-p>
 imap <c-c> <esc>
 imap jj <esc>
-
-" Open notes directory
-nnoremap <silent> <leader>n :tabedit /mnt/c/Users/Rainer Borene/Dropbox/Notebook/Notes<cr>
 
 " }}}
 " Quickfix mode {{{
@@ -380,25 +377,6 @@ augroup END
 " }}}
 " Autocommands {{{
 
-augroup ft_javascript
-  au!
-  au BufNewFile,BufRead *.es6 set filetype=javascript
-  au BufNewFile,BufRead .jshintrc,.babelrc,.eslintrc set filetype=json
-augroup END
-
-augroup ft_html
-  au!
-  au FileType html,eruby setlocal foldmethod=manual
-  au FileType html,eruby nnoremap <buffer> <localleader>f Vatzf
-  au FileType html,eruby nnoremap <buffer> <localleader>= Vat=
-augroup END
-
-augroup ft_xml
-  au!
-  au FileType xml let &l:equalprg='xmllint --format --recover - 2>/dev/null'
-  au BufNewFile,BufRead *.tmTheme setlocal filetype=xml
-augroup END
-
 augroup ft_markdown
   au!
   au BufNewFile,BufRead *.m*down setlocal filetype=markdown foldlevel=1
@@ -408,9 +386,9 @@ augroup ft_markdown
   au FileType markdown setlocal wrap linebreak nolist
 augroup END
 
-augroup ft_css
+augroup ft_caddy
   au!
-  au FileType css,scss,sass setlocal iskeyword+=-
+  au BufNewFile,BufRead Caddyfile* setlocal filetype=caddy
 augroup END
 
 augroup ft_ruby
@@ -422,7 +400,6 @@ augroup ft_ruby
 augroup END
 
 augroup treesitter_folding
-  au!
   au FileType css,javascript,lua,ruby,sql setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
 augroup END
 
@@ -448,9 +425,6 @@ augroup vimrc
 
   " Resize splits when the window is resized
   au VimResized * :wincmd =
-
-  " No folds closed when editing new files
-  au BufNew * setlocal foldlevelstart=99
 
   " Don't keep undo files in temp directories or shm
   au BufWritePre /tmp/* setlocal noundofile
@@ -512,15 +486,6 @@ function! MyFoldText()
   return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
 endfunction
 set foldtext=MyFoldText()
-
-" }}}
-" Terminal {{{
-
-tnoremap <Esc> <C-\><C-n>
-tnoremap <a-a> <esc>a
-tnoremap <a-b> <esc>b
-tnoremap <a-d> <esc>d
-tnoremap <a-f> <esc>f
 
 " }}}
 " Automatically create any non-existent directories before writing the buffer {{{

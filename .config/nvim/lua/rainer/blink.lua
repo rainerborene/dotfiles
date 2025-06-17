@@ -1,5 +1,3 @@
----@diagnostic disable: missing-fields
-
 require("blink.cmp").setup {
   appearance = {
     use_nvim_cmp_as_default = true,
@@ -16,7 +14,7 @@ require("blink.cmp").setup {
   completion = {
     documentation = {
       auto_show = true,
-      auto_show_delay_ms = 50,
+      auto_show_delay_ms = 500,
       window = {
         border = "rounded",
       },
@@ -28,15 +26,19 @@ require("blink.cmp").setup {
       snippets = {
         score_offset = 3,
       },
+      buffer = {
+        opts = {
+          get_bufnrs = vim.api.nvim_list_bufs,
+        },
+      },
       ripgrep = {
         name = "Ripgrep",
         module = "blink-ripgrep",
         score_offset = -3,
+        async = true,
+        timeout_ms = 100,
         opts = {
           max_filesize = "100K",
-          -- future_features = {
-          --   issue185_workaround = true,
-          -- },
         },
       },
     },

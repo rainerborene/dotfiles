@@ -1,3 +1,5 @@
+local config = require "nvim-surround.config"
+
 require("nvim-surround").setup {
   keymaps = { -- vim-surround style keymaps
     insert = false, -- "<C-s>",
@@ -8,5 +10,14 @@ require("nvim-surround").setup {
     visual = "s",
     delete = "sd",
     change = "sr",
+  },
+  surrounds = {
+    ["E"] = {
+      add = { "<%= ", " %>" },
+      find = function()
+        return config.get_selection { pattern = "<%%=.-%%>" }
+      end,
+      delete = "^(<%%=%s*)().-(%s*%%>)()$",
+    },
   },
 }

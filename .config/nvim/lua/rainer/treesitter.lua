@@ -18,6 +18,7 @@ treesitter.setup {
     "query",
     "vue",
     "vim",
+    "caddy",
     "vimdoc",
     "css",
   },

@@ -1,0 +1,59 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task -l
+
+  asdf:
+    desc: Install asdf package manager
+    cmds:
+      - git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+
+  fzf:
+    desc: Install fzf command-line fuzzy finder
+    cmds:
+      - git -C ~/.fzf pull 2>/dev/null || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+
+  lsp:
+    desc: Install TailwindCSS language server
+    cmds:
+      - npm install -g prettier @tailwindcss/language-server
+
+  vivid:
+    desc: Install themeable LS_COLORS generator
+    dir: /tmp
+    cmds:
+      - wget "https://github.com/sharkdp/vivid/releases/download/v0.9.0/vivid_0.9.0_amd64.deb"
+      - sudo dpkg -i vivid_0.9.0_amd64.deb
+
+  plug.vim:
+    desc: Install minimalist vim plugin manager
+    cmds:
+      - curl -fLo .config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+  gems:
+    desc: Install gems for Ruby on Rails development
+    cmds:
+      - gem install easy_translate erb_lint i18n-tasks neovim
+          rubocop rubocop-minitest rubocop-performance rubocop-rails rubocop-rails-omakase
+          ruby-lsp ruby-lsp-rails
+
+  rust-tools:
+    desc: Install useful cli programs using Cargo
+    cmds:
+      - cargo install -f bat difftastic eza fd-find hexyl jnv ripgrep sd xplr zoxide
+
+  chromedriver:
+    desc: Pull latest chromedriver to WindowsApps directory
+    dir: /tmp
+    vars:
+      VERSION:
+        sh: curl https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions.json | jq -r '.channels.Stable.version'
+    cmds:
+      - curl https://storage.googleapis.com/chrome-for-testing-public/{{.VERSION}}/win64/chromedriver-win64.zip -o chromedriver.zip
+      - unzip -u chromedriver.zip
+      - mv -v chromedriver-win64/chromedriver.exe "`readlink $(which chromedriver)`"
