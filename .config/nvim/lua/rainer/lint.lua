@@ -7,7 +7,7 @@ lint.linters_by_ft = {
   eruby = { "erb_lint" },
 }
 
-lint.linters.erb_lint.cmd = "erblint"
+lint.linters.erb_lint.cmd = "erb_lint"
 lint.linters.erb_lint.args = { "--format", "compact" }
 
 vim.diagnostic.config { virtual_text = true }

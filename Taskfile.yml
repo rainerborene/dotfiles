@@ -19,9 +19,9 @@ tasks:
       - git -C ~/.fzf pull 2>/dev/null || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
 
   lsp:
-    desc: Install TailwindCSS language server
+    desc: Install TailwindCSS and vscode language servers
     cmds:
-      - npm install -g prettier @tailwindcss/language-server
+      - npm install -g @tailwindcss/language-server vscode-langservers-extracted
 
   vivid:
     desc: Install themeable LS_COLORS generator
@@ -38,14 +38,16 @@ tasks:
   gems:
     desc: Install gems for Ruby on Rails development
     cmds:
+      - gem update --system
       - gem install easy_translate erb_lint i18n-tasks neovim
           rubocop rubocop-minitest rubocop-performance rubocop-rails rubocop-rails-omakase
           ruby-lsp ruby-lsp-rails
 
-  rust-tools:
-    desc: Install useful cli programs using Cargo
+  tools:
+    desc: Install my daily dev tools with flox
     cmds:
-      - cargo install -f bat difftastic eza fd-find hexyl jnv ripgrep sd xplr zoxide
+      - flox install ast-grep bat difftastic eza fastfetch fd go-task hyperfine
+          jemalloc jq just lazygit ripgrep stow universal-ctags xan xh xplr zoxide
 
   chromedriver:
     desc: Pull latest chromedriver to WindowsApps directory

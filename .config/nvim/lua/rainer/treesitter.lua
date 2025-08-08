@@ -68,7 +68,4 @@ treesitter.setup {
       },
     },
   },
-  matchup = {
-    enable = true,
-  },
 }

@@ -25,6 +25,7 @@ Plug 'AndrewRadev/switch.vim'
 Plug 'MagicDuck/grug-far.nvim'
 Plug 'Saghen/blink.cmp', { 'do': 'cargo build --release' }
 Plug 'andymass/vim-matchup'
+Plug 'b0o/schemastore.nvim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'cocopon/shadeline.vim'
 Plug 'echasnovski/mini.align'
@@ -50,10 +51,8 @@ Plug 'mhinz/vim-startify'
 Plug 'mikavilpas/blink-ripgrep.nvim'
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-Plug 'olimorris/codecompanion.nvim'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
@@ -102,6 +101,7 @@ set clipboard+=unnamedplus
 
 " better navigation
 set foldlevel=99
+set foldtext=v:lua.require('rainer.misc').fold_text()
 set gdefault
 set ignorecase
 set smartcase
@@ -347,21 +347,11 @@ imap <c-k> <c-p>
 imap <c-c> <esc>
 imap jj <esc>
 
-" }}}
-" Quickfix mode {{{
-
-function! s:qf_toggle()
-  let nr = winnr("$")
-  if len(getqflist()) > 0
-    copen
-  end
-  if nr == winnr("$")
-    cclose
-  endif
-endfunction
-
 " Close quickfix/location window
-nnoremap <silent> <leader>c :call <sid>qf_toggle()<cr>
+nnoremap <silent> <leader>c :lua require('rainer.misc').qf_toggle()<cr>
+
+" }}}
+" Autocommands {{{
 
 augroup ft_qf
   au!
@@ -373,9 +363,6 @@ augroup ft_qf
   " Automatically opens the quickfix window after :Ggrep.
   au QuickFixCmdPost *grep* cwindow | doautocmd BufReadPost quickfix
 augroup END
-
-" }}}
-" Autocommands {{{
 
 augroup ft_markdown
   au!
@@ -394,13 +381,19 @@ augroup END
 augroup ft_ruby
   au!
   au BufRead *gemrc setlocal filetype=yaml
-  au FileType ruby setlocal iskeyword+=!,?
-  au FileType ruby setlocal keywordprg=ri\ -T
+  au FileType ruby setlocal iskeyword+=!,? keywordprg=ri\ -T
   au BufNewFile,BufRead .env* set filetype=sh
 augroup END
 
 augroup treesitter_folding
+  au!
   au FileType css,javascript,lua,ruby,sql setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+augroup END
+
+augroup vimrc_help
+  au!
+  au BufEnter *.txt if &buftype == 'help' | wincmd T | endif
+  au FileType help nnoremap <buffer> q :q<cr>
 augroup END
 
 augroup vimrc
@@ -432,6 +425,9 @@ augroup vimrc
   " Don't keep viminfo for files in temp directories or shm
   au BufNewFile,BufReadPre /tmp/* setlocal viminfo=
 
+  " Auto-create parent directories (except for URIs "://").
+  au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
+
   " Always show sign column
   au BufEnter *
         \  if !exists("b:signed_column") && filereadable(expand("%")) && &modifiable && &ft !~ "git"
@@ -451,70 +447,6 @@ augroup vimrc
         \    setlocal omnifunc=syntaxcomplete#Complete |
         \ endif
 augroup END
-
-" }}}
-" Help in new tabs {{{
-
-function! s:helptab()
-  if &buftype == 'help'
-    wincmd T
-    setlocal nolist
-    nnoremap <buffer> q :q<cr>
-  endif
-endfunction
-
-augroup vimrc_help
-  au!
-  au BufEnter *.txt call s:helptab()
-augroup END
-
-" }}}
-" Folding {{{
-
-function! MyFoldText()
-  let line = getline(v:foldstart)
-  let nucolwidth = &fdc + &number * &numberwidth
-  let windowwidth = winwidth(0) - nucolwidth - 3
-  let foldedlinecount = v:foldend - v:foldstart
-
-  " expand tabs into spaces
-  let onetab = strpart('          ', 0, &tabstop)
-  let line = substitute(line, '\t', onetab, 'g')
-
-  let line = strpart(line, 0, windowwidth - 2 -len(foldedlinecount))
-  let fillcharcount = windowwidth - len(line) - len(foldedlinecount)
-  return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
-endfunction
-set foldtext=MyFoldText()
-
-" }}}
-" Automatically create any non-existent directories before writing the buffer {{{
-
-function! s:Mkdir() abort
-  let dir = expand('%:p:h')
-  if !isdirectory(dir) && index(["fugitive", "git", "oil"], &ft) == -1
-    call mkdir(dir, 'p')
-    echo 'Created non-existing directory: '.dir
-  endif
-endfunction
-autocmd BufWritePre * call s:Mkdir()
-
-" }}}
-" Open NPM package in a new tab {{{
-
-function! s:node_packages(A, L, P)
-  return map(split(globpath("node_modules", a:A . "*"), "\n"), 'v:val[strlen("node_modules/"): -1]')
-endfunction
-
-function! s:node_topen(package)
-  let l:path = 'node_modules/'.a:package
-  if isdirectory(l:path)
-    silent exe 'tabedit '.l:path
-    silent exe 'tcd '.l:path
-  end
-endfunction
-
-command! -nargs=1 -complete=customlist,s:node_packages Nopen exe s:node_topen(<q-args>)
 
 " }}}
 " Plugins {{{
@@ -807,20 +739,6 @@ nnoremap <leader>hp :Gitsigns preview_hunk<cr>
 " Matchup {{{
 
 let g:matchup_matchparen_offscreen = {}
-
-" }}}
-" Codecompanion {{{
-
-augroup llm_plugin
-  au!
-  au User CodeCompanionDiffAttached nnoremap <silent> <buffer> q :bd!<cr>
-  au User CodeCompanionChatOpened set conceallevel=2
-  au User CodeCompanionChatClosed set conceallevel&
-augroup END
-
-cnoreabbrev cc CodeCompanionChat
-
-nnoremap <leader>C :%CodeCompanion<Space>
 
 " }}}
 " Targets {{{

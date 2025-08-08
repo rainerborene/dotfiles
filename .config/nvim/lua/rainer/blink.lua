@@ -4,7 +4,7 @@ require("blink.cmp").setup {
   },
   keymap = {
     preset = "super-tab",
-    ["<C-e>"] = { "select_and_accept" },
+    ["<C-e>"] = { "select_and_accept", "fallback" },
     ["<C-d>"] = { "scroll_documentation_down", "fallback" },
   },
   cmdline = {
@@ -38,7 +38,11 @@ require("blink.cmp").setup {
         async = true,
         timeout_ms = 100,
         opts = {
-          max_filesize = "100K",
+          backend = {
+            ripgrep = {
+              max_filesize = "100K",
+            },
+          },
         },
       },
     },
