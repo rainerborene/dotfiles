@@ -27,8 +27,8 @@ Plug 'Saghen/blink.cmp', { 'do': 'cargo build --release' }
 Plug 'andymass/vim-matchup'
 Plug 'b0o/schemastore.nvim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-Plug 'cocopon/shadeline.vim'
 Plug 'echasnovski/mini.align'
+Plug 'echasnovski/mini.jump2d'
 Plug 'echasnovski/mini.operators'
 Plug 'folke/snacks.nvim'
 Plug 'folke/ts-comments.nvim'
@@ -59,9 +59,9 @@ Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
 Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sindrets/diffview.nvim'
+Plug 'sschleemilch/slimline.nvim'
 Plug 'stevearc/conform.nvim'
 Plug 'stevearc/oil.nvim'
-Plug 'thinca/vim-quickrun'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -101,7 +101,7 @@ set clipboard+=unnamedplus
 
 " better navigation
 set foldlevel=99
-set foldtext=v:lua.require('rainer.misc').fold_text()
+set foldtext=v:lua.require('rainer.utils').fold_text()
 set gdefault
 set ignorecase
 set smartcase
@@ -137,6 +137,8 @@ set background=dark
 set termguicolors
 
 function! init#colorscheme() abort
+  hi! link Slimline StatusLine
+  hi! MiniJump2dSpot cterm=bold gui=bold
   hi! EndOfBuffer guibg=bg guifg=bg
   hi! GitSignsDelete guifg=#FF9580
   hi! MatchWord gui=bold
@@ -348,7 +350,7 @@ imap <c-c> <esc>
 imap jj <esc>
 
 " Close quickfix/location window
-nnoremap <silent> <leader>c :lua require('rainer.misc').qf_toggle()<cr>
+nnoremap <silent> <leader>c :lua require('rainer.utils').qf_toggle()<cr>
 
 " }}}
 " Autocommands {{{
@@ -392,7 +394,7 @@ augroup END
 
 augroup vimrc_help
   au!
-  au BufEnter *.txt if &buftype == 'help' | wincmd T | endif
+  au FileType help wincmd T
   au FileType help nnoremap <buffer> q :q<cr>
 augroup END
 
@@ -678,11 +680,6 @@ let g:clever_f_across_no_line = 1
 let g:clever_f_smart_case = 1
 
 " }}}
-" QuickRun {{{
-
-map ! <Plug>(quickrun)
-
-" }}}
 " Asterisk {{{
 
 let g:asterisk#keeppos = 1
@@ -696,27 +693,6 @@ map g# <Plug>(asterisk-gz#)
 " Cool {{{
 
 let g:CoolTotalMatches = 1
-
-" }}}
-" Shadeline {{{
-
-function! WrapFugitiveHead()
-  let name = exists('*FugitiveHead') ? FugitiveHead() : ''
-  return empty(name) ? '' : printf('(%s)', name)
-endfunction
-
-let g:shadeline = {}
-let g:shadeline.active = {
-      \ 'left':  ['fname', 'WrapFugitiveHead', 'flags'],
-      \ 'right': [
-      \   ['ff', 'fenc', 'ft'],
-      \   'ruler'
-      \ ],
-      \ }
-
-let g:shadeline.inactive = {
-      \ 'left': ['fname', 'flags'],
-      \ }
 
 " }}}
 " Oil {{{

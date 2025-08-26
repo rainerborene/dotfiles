@@ -12,6 +12,7 @@
 .tern-port
 .vagrant
 .zeus.sock
+.crush
 Gemfile.lock.tags
 Thumbs.db
 custom_plan.rb

@@ -18,6 +18,11 @@ tasks:
     cmds:
       - git -C ~/.fzf pull 2>/dev/null || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
 
+  atuin:
+    desc: Atuin for magical shell history
+    cmds:
+      - bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+
   lsp:
     desc: Install TailwindCSS and vscode language servers
     cmds:
@@ -26,9 +31,11 @@ tasks:
   vivid:
     desc: Install themeable LS_COLORS generator
     dir: /tmp
+    vars:
+      VERSION: 0.10.1
     cmds:
-      - wget "https://github.com/sharkdp/vivid/releases/download/v0.9.0/vivid_0.9.0_amd64.deb"
-      - sudo dpkg -i vivid_0.9.0_amd64.deb
+      - wget "https://github.com/sharkdp/vivid/releases/download/v{{.VERSION}}/vivid_{{.VERSION}}_amd64.deb"
+      - sudo dpkg -i vivid_{{.VERSION}}_amd64.deb
 
   plug.vim:
     desc: Install minimalist vim plugin manager

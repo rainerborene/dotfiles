@@ -75,10 +75,12 @@ set -x FZF_CTRL_R_OPTS "--preview 'echo {}' --preview-window down:3:hidden:wrap 
 set -x FZF_CTRL_T_COMMAND 'fd --type f --type d --hidden --follow --exclude .git'
 set -x FZF_CTRL_T_OPTS "--preview 'bat -n --color=always {}' | head -200'"
 set -x FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git'
-set -x FZF_DEFAULT_OPTS " \
-  --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
-  --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
-  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+set -x FZF_DEFAULT_OPTS "\
+  --color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 \
+  --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
+  --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
+  --color=selected-bg:#45475A \
+  --color=border:#6C7086,label:#CDD6F4"
 
 function fco -d "Fuzzy-find and checkout a branch"
   git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)" | read -z branches;

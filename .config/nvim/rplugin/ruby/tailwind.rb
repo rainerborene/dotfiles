@@ -4,7 +4,7 @@ require "neovim"
 
 JIT_REGEX = /[\w+-]+\[[^\[\]]+\]/
 CSS_REGEX = /(@apply\s*)(.*)(;)/
-QUOTE_REGEX = /(["'`])((?:(?!\1|<%=)[^']|<%=.*?%>)*)(\1)/
+QUOTE_REGEX = /(["'`])((?:(?!\1|<%=).|<%=.*?%>)*)(\1)/
 TAILWIND_REGEX = /
   \b(?:
     # Layout

@@ -19,6 +19,13 @@ require("blink.cmp").setup {
         border = "rounded",
       },
     },
+    list = {
+      selection = {
+        preselect = function()
+          return not require("blink.cmp").snippet_active { direction = 1 }
+        end,
+      },
+    },
   },
   sources = {
     default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
