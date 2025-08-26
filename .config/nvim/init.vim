@@ -27,6 +27,7 @@ Plug 'Saghen/blink.cmp', { 'do': 'cargo build --release' }
 Plug 'andymass/vim-matchup'
 Plug 'b0o/schemastore.nvim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'chrisgrieser/nvim-spider'
 Plug 'echasnovski/mini.align'
 Plug 'echasnovski/mini.jump2d'
 Plug 'echasnovski/mini.operators'
@@ -36,7 +37,6 @@ Plug 'haya14busa/vim-asterisk'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/gv.vim'
 Plug 'kana/vim-niceblock'
-Plug 'kana/vim-smartword'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-indent'
@@ -44,7 +44,6 @@ Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
 Plug 'kylechui/nvim-surround'
 Plug 'lewis6991/gitsigns.nvim'
-Plug 'machakann/vim-textobj-delimited'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mfussenegger/nvim-lint'
 Plug 'mhinz/vim-startify'
@@ -54,7 +53,6 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'rafamadriz/friendly-snippets'
-Plug 'rhysd/clever-f.vim'
 Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
 Plug 'saaguero/vim-textobj-pastedtext'
@@ -69,6 +67,7 @@ Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-unimpaired'
+Plug 'unblevable/quick-scope'
 Plug 'wellle/targets.vim'
 Plug 'whatyouhide/vim-textobj-erb'
 Plug 'windwp/nvim-autopairs'
@@ -569,16 +568,19 @@ augroup lint
 augroup END
 
 " }}}
-" Smartword {{{
+" Spider {{{
 
-nmap w <Plug>(smartword-w)
-nmap b <Plug>(smartword-b)
-nmap e <Plug>(smartword-e)
-nmap ge <Plug>(smartword-ge)
-xmap w <Plug>(smartword-w)
-xmap b <Plug>(smartword-b)
-xmap e <Plug>(smartword-e)
-xmap ge <Plug>(smartword-ge)
+nmap <silent> w  <cmd>lua require'spider'.motion('w')<CR>
+nmap <silent> b  <cmd>lua require'spider'.motion('b')<CR>
+nmap <silent> e  <cmd>lua require'spider'.motion('e')<CR>
+
+xmap <silent> w  <cmd>lua require'spider'.motion('w')<CR>
+xmap <silent> b  <cmd>lua require'spider'.motion('b')<CR>
+xmap <silent> e  <cmd>lua require'spider'.motion('e')<CR>
+
+omap <silent> b  <cmd>lua require'spider'.motion('b')<CR>
+omap <silent> e  <cmd>lua require'spider'.motion('e')<CR>
+omap <expr>   w  printf("<cmd>lua require'spider'.motion('%s')<CR>", searchpos('\%#\s', '')[1] ? 'w' : 'e')
 
 " }}}
 " Startify {{{
@@ -674,10 +676,9 @@ omap <silent> ia <Plug>SidewaysArgumentTextobjI
 xmap <silent> ia <Plug>SidewaysArgumentTextobjI
 
 " }}}
-" Clever-f {{{
+" QuickScope {{{
 
-let g:clever_f_across_no_line = 1
-let g:clever_f_smart_case = 1
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " }}}
 " Asterisk {{{
@@ -715,13 +716,6 @@ nnoremap <leader>hp :Gitsigns preview_hunk<cr>
 " Matchup {{{
 
 let g:matchup_matchparen_offscreen = {}
-
-" }}}
-" Targets {{{
-
-autocmd User targets#mappings#user call targets#mappings#extend({
-    \ '\': {'separator': [{'d': '::'}]},
-    \ })
 
 " }}}
 
