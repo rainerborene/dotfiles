@@ -4,3 +4,4 @@
 .config/nvim/tmp
 !.config/nvim/plugged/.keep
 .config/fish/fish_variables
+.config/atuin/atuin-receipt.json
