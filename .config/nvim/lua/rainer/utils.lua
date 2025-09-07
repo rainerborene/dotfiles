@@ -47,4 +47,13 @@ M.qf_toggle = function()
   end
 end
 
+M.select_last_change = function()
+  local mode = vim.fn.mode()
+  local is_visual = mode == "v" or mode == "V" or mode == "\22"
+
+  vim.api.nvim_win_set_cursor(0, vim.api.nvim_buf_get_mark(0, "["))
+  vim.cmd.normal { is_visual and "o" or "v", bang = true }
+  vim.api.nvim_win_set_cursor(0, vim.api.nvim_buf_get_mark(0, "]"))
+end
+
 return M

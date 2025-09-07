@@ -27,21 +27,14 @@ Plug 'Saghen/blink.cmp', { 'do': 'cargo build --release' }
 Plug 'andymass/vim-matchup'
 Plug 'b0o/schemastore.nvim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-Plug 'chrisgrieser/nvim-spider'
-Plug 'echasnovski/mini.align'
-Plug 'echasnovski/mini.jump2d'
-Plug 'echasnovski/mini.operators'
+Plug 'coderifous/textobj-word-column.vim'
+Plug 'folke/flash.nvim'
 Plug 'folke/snacks.nvim'
 Plug 'folke/ts-comments.nvim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/gv.vim'
 Plug 'kana/vim-niceblock'
-Plug 'kana/vim-textobj-entire'
-Plug 'kana/vim-textobj-fold'
-Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-line'
-Plug 'kana/vim-textobj-user'
 Plug 'kylechui/nvim-surround'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
@@ -50,12 +43,14 @@ Plug 'mhinz/vim-startify'
 Plug 'mikavilpas/blink-ripgrep.nvim'
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-mini/mini.ai'
+Plug 'nvim-mini/mini.align'
+Plug 'nvim-mini/mini.extra'
+Plug 'nvim-mini/mini.operators'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'rafamadriz/friendly-snippets'
-Plug 'rhysd/vim-textobj-word-column'
 Plug 'romainl/vim-cool'
-Plug 'saaguero/vim-textobj-pastedtext'
 Plug 'sindrets/diffview.nvim'
 Plug 'sschleemilch/slimline.nvim'
 Plug 'stevearc/conform.nvim'
@@ -67,9 +62,6 @@ Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-unimpaired'
-Plug 'unblevable/quick-scope'
-Plug 'wellle/targets.vim'
-Plug 'whatyouhide/vim-textobj-erb'
 Plug 'windwp/nvim-autopairs'
 
 call plug#end()
@@ -137,7 +129,6 @@ set termguicolors
 
 function! init#colorscheme() abort
   hi! link Slimline StatusLine
-  hi! MiniJump2dSpot cterm=bold gui=bold
   hi! EndOfBuffer guibg=bg guifg=bg
   hi! GitSignsDelete guifg=#FF9580
   hi! MatchWord gui=bold
@@ -260,6 +251,14 @@ noremap H ^
 noremap L $
 vnoremap L g_
 
+" Fix issue with snippet expansion
+sunmap H
+sunmap L
+
+" Select last paste
+xnoremap gp <cmd>lua require'rainer.utils'.select_last_change()<cr>
+onoremap gp <cmd>lua require'rainer.utils'.select_last_change()<cr>
+
 " No overwrite paste
 xnoremap p "_dP
 
@@ -291,16 +290,18 @@ nnoremap <silent> <C-s> :update<cr>
 cnoreabbrev Wqa wqa
 cnoreabbrev W w
 
-" Send to the black hole register
+" Do NOT yank with x/s
 noremap x "_x
 noremap X "_d
+nnoremap s "_s
+nnoremap S "_S
 
 " Goto older/newer position in change list
 nnoremap <silent> ( g;zvzz
 nnoremap <silent> ) g,zvzz
 
 " Clean trailing whitespace
-nnoremap <silent> =w mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`z
+nnoremap <silent> =w mz:silent! %s/\s\+$\\|\r\+$//<cr>:let @/=''<cr>`z
 
 " Fast access to some registers
 noremap! <c-r>/ <c-r>=substitute(getreg('/'), '[<>\\]', '', 'g')<cr>
@@ -568,30 +569,10 @@ augroup lint
 augroup END
 
 " }}}
-" Spider {{{
-
-nmap <silent> w  <cmd>lua require'spider'.motion('w')<CR>
-nmap <silent> b  <cmd>lua require'spider'.motion('b')<CR>
-nmap <silent> e  <cmd>lua require'spider'.motion('e')<CR>
-
-xmap <silent> w  <cmd>lua require'spider'.motion('w')<CR>
-xmap <silent> b  <cmd>lua require'spider'.motion('b')<CR>
-xmap <silent> e  <cmd>lua require'spider'.motion('e')<CR>
-
-omap <silent> b  <cmd>lua require'spider'.motion('b')<CR>
-omap <silent> e  <cmd>lua require'spider'.motion('e')<CR>
-omap <expr>   w  printf("<cmd>lua require'spider'.motion('%s')<CR>", searchpos('\%#\s', '')[1] ? 'w' : 'e')
-
-" }}}
 " Startify {{{
 
 let g:startify_change_to_vcs_root = 1
 let g:startify_session_persistence = 1
-
-" }}}
-" Pasted Text Object {{{
-
-let g:pastedtext_select_key = "gp"
 
 " }}}
 " Highlighted Yank {{{
@@ -676,11 +657,6 @@ omap <silent> ia <Plug>SidewaysArgumentTextobjI
 xmap <silent> ia <Plug>SidewaysArgumentTextobjI
 
 " }}}
-" QuickScope {{{
-
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
-" }}}
 " Asterisk {{{
 
 let g:asterisk#keeppos = 1
@@ -716,6 +692,32 @@ nnoremap <leader>hp :Gitsigns preview_hunk<cr>
 " Matchup {{{
 
 let g:matchup_matchparen_offscreen = {}
+
+" }}}
+" Word Column {{{
+
+let g:skip_default_textobj_word_column_mappings = 1
+
+xnoremap <silent> av :<C-u>call TextObjWordBasedColumn("aw")<cr>
+xnoremap <silent> aV :<C-u>call TextObjWordBasedColumn("aW")<cr>
+xnoremap <silent> iv :<C-u>call TextObjWordBasedColumn("iw")<cr>
+xnoremap <silent> iV :<C-u>call TextObjWordBasedColumn("iW")<cr>
+onoremap <silent> av :call TextObjWordBasedColumn("aw")<cr>
+onoremap <silent> aV :call TextObjWordBasedColumn("aW")<cr>
+onoremap <silent> iv :call TextObjWordBasedColumn("iw")<cr>
+onoremap <silent> iV :call TextObjWordBasedColumn("iW")<cr>
+
+" }}}
+" Flash {{{
+
+nnoremap m <cmd>lua require('flash').jump()<cr>
+xnoremap m <cmd>lua require('flash').jump()<cr>
+onoremap m <cmd>lua require('flash').jump()<cr>
+
+nnoremap M <cmd>lua require('flash').treesitter_search()<cr>
+"onoremap M <cmd>lua require('flash').remote()<cr>
+
+cnoremap <c-j> <cmd>lua require('flash').toggle()<cr>
 
 " }}}
 

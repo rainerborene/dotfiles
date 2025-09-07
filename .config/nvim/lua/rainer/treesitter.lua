@@ -1,9 +1,5 @@
 local treesitter = require "nvim-treesitter.configs"
 
--- constants for selection_modes
-local charwise = "v"
-local linewise = "V"
-
 ---@diagnostic disable-next-line: missing-fields
 treesitter.setup {
   ensure_installed = {
@@ -28,8 +24,10 @@ treesitter.setup {
   incremental_selection = {
     enable = true,
     keymaps = {
-      node_incremental = "v",
-      node_decremental = "V",
+      init_selection = "<cr>",
+      node_incremental = "<cr>",
+      scope_incremental = false,
+      node_decremental = "<bs>",
     },
   },
   highlight = {
@@ -48,10 +46,9 @@ treesitter.setup {
         ["ir"] = "@block.inner",
       },
       selection_modes = {
-        ["@parameter.outer"] = charwise,
-        ["@function.outer"] = linewise,
-        ["@class.outer"] = linewise,
-        ["@block.outer"] = linewise,
+        ["@function.outer"] = "V",
+        ["@block.outer"] = "V",
+        ["@class.outer"] = "V",
       },
     },
     move = {
