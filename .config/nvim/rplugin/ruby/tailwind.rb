@@ -96,7 +96,7 @@ Neovim.plugin do |plug|
     end
 
     def sort_tailwind_classes(class_names)
-      @nvim.exec_lua("return require('rainer.tailwind').sort({...})", [class_names])
+      @nvim.exec_lua("return require('rainer.utils').tailwind_sort({...})", [class_names])
     end
 
     def sort_classes(str)

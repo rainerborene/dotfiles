@@ -1,7 +1,4 @@
-.config/nvim/autoload/plug.vim
-.config/nvim/plugged/*
 .config/nvim/spell/*.spl
 .config/nvim/tmp
-!.config/nvim/plugged/.keep
 .config/fish/fish_variables
 .config/atuin/atuin-receipt.json
