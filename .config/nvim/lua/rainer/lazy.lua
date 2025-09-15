@@ -20,6 +20,9 @@ require("lazy").setup {
   spec = { { import = "plugins" } },
   install = { colorscheme = { "catppuccin", "habamax" } },
   checker = { enabled = true },
+  rocks = {
+    enabled = false,
+  },
   performance = {
     rtp = {
       disabled_plugins = {

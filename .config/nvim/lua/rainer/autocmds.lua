@@ -12,6 +12,15 @@ autocmd("TextYankPost", {
   end,
 })
 
+autocmd("FileType", {
+  group = augroup "git",
+  pattern = { "gitcommit", "git" },
+  callback = function()
+    vim.opt_local.foldmethod = "syntax"
+    vim.opt_local.spell = true
+  end,
+})
+
 -- Close some filetypes with <q>
 autocmd("FileType", {
   group = augroup "close_with_q",

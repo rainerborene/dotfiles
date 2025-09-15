@@ -21,13 +21,9 @@ vim.keymap.set("n", "<leader>s", "<C-W>s")
 vim.keymap.set("n", "<leader>v", "<C-W>v")
 
 -- Easier to type, and I never use the default behavior.
-vim.keymap.set({ "n", "v", "o" }, "H", "^")
+vim.keymap.set({ "n", "x", "o" }, "H", "^")
 vim.keymap.set({ "n", "o" }, "L", "$")
-vim.keymap.set("v", "L", "g_")
-
--- Fix issue with snippet expansion
-vim.keymap.del("s", "H")
-vim.keymap.del("s", "L")
+vim.keymap.set("x", "L", "g_")
 
 -- No overwrite paste
 vim.keymap.set("x", "p", [["_dP]])
@@ -60,8 +56,8 @@ vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
 -- Center screen
-vim.keymap.set("n", "gg", "ggzv")
-vim.keymap.set("n", "G", "Gzv")
+vim.keymap.set("n", "gg", "ggzz")
+vim.keymap.set("n", "G", "Gzz")
 
 -- Keep the cursor in place while joining lines
 vim.keymap.set("n", "J", "mzJ`z")
@@ -73,6 +69,9 @@ vim.keymap.set("", "<C-u>", "<C-u>zz")
 -- Use c-\ to do c-] but open it in a new split.
 vim.keymap.set("n", "<c-]>", "<c-]>zz")
 vim.keymap.set("n", "<c-\\>", ":vertical wincmd ]<cr>zz")
+
+-- `gf` opens file under cursor in a new vertical split
+vim.keymap.set("n", "gf", ":vertical wincmd f<CR>")
 
 -- [w ]w - Forward and backwards tabs
 vim.keymap.set("n", "[w", "<esc>:tabprevious<cr>")
