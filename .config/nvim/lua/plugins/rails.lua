@@ -26,11 +26,17 @@ return {
       vim.g["test#strategy"] = "wezterm"
     end,
     keys = {
-      { "<leader>rr", ":TestNearest" },
-      { "<leader>rf", ":TestFile" },
-      { "<leader>ra", ":TestSuite" },
-      { "<leader>rl", ":TestLast" },
-      { "<leader>rg", ":TestVisit" },
+      { "<leader>rr", ":TestNearest<cr>" },
+      {
+        "<leader>rf",
+        function()
+          vim.g["test#wezterm#pane_id"] = nil
+          vim.cmd.TestFile()
+        end,
+      },
+      { "<leader>ra", ":TestSuite<cr>" },
+      { "<leader>rl", ":TestLast<cr>" },
+      { "<leader>rg", ":TestVisit<cr>" },
     },
   },
 }

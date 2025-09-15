@@ -7,6 +7,7 @@ vim.opt.spellfile = vim.fn.stdpath "config" .. "/spell/custom-dictionary.utf-8.a
 vim.opt.spelllang:append "pt"
 vim.opt.undofile = true
 vim.opt.updatetime = 1000
+vim.opt.wildignore = { "*.DS_Store", "*~", ".git", "*.pyc", "*.o", "*.spl", "*.rdb" }
 
 -- text manipulation
 vim.opt.expandtab = true
@@ -17,7 +18,9 @@ vim.opt.tabstop = 4
 vim.opt.textwidth = 80
 vim.opt.virtualedit = "block"
 vim.opt.completeopt = { "noinsert", "menuone", "noselect" }
-vim.opt.clipboard = "unnamedplus"
+vim.schedule(function ()
+  vim.opt.clipboard = "unnamedplus"
+end)
 
 -- folding
 vim.opt.foldlevel = 99
@@ -31,9 +34,6 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
-
--- wild stuff
-vim.opt.wildignore = { "*.DS_Store", "*~", ".git", "*.pyc", "*.o", "*.spl", "*.rdb" }
 
 -- ui customization
 vim.opt.list = true

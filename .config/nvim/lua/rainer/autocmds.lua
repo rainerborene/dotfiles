@@ -4,20 +4,11 @@ local augroup = function(name)
   return vim.api.nvim_create_augroup("rainer_" .. name, { clear = true })
 end
 
+-- Highlight on yank
 autocmd("TextYankPost", {
   group = augroup "yank_highlight",
-  desc = "Highlight on yank",
   callback = function()
     vim.hl.on_yank()
-  end,
-})
-
-autocmd("FileType", {
-  group = augroup "git",
-  pattern = { "gitcommit", "git" },
-  callback = function()
-    vim.opt_local.foldmethod = "syntax"
-    vim.opt_local.spell = true
   end,
 })
 
@@ -33,6 +24,24 @@ autocmd("FileType", {
   },
   callback = function(args)
     vim.keymap.set("n", "q", "<cmd>quit<cr>", { buffer = args.buf })
+  end,
+})
+
+-- Auto-resize splits when window is resized
+autocmd("VimResized", {
+  group = augroup "resize_splits",
+  pattern = "*",
+  command = "wincmd =",
+})
+
+-- go to last loc when opening a buffer
+autocmd("BufReadPost", {
+  group = augroup "last_loc",
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    if mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(0) then
+      vim.api.nvim_win_set_cursor(0, mark)
+    end
   end,
 })
 
@@ -53,23 +62,5 @@ end, {
         return string.sub(val, string.len "node_modules/" + 1)
       end)
       :totable()
-  end,
-})
-
--- Auto-resize splits when window is resized
-autocmd("VimResized", {
-  group = augroup "resize_splits",
-  pattern = "*",
-  command = "wincmd =",
-})
-
--- go to last loc when opening a buffer
-autocmd("BufReadPost", {
-  group = augroup "last_loc",
-  callback = function()
-    local mark = vim.api.nvim_buf_get_mark(0, '"')
-    if mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(0) then
-      vim.api.nvim_win_set_cursor(0, mark)
-    end
   end,
 })

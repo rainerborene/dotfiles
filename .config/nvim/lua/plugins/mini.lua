@@ -85,6 +85,6 @@ return {
 
       -- Make c work in visual mode
       vim.keymap.del("x", "cx")
-    end
+    end,
   },
 }

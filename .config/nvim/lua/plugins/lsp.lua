@@ -70,16 +70,28 @@ return {
       end
 
       vim.diagnostic.config { virtual_text = true }
+
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("plugin_lsp", { clear = true }),
+        callback = function(event)
+          local map = function(lhs, rhs, mode)
+            mode = mode or "n"
+            vim.keymap.set(mode, lhs, rhs, { buffer = event.buf, silent = true })
+          end
+
+          map("<leader>ld", vim.lsp.buf.definition)
+          map("<leader>li", vim.lsp.buf.implementation)
+          map("<leader>ls", vim.lsp.buf.signature_help)
+          map("<leader>le", vim.lsp.buf.references)
+          map("<leader>lr", vim.lsp.buf.rename)
+          map("<leader>lh", vim.lsp.buf.hover)
+          map("<leader>la", vim.lsp.buf.code_action)
+          map("<leader>ll", vim.diagnostic.open_float)
+          map("K", function()
+            vim.lsp.buf.hover { border = "rounded" }
+          end)
+        end,
+      })
     end,
-    keys = {
-      { "<leader>ld", vim.lsp.buf.definition },
-      { "<leader>li", vim.lsp.buf.implementation },
-      { "<leader>ls", vim.lsp.buf.signature_help },
-      { "<leader>le", vim.lsp.buf.references },
-      { "<leader>lr", vim.lsp.buf.rename },
-      { "<leader>lh", vim.lsp.buf.hover },
-      { "<leader>la", vim.lsp.buf.code_action },
-      { "<leader>ll", vim.lsp.diagnostic.show_line_diagnostics },
-    },
   },
 }

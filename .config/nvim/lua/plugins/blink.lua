@@ -15,11 +15,15 @@ return {
         preset = "super-tab",
         ["<C-e>"] = { "select_and_accept", "fallback" },
         ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+        ["<C-k>"] = { "select_prev", "fallback_to_mappings" },
+        ["<C-j>"] = { "select_next", "fallback_to_mappings" },
       },
       cmdline = {
         enabled = false,
       },
-      signature = { enabled = true },
+      signature = {
+        enabled = true,
+      },
       completion = {
         documentation = {
           auto_show = true,
