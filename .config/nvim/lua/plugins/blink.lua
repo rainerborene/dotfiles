@@ -6,7 +6,7 @@ return {
       "rafamadriz/friendly-snippets",
       "mikavilpas/blink-ripgrep.nvim",
     },
-    build = "cargo build --release",
+    build = "cargo +nightly build --release",
     opts = {
       appearance = {
         use_nvim_cmp_as_default = true,

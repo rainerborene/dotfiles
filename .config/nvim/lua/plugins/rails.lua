@@ -5,7 +5,6 @@ return {
   },
   {
     "tpope/vim-rails",
-    event = "VeryLazy",
     init = function()
       vim.g.rails_projections = {
         ["app/components/*_component.rb"] = {
@@ -18,6 +17,22 @@ return {
           alternate = "test/components/{}_component_test.rb",
         },
       }
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "Rails",
+        group = vim.api.nvim_create_augroup("plugin_rails", { clear = true }),
+        callback = function(event)
+          vim.api.nvim_buf_create_user_command(event.buf, "AV", function(args)
+            local alternate = vim.fn.eval "rails#buffer().alternate()"
+            if vim.fn.filereadable(alternate) == 1 or args.bang then
+              vim.cmd.vsplit(alternate)
+            end
+          end, {
+            bang = true,
+            bar = true,
+          })
+        end,
+      })
     end,
   },
   {

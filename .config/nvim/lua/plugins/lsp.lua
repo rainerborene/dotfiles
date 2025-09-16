@@ -81,12 +81,13 @@ return {
 
           map("<leader>ld", vim.lsp.buf.definition)
           map("<leader>li", vim.lsp.buf.implementation)
-          map("<leader>ls", vim.lsp.buf.signature_help)
           map("<leader>le", vim.lsp.buf.references)
           map("<leader>lr", vim.lsp.buf.rename)
-          map("<leader>lh", vim.lsp.buf.hover)
           map("<leader>la", vim.lsp.buf.code_action)
           map("<leader>ll", vim.diagnostic.open_float)
+          map("<leader>ls", function()
+            vim.lsp.buf.signature_help { border = "rounded" }
+          end)
           map("K", function()
             vim.lsp.buf.hover { border = "rounded" }
           end)

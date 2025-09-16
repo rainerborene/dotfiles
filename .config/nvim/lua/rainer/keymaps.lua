@@ -1,111 +1,108 @@
-local map = function(mode, lhs, rhs, opts)
-  opts = opts or {}
-  opts.silent = true
-  vim.keymap.set(mode, lhs, rhs, opts)
-end
-
 vim.g.mapleader = ","
 vim.g.maplocalleader = "\\"
 
 -- Easy command-line mode
-map("", ";", ":")
+vim.keymap.set("", ";", ":")
 
 -- Easier bracket matching
-map("", "<Tab>", "%", { remap = true })
-map("", "<C-o>", "<Nop>")
+vim.keymap.set("", "<Tab>", "%", { remap = true })
+vim.keymap.set("", "<C-o>", "<Nop>")
 
 -- Quit
-map("i", "<c-q>", "<esc>:q<cr>")
-map("n", "<c-q>", ":q<cr>")
+vim.keymap.set("i", "<c-q>", "<esc>:q<cr>")
+vim.keymap.set("n", "<c-q>", ":q<cr>")
 
 -- Save
-map("i", "<C-s>", "<C-o>:update<cr>")
-map("n", "<C-s>", ":update<cr>")
+vim.keymap.set("i", "<C-s>", "<C-o>:update<cr>")
+vim.keymap.set("n", "<C-s>", ":update<cr>")
 
 -- Split windows
-map("n", "<leader>s", "<C-W>s")
-map("n", "<leader>v", "<C-W>v")
+vim.keymap.set("n", "<leader>s", "<C-W>s")
+vim.keymap.set("n", "<leader>v", "<C-W>v")
+
+-- Breaking the bad habit
+vim.keymap.set("n", "U", "<Nop>")
 
 -- Easier to type, and I never use the default behavior.
-map({ "n", "x", "o" }, "H", "^")
-map({ "n", "o" }, "L", "$")
-map("x", "L", "g_")
+vim.keymap.set({ "n", "x", "o" }, "H", "^")
+vim.keymap.set({ "n", "o" }, "L", "$")
+vim.keymap.set("x", "L", "g_")
 
 -- No overwrite paste
-map("x", "p", [["_dP]])
+vim.keymap.set("x", "p", [["_dP]])
 
 -- Reindent entire file
-map("n", "==", [[mqHmwgg=G`wzt`q]])
+vim.keymap.set("n", "==", [[mqHmwgg=G`wzt`q]])
 
 -- Easy filetype switching
-map("n", "=f", ":setfiletype<Space>")
+vim.keymap.set("n", "=f", ":setfiletype<Space>")
 
 -- Open notes directory
-map("n", "<leader>n", ":tabedit /mnt/c/Users/Rainer\\ Borene/Dropbox/Notebook/Notes<cr>")
+vim.keymap.set("n", "<leader>n", ":tabedit /mnt/c/Users/Rainer\\ Borene/Dropbox/Notebook/Notes<cr>")
 
 -- Fast escape from insert mode
-map("i", "jj", "<esc>", { remap = true })
+vim.keymap.set("i", "jj", "<esc>", { remap = true })
 
 -- Faster scrolling
-map("n", "<c-e>", "5<c-e>")
-map("n", "<c-y>", "5<c-y>")
+vim.keymap.set("n", "<c-e>", "5<c-e>")
+vim.keymap.set("n", "<c-y>", "5<c-y>")
 
 -- Remap for dealing with word wrap and adding jumps to the jumplist.
-map("n", "j", [[(v:count > 1 ? 'm`' . v:count : 'g') . 'j']], { expr = true })
-map("n", "k", [[(v:count > 1 ? 'm`' . v:count : 'g') . 'k']], { expr = true })
+vim.keymap.set("n", "j", [[(v:count > 1 ? 'm`' . v:count : 'g') . 'j']], { expr = true })
+vim.keymap.set("n", "k", [[(v:count > 1 ? 'm`' . v:count : 'g') . 'k']], { expr = true })
 
 -- Keeping the cursor centered.
-map("n", "n", "nzzzv")
-map("n", "N", "Nzzzv")
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
 
 -- Center screen
-map("n", "gg", "ggzz")
-map("n", "G", "Gzz")
+vim.keymap.set("n", "gg", "ggzz")
+vim.keymap.set("n", "G", "Gzz")
 
 -- Keep the cursor in place while joining lines
-map("n", "J", "mzJ`z")
+vim.keymap.set("n", "J", "mzJ`z")
 
 -- Same when moving up and down
-map("", "<C-d>", "<C-d>zz")
-map("", "<C-u>", "<C-u>zz")
+vim.keymap.set("", "<C-d>", "<C-d>zz")
+vim.keymap.set("", "<C-u>", "<C-u>zz")
 
 -- Use c-\ to do c-] but open it in a new split.
-map("n", "<c-]>", "<c-]>zz")
-map("n", "<c-\\>", ":vertical wincmd ]<cr>zz")
+vim.keymap.set("n", "<c-]>", "<c-]>zz")
+vim.keymap.set("n", "<c-\\>", ":vertical wincmd ]<cr>zz")
 
 -- `gf` opens file under cursor in a new vertical split
-map("c", "<Plug><cfile>", "<C-R><C-F>")
-map("n", "gf", ":vert sfind <Plug><cfile><CR>")
+vim.keymap.set("c", "<Plug><cfile>", "<C-R><C-F>")
+vim.keymap.set("n", "gf", ":vert sfind <Plug><cfile><CR>")
 
 -- [w ]w - Forward and backwards tabs
-map("n", "[w", "<esc>:tabprevious<cr>")
-map("n", "]w", "<esc>:tabnext<cr>")
+vim.keymap.set("n", "[w", "<esc>:tabprevious<cr>")
+vim.keymap.set("n", "]w", "<esc>:tabnext<cr>")
 
 -- [W ]W - Move tabs
-map("n", "[W", "<esc>:tabmove -1<cr>")
-map("n", "]W", "<esc>:tabmove +1<cr>")
+vim.keymap.set("n", "[W", "<esc>:tabmove -1<cr>")
+vim.keymap.set("n", "]W", "<esc>:tabmove +1<cr>")
 
 -- Space to toggle folds.
-map({ "n", "v" }, "<Space>", "za")
+vim.keymap.set({ "n", "v" }, "<Space>", "za")
 
 -- Ctrl-b: Go (b)ack. Go to previously buffer
-map("n", "<c-b>", "<c-^>")
+vim.keymap.set("n", "<c-b>", "<c-^>")
 
 -- Do NOT yank with x/s
-map("", "x", [["_x]])
-map("", "X", [["_d]])
-map("n", "s", [["_s]])
-map("n", "S", [["_S]])
+vim.keymap.set("", "x", [["_x]])
+vim.keymap.set("", "X", [["_d]])
+vim.keymap.set("n", "s", [["_s]])
+vim.keymap.set("n", "S", [["_S]])
 
 -- Clean trailing whitespace
-map("n", "=w", function()
+vim.keymap.set("n", "=w", function()
   local curpos = vim.api.nvim_win_get_cursor(0)
   vim.cmd [[keeppatterns %s/\s\+$//e]]
   vim.api.nvim_win_set_cursor(0, curpos)
 end)
 
 -- Select last paste
-map({ "x", "o" }, "gp", function()
+vim.keymap.set({ "x", "o" }, "gp", function()
   local mode = vim.fn.mode()
   local is_visual = mode == "v" or mode == "V" or mode == "\22"
 
@@ -115,7 +112,7 @@ map({ "x", "o" }, "gp", function()
 end)
 
 -- Close quickfix/location window
-map("n", "<leader>c", function()
+vim.keymap.set("n", "<leader>c", function()
   local nr = vim.fn.winnr "$"
   if #vim.fn.getqflist() > 0 then
     vim.cmd.copen()
@@ -126,7 +123,7 @@ map("n", "<leader>c", function()
 end)
 
 -- Poweful <esc>.
-map({ "i", "s", "n" }, "<esc>", function()
+vim.keymap.set({ "i", "s", "n" }, "<esc>", function()
   vim.snippet.stop()
   return "<esc>"
 end, { expr = true })

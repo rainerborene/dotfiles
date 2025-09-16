@@ -4,4 +4,4 @@ neovim 0.11.4
 stylua 0.20.0
 lua-language-server 3.9.0
 golang 1.22.5
-rust stable
+rust nightly
