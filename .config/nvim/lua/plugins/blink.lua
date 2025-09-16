@@ -45,6 +45,11 @@ return {
         providers = {
           snippets = {
             score_offset = 3,
+            opts = {
+              extended_filetypes = {
+                ruby = { "rails" },
+              },
+            },
           },
           buffer = {
             opts = {

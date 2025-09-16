@@ -49,7 +49,7 @@ tasks:
     desc: Install my daily dev tools with flox
     cmds:
       - flox install ast-grep bat difftastic eza fastfetch fd go-task hyperfine
-          jemalloc jq just lazygit ripgrep stow xan xh xplr zoxide
+        jemalloc jq just lazygit ripgrep stow xan xh xplr zoxide
 
   chromedriver:
     desc: Pull latest chromedriver to WindowsApps directory

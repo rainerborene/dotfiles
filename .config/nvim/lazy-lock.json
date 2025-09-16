@@ -1,5 +1,5 @@
 {
-  "blink-ripgrep.nvim": { "branch": "main", "commit": "cf9b1dec1b9ab23067b19133d61b1c6a997cbc01" },
+  "blink-ripgrep.nvim": { "branch": "main", "commit": "2bb92d17b14b6fda7e409d10664499532657c9c6" },
   "blink.cmp": { "branch": "main", "commit": "327fff91fe6af358e990be7be1ec8b78037d2138" },
   "catppuccin": { "branch": "main", "commit": "30fa4d122d9b22ad8b2e0ab1b533c8c26c4dde86" },
   "conform.nvim": { "branch": "master", "commit": "b4aab989db276993ea5dcb78872be494ce546521" },
@@ -25,7 +25,7 @@
   "sideways.vim": { "branch": "main", "commit": "1efb7db049e5536742dc89205f6e229297c31230" },
   "slimline.nvim": { "branch": "main", "commit": "37d197329b0a65af820e794a007553aa7ef387b5" },
   "smart-splits.nvim": { "branch": "master", "commit": "e4f0c09277ca18d035ebb5da39fb14df0e2743f8" },
-  "snacks.nvim": { "branch": "main", "commit": "da230e3ca8146da4b73752daaf0a1d07d343c12d" },
+  "snacks.nvim": { "branch": "main", "commit": "7e3c655bec091e39d35ce950a41efd52c6341801" },
   "splitjoin.vim": { "branch": "main", "commit": "b55d5ba3e2b2649317925c21a68f90c8f28ec3e9" },
   "switch.vim": { "branch": "main", "commit": "4017a58f7ed8a2d76a288e36130affe8eb55e83a" },
   "textobj-word-column.vim": { "branch": "master", "commit": "cb40e1459817a7fa23741ff6df05e4481bde5a33" },

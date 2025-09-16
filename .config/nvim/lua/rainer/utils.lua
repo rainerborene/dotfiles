@@ -28,9 +28,9 @@ M.tailwind_sort = function(class_texts)
     classLists = class_texts,
   })
 
-  local response = client.request_sync("@/tailwindCSS/sortSelection", params, 2000, bufnr)
-
-  if not response or response.err or not response.result then
+  ---@diagnostic disable-next-line: param-type-mismatch
+  local response, err = client.request_sync("@/tailwindCSS/sortSelection", params, 2000, bufnr)
+  if not response or err or not response.result then
     return class_texts[1]
   end
 
