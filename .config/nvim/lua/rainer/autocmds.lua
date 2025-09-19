@@ -17,8 +17,10 @@ autocmd("FileType", {
   group = augroup "close_with_q",
   desc = "Close with <q>",
   pattern = {
-    "git",
     "fugitive",
+    "fugitiveblame",
+    "git",
+    "gitsigns-blame",
     "help",
     "qf",
   },

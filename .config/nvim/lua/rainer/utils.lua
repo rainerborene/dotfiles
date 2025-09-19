@@ -17,7 +17,7 @@ M.fold_text = function()
   return line .. "…" .. string.rep(" ", fillcharcount) .. foldedlinecount .. "…" .. " "
 end
 
-M.tailwind_sort = function(class_texts)
+M.tailwind_sort_classes = function(class_texts)
   local bufnr = vim.api.nvim_get_current_buf()
   local client = vim.lsp.get_clients({ name = "tailwindcss" })[1]
   if not client then

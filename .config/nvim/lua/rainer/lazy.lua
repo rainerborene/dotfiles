@@ -18,9 +18,20 @@ vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim
 require("lazy").setup {
   spec = { { import = "plugins" } },
-  install = { colorscheme = { "catppuccin", "habamax" } },
+  install = { colorscheme = { "habamax" } },
   checker = { enabled = true },
-  rocks = { enabled = false, },
+  rocks = { enabled = false },
+  ui = {
+    custom_keys = {
+      ["<localleader>e"] = {
+        function(plugin)
+          vim.cmd.tabedit(plugin.dir)
+          vim.cmd.tcd(plugin.dir)
+        end,
+        desc = "Open plugin directory in a new tab",
+      },
+    },
+  },
   performance = {
     rtp = {
       disabled_plugins = {

@@ -36,6 +36,18 @@ return {
           end
         end)
 
+        -- Set syntax folding for git buffers
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = { "gitcommit", "git" },
+          group = vim.api.nvim_create_augroup("plugin_git", { clear = true }),
+          callback = function()
+            vim.schedule(function()
+              vim.opt_local.foldmethod = "syntax"
+              vim.opt_local.spell = true
+            end)
+          end,
+        })
+
         -- Actions
         map("n", "<leader>hs", gitsigns.stage_hunk)
         map("n", "<leader>hr", gitsigns.reset_hunk)
@@ -64,24 +76,9 @@ return {
     "tpope/vim-fugitive",
     keys = {
       { "<leader>ge", ":Gedit<cr>" },
-      { "<leader>gl", ":Gclog<cr>" },
       { "<leader>gw", ":Gwrite<cr>" },
       { "<leader>gs", ":Git<cr>gg)", remap = true },
     },
-    init = function()
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "gitcommit", "git" },
-        group = vim.api.nvim_create_augroup("plugin_fugitive", { clear = true }),
-        callback = function()
-          vim.opt_local.foldmethod = "syntax"
-          vim.opt_local.spell = true
-        end,
-      })
-    end,
-  },
-  {
-    "junegunn/gv.vim",
-    cmd = "GV",
   },
   {
     "sindrets/diffview.nvim",

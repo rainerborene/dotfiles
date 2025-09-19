@@ -60,9 +60,8 @@ return {
             name = "Ripgrep",
             module = "blink-ripgrep",
             score_offset = -3,
-            async = true,
-            timeout_ms = 100,
             opts = {
+              prefix_min_len = 5,
               backend = {
                 ripgrep = {
                   max_filesize = "100K",

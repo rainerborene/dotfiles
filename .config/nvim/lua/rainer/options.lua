@@ -18,7 +18,7 @@ vim.opt.tabstop = 4
 vim.opt.textwidth = 80
 vim.opt.virtualedit = "block"
 vim.opt.completeopt = { "noinsert", "menuone", "noselect" }
-vim.schedule(function ()
+vim.schedule(function()
   vim.opt.clipboard = "unnamedplus"
 end)
 
@@ -45,7 +45,6 @@ vim.opt.relativenumber = true
 vim.opt.number = true
 vim.opt.pumheight = 20
 vim.opt.laststatus = 3
-vim.opt.termguicolors = true
 vim.opt.signcolumn = "yes"
 
 -- disable optional providers

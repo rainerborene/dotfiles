@@ -179,6 +179,29 @@ return {
       { "<leader>A", function() Snacks.picker.grep_word() end, mode = { "n", "v" }, },
       { "<leader>f", function() Snacks.picker.grep_word { search = vim.fn.input "Grep For > ", regex = true } end, },
       {
+        "<leader>gl",
+        function()
+          Snacks.picker.git_log {
+            confirm = function(picker, item, action)
+              local gitsigns = require "gitsigns"
+              picker:close()
+              if not item then
+                return
+              end
+              if not action.cmd then
+                gitsigns.show_commit(item.commit, "enew")
+              elseif action.cmd == "split" then
+                gitsigns.show_commit(item.commit, "split")
+              elseif action.cmd == "vsplit" then
+                gitsigns.show_commit(item.commit, "vsplit")
+              elseif action.cmd == "tab" then
+                gitsigns.show_commit(item.commit, "tabedit")
+              end
+            end,
+          }
+        end,
+      },
+      {
         "<leader>F",
         function()
           if vim.b.bundler_paths == nil then

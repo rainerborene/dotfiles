@@ -42,6 +42,7 @@ vim.keymap.set("n", "<leader>n", ":tabedit /mnt/c/Users/Rainer\\ Borene/Dropbox/
 
 -- Fast escape from insert mode
 vim.keymap.set("i", "jj", "<esc>", { remap = true })
+vim.keymap.set("i", "<c-c>", "<esc>", { remap = true })
 
 -- Faster scrolling
 vim.keymap.set("n", "<c-e>", "5<c-e>")
