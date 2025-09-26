@@ -19,23 +19,6 @@ return {
           vim.keymap.set(mode, l, r, opts)
         end
 
-        -- Navigation
-        map("n", "]c", function()
-          if vim.wo.diff then
-            vim.cmd.normal { "]c", bang = true }
-          else
-            gitsigns.nav_hunk "next"
-          end
-        end)
-
-        map("n", "[c", function()
-          if vim.wo.diff then
-            vim.cmd.normal { "[c", bang = true }
-          else
-            gitsigns.nav_hunk "prev"
-          end
-        end)
-
         -- Set syntax folding for git buffers
         vim.api.nvim_create_autocmd("FileType", {
           pattern = { "gitcommit", "git" },
@@ -48,32 +31,51 @@ return {
           end,
         })
 
-        -- Actions
-        map("n", "<leader>hs", gitsigns.stage_hunk)
-        map("n", "<leader>hr", gitsigns.reset_hunk)
-        map("v", "<leader>hs", function() gitsigns.stage_hunk { vim.fn.line ".", vim.fn.line "v" } end)
-        map("v", "<leader>hr", function() gitsigns.reset_hunk { vim.fn.line ".", vim.fn.line "v" } end)
-        map("n", "<leader>hS", gitsigns.stage_buffer)
-        map("n", "<leader>hR", gitsigns.reset_buffer)
-        map("n", "<leader>hp", gitsigns.preview_hunk)
-        map("n", "<leader>hi", gitsigns.preview_hunk_inline)
-        map("n", "<leader>hb", function() gitsigns.blame_line { full = true } end)
-        map("n", "<leader>hd", gitsigns.diffthis)
-        map("n", "<leader>hD", function() gitsigns.diffthis "~" end)
-        map("n", "<leader>hQ", function() gitsigns.setqflist "all" end)
-        map("n", "<leader>hq", gitsigns.setqflist)
+        -- Navigation
+        map("n", "]c", function()
+          if vim.wo.diff then
+            vim.cmd.normal { "]c", bang = true }
+          else
+            gitsigns.nav_hunk "next"
+          end
+        end, { desc = "Jump to next git [c]hange" })
 
-        -- Toggles
-        map("n", "<leader>tb", gitsigns.toggle_current_line_blame)
-        map("n", "<leader>tw", gitsigns.toggle_word_diff)
+        map("n", "[c", function()
+          if vim.wo.diff then
+            vim.cmd.normal { "[c", bang = true }
+          else
+            gitsigns.nav_hunk "prev"
+          end
+        end, { desc = "Jump to previous git [c]hange" })
+
+        -- Actions
+        map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "git [s]tage hunk" })
+        map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "git [r]eset hunk" })
+        map("v", "<leader>hs", function()
+          gitsigns.stage_hunk { vim.fn.line ".", vim.fn.line "v" }
+        end, { desc = "git [s]tage hunk" })
+
+        map("v", "<leader>hr", function()
+          gitsigns.reset_hunk { vim.fn.line ".", vim.fn.line "v" }
+        end, { desc = "git [r]eset hunk" })
+
+        map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "git [S]tage buffer" })
+        map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "git [R]eset buffer" })
+        map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "git [p]review hunk" })
+        map("n", "<leader>hb", gitsigns.blame_line, { desc = "git [b]lame line" })
+        map("n", "<leader>hd", gitsigns.diffthis, { desc = "git [d]iff against index" })
+        map("n", "<leader>hD", function()
+          gitsigns.diffthis "@"
+        end, { desc = "git [D]iff against last commit" })
 
         -- Text object
-        map({ "o", "x" }, "ih", gitsigns.select_hunk)
+        map({ "o", "x" }, "ih", gitsigns.select_hunk, { desc = "GitSigns Select Hunk" })
       end,
     },
   },
   {
     "tpope/vim-fugitive",
+    cmd = { "Git", "Gread", "Gwrite" },
     keys = {
       { "<leader>ge", ":Gedit<cr>" },
       { "<leader>gw", ":Gwrite<cr>" },

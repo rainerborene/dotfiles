@@ -9,12 +9,12 @@ vim.keymap.set("", "<Tab>", "%", { remap = true })
 vim.keymap.set("", "<C-o>", "<Nop>")
 
 -- Quit
-vim.keymap.set("i", "<c-q>", "<esc>:q<cr>")
-vim.keymap.set("n", "<c-q>", ":q<cr>")
+vim.keymap.set("i", "<c-q>", "<esc>:q<cr>", { silent = true })
+vim.keymap.set("n", "<c-q>", ":q<cr>", { silent = true })
 
 -- Save
-vim.keymap.set("i", "<C-s>", "<C-o>:update<cr>")
-vim.keymap.set("n", "<C-s>", ":update<cr>")
+vim.keymap.set("i", "<C-s>", "<C-o>:update<cr>", { silent = true })
+vim.keymap.set("n", "<C-s>", ":update<cr>", { silent = true })
 
 -- Split windows
 vim.keymap.set("n", "<leader>s", "<C-W>s")
@@ -69,19 +69,19 @@ vim.keymap.set("", "<C-u>", "<C-u>zz")
 
 -- Use c-\ to do c-] but open it in a new split.
 vim.keymap.set("n", "<c-]>", "<c-]>zz")
-vim.keymap.set("n", "<c-\\>", ":vertical wincmd ]<cr>zz")
+vim.keymap.set("n", "<c-\\>", ":vertical wincmd ]<cr>zz", { silent = true })
 
 -- `gf` opens file under cursor in a new vertical split
 vim.keymap.set("c", "<Plug><cfile>", "<C-R><C-F>")
 vim.keymap.set("n", "gf", ":vert sfind <Plug><cfile><CR>")
 
 -- [w ]w - Forward and backwards tabs
-vim.keymap.set("n", "[w", "<esc>:tabprevious<cr>")
-vim.keymap.set("n", "]w", "<esc>:tabnext<cr>")
+vim.keymap.set("n", "[w", "<esc>:tabprevious<cr>", { silent = true })
+vim.keymap.set("n", "]w", "<esc>:tabnext<cr>", { silent = true })
 
 -- [W ]W - Move tabs
-vim.keymap.set("n", "[W", "<esc>:tabmove -1<cr>")
-vim.keymap.set("n", "]W", "<esc>:tabmove +1<cr>")
+vim.keymap.set("n", "[W", "<esc>:tabmove -1<cr>", { silent = true })
+vim.keymap.set("n", "]W", "<esc>:tabmove +1<cr>", { silent = true })
 
 -- Space to toggle folds.
 vim.keymap.set({ "n", "v" }, "<Space>", "za")

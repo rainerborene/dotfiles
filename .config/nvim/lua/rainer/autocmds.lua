@@ -4,15 +4,14 @@ local augroup = function(name)
   return vim.api.nvim_create_augroup("rainer_" .. name, { clear = true })
 end
 
--- Highlight on yank
 autocmd("TextYankPost", {
   group = augroup "yank_highlight",
+  desc = "Highlight on yank",
   callback = function()
     vim.hl.on_yank()
   end,
 })
 
--- Close some filetypes with <q>
 autocmd("FileType", {
   group = augroup "close_with_q",
   desc = "Close with <q>",
@@ -29,16 +28,16 @@ autocmd("FileType", {
   end,
 })
 
--- Auto-resize splits when window is resized
 autocmd("VimResized", {
   group = augroup "resize_splits",
+  desc = "Auto-resize splits when window is resized",
   pattern = "*",
   command = "wincmd =",
 })
 
--- go to last loc when opening a buffer
 autocmd("BufReadPost", {
   group = augroup "last_loc",
+  desc = "Go to the last location when opening a buffer",
   callback = function()
     local mark = vim.api.nvim_buf_get_mark(0, '"')
     if mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(0) then
@@ -47,7 +46,6 @@ autocmd("BufReadPost", {
   end,
 })
 
--- Open NPM package in a new tab
 command("Nopen", function(opts)
   local path = "node_modules/" .. opts.args
   if vim.fn.isdirectory(path) == 0 then
@@ -57,6 +55,7 @@ command("Nopen", function(opts)
   vim.cmd.tcd(path)
 end, {
   nargs = 1,
+  desc = "Open NPM package in a new tab",
   complete = function(arg_lead, _, _)
     return vim
       .iter(vim.fn.globpath("node_modules", arg_lead .. "*", true, true))

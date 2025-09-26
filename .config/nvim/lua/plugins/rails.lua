@@ -6,6 +6,24 @@ return {
   {
     "tpope/vim-rails",
     init = function()
+      -- Save ~1s loading ruby file
+      vim.g.ruby_host_prog = "~/.asdf/shims/neovim-ruby-host"
+      vim.g.ruby_default_path = vim
+        .iter({
+          "/3.4.0",
+          "/3.4.0/x86_64-linux",
+          "/site_ruby",
+          "/site_ruby/3.4.0",
+          "/site_ruby/3.4.0/x86_64-linux",
+          "/vendor_ruby",
+          "/vendor_ruby/3.4.0",
+          "/vendor_ruby/3.4.0/x86_64-linux",
+        })
+        :map(function(val)
+          return "~/.asdf/installs/ruby/3.4.1/lib/ruby/" .. val
+        end)
+        :totable()
+
       vim.g.rails_projections = {
         ["app/components/*_component.rb"] = {
           command = "component",
@@ -41,14 +59,14 @@ return {
       vim.g["test#strategy"] = "wezterm"
     end,
     keys = {
-      { "<leader>rr", ":TestNearest<cr>" },
       {
-        "<leader>rf",
+        "<leader>rr",
         function()
           vim.g["test#wezterm#pane_id"] = nil
-          vim.cmd.TestFile()
+          vim.cmd.TestNearest()
         end,
       },
+      { "<leader>rf", ":TestFile<cr>" },
       { "<leader>ra", ":TestSuite<cr>" },
       { "<leader>rl", ":TestLast<cr>" },
       { "<leader>rg", ":TestVisit<cr>" },
