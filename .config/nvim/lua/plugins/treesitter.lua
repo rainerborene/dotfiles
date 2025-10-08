@@ -20,7 +20,8 @@ return {
       "css",
     },
     indent = {
-      enable = false,
+      enable = true,
+      disable = { "yaml" },
     },
     incremental_selection = {
       enable = true,
@@ -87,6 +88,15 @@ return {
       desc = "Enable incremental selection when leaving the cmdline window",
       group = toggle_inc_selection_group,
       command = "TSBufEnable incremental_selection",
+    })
+
+    -- https://github.com/nvim-treesitter/nvim-treesitter/issues/3363
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "ruby",
+      desc = "Temporary solution to address the Ruby indentation issue",
+      callback = function()
+        vim.opt_local.indentkeys:remove "."
+      end,
     })
 
     require("nvim-treesitter.configs").setup(opts)

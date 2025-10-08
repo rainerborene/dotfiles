@@ -46,6 +46,18 @@ autocmd("BufReadPost", {
   end,
 })
 
+autocmd("BufWritePre", {
+  group = augroup "auto_create_dir",
+  desc = "Auto create dir when saving a file",
+  callback = function(event)
+    if event.match:match "^%w%w+://" then
+      return
+    end
+    local file = vim.loop.fs_realpath(event.match) or event.match
+    vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+  end,
+})
+
 command("Nopen", function(opts)
   local path = "node_modules/" .. opts.args
   if vim.fn.isdirectory(path) == 0 then

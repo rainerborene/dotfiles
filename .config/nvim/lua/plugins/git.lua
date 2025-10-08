@@ -12,24 +12,11 @@ return {
       },
       on_attach = function(bufnr)
         local gitsigns = require "gitsigns"
-
         local function map(mode, l, r, opts)
           opts = opts or {}
           opts.buffer = bufnr
           vim.keymap.set(mode, l, r, opts)
         end
-
-        -- Set syntax folding for git buffers
-        vim.api.nvim_create_autocmd("FileType", {
-          pattern = { "gitcommit", "git" },
-          group = vim.api.nvim_create_augroup("plugin_git", { clear = true }),
-          callback = function()
-            vim.schedule(function()
-              vim.opt_local.foldmethod = "syntax"
-              vim.opt_local.spell = true
-            end)
-          end,
-        })
 
         -- Navigation
         map("n", "]c", function()
@@ -69,13 +56,26 @@ return {
         end, { desc = "git [D]iff against last commit" })
 
         -- Text object
-        map({ "o", "x" }, "ih", gitsigns.select_hunk, { desc = "GitSigns Select Hunk" })
+        map({ "o", "x" }, "ih", gitsigns.select_hunk)
+        map({ "o", "x" }, "ah", gitsigns.select_hunk)
       end,
     },
   },
   {
     "tpope/vim-fugitive",
     cmd = { "Git", "Gread", "Gwrite" },
+    init = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "gitcommit", "git" },
+        group = vim.api.nvim_create_augroup("plugin_git", { clear = true }),
+        callback = function()
+          vim.schedule(function()
+            vim.opt_local.foldmethod = "syntax"
+            vim.opt_local.spell = true
+          end)
+        end,
+      })
+    end,
     keys = {
       { "<leader>ge", ":Gedit<cr>" },
       { "<leader>gw", ":Gwrite<cr>" },

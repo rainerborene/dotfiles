@@ -1,6 +1,3 @@
-vim.g.mapleader = ","
-vim.g.maplocalleader = "\\"
-
 -- Easy command-line mode
 vim.keymap.set("", ";", ":")
 
@@ -38,7 +35,7 @@ vim.keymap.set("n", "==", [[mqHmwgg=G`wzt`q]])
 vim.keymap.set("n", "=f", ":setfiletype<Space>")
 
 -- Open notes directory
-vim.keymap.set("n", "<leader>n", ":tabedit /mnt/c/Users/Rainer\\ Borene/Dropbox/Notebook/Notes<cr>")
+vim.keymap.set("n", "<leader>n", ":tabedit /mnt/c/Users/Rainer\\ Borene/Dropbox/Notebook/Notes<cr>", { silent = true })
 
 -- Fast escape from insert mode
 vim.keymap.set("i", "jj", "<esc>", { remap = true })
@@ -123,7 +120,7 @@ vim.keymap.set("n", "<leader>c", function()
   end
 end)
 
--- Poweful <esc>.
+-- Stop snippet on escape
 vim.keymap.set({ "i", "s", "n" }, "<esc>", function()
   vim.snippet.stop()
   return "<esc>"

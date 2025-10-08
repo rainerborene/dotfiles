@@ -74,23 +74,22 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("plugin_lsp", { clear = true }),
         callback = function(event)
-          local map = function(lhs, rhs, mode)
-            mode = mode or "n"
-            vim.keymap.set(mode, lhs, rhs, { buffer = event.buf, silent = true })
+          local map = function(lhs, rhs, map_opts)
+            vim.keymap.set(map_opts.mode or "n", lhs, rhs, { buffer = event.buf, silent = true, desc = map_opts.desc })
           end
 
-          map("<leader>ld", vim.lsp.buf.definition)
-          map("<leader>li", vim.lsp.buf.implementation)
-          map("<leader>le", vim.lsp.buf.references)
-          map("<leader>lr", vim.lsp.buf.rename)
-          map("<leader>la", vim.lsp.buf.code_action)
-          map("<leader>ll", vim.diagnostic.open_float)
+          map("<leader>ld", vim.lsp.buf.definition, { desc = "Go to Definition" })
+          map("<leader>li", vim.lsp.buf.implementation, { desc = "Go to Implementation" })
+          map("<leader>le", vim.lsp.buf.references, { desc = "Find references" })
+          map("<leader>lr", vim.lsp.buf.rename, { desc = "Rename" })
+          map("<leader>la", vim.lsp.buf.code_action, { desc = "Code actions" })
+          map("<leader>ll", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
           map("<leader>ls", function()
             vim.lsp.buf.signature_help { border = "rounded" }
-          end)
+          end, { desc = "Show signature help" })
           map("K", function()
             vim.lsp.buf.hover { border = "rounded" }
-          end)
+          end, { desc = "Hover documentation" })
         end,
       })
     end,

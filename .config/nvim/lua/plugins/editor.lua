@@ -182,6 +182,8 @@ return {
         "<leader>gl",
         function()
           Snacks.picker.git_log {
+            follow = true,
+            current_file = vim.v.count > 0,
             confirm = function(picker, item, action)
               local gitsigns = require "gitsigns"
               picker:close()
