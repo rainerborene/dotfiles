@@ -49,9 +49,9 @@ vim.keymap.set("n", "<c-y>", "5<c-y>")
 vim.keymap.set("n", "j", [[(v:count > 1 ? 'm`' . v:count : 'g') . 'j']], { expr = true })
 vim.keymap.set("n", "k", [[(v:count > 1 ? 'm`' . v:count : 'g') . 'k']], { expr = true })
 
--- Keeping the cursor centered.
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
+-- Map n/N to always move in the same direction.
+vim.keymap.set("n", "n", "'Nn'[v:searchforward]", { silent = true, expr = true })
+vim.keymap.set("n", "N", "'nN'[v:searchforward]", { silent = true, expr = true })
 
 -- Center screen
 vim.keymap.set("n", "gg", "ggzz")
@@ -92,6 +92,16 @@ vim.keymap.set("", "X", [["_d]])
 vim.keymap.set("n", "s", [["_s]])
 vim.keymap.set("n", "S", [["_S]])
 
+-- Stay star motions
+local better_hlsearch = function()
+  local current_word = vim.call("expand", "<cword>")
+  vim.fn.setreg("/", "\\<" .. current_word .. "\\>")
+  vim.opt.hlsearch = true
+end
+
+vim.keymap.set("n", "#", better_hlsearch)
+vim.keymap.set("n", "*", better_hlsearch)
+
 -- Clean trailing whitespace
 vim.keymap.set("n", "=w", function()
   local curpos = vim.api.nvim_win_get_cursor(0)
@@ -125,3 +135,17 @@ vim.keymap.set({ "i", "s", "n" }, "<esc>", function()
   vim.snippet.stop()
   return "<esc>"
 end, { expr = true })
+
+-- Disable hlsearch automatically when your search done and enable on next searching
+vim.on_key(function(char)
+  local is_normal = vim.fn.mode() == "n" and char ~= "z"
+  if not is_normal or require("flash.prompt").visible() then
+    return
+  end
+  local keys = { "<CR>", "n", "N", "*", "#", "?", "/" }
+  local new_hlsearch = vim.tbl_contains(keys, vim.fn.keytrans(char))
+
+  if vim.o.hlsearch ~= new_hlsearch then
+    vim.o.hlsearch = new_hlsearch
+  end
+end, vim.api.nvim_create_namespace "toggle_hlsearch")

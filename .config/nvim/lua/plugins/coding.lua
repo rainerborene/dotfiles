@@ -16,8 +16,6 @@ return {
     },
   },
 
-  { "AndrewRadev/splitjoin.vim", keys = { "gJ", "gS" } },
-
   { "folke/ts-comments.nvim" },
 
   { "tpope/vim-rsi" },

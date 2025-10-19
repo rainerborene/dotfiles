@@ -39,17 +39,7 @@ return {
             return
           end
 
-          local start_pos = vim.api.nvim_buf_get_mark(0, "<")
-          local end_pos = vim.api.nvim_buf_get_mark(0, ">")
-
-          vim.lsp.buf.format {
-            range = {
-              start = { start_pos[1], start_pos[2] },
-              ["end"] = { end_pos[1], end_pos[2] },
-            },
-          }
-
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+          vim.cmd.normal { "mq=`q", bang = true, mods = { silent = true, emsg_silent = true } }
         end)
       end,
       mode = { "n", "v" },

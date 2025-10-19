@@ -58,6 +58,16 @@ autocmd("BufWritePre", {
   end,
 })
 
+autocmd("CursorMoved", {
+  group = augroup "center_on_search",
+  desc = "Center screen on search highlighting",
+  callback = function()
+    if vim.o.hlsearch then
+      vim.api.nvim_feedkeys("zz", "n", false)
+    end
+  end,
+})
+
 command("Nopen", function(opts)
   local path = "node_modules/" .. opts.args
   if vim.fn.isdirectory(path) == 0 then

@@ -87,4 +87,14 @@ return {
       vim.keymap.del("x", "cx")
     end,
   },
+  {
+    "nvim-mini/mini.splitjoin",
+    opts = {
+      mappings = {
+        toggle = "",
+        split = "gS",
+        join = "gJ",
+      },
+    },
+  },
 }

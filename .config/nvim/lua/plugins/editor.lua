@@ -4,24 +4,6 @@ return {
   { "tpope/vim-repeat" },
 
   {
-    "romainl/vim-cool",
-    init = function()
-      vim.g.CoolTotalMatches = 1
-    end,
-  },
-  {
-    "haya14busa/vim-asterisk",
-    init = function()
-      vim.g["asterisk#keeppos"] = 1
-    end,
-    keys = {
-      { "*", "<Plug>(asterisk-z*)", mode = "" },
-      { "g*", "<Plug>(asterisk-gz*)", mode = "" },
-      { "#", "<Plug>(asterisk-z#)", mode = "" },
-      { "g#", "<Plug>(asterisk-gz#)", mode = "" },
-    },
-  },
-  {
     "stevearc/oil.nvim",
     lazy = false,
     opts = {
