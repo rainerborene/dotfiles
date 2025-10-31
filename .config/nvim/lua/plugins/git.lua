@@ -68,18 +68,16 @@ return {
       vim.api.nvim_create_autocmd("FileType", {
         pattern = { "gitcommit", "git" },
         group = vim.api.nvim_create_augroup("plugin_git", { clear = true }),
-        callback = function()
-          vim.schedule(function()
-            vim.opt_local.foldmethod = "syntax"
-            vim.opt_local.spell = true
-          end)
-        end,
+        callback = vim.schedule_wrap(function()
+          vim.opt_local.foldmethod = "syntax"
+          vim.opt_local.spell = true
+        end),
       })
     end,
     keys = {
-      { "<leader>ge", ":Gedit<cr>" },
-      { "<leader>gw", ":Gwrite<cr>" },
-      { "<leader>gs", ":Git<cr>gg)", remap = true },
+      { "<leader>ge", ":Gedit<cr>", silent = true },
+      { "<leader>gw", ":Gwrite<cr>", silent = true },
+      { "<leader>gs", ":Git<cr>gg)", silent = true, remap = true },
     },
   },
   {

@@ -5,28 +5,6 @@ return {
     config = function()
       local ai = require "mini.ai"
       local extra = require "mini.extra"
-      local folding = function()
-        return function()
-          vim.opt.foldexpr = vim.opt.foldexpr
-          local lnum = vim.fn.line "."
-          local start_line = vim.fn.foldclosed(lnum)
-          local end_line = vim.fn.foldclosedend(lnum)
-          if start_line < 0 then
-            vim.cmd.foldclose { mods = { silent = true, emsg_silent = true } }
-            start_line = vim.fn.foldclosed(lnum)
-            end_line = vim.fn.foldclosedend(lnum)
-            vim.cmd.foldopen { mods = { silent = true, emsg_silent = true } }
-          end
-          if start_line < 0 then
-            return
-          end
-          return {
-            from = { line = start_line, col = 1 },
-            to = { line = end_line, col = 1 },
-            vis_mode = "V",
-          }
-        end
-      end
 
       ai.setup {
         n_lines = 500,
@@ -57,9 +35,7 @@ return {
 
           E = ai.gen_spec.pair("<%= ", "%>"),
           e = extra.gen_ai_spec.buffer(),
-          i = extra.gen_ai_spec.indent(),
           l = extra.gen_ai_spec.line(),
-          z = folding(),
         },
       }
     end,

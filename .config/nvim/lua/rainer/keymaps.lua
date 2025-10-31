@@ -94,7 +94,7 @@ vim.keymap.set("n", "S", [["_S]])
 
 -- Stay star motions
 local better_hlsearch = function()
-  local current_word = vim.call("expand", "<cword>")
+  local current_word = vim.fn.expand("<cword>")
   vim.fn.setreg("/", "\\<" .. current_word .. "\\>")
   vim.opt.hlsearch = true
 end

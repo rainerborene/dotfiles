@@ -7,7 +7,7 @@ return {
     "tpope/vim-rails",
     init = function()
       -- Save ~1s loading ruby file
-      local lib_ruby_dir = "~/.asdf/installs/ruby/3.4.1/lib/ruby"
+      local lib_ruby_dir = "~/.asdf/installs/ruby/3.4.7/lib/ruby"
       vim.g.ruby_host_prog = "~/.asdf/shims/neovim-ruby-host"
       vim.g.ruby_default_path = {
         lib_ruby_dir .. "/3.4.0",

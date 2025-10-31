@@ -120,11 +120,24 @@ return {
         end,
         mode = "c",
       },
+      {
+        "<cr>",
+        function()
+          require("flash").treesitter {
+            actions = {
+              ["<cr>"] = "next",
+              ["<bs>"] = "prev",
+            },
+          }
+        end,
+        mode = { "n", "x", "o" }
+      }
     },
   },
   {
     "folke/snacks.nvim",
     opts = {
+      scope = { enabled = true },
       picker = {
         icons = {
           files = { enabled = false },
@@ -152,6 +165,8 @@ return {
       },
     },
     keys = {
+      { "ai", mode = { "o", "x" } },
+      { "ii", mode = { "o", "x" } },
       { "<leader><leader>", function() Snacks.picker.files() end, },
       { "<leader><tab>", function() Snacks.picker.keymaps() end, },
       { "<leader>.", function() Snacks.picker.lsp_workspace_symbols() end, },
@@ -173,7 +188,8 @@ return {
                 return
               end
               if not action.cmd then
-                gitsigns.show_commit(item.commit, "enew")
+                vim.cmd.DiffviewOpen(item.commit .. "^!")
+                -- gitsigns.show_commit(item.commit, "enew")
               elseif action.cmd == "split" then
                 gitsigns.show_commit(item.commit, "split")
               elseif action.cmd == "vsplit" then

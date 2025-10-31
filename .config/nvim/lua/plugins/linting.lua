@@ -16,7 +16,7 @@ return {
 
     vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
       callback = function()
-        if vim.bo.modifiable then
+        if vim.bo.modifiable and vim.bo.filetype ~= "eruby.yaml" then
           lint.try_lint()
         end
       end,

@@ -48,16 +48,20 @@ tasks:
   tools:
     desc: Install my daily dev tools with flox
     cmds:
-      - flox install ast-grep bat difftastic eza fastfetch fd go-task hyperfine
-        jemalloc jq ripgrep stow xan xh zoxide
+      - flox install tree-sitter ast-grep bat difftastic eza fastfetch fd
+          go-task hyperfine jemalloc jq ripgrep stow xan xh zoxide
 
-  chromedriver:
-    desc: Pull latest chromedriver to WindowsApps directory
+  chrome-headless:
+    desc: Download the latest chrome driver and headless shell
     dir: /tmp
     vars:
       VERSION:
         sh: curl https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions.json | jq -r '.channels.Stable.version'
     cmds:
-      - curl https://storage.googleapis.com/chrome-for-testing-public/{{.VERSION}}/win64/chromedriver-win64.zip -o chromedriver.zip
-      - unzip -u chromedriver.zip
+      - curl -O https://storage.googleapis.com/chrome-for-testing-public/{{.VERSION}}/win64/chromedriver-win64.zip
+      - curl -O https://storage.googleapis.com/chrome-for-testing-public/{{.VERSION}}/linux64/chrome-headless-shell-linux64.zip
+      - unzip -u chromedriver-win64.zip
+      - unzip -u chrome-headless-shell-linux64.zip
+      - rm -rf ~/.local/bin/chrome-headless-shell-linux64/
       - mv -v chromedriver-win64/chromedriver.exe "`readlink $(which chromedriver)`"
+      - mv -v chrome-headless-shell-linux64/ ~/.local/bin/
