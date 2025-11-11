@@ -26,7 +26,7 @@ tasks:
   lsp:
     desc: Install TailwindCSS and vscode language servers
     cmds:
-      - npm install -g @tailwindcss/language-server vscode-langservers-extracted
+      - npm install -g @olrtg/emmet-language-server @tailwindcss/language-server vscode-langservers-extracted
 
   vivid:
     desc: Install themeable LS_COLORS generator
@@ -40,9 +40,8 @@ tasks:
   gems:
     desc: Install gems for Ruby on Rails development
     cmds:
-      - gem update --system
-      - gem install easy_translate erb_lint i18n-tasks neovim
-          rubocop rubocop-minitest rubocop-performance rubocop-rails rubocop-rails-omakase
+      - gem install herb easy_translate erb_lint i18n-tasks neovim rubocop
+          rubocop-minitest rubocop-performance rubocop-rails rubocop-rails-omakase
           ruby-lsp ruby-lsp-rails
 
   tools:

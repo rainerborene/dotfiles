@@ -20,29 +20,26 @@ return {
         "caddy",
         "vimdoc",
         "css",
+        "svelte"
       },
+      indent = {
+        enable = true,
+        disable = { "yaml", "ruby" }
+      }
     },
     config = function(_, opts)
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = "*",
-        callback = function()
-          if not vim.treesitter.get_parser(nil, nil, { error = false }) then
+        callback = function(args)
+          local filetype = args.match
+          local lang = vim.treesitter.language.get_lang(filetype)
+          ---@diagnostic disable-next-line: param-type-mismatch
+          if not vim.treesitter.language.add(lang) then
             return
           end
-
           vim.treesitter.start()
-          if vim.bo.filetype ~= "yaml" then
+          if opts.indent.enable and not vim.tbl_contains(opts.indent.disable, vim.bo.filetype) then
             vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
           end
-        end,
-      })
-
-      -- https://github.com/nvim-treesitter/nvim-treesitter/issues/3363
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "ruby",
-        desc = "Temporary solution to address the Ruby indentation issue",
-        callback = function()
-          vim.opt_local.indentkeys:remove "."
         end,
       })
 

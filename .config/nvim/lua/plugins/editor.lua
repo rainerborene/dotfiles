@@ -130,7 +130,8 @@ return {
             },
           }
         end,
-        mode = { "n", "x", "o" }
+        mode = { "n", "x", "o" },
+        ft = { "ruby", "json", "lua", "html", "javascript", "typescript", "tsx", "vue", "vim", "css" }
       }
     },
   },
@@ -182,20 +183,18 @@ return {
             follow = true,
             current_file = vim.v.count > 0,
             confirm = function(picker, item, action)
-              local gitsigns = require "gitsigns"
               picker:close()
               if not item then
                 return
               end
               if not action.cmd then
                 vim.cmd.DiffviewOpen(item.commit .. "^!")
-                -- gitsigns.show_commit(item.commit, "enew")
               elseif action.cmd == "split" then
-                gitsigns.show_commit(item.commit, "split")
+                vim.cmd.Gsplit(item.commit)
               elseif action.cmd == "vsplit" then
-                gitsigns.show_commit(item.commit, "vsplit")
+                vim.cmd.Gvsplit(item.commit)
               elseif action.cmd == "tab" then
-                gitsigns.show_commit(item.commit, "tabedit")
+                vim.cmd.Gtabedit(item.commit)
               end
             end,
           }
