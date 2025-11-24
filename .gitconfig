@@ -45,7 +45,7 @@
   keepTemporaries = false
 
 [mergetool "fugitive"]
-  cmd = "nvim -f -c 'Gvdiff' $MERGED"
+  cmd = "nvim -f -c 'Gvdiffsplit' $MERGED"
 
 [alias]
   a                 = add

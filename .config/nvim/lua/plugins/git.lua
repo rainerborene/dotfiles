@@ -63,7 +63,7 @@ return {
   },
   {
     "tpope/vim-fugitive",
-    cmd = { "Git", "Gread", "Gwrite", "Gsplit", "Gvsplit", "Gtabedit" },
+    cmd = { "Git", "Gread", "Gsplit", "Gtabedit", "Gvdiffsplit", "Gvsplit", "Gwrite" },
     init = function()
       vim.api.nvim_create_autocmd("FileType", {
         pattern = { "gitcommit", "git" },

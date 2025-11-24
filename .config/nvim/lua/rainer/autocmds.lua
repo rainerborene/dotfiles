@@ -12,6 +12,13 @@ autocmd("TextYankPost", {
   end,
 })
 
+autocmd("CmdwinEnter", {
+  callback = function(args)
+    vim.keymap.del({ "n", "x", "o" }, "<cr>", { buffer = args.buf })
+    vim.keymap.set("n", "<c-c>", "<Cmd>quit<cr>", { buffer = args.buf })
+  end,
+})
+
 autocmd("FileType", {
   group = augroup "close_with_q",
   desc = "Close with <q>",
@@ -39,6 +46,10 @@ autocmd("BufReadPost", {
   group = augroup "last_loc",
   desc = "Go to the last location when opening a buffer",
   callback = function()
+    local bufname = vim.api.nvim_buf_get_name(0)
+    if vim.startswith(bufname, "fugitive://") or bufname:match ".git/" then
+      return
+    end
     local mark = vim.api.nvim_buf_get_mark(0, '"')
     if mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(0) then
       vim.api.nvim_win_set_cursor(0, mark)

@@ -20,12 +20,12 @@ return {
         "caddy",
         "vimdoc",
         "css",
-        "svelte"
+        "svelte",
       },
       indent = {
         enable = true,
-        disable = { "yaml", "ruby" }
-      }
+        disable = { "yaml", "ruby" },
+      },
     },
     config = function(_, opts)
       vim.api.nvim_create_autocmd("FileType", {
