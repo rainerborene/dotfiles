@@ -44,11 +44,14 @@ tasks:
           rubocop-minitest rubocop-performance rubocop-rails rubocop-rails-omakase
           ruby-lsp ruby-lsp-rails
 
-  tools:
-    desc: Install my daily dev tools with flox
+  flox:
+    desc: Install flox package and environment manager
+    dir: /tmp
+    vars:
+      VERSION: 1.7.7
     cmds:
-      - flox install tree-sitter ast-grep bat difftastic eza fastfetch fd
-          go-task hyperfine jemalloc jq ripgrep stow xan xh zoxide
+      - curl -O https://downloads.flox.dev/by-env/stable/deb/flox-{{.VERSION}}.x86_64-linux.deb
+      - sudo dpkg -i flox-{{.VERSION}}.x86_64-linux.deb
 
   chrome-headless:
     desc: Download the latest chrome driver and headless shell

@@ -137,6 +137,7 @@ return {
   },
   {
     "folke/snacks.nvim",
+    lazy = false,
     opts = {
       scope = { enabled = true },
       picker = {
@@ -166,8 +167,6 @@ return {
       },
     },
     keys = {
-      { "ai", mode = { "o", "x" } },
-      { "ii", mode = { "o", "x" } },
       { "<leader><leader>", function() Snacks.picker.files() end, },
       { "<leader><tab>", function() Snacks.picker.keymaps() end, },
       { "<leader>.", function() Snacks.picker.lsp_workspace_symbols() end, },
@@ -222,5 +221,23 @@ return {
         end,
       },
     },
+    init = function()
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "VeryLazy",
+        callback = function()
+          _G.dd = function(...)
+            Snacks.debug.inspect(...)
+          end
+          _G.bt = function()
+            Snacks.debug.backtrace()
+          end
+
+          ---@diagnostic disable-next-line: duplicate-set-field
+          vim._print = function(_, ...)
+            dd(...)
+          end
+        end,
+      })
+    end,
   },
 }

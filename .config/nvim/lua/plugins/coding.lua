@@ -26,7 +26,7 @@ return {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     opts = {
-      disable_filetype = { "snacks_picker_input", "grug-far" },
+      disable_filetype = { "snacks_picker_input", "snacks_picker_list", "grug-far" },
     },
     config = function(_, opts)
       local npairs = require "nvim-autopairs"
