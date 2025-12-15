@@ -1,10 +1,8 @@
 return {
   {
     "nvim-mini/mini.ai",
-    dependencies = { "nvim-mini/mini.extra" },
     config = function()
       local ai = require "mini.ai"
-      local extra = require "mini.extra"
 
       ai.setup {
         n_lines = 500,
@@ -34,8 +32,26 @@ return {
           },
 
           E = ai.gen_spec.pair("<%= ", "%>"),
-          e = extra.gen_ai_spec.buffer(),
-          l = extra.gen_ai_spec.line(),
+          l = function(ai_type)
+            local line_num = vim.fn.line "."
+            local line = vim.fn.getline(line_num)
+            -- Ignore indentation for `i` textobject
+            local from_col = ai_type == "a" and 1 or (line:match("^(%s*)"):len() + 1)
+            -- Don't select `\n` past the line to operate within a line
+            local to_col = line:len()
+
+            return { from = { line = line_num, col = from_col }, to = { line = line_num, col = to_col } }
+          end,
+
+          -- Whole buffer
+          e = function()
+            local from = { line = 1, col = 1 }
+            local to = {
+              line = vim.fn.line "$",
+              col = math.max(vim.fn.getline("$"):len(), 1),
+            }
+            return { from = from, to = to }
+          end,
         },
       }
     end,

@@ -3,11 +3,19 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
     priority = 1000,
-    config = function()
-      vim.cmd.colorscheme "catppuccin"
+    opts = {
+      auto_integrations = true,
+      custom_highlights = function()
+        return {
+          SlimLine = { link = "StatusLine" },
+          MatchWord = { bold = true },
+        }
+      end,
+    },
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
 
-      vim.api.nvim_set_hl(0, "Slimline", { link = "StatusLine" })
-      vim.api.nvim_set_hl(0, "MatchWord", { bold = true })
+      vim.cmd.colorscheme "catppuccin"
     end,
   },
   {

@@ -77,18 +77,6 @@ return {
     },
   },
   {
-    "mbbill/undotree",
-    cmd = "UndotreeToggle",
-    init = function()
-      vim.g.undotree_WindowLayout = 2
-      vim.g.undotree_SetFocusWhenToggle = 1
-      vim.g.undotree_ShortIndicators = 1
-    end,
-    keys = {
-      { "<leader>u", "<Cmd>UndotreeToggle<cr>" },
-    },
-  },
-  {
     "folke/flash.nvim",
     event = "VeryLazy",
     opts = {
@@ -175,6 +163,7 @@ return {
       { "<leader>a", function() Snacks.picker.grep() end, },
       { "<leader>A", function() Snacks.picker.grep_word() end, mode = { "n", "v" }, },
       { "<leader>f", function() Snacks.picker.grep_word { search = vim.fn.input "Grep For > ", regex = true } end, },
+      { "<leader>u", function() Snacks.picker.undo() end, },
       {
         "<leader>gl",
         function()
