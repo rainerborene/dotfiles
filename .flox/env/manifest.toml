@@ -19,6 +19,7 @@ xan.pkg-path = "xan"
 ast-grep.pkg-path = "ast-grep"
 cloc.pkg-path = "cloc"
 tree-sitter.pkg-path = "tree-sitter"
+vivid.pkg-path = "vivid"
 
 [options]
 systems = ["x86_64-linux"]

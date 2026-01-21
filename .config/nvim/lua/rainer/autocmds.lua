@@ -30,8 +30,30 @@ autocmd("FileType", {
     "help",
     "qf",
   },
-  callback = function(args)
-    vim.keymap.set("n", "q", "<cmd>quit<cr>", { buffer = args.buf })
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "q", function()
+      vim.cmd.close { mods = { silent = true, emsg_silent = true } }
+      pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+    end, { buffer = event.buf, silent = true })
+  end,
+})
+
+local au_cursorline = augroup "cursorline_focus"
+
+autocmd({ "CursorHold", "CursorHoldI", "WinEnter" }, {
+  group = au_cursorline,
+  desc = "Show cursorline in active window",
+  callback = function()
+    vim.wo.cursorline = true
+  end,
+})
+
+autocmd({ "CursorMoved", "CursorMovedI", "WinLeave" }, {
+  group = au_cursorline,
+  desc = "Hide cursorline in insert mode and inactive windows",
+  callback = function()
+    vim.wo.cursorline = false
   end,
 })
 

@@ -1,8 +1,5 @@
 return {
   { "tpope/vim-unimpaired" },
-
-  { "tpope/vim-repeat" },
-
   {
     "stevearc/oil.nvim",
     lazy = false,

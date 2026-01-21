@@ -7,7 +7,20 @@ return {
     keys = { "-" },
   },
   {
+    "AndrewRadev/splitjoin.vim",
+    lazy = false,
+    init = function()
+      vim.g.splitjoin_split_mapping = ""
+      vim.g.splitjoin_join_mapping = ""
+    end,
+    keys = {
+      { "gS", ":SplitjoinSplit<cr>" },
+      { "gJ", ":SplitjoinJoin<cr>" },
+    },
+  },
+  {
     "AndrewRadev/sideways.vim",
+    lazy = false,
     keys = {
       { "sh", ":SidewaysLeft<cr>" },
       { "sl", ":SidewaysRight<cr>" },

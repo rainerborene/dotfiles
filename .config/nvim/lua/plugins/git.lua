@@ -65,13 +65,23 @@ return {
     "tpope/vim-fugitive",
     cmd = { "Git", "Gclog", "Gread", "Gsplit", "Gtabedit", "Gvdiffsplit", "Gvsplit" },
     init = function()
+      local git_group = vim.api.nvim_create_augroup("plugin_git", { clear = true })
+
       vim.api.nvim_create_autocmd("FileType", {
         pattern = { "gitcommit", "git" },
-        group = vim.api.nvim_create_augroup("plugin_git", { clear = true }),
+        group = git_group,
         callback = vim.schedule_wrap(function()
           vim.opt_local.foldmethod = "syntax"
           vim.opt_local.spell = true
         end),
+      })
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "gitrebase",
+        group = git_group,
+        callback = function(event)
+          vim.keymap.set("n", "S", ":Cycle<cr>", { buffer = event.buf, silent = true })
+        end,
       })
     end,
     keys = {

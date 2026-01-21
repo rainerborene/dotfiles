@@ -7,6 +7,7 @@ return {
       auto_integrations = true,
       custom_highlights = function()
         return {
+          htmlTagN = { link = "htmlTagName" },
           SlimLine = { link = "StatusLine" },
           MatchWord = { bold = true },
         }

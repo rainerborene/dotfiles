@@ -8,6 +8,7 @@ set -gx EDITOR nvim
 set -gx LANG en_US.UTF-8
 set -gx LC_ALL en_US.UTF-8
 set -gx ASDF_DATA_DIR $HOME/.asdf
+set -gx DOCKER_API_VERSION 1.43
 
 fish_add_path "/usr/bin"
 fish_add_path "/usr/local/bin"

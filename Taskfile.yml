@@ -18,6 +18,11 @@ tasks:
     cmds:
       - git -C ~/.fzf pull 2>/dev/null || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
 
+  pass:
+    desc: Install Proton Pass CLI
+    cmds:
+      - curl -fsSL https://proton.me/download/pass-cli/install.sh | bash
+
   atuin:
     desc: Atuin for magical shell history
     cmds:
@@ -28,21 +33,12 @@ tasks:
     cmds:
       - npm install -g @olrtg/emmet-language-server @tailwindcss/language-server vscode-langservers-extracted
 
-  vivid:
-    desc: Install themeable LS_COLORS generator
-    dir: /tmp
-    vars:
-      VERSION: 0.10.1
-    cmds:
-      - wget "https://github.com/sharkdp/vivid/releases/download/v{{.VERSION}}/vivid_{{.VERSION}}_amd64.deb"
-      - sudo dpkg -i vivid_{{.VERSION}}_amd64.deb
-
   gems:
     desc: Install gems for Ruby on Rails development
     cmds:
-      - gem install herb easy_translate erb_lint i18n-tasks neovim rubocop
-          rubocop-minitest rubocop-performance rubocop-rails rubocop-rails-omakase
-          ruby-lsp ruby-lsp-rails
+      - gem install bundler-audit easy_translate erb_lint herb i18n-tasks neovim
+          rubocop rubocop-minitest rubocop-performance rubocop-rails
+          rubocop-rails-omakase ruby-lsp ruby-lsp-rails
 
   flox:
     desc: Install flox package and environment manager

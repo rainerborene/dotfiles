@@ -5,6 +5,15 @@ vim.keymap.set("", ";", ":")
 vim.keymap.set("", "<Tab>", "%", { remap = true })
 vim.keymap.set("", "<C-o>", "<Nop>")
 
+-- Keep the cursor in place while joining lines
+vim.keymap.set("n", "J", "mzJ`z")
+
+-- Always start inserting at the end of input fields
+vim.keymap.set("", "gi", "gi<End>")
+
+-- Move to last change
+vim.keymap.set("n", "gI", "`.zz")
+
 -- Quit
 vim.keymap.set("i", "<c-q>", "<esc>:q<cr>", { silent = true })
 vim.keymap.set("n", "<c-q>", ":q<cr>", { silent = true })
@@ -86,11 +95,18 @@ vim.keymap.set({ "n", "v" }, "<Space>", "za")
 -- Ctrl-b: Go (b)ack. Go to previously buffer
 vim.keymap.set("n", "<c-b>", "<c-^>")
 
+-- Goto older/newer position in change list
+vim.keymap.set("n", "(", "g;zvzz", { silent = true })
+vim.keymap.set("n", ")", "g,zvzz", { silent = true })
+
 -- Do NOT yank with x/s
 vim.keymap.set("", "x", [["_x]])
 vim.keymap.set("", "X", [["_d]])
 vim.keymap.set("n", "s", [["_s]])
 vim.keymap.set("n", "S", [["_S]])
+
+-- Change current word and prepare to repeat next occurence (like *cgn)
+vim.keymap.set("n", "c*", [[:<C-U>let @/='\<'.expand("<cword>").'\>'<CR>:set hlsearch<CR>cgn]])
 
 -- Stay star motions
 local better_hlsearch = function()
@@ -101,6 +117,20 @@ end
 
 vim.keymap.set("n", "#", better_hlsearch)
 vim.keymap.set("n", "*", better_hlsearch)
+
+-- Disable hlsearch automatically when your search done and enable on next searching
+vim.on_key(function(char)
+  local is_normal = vim.fn.mode() == "n" and char ~= "z"
+  if not is_normal or require("flash.prompt").visible() then
+    return
+  end
+  local keys = { "<CR>", "n", "N", "*", "#", "?", "/" }
+  local new_hlsearch = vim.tbl_contains(keys, vim.fn.keytrans(char))
+
+  if vim.o.hlsearch ~= new_hlsearch then
+    vim.o.hlsearch = new_hlsearch
+  end
+end, vim.api.nvim_create_namespace "toggle_hlsearch")
 
 -- Clean trailing whitespace
 vim.keymap.set("n", "=w", function()
@@ -124,7 +154,7 @@ end)
 vim.keymap.set("n", "<leader>c", function()
   local nr = vim.fn.winnr "$"
   if #vim.fn.getqflist() > 0 then
-    vim.cmd.copen()
+    vim.cmd.copen { mods = { split = "botright" } }
   end
   if nr == vim.fn.winnr "$" then
     vim.cmd.cclose()
@@ -136,17 +166,3 @@ vim.keymap.set({ "i", "s", "n" }, "<esc>", function()
   vim.snippet.stop()
   return "<esc>"
 end, { expr = true })
-
--- Disable hlsearch automatically when your search done and enable on next searching
-vim.on_key(function(char)
-  local is_normal = vim.fn.mode() == "n" and char ~= "z"
-  if not is_normal or require("flash.prompt").visible() then
-    return
-  end
-  local keys = { "<CR>", "n", "N", "*", "#", "?", "/" }
-  local new_hlsearch = vim.tbl_contains(keys, vim.fn.keytrans(char))
-
-  if vim.o.hlsearch ~= new_hlsearch then
-    vim.o.hlsearch = new_hlsearch
-  end
-end, vim.api.nvim_create_namespace "toggle_hlsearch")

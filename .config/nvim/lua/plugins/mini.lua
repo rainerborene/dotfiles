@@ -13,7 +13,7 @@ return {
           inside_last = "",
         },
         custom_textobjects = {
-          t = { "<([%p%w]-).->.-</%1>", "^<.-[^%%-]>().*()</[^/]->$" }, -- tags
+          t = false,
           d = {
             {
               -- Cam*elCase
@@ -78,15 +78,5 @@ return {
       -- Make c work in visual mode
       vim.keymap.del("x", "cx")
     end,
-  },
-  {
-    "nvim-mini/mini.splitjoin",
-    opts = {
-      mappings = {
-        toggle = "",
-        split = "gS",
-        join = "gJ",
-      },
-    },
-  },
+  }
 }
