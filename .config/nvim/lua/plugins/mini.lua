@@ -16,18 +16,11 @@ return {
           t = false,
           d = {
             {
-              -- Cam*elCase
-              { "()()%u[%l%d]+()%f[^%l%d]()" },
-              -- a*aa_bbb
-              { "[^%w]()()[%w]+()_()" },
-              -- a*aa_bb
-              { "^()()[%w]+()_()" },
-              -- aaa_bbb*_ccc
-              { "_()()[%w]+()_()" },
-              -- bbb_cc*cc
-              { "()_()[%w]+()()%f[%W]" },
-              -- bbb_cc*c at the end of the line
-              { "()_()[%w]+()()$" },
+              "%f[%a]%l+%d*",
+              "%f[%w]%d+",
+              "%f[%u]%u%f[%A]%d*",
+              "%f[%u]%u%l+%d*",
+              "%f[%u]%u%u+%d*",
             },
           },
 

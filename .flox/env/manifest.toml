@@ -6,7 +6,6 @@ bat.pkg-path = "bat"
 eza.pkg-path = "eza"
 zoxide.pkg-path = "zoxide"
 difftastic.pkg-path = "difftastic"
-universal-ctags.pkg-path = "universal-ctags"
 ripgrep.pkg-path = "ripgrep"
 go-task.pkg-path = "go-task"
 jq.pkg-path = "jq"
@@ -20,6 +19,7 @@ ast-grep.pkg-path = "ast-grep"
 cloc.pkg-path = "cloc"
 tree-sitter.pkg-path = "tree-sitter"
 vivid.pkg-path = "vivid"
+wsl-open.pkg-path = "wsl-open"
 
 [options]
 systems = ["x86_64-linux"]

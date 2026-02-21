@@ -17,6 +17,7 @@ fish_add_path "$HOME/.local/bin"
 fish_add_path "$HOME/.fzf/bin"
 fish_add_path "$HOME/.atuin/bin"
 fish_add_path "$HOME/.yarn/bin"
+fish_add_path "$HOME/.opencode/bin"
 fish_add_path "$HOME/.config/yarn/global/node_modules/.bin"
 fish_add_path "$ASDF_DATA_DIR/shims"
 
@@ -37,15 +38,17 @@ alias l 'tree --dirsfirst -ChaFL 1'
 alias vim 'nvim'
 alias vi 'nvim'
 alias v 'nvim'
-alias open 'xdg-open &>/dev/null'
+alias open 'wsl-open'
 alias pbcopy 'xsel --clipboard --input'
 alias pbpaste 'xsel --clipboard --output'
 alias be 'bundle exec'
 alias rc 'rails console'
 alias rs 'rails server'
-alias fore 'foreman start -f Procfile.dev'
+alias cx 'claude'
 alias dkk 'docker kill (docker ps -q)'
 alias rmzone 'find . -name "*:Zone.Identifier" -delete'
+
+abbr oc 'opencode'
 
 function dkrm -d "Delete docker images by given name"
   docker images | grep $argv | awk '{ print $1 ":" $2 }' | xargs docker rmi
@@ -103,24 +106,9 @@ fzf --fish | source
 wezterm shell-completion --shell fish | source
 
 
-# Prompt
+# Vivid
 # --------------------------------------------------------------------
 
-set -g ___fish_git_prompt_color (set_color yellow)
-set -g __fish_git_prompt_showdirtystate true
-set -g fish_prompt_pwd_dir_length 0
-
-function _fishprompt_saved_prompt
-  set -l grey (set_color -o grey)
-  set -l blue (set_color -o blue)
-  set -l normal (set_color normal)
-  set -l arrow " $grey➜ $normal"
-  set -l cwd $blue(prompt_pwd)
-
-  printf '%s%s%s' $cwd (fish_git_prompt) $arrow
-end
-
-### Nice colorized output
 set -x LS_COLORS (vivid generate catppuccin-mocha)
 
 

@@ -4,9 +4,8 @@ return {
     event = "InsertEnter",
     dependencies = {
       "rafamadriz/friendly-snippets",
-      "mikavilpas/blink-ripgrep.nvim",
     },
-    build = "cargo +nightly build --release",
+    version = "1.*",
     opts = {
       appearance = {
         use_nvim_cmp_as_default = true,
@@ -41,7 +40,7 @@ return {
         },
       },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
+        default = { "lsp", "path", "snippets", "buffer" },
         providers = {
           snippets = {
             score_offset = 3,
@@ -56,21 +55,11 @@ return {
               get_bufnrs = vim.api.nvim_list_bufs,
             },
           },
-          ripgrep = {
-            name = "Ripgrep",
-            module = "blink-ripgrep",
-            score_offset = -3,
-            opts = {
-              prefix_min_len = 5,
-              backend = {
-                ripgrep = {
-                  max_filesize = "100K",
-                },
-              },
-            },
-          },
         },
       },
     },
+    init = function()
+      vim.g.omni_sql_no_default_maps = 1
+    end
   },
 }

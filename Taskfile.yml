@@ -23,6 +23,11 @@ tasks:
     cmds:
       - curl -fsSL https://proton.me/download/pass-cli/install.sh | bash
 
+  opencode:
+    desc: Install open source AI coding agent
+    cmds:
+      - curl -fsSL https://opencode.ai/install | bash
+
   atuin:
     desc: Atuin for magical shell history
     cmds:
