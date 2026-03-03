@@ -59,16 +59,6 @@ return {
     "kylechui/nvim-surround",
     event = "VeryLazy",
     opts = {
-      keymaps = {
-        insert = false,
-        insert_line = false,
-        normal = "sa",
-        normal_line = "saa",
-        normal_cur_line = "sS",
-        visual = "s",
-        delete = "sd",
-        change = "sr",
-      },
       surrounds = {
         ["E"] = {
           add = { "<%= ", " %>" },
@@ -78,6 +68,17 @@ return {
           delete = "^(<%%=%s*)().-(%s*%%>)()$",
         },
       },
+    },
+    init = function()
+      vim.g.nvim_surround_no_mappings = true
+    end,
+    keys = {
+      { "sa", "<Plug>(nvim-surround-normal)" },
+      { "saa", "<Plug>(nvim-surround-normal-cur)" },
+      { "sS", "<Plug>(nvim-surround-normal-cur-line)" },
+      { "S", "<Plug>(nvim-surround-visual)", mode = { "x" } },
+      { "sd", "<Plug>(nvim-surround-delete)" },
+      { "sr", "<Plug>(nvim-surround-change)" },
     },
   },
   {

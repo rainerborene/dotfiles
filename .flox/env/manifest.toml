@@ -20,6 +20,7 @@ cloc.pkg-path = "cloc"
 tree-sitter.pkg-path = "tree-sitter"
 vivid.pkg-path = "vivid"
 wsl-open.pkg-path = "wsl-open"
+btop.pkg-path = "btop"
 
 [options]
 systems = ["x86_64-linux"]

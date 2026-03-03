@@ -1,112 +1,114 @@
+local map = vim.keymap.set
+
 -- Easy command-line mode
-vim.keymap.set("", ";", ":")
+map("", ";", ":")
 
 -- Easier bracket matching
-vim.keymap.set("", "<Tab>", "%", { remap = true })
-vim.keymap.set("", "<C-o>", "<Nop>")
+map("", "<Tab>", "%", { remap = true })
+map("", "<C-o>", "<Nop>")
 
 -- Keep the cursor in place while joining lines
-vim.keymap.set("n", "J", "mzJ`z")
+map("n", "J", "mzJ`z")
 
 -- Always start inserting at the end of input fields
-vim.keymap.set("", "gi", "gi<End>")
+map("", "gi", "gi<End>")
 
 -- Move to last change
-vim.keymap.set("n", "gI", "`.zz")
+map("n", "gI", "`.zz")
 
 -- Quit
-vim.keymap.set("i", "<c-q>", "<esc>:q<cr>", { silent = true })
-vim.keymap.set("n", "<c-q>", ":q<cr>", { silent = true })
+map("i", "<c-q>", "<esc>:q<cr>", { silent = true })
+map("n", "<c-q>", ":q<cr>", { silent = true })
 
 -- Save
-vim.keymap.set("i", "<C-s>", "<C-o>:update<cr>", { silent = true })
-vim.keymap.set("n", "<C-s>", ":update<cr>", { silent = true })
+map("i", "<C-s>", "<C-o>:update<cr>", { silent = true })
+map("n", "<C-s>", ":update<cr>", { silent = true })
 
 -- Split windows
-vim.keymap.set("n", "<leader>s", "<C-W>s")
-vim.keymap.set("n", "<leader>v", "<C-W>v")
+map("n", "<leader>s", "<C-W>s")
+map("n", "<leader>v", "<C-W>v")
 
 -- Breaking the bad habit
-vim.keymap.set("n", "U", "<Nop>")
+map("n", "U", "<Nop>")
 
 -- Easier to type, and I never use the default behavior.
-vim.keymap.set({ "n", "x", "o" }, "H", "^")
-vim.keymap.set({ "n", "o" }, "L", "$")
-vim.keymap.set("x", "L", "g_")
+map({ "n", "x", "o" }, "H", "^")
+map({ "n", "o" }, "L", "$")
+map("x", "L", "g_")
 
 -- No overwrite paste
-vim.keymap.set("x", "p", [["_dP]])
+map("x", "p", [["_dP]])
 
 -- Reindent entire file
-vim.keymap.set("n", "==", [[mqHmwgg=G`wzt`q]])
+map("n", "==", [[mqHmwgg=G`wzt`q]])
 
 -- Easy filetype switching
-vim.keymap.set("n", "=f", ":setfiletype<Space>")
+map("n", "=f", ":setfiletype<Space>")
 
 -- Open notes directory
-vim.keymap.set("n", "<leader>n", ":tabedit /mnt/c/Users/Rainer\\ Borene/Dropbox/Notebook/Notes<cr>", { silent = true })
+map("n", "<leader>n", ":tabedit /mnt/c/Users/Rainer\\ Borene/Dropbox/Notebook/Notes<cr>", { silent = true })
 
 -- Fast escape from insert mode
-vim.keymap.set("i", "jj", "<esc>", { remap = true })
-vim.keymap.set("i", "<c-c>", "<esc>", { remap = true })
+map("i", "jj", "<esc>", { remap = true })
+map("i", "<c-c>", "<esc>", { remap = true })
 
 -- Faster scrolling
-vim.keymap.set("n", "<c-e>", "5<c-e>")
-vim.keymap.set("n", "<c-y>", "5<c-y>")
+map("n", "<c-e>", "5<c-e>")
+map("n", "<c-y>", "5<c-y>")
 
 -- Remap for dealing with word wrap and adding jumps to the jumplist.
-vim.keymap.set("n", "j", [[(v:count > 1 ? 'm`' . v:count : 'g') . 'j']], { expr = true })
-vim.keymap.set("n", "k", [[(v:count > 1 ? 'm`' . v:count : 'g') . 'k']], { expr = true })
+map("n", "j", [[(v:count > 1 ? 'm`' . v:count : 'g') . 'j']], { expr = true })
+map("n", "k", [[(v:count > 1 ? 'm`' . v:count : 'g') . 'k']], { expr = true })
 
 -- Map n/N to always move in the same direction.
-vim.keymap.set("n", "n", "'Nn'[v:searchforward]", { silent = true, expr = true })
-vim.keymap.set("n", "N", "'nN'[v:searchforward]", { silent = true, expr = true })
+map("n", "n", "'Nn'[v:searchforward]", { silent = true, expr = true })
+map("n", "N", "'nN'[v:searchforward]", { silent = true, expr = true })
 
 -- Center screen
-vim.keymap.set("n", "gg", "ggzz")
-vim.keymap.set("n", "G", "Gzz")
+map("n", "gg", "ggzz")
+map("n", "G", "Gzz")
 
 -- Keep the cursor in place while joining lines
-vim.keymap.set("n", "J", "mzJ`z")
+map("n", "J", "mzJ`z")
 
 -- Same when moving up and down
-vim.keymap.set("", "<C-d>", "<C-d>zz")
-vim.keymap.set("", "<C-u>", "<C-u>zz")
+map("", "<C-d>", "<C-d>zz")
+map("", "<C-u>", "<C-u>zz")
 
 -- Use c-\ to do c-] but open it in a new split.
-vim.keymap.set("n", "<c-]>", "<c-]>zz")
-vim.keymap.set("n", "<c-\\>", ":vertical wincmd ]<cr>zz", { silent = true })
+map("n", "<c-]>", "<c-]>zz")
+map("n", "<c-\\>", ":vertical wincmd ]<cr>zz", { silent = true })
 
 -- `gf` opens file under cursor in a new vertical split
-vim.keymap.set("c", "<Plug><cfile>", "<C-R><C-F>")
-vim.keymap.set("n", "gf", ":vert sfind <Plug><cfile><CR>")
+map("c", "<Plug><cfile>", "<C-R><C-F>")
+map("n", "gf", ":vert sfind <Plug><cfile><CR>")
 
 -- [w ]w - Forward and backwards tabs
-vim.keymap.set("n", "[w", "<esc>:tabprevious<cr>", { silent = true })
-vim.keymap.set("n", "]w", "<esc>:tabnext<cr>", { silent = true })
+map("n", "[w", "<esc>:tabprevious<cr>", { silent = true })
+map("n", "]w", "<esc>:tabnext<cr>", { silent = true })
 
 -- [W ]W - Move tabs
-vim.keymap.set("n", "[W", "<esc>:tabmove -1<cr>", { silent = true })
-vim.keymap.set("n", "]W", "<esc>:tabmove +1<cr>", { silent = true })
+map("n", "[W", "<esc>:tabmove -1<cr>", { silent = true })
+map("n", "]W", "<esc>:tabmove +1<cr>", { silent = true })
 
 -- Space to toggle folds.
-vim.keymap.set({ "n", "v" }, "<Space>", "za")
+map({ "n", "v" }, "<Space>", "za")
 
 -- Ctrl-b: Go (b)ack. Go to previously buffer
-vim.keymap.set("n", "<c-b>", "<c-^>")
+map("n", "<c-b>", "<c-^>")
 
 -- Goto older/newer position in change list
-vim.keymap.set("n", "(", "g;zvzz", { silent = true })
-vim.keymap.set("n", ")", "g,zvzz", { silent = true })
+map("n", "(", "g;zvzz", { silent = true })
+map("n", ")", "g,zvzz", { silent = true })
 
 -- Do NOT yank with x/s
-vim.keymap.set("", "x", [["_x]])
-vim.keymap.set("", "X", [["_d]])
-vim.keymap.set("n", "s", [["_s]])
-vim.keymap.set("n", "S", [["_S]])
+map("", "x", [["_x]])
+map("", "X", [["_d]])
+map("n", "s", [["_s]])
+map("n", "S", [["_S]])
 
 -- Change current word and prepare to repeat next occurence (like *cgn)
-vim.keymap.set("n", "c*", [[:<C-U>let @/='\<'.expand("<cword>").'\>'<CR>:set hlsearch<CR>cgn]])
+map("n", "c*", [[:<C-U>let @/='\<'.expand("<cword>").'\>'<CR>:set hlsearch<CR>cgn]])
 
 -- Stay star motions
 local better_hlsearch = function()
@@ -115,8 +117,8 @@ local better_hlsearch = function()
   vim.opt.hlsearch = true
 end
 
-vim.keymap.set("n", "#", better_hlsearch)
-vim.keymap.set("n", "*", better_hlsearch)
+map("n", "#", better_hlsearch)
+map("n", "*", better_hlsearch)
 
 -- Disable hlsearch automatically when your search done and enable on next searching
 vim.on_key(function(char)
@@ -133,7 +135,7 @@ vim.on_key(function(char)
 end, vim.api.nvim_create_namespace "toggle_hlsearch")
 
 -- Clean trailing whitespace
-vim.keymap.set("n", "=w", function()
+map("n", "=w", function()
   local curpos = vim.api.nvim_win_get_cursor(0)
   vim.cmd [[keeppatterns %s/\s\+$//e]]
   vim.cmd [[keeppatterns %s/\r//e]]
@@ -141,7 +143,7 @@ vim.keymap.set("n", "=w", function()
 end)
 
 -- Select last paste
-vim.keymap.set({ "x", "o" }, "gp", function()
+map({ "x", "o" }, "gp", function()
   local mode = vim.fn.mode()
   local is_visual = mode == "v" or mode == "V" or mode == "\22"
 
@@ -151,7 +153,7 @@ vim.keymap.set({ "x", "o" }, "gp", function()
 end)
 
 -- Close quickfix/location window
-vim.keymap.set("n", "<leader>c", function()
+map("n", "<leader>c", function()
   local nr = vim.fn.winnr "$"
   if #vim.fn.getqflist() > 0 then
     vim.cmd.copen { mods = { split = "botright" } }
@@ -162,7 +164,7 @@ vim.keymap.set("n", "<leader>c", function()
 end)
 
 -- Stop snippet on escape
-vim.keymap.set({ "i", "s", "n" }, "<esc>", function()
+map({ "i", "s", "n" }, "<esc>", function()
   vim.snippet.stop()
   return "<esc>"
 end, { expr = true })

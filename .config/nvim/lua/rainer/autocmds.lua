@@ -1,3 +1,5 @@
+local map = vim.keymap.set
+local unmap = vim.keymap.del
 local command = vim.api.nvim_create_user_command
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = function(name)
@@ -14,8 +16,8 @@ autocmd("TextYankPost", {
 
 autocmd("CmdwinEnter", {
   callback = function(args)
-    vim.keymap.del({ "n", "x", "o" }, "<cr>", { buffer = args.buf })
-    vim.keymap.set("n", "<c-c>", "<Cmd>quit<cr>", { buffer = args.buf })
+    unmap({ "n", "x", "o" }, "<cr>", { buffer = args.buf })
+    map("n", "<c-c>", "<Cmd>quit<cr>", { buffer = args.buf })
   end,
 })
 
@@ -32,7 +34,7 @@ autocmd("FileType", {
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
-    vim.keymap.set("n", "q", function()
+    map("n", "q", function()
       vim.cmd.close { mods = { silent = true, emsg_silent = true } }
       pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
     end, { buffer = event.buf, silent = true })
