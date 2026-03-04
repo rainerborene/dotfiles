@@ -8,10 +8,15 @@ tasks:
     cmds:
       - task -l
 
-  asdf:
-    desc: Install asdf package manager
+  wsl:
+    desc: Install wsl-open utility
     cmds:
-      - git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+      - npm install -g wsl-open
+
+  mise:
+    desc: Install mise-en-place
+    cmds:
+      - curl https://mise.run | sh
 
   fzf:
     desc: Install fzf command-line fuzzy finder
@@ -44,15 +49,6 @@ tasks:
       - gem install bundler-audit easy_translate erb_lint herb i18n-tasks neovim
           rubocop rubocop-minitest rubocop-performance rubocop-rails
           rubocop-rails-omakase ruby-lsp ruby-lsp-rails
-
-  flox:
-    desc: Install flox package and environment manager
-    dir: /tmp
-    vars:
-      VERSION: 1.7.7
-    cmds:
-      - curl -O https://downloads.flox.dev/by-env/stable/deb/flox-{{.VERSION}}.x86_64-linux.deb
-      - sudo dpkg -i flox-{{.VERSION}}.x86_64-linux.deb
 
   chrome-headless:
     desc: Download the latest chrome driver and headless shell

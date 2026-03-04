@@ -6,19 +6,8 @@ return {
   {
     "tpope/vim-rails",
     init = function()
-      -- Save ~1s loading ruby file
-      local lib_ruby_dir = "~/.asdf/installs/ruby/3.4.7/lib/ruby"
-      vim.g.ruby_host_prog = "~/.asdf/shims/neovim-ruby-host"
-      vim.g.ruby_default_path = {
-        lib_ruby_dir .. "/3.4.0",
-        lib_ruby_dir .. "/3.4.0/x86_64-linux",
-        lib_ruby_dir .. "/site_ruby",
-        lib_ruby_dir .. "/site_ruby/3.4.0",
-        lib_ruby_dir .. "/site_ruby/3.4.0/x86_64-linux",
-        lib_ruby_dir .. "/vendor_ruby",
-        lib_ruby_dir .. "/vendor_ruby/3.4.0",
-        lib_ruby_dir .. "/vendor_ruby/3.4.0/x86_64-linux",
-      }
+      -- -- Save ~1s loading ruby file
+      vim.g.ruby_host_prog = "~/.local/share/mise/installs/ruby/4.0.0/bin/neovim-ruby-host"
 
       vim.g.rails_projections = {
         ["app/components/*_component.rb"] = {

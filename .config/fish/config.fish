@@ -7,7 +7,6 @@ set -gx fish_greeting
 set -gx EDITOR nvim
 set -gx LANG en_US.UTF-8
 set -gx LC_ALL en_US.UTF-8
-set -gx ASDF_DATA_DIR $HOME/.asdf
 set -gx DOCKER_API_VERSION 1.43
 
 fish_add_path "/usr/bin"
@@ -18,8 +17,6 @@ fish_add_path "$HOME/.fzf/bin"
 fish_add_path "$HOME/.atuin/bin"
 fish_add_path "$HOME/.yarn/bin"
 fish_add_path "$HOME/.opencode/bin"
-fish_add_path "$HOME/.config/yarn/global/node_modules/.bin"
-fish_add_path "$ASDF_DATA_DIR/shims"
 
 
 # Aliases
@@ -56,19 +53,19 @@ function dkrm -d "Delete docker images by given name"
 end
 
 
-# Package managers
+# Mise
 # --------------------------------------------------------------------
 
-flox activate -d ~ | source
-
-### unset LD_AUDIT to fix shared library loading error
-set -e LD_AUDIT
+mise activate fish | source
+mise completion fish | source
 
 
 # Zoxide
 # --------------------------------------------------------------------
 
-zoxide init fish | source
+if status is-interactive
+  zoxide init fish | source
+end
 
 
 # fzf (https://github.com/junegunn/fzf)
@@ -98,28 +95,30 @@ function fe -d "Open the selected file with the default editor"
   test -n "$file"; and nvim $file
 end
 
-fzf --fish | source
+if status is-interactive
+  fzf --fish | source
+end
 
 
 # Wezterm
 # --------------------------------------------------------------------
 
-wezterm shell-completion --shell fish | source
+if status is-interactive
+  wezterm shell-completion --shell fish | source
+end
 
 
 # Vivid
 # --------------------------------------------------------------------
 
-set -x LS_COLORS (vivid generate catppuccin-mocha)
+if status is-interactive
+  set -x LS_COLORS (vivid generate catppuccin-mocha)
+end
 
 
 # Atuin
 # --------------------------------------------------------------------
 
-atuin init fish | source
-
-
-# Asdf
-# --------------------------------------------------------------------
-
-asdf completion fish | source
+if status is-interactive
+  atuin init fish | source
+end

@@ -1,0 +1,27 @@
+[settings]
+
+[settings.ruby]
+compile = false
+
+[tools]
+bat = "latest"
+btop = "latest"
+difftastic = "latest"
+eza = "latest"
+fastfetch = "latest"
+fd = "latest"
+go = "1.22.5"
+jq = "latest"
+lua-language-server = "3.9.0"
+neovim = "0.11.6"
+node = "22.12.0"
+ripgrep = "latest"
+ruby = "4.0.0"
+rust = "nightly"
+stylua = "0.20.0"
+task = "latest"
+tree-sitter = "latest"
+usage = "latest"
+vivid = "latest"
+watchexec = "latest"
+zoxide = "latest"

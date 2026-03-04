@@ -2,5 +2,4 @@
 .config/nvim/tmp
 .config/fish/fish_variables
 .config/atuin/atuin-receipt.json
-.flox/env/manifest.lock
-.flox/run/
+.config/btop/btop.conf
