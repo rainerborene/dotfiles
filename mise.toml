@@ -1,0 +1,24 @@
+# Bootstrap dotfiles with:
+# curl https://mise.run | sh
+
+[tasks.gems]
+description = "Install gems for Ruby on Rails development"
+run = """
+gem install bundler-audit erb_lint herb i18n-tasks neovim \
+    rubocop rubocop-minitest rubocop-performance rubocop-rails \
+    rubocop-rails-omakase ruby-lsp ruby-lsp-rails
+"""
+
+[tasks."chrome-headless"]
+description = "Download the latest chrome driver and headless shell"
+dir = "/tmp"
+run = """
+version=$(curl https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions.json | jq -r '.channels.Stable.version')
+curl -O https://storage.googleapis.com/chrome-for-testing-public/$version/win64/chromedriver-win64.zip
+curl -O https://storage.googleapis.com/chrome-for-testing-public/$version/linux64/chrome-headless-shell-linux64.zip
+unzip -u chromedriver-win64.zip
+unzip -u chrome-headless-shell-linux64.zip
+rm -rf ~/.local/bin/chrome-headless-shell-linux64/
+mv -v chromedriver-win64/chromedriver.exe "`readlink $(which chromedriver)`"
+mv -v chrome-headless-shell-linux64/ ~/.local/bin/
+"""

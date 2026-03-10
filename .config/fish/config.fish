@@ -14,9 +14,7 @@ fish_add_path "/usr/local/bin"
 fish_add_path "/usr/local/share/npm/bin"
 fish_add_path "$HOME/.local/bin"
 fish_add_path "$HOME/.fzf/bin"
-fish_add_path "$HOME/.atuin/bin"
 fish_add_path "$HOME/.yarn/bin"
-fish_add_path "$HOME/.opencode/bin"
 
 
 # Aliases
@@ -27,6 +25,7 @@ alias ... 'cd ../..'
 alias .... 'cd ../../..'
 alias ..... 'cd ../../../..'
 alias ...... 'cd ../../../../..'
+alias cdr 'cd (git rev-parse --show-toplevel)'
 alias j 'z'
 alias g 'git'
 alias la 'ls -la'
@@ -42,7 +41,6 @@ alias pbpaste 'xsel --clipboard --output'
 alias be 'bundle exec'
 alias rc 'rails console'
 alias rs 'rails server'
-alias cx 'claude'
 alias dkk 'docker kill (docker ps -q)'
 alias rmzone 'find . -name "*:Zone.Identifier" -delete'
 
@@ -75,7 +73,7 @@ set -x FZF_ALT_C_COMMAND 'fd --type d --hidden --follow --exclude .git'
 set -x FZF_ALT_C_OPTS "--preview 'tree -C {} | head -200'"
 set -x FZF_CTRL_R_OPTS "--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --border"
 set -x FZF_CTRL_T_COMMAND 'fd --type f --type d --hidden --follow --exclude .git'
-set -x FZF_CTRL_T_OPTS "--preview 'bat -n --color=always {}' | head -200'"
+set -x FZF_CTRL_T_OPTS "--preview 'bat -n --color=always {} --line-range :200'"
 set -x FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git'
 set -x FZF_DEFAULT_OPTS "\
   --color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 \
