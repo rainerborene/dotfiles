@@ -10,6 +10,7 @@ return {
         emmet_language_server = {
           filetypes = { "css", "eruby", "html", "vue" },
         },
+        herb_ls = {},
         tailwindcss = {
           settings = {
             tailwindCSS = {

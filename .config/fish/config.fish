@@ -7,7 +7,6 @@ set -gx fish_greeting
 set -gx EDITOR nvim
 set -gx LANG en_US.UTF-8
 set -gx LC_ALL en_US.UTF-8
-set -gx DOCKER_API_VERSION 1.43
 
 fish_add_path "/usr/bin"
 fish_add_path "/usr/local/bin"
@@ -36,18 +35,21 @@ alias vim 'nvim'
 alias vi 'nvim'
 alias v 'nvim'
 alias open 'wsl-open'
+alias rmzone 'find . -name "*:Zone.Identifier" -delete'
 alias pbcopy 'xsel --clipboard --input'
 alias pbpaste 'xsel --clipboard --output'
+alias mr 'mise run'
 alias be 'bundle exec'
 alias rc 'rails console'
 alias rs 'rails server'
 alias dkk 'docker kill (docker ps -q)'
-alias rmzone 'find . -name "*:Zone.Identifier" -delete'
 
 abbr oc 'opencode'
 
 function dkrm -d "Delete docker images by given name"
-  docker images | grep $argv | awk '{ print $1 ":" $2 }' | xargs docker rmi
+  docker images --format json \
+    | jq -r --arg image "$argv" 'select((.Repository + ":" + .Tag) | contains($image)).ID' \
+    | xargs docker rmi
 end
 
 

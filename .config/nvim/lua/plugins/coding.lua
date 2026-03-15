@@ -40,6 +40,7 @@ return {
     event = "InsertEnter",
     opts = {
       disable_filetype = { "snacks_picker_input", "snacks_picker_list", "grug-far" },
+      disable_in_macro = true,
     },
     config = function(_, opts)
       local npairs = require "nvim-autopairs"

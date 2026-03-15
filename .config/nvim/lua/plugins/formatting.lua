@@ -6,7 +6,7 @@ return {
       ruby = { "rubocop" },
       html = { "prettierhtml" },
       json = { "jq" },
-      eruby = { "prettierhtml" },
+      eruby = { "herb" },
       javascript = { "biome" },
       vue = { "biome" },
       xml = { "xmllint" },
@@ -16,16 +16,12 @@ return {
       rubocop = {
         args = { "--server", "--auto-correct-all", "--force-exclusion", "--stderr", "--stdin", "$FILENAME" },
       },
-      prettier = {
-        options = {
-          ft_parsers = {
-            eruby = "html",
-          },
-        },
-      },
       prettierhtml = {
         command = "prettier",
         args = { "--parser", "html", "--print-width", "200" },
+      },
+      herb = {
+        command = "herb-format",
       },
     },
   },

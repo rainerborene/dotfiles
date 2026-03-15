@@ -1,5 +1,5 @@
 # Bootstrap dotfiles with:
-# curl https://mise.run | sh
+# $ stow && curl https://mise.run | sh
 
 [tasks.gems]
 description = "Install gems for Ruby on Rails development"
