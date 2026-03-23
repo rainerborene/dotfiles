@@ -7,7 +7,7 @@ return {
     "tpope/vim-rails",
     init = function()
       -- -- Save ~1s loading ruby file
-      vim.g.ruby_host_prog = "~/.local/share/mise/installs/ruby/4.0.0/bin/neovim-ruby-host"
+      vim.g.ruby_host_prog = "~/.local/share/mise/installs/ruby/latest/bin/neovim-ruby-host"
 
       vim.g.rails_projections = {
         ["app/components/*_component.rb"] = {

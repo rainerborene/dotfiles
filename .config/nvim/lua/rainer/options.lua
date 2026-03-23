@@ -13,6 +13,7 @@ vim.opt.undofile = true
 vim.opt.updatetime = 1000
 vim.opt.wildignore = { "*.DS_Store", "*~", ".git", "*.pyc", "*.o", "*.spl", "*.rdb" }
 
+
 -- text manipulation
 vim.opt.expandtab = true
 vim.opt.formatoptions = "qrn1j"
@@ -43,7 +44,7 @@ vim.opt.splitright = true
 vim.opt.list = true
 vim.opt.diffopt:append "algorithm:patience"
 vim.opt.listchars = { tab = "» ", trail = "·", extends = "❯", precedes = "❮" }
-vim.opt.fillchars = { diff = "─", vert = "│", msgsep = "─" }
+vim.opt.fillchars = { diff = "─", vert = "│", msgsep = "─", eob = " " }
 vim.opt.showbreak = "↪ "
 vim.opt.relativenumber = true
 vim.opt.number = true

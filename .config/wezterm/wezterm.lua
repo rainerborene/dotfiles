@@ -63,13 +63,6 @@ wezterm.on("format-window-title", function(tab)
   return tab_title(tab)
 end)
 
--- Workaround to autoreload config on WSL environment
-wezterm.on("user-var-changed", function(_, _, name)
-  if name == "reload_configuration" then
-    wezterm.reload_configuration()
-  end
-end)
-
 wezterm.on("trigger-vim-with-scrollback", function(window, pane)
   -- Retrieve the text from the pane
   local text = pane:get_lines_as_text(pane:get_dimensions().scrollback_rows)
@@ -127,7 +120,7 @@ config.mouse_bindings = {
 
 config.leader = { mods = "CTRL", key = "f" }
 config.keys = {
-  { key = "s", mods = "LEADER", action = wezterm.action { SplitVertical = { domain = "CurrentPaneDomain" } } },
+  { key = "s", mods = "LEADER", action = wezterm.action.SplitPane { direction = "Down", size = { Cells = 15 } } },
   { key = "v", mods = "LEADER", action = wezterm.action { SplitHorizontal = { domain = "CurrentPaneDomain" } } },
   { key = "z", mods = "LEADER", action = wezterm.action.TogglePaneZoomState },
   { key = "n", mods = "LEADER", action = wezterm.action { ActivateTabRelative = 1 } },

@@ -1,6 +1,22 @@
 # Bootstrap dotfiles with:
 # $ stow && curl https://mise.run | sh
 
+[tasks.completions]
+description = "Generate fish shell completions"
+run = [
+  "mise completion fish > .config/fish/completions/mise.fish",
+  "pnpm completion fish > .config/fish/completions/pnpm.fish",
+  "wezterm shell-completion --shell fish > .config/fish/completions/wezterm.fish"
+]
+
+[tasks.profile]
+description = "Profile fish shell startup time"
+interactive = true
+run = [
+  "fish --profile-startup /tmp/fish.profile -i -c exit",
+  "bat /tmp/fish.profile",
+]
+
 [tasks.gems]
 description = "Install gems for Ruby on Rails development"
 run = """

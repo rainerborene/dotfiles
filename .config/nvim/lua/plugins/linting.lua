@@ -7,7 +7,7 @@ return {
     lint.linters_by_ft = {
       ruby = { "rubocop" },
       json = { "jq" },
-      javascript = { "biomejs" },
+      javascript = { "oxlint" },
       eruby = { "erb_lint" },
     }
 

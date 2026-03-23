@@ -13,7 +13,7 @@ fish_add_path "/usr/local/bin"
 fish_add_path "/usr/local/share/npm/bin"
 fish_add_path "$HOME/.local/bin"
 fish_add_path "$HOME/.fzf/bin"
-fish_add_path "$HOME/.yarn/bin"
+fish_add_path "$HOME/.local/share/pnpm"
 
 
 # Aliases
@@ -44,6 +44,7 @@ alias rc 'rails console'
 alias rs 'rails server'
 alias dkk 'docker kill (docker ps -q)'
 
+abbr p 'pnpm'
 abbr oc 'opencode'
 
 function dkrm -d "Delete docker images by given name"
@@ -57,7 +58,6 @@ end
 # --------------------------------------------------------------------
 
 mise activate fish | source
-mise completion fish | source
 
 
 # Zoxide
@@ -97,14 +97,6 @@ end
 
 if status is-interactive
   fzf --fish | source
-end
-
-
-# Wezterm
-# --------------------------------------------------------------------
-
-if status is-interactive
-  wezterm shell-completion --shell fish | source
 end
 
 

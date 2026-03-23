@@ -5,10 +5,11 @@ return {
     formatters_by_ft = {
       ruby = { "rubocop" },
       html = { "prettierhtml" },
+      svg = { "prettierhtml" },
       json = { "jq" },
       eruby = { "herb" },
-      javascript = { "biome" },
-      vue = { "biome" },
+      javascript = { "oxfmt" },
+      vue = { "oxfmt" },
       xml = { "xmllint" },
       lua = { "stylua" },
     },

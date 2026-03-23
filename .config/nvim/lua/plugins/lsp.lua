@@ -6,7 +6,13 @@ return {
     opts = {
       servers = {
         ruby_lsp = {},
-        ts_ls = {},
+        ts_ls = {
+          init_options = {
+            tsserver = {
+              path = vim.fn.expand "~/.local/share/mise/installs/npm-typescript/latest/bin/tsserver",
+            }
+          },
+        },
         emmet_language_server = {
           filetypes = { "css", "eruby", "html", "vue" },
         },
