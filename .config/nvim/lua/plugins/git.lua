@@ -93,16 +93,20 @@ return {
   {
     "sindrets/diffview.nvim",
     cmd = { "DiffviewOpen", "DiffviewFileHistory" },
-    opts = { use_icons = false },
-    init = function()
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "DiffviewFiles" },
-        group = vim.api.nvim_create_augroup("plugin_diffview", { clear = true }),
-        callback = function(event)
-          vim.keymap.set("n", "q", ":DiffviewClose<cr>", { buffer = event.buf, silent = true })
-        end,
-      })
-    end,
+    opts = {
+      use_icons = false,
+      keymaps = {
+        view = {
+          { "n", "q", ":DiffviewClose<cr>" },
+        },
+        file_panel = {
+          { "n", "q", ":DiffviewClose<cr>" },
+        },
+        file_history_panel = {
+          { "n", "q", ":DiffviewClose<cr>" },
+        },
+      },
+    },
     keys = {
       {
         "<leader>gd",
@@ -111,6 +115,15 @@ return {
             return vim.cmd.DiffviewClose()
           end
           return vim.cmd.DiffviewOpen()
+        end,
+      },
+      {
+        "<leader>gD",
+        function()
+          if vim.t.diffview_view_initialized then
+            return vim.cmd.DiffviewClose()
+          end
+          return vim.cmd.DiffviewFileHistory { "%" }
         end,
       },
     },

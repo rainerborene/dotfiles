@@ -10,9 +10,7 @@ vim.opt.writebackup = false
 vim.opt.spellfile = vim.fn.stdpath "config" .. "/spell/custom-dictionary.utf-8.add"
 vim.opt.spelllang:append "pt"
 vim.opt.undofile = true
-vim.opt.updatetime = 1000
 vim.opt.wildignore = { "*.DS_Store", "*~", ".git", "*.pyc", "*.o", "*.spl", "*.rdb" }
-
 
 -- text manipulation
 vim.opt.expandtab = true
@@ -42,14 +40,15 @@ vim.opt.splitright = true
 
 -- ui customization
 vim.opt.list = true
-vim.opt.diffopt:append "algorithm:patience"
+vim.opt.diffopt = { "filler", "internal", "closeoff", "algorithm:histogram", "context:5", "linematch:60" }
 vim.opt.listchars = { tab = "» ", trail = "·", extends = "❯", precedes = "❮" }
 vim.opt.fillchars = { diff = "─", vert = "│", msgsep = "─", eob = " " }
+vim.opt.tabline = "%!v:lua.require('rainer.utils').tabline()"
 vim.opt.showbreak = "↪ "
+vim.opt.showmode = false
 vim.opt.relativenumber = true
 vim.opt.number = true
 vim.opt.pumheight = 20
-vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"
 
 -- disable optional providers

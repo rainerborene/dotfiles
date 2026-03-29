@@ -37,4 +37,48 @@ M.tailwind_sort_classes = function(class_texts)
   return response.result.classLists[1]
 end
 
+M.tabline = function()
+  local s = ""
+
+  for tabnr = 1, vim.fn.tabpagenr "$" do
+    local is_current_tab = (tabnr == vim.fn.tabpagenr())
+    local winnr = vim.fn.tabpagewinnr(tabnr)
+
+    -- If current tab has a floating window focused, use the last non-floating window instead
+    if is_current_tab then
+      local cur_win = vim.api.nvim_get_current_win()
+      local config = vim.api.nvim_win_get_config(cur_win)
+
+      if config.relative ~= "" then -- floating window
+        local wins = vim.api.nvim_tabpage_list_wins(0)
+        for i = #wins, 1, -1 do
+          local win = wins[i]
+          local win_config = vim.api.nvim_win_get_config(win)
+          if win_config.relative == "" then -- found a normal window
+            winnr = vim.fn.win_id2win(win)
+            break
+          end
+        end
+      end
+    end
+
+    local buflist = vim.fn.tabpagebuflist(tabnr)
+    local buf = buflist[winnr] or buflist[1] or 0
+    local bufname = vim.fn.bufname(buf)
+    local bufname_short = vim.fn.fnamemodify(bufname, ":t")
+
+    if bufname_short == "" then
+      bufname_short = "[No Name]"
+    end
+
+    if is_current_tab then
+      s = s .. "%#TabLineSel#" .. " " .. bufname_short .. " "
+    else
+      s = s .. "%#TabLine#" .. " " .. bufname_short .. " "
+    end
+  end
+
+  return s .. "%#TabLineFill#"
+end
+
 return M

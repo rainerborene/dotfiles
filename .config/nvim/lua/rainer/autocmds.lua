@@ -6,6 +6,13 @@ local augroup = function(name)
   return vim.api.nvim_create_augroup("rainer_" .. name, { clear = true })
 end
 
+autocmd({ "FocusGained", "BufEnter" }, {
+  group = augroup "checktime",
+  desc = "Check if we need to reload the file when it changed",
+  pattern = "*",
+  command = "checktime",
+})
+
 autocmd("TextYankPost", {
   group = augroup "yank_highlight",
   desc = "Highlight on yank",

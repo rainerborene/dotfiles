@@ -20,9 +20,15 @@ return {
     end,
   },
   {
-    "sschleemilch/slimline.nvim",
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
     opts = {
-      style = "fg",
+      options = {
+        theme = "catppuccin-nvim",
+        section_separators = { left = "", right = "" },
+        component_separators = { left = "", right = "" },
+        globalstatus = true,
+      },
     },
   },
   {

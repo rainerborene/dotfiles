@@ -125,6 +125,7 @@ return {
     lazy = false,
     opts = {
       scope = { enabled = true },
+      notifier = { enabled = true },
       picker = {
         icons = {
           files = { enabled = false },
@@ -152,7 +153,9 @@ return {
       },
     },
     keys = {
-      { "<leader><leader>", function() Snacks.picker.files() end, },
+      { "<leader>q", function() Snacks.bufdelete() end },
+      { "<leader>M",  function() Snacks.notifier.show_history() end },
+      { "<leader><leader>", function() Snacks.picker.smart() end, },
       { "<leader><tab>", function() Snacks.picker.keymaps() end, },
       { "<leader>.", function() Snacks.picker.lsp_workspace_symbols() end, },
       { "<leader>k", function() Snacks.picker.help() end, },
