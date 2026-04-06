@@ -22,13 +22,26 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
+    init = function()
+      if vim.fn.argc(-1) > 0 then
+        -- set an empty statusline till lualine loads
+        vim.o.statusline = " "
+      else
+        -- hide the statusline on the starter page
+        vim.o.laststatus = 0
+      end
+    end,
     opts = {
       options = {
         theme = "catppuccin-nvim",
-        section_separators = { left = "", right = "" },
-        component_separators = { left = "", right = "" },
+        section_separators = "",
+        component_separators = "",
         globalstatus = true,
       },
+      sections = {
+        lualine_b = { "branch" },
+      },
+      extensions = { "fugitive", "lazy", "oil" },
     },
   },
   {

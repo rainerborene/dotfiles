@@ -24,6 +24,9 @@ map("n", "<c-q>", ":q<cr>", { silent = true })
 map("i", "<C-s>", "<C-o>:update<cr>", { silent = true })
 map("n", "<C-s>", ":update<cr>", { silent = true })
 
+-- Open the package manager.
+map("n", "<leader>L", "<cmd>Lazy<cr>")
+
 -- Split windows
 map("n", "<leader>s", "<C-W>s")
 map("n", "<leader>v", "<C-W>v")
@@ -110,6 +113,9 @@ map("n", "S", [["_S]])
 -- Change current word and prepare to repeat next occurence (like *cgn)
 map("n", "c*", [[:<C-U>let @/='\<'.expand("<cword>").'\>'<CR>:set hlsearch<CR>cgn]])
 
+-- Expand %% to current directory in command mode
+vim.cmd.cabbr { args = { "<expr>", "%%", "&filetype == 'oil' ? bufname('%')[6:] : expand('%:h')" } }
+
 -- Stay star motions
 local better_hlsearch = function()
   local current_word = vim.fn.expand "<cword>"
@@ -133,14 +139,6 @@ vim.on_key(function(char)
     vim.o.hlsearch = new_hlsearch
   end
 end, vim.api.nvim_create_namespace "toggle_hlsearch")
-
--- Clean trailing whitespace
-map("n", "=w", function()
-  local curpos = vim.api.nvim_win_get_cursor(0)
-  vim.cmd [[keeppatterns %s/\s\+$//e]]
-  vim.cmd [[keeppatterns %s/\r//e]]
-  vim.api.nvim_win_set_cursor(0, curpos)
-end)
 
 -- Select last paste
 map({ "x", "o" }, "gp", function()

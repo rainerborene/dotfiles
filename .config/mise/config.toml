@@ -14,7 +14,7 @@ fd = "latest"
 fzf = "latest"
 jq = "latest"
 lua-language-server = "latest"
-neovim = "0.11.6"
+neovim = "0.12.0"
 node = "22.12.0"
 "npm:@olrtg/emmet-language-server" = "latest"
 "npm:@tailwindcss/language-server" = "latest"
@@ -39,8 +39,9 @@ oxfmt = "latest"
 oxlint = "latest"
 task = "latest"
 
+# https://github.com/protonpass/pass-cli/blob/main/CHANGELOG.md
 "http:pass-cli" = {
-  version = "1.6.1",
+  version = "1.8.0",
   version_list_url = "https://api.github.com/repos/protonpass/pass-cli/tags",
   version_json_path = ".[].name",
   url = "https://proton.me/download/pass-cli/{{ version }}/pass-cli-linux-x86_64",

@@ -41,5 +41,12 @@ return {
       end,
       mode = { "n", "v" },
     },
+    {
+      "=w",
+      function()
+        require("conform").format { formatters = { "trim_whitespace", "trim_newlines" } }
+      end,
+      desc = "Clean trailing whitespace",
+    },
   },
 }

@@ -77,7 +77,7 @@ return {
       { "sa", "<Plug>(nvim-surround-normal)" },
       { "saa", "<Plug>(nvim-surround-normal-cur)" },
       { "sS", "<Plug>(nvim-surround-normal-cur-line)" },
-      { "S", "<Plug>(nvim-surround-visual)", mode = { "x" } },
+      { "S", "<Plug>(nvim-surround-visual)", mode = "x" },
       { "sd", "<Plug>(nvim-surround-delete)" },
       { "sr", "<Plug>(nvim-surround-change)" },
     },

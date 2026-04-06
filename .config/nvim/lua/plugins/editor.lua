@@ -39,6 +39,7 @@ return {
     opts = {
       at_edge = "stop",
     },
+    -- stylua: ignore
     keys = {
       -- Resize splits
       { "<A-h>", function() require("smart-splits").resize_left() end, },
@@ -93,31 +94,19 @@ return {
         mode = { "n", "x", "o" },
       },
       {
-        "M",
+        "r",
         function()
           require("flash").treesitter_search()
         end,
+        mode = "o",
       },
       {
-        "<c-j>",
+        "R",
         function()
-          require("flash").toggle()
+          require("flash").remote()
         end,
-        mode = "c",
+        mode = "o",
       },
-      {
-        "<cr>",
-        function()
-          require("flash").treesitter {
-            actions = {
-              ["<cr>"] = "next",
-              ["<bs>"] = "prev",
-            },
-          }
-        end,
-        mode = { "n", "x", "o" },
-        ft = { "ruby", "json", "lua", "html", "javascript", "typescript", "tsx", "vue", "vim", "css" }
-      }
     },
   },
   {
@@ -152,6 +141,7 @@ return {
         },
       },
     },
+    -- stylua: ignore
     keys = {
       { "<leader>q", function() Snacks.bufdelete() end },
       { "<leader>M",  function() Snacks.notifier.show_history() end },

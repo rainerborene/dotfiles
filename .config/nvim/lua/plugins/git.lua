@@ -97,35 +97,19 @@ return {
       use_icons = false,
       keymaps = {
         view = {
-          { "n", "q", ":DiffviewClose<cr>" },
+          { "n", "q", ":DiffviewClose<cr>", { desc = "Close the active Diffview" } },
         },
         file_panel = {
-          { "n", "q", ":DiffviewClose<cr>" },
+          { "n", "q", ":DiffviewClose<cr>", { desc = "Close the active Diffview" } },
         },
         file_history_panel = {
-          { "n", "q", ":DiffviewClose<cr>" },
+          { "n", "q", ":DiffviewClose<cr>", { desc = "Close the active Diffview" } },
         },
       },
     },
     keys = {
-      {
-        "<leader>gd",
-        function()
-          if vim.t.diffview_view_initialized then
-            return vim.cmd.DiffviewClose()
-          end
-          return vim.cmd.DiffviewOpen()
-        end,
-      },
-      {
-        "<leader>gD",
-        function()
-          if vim.t.diffview_view_initialized then
-            return vim.cmd.DiffviewClose()
-          end
-          return vim.cmd.DiffviewFileHistory { "%" }
-        end,
-      },
+      { "<leader>gd", "<cmd>DiffviewOpen<cr>" },
+      { "<leader>gD", "<cmd>DiffviewFileHistory %<cr>" },
     },
   },
 }

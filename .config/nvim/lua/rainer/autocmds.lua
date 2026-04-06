@@ -8,7 +8,7 @@ end
 
 autocmd({ "FocusGained", "BufEnter" }, {
   group = augroup "checktime",
-  desc = "Check if we need to reload the file when it changed",
+  desc = "Reload files from disk when we focus vim",
   pattern = "*",
   command = "checktime",
 })

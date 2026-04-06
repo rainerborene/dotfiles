@@ -1,6 +1,5 @@
 .config/nvim/spell/*.spl
 .config/nvim/tmp
-.config/attyx
 .config/fish/fish_variables
 .config/fish/completions
 .config/atuin/atuin-receipt.json
