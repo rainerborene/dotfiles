@@ -6,7 +6,7 @@ compile = false
 [tools]
 atuin = "latest"
 bat = "latest"
-btop = "latest"
+btop = { version = "latest", os = ["linux"] }
 difftastic = "latest"
 eza = "latest"
 fastfetch = "latest"
@@ -32,18 +32,19 @@ ruby = "4.0.0"
 stylua = "latest"
 tree-sitter = "latest"
 usage = "latest"
-vivid = "latest"
+vivid = { version = "latest", os = ["linux"] }
 watchexec = "latest"
 zoxide = "latest"
 oxfmt = "latest"
 oxlint = "latest"
 task = "latest"
 
-# https://github.com/protonpass/pass-cli/blob/main/CHANGELOG.md
 "http:pass-cli" = {
+  # https://github.com/protonpass/pass-cli/blob/main/CHANGELOG.md
   version = "1.8.0",
   version_list_url = "https://api.github.com/repos/protonpass/pass-cli/tags",
   version_json_path = ".[].name",
-  url = "https://proton.me/download/pass-cli/{{ version }}/pass-cli-linux-x86_64",
+  url = "https://proton.me/download/pass-cli/{{ version }}/pass-cli-{{os()}}-{{arch(x64='x86_64', arm64='aarch64')}}",
   bin = "pass-cli"
 }
+"github:axllent/mailpit" = "latest"

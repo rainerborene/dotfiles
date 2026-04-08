@@ -1,7 +1,7 @@
 # Environment variables
 # --------------------------------------------------------------------
 
-source ~/.fish_profile
+source ~/.fish_profile 2>/dev/null
 
 set -gx fish_greeting
 set -gx EDITOR nvim
@@ -104,7 +104,7 @@ end
 # Vivid
 # --------------------------------------------------------------------
 
-if status is-interactive
+if which vivid 2>/dev/null; and status is-interactive
   set -x LS_COLORS (vivid generate catppuccin-mocha)
 end
 
@@ -114,4 +114,12 @@ end
 
 if status is-interactive
   atuin init fish | source
+end
+
+
+# Homebrew
+# --------------------------------------------------------------------
+
+if test -d /opt/homebrew/bin
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 end
