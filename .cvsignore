@@ -30,3 +30,5 @@ build
 workbench.xmi
 .git-old
 .git
+.claude
+.mcp.json

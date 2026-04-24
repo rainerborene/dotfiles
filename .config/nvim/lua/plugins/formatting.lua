@@ -9,13 +9,14 @@ return {
       json = { "jq" },
       eruby = { "herb" },
       javascript = { "oxfmt" },
+      css = { "oxfmt" },
       vue = { "oxfmt" },
       xml = { "xmllint" },
       lua = { "stylua" },
     },
     formatters = {
       rubocop = {
-        args = { "--server", "--auto-correct-all", "--force-exclusion", "--stderr", "--stdin", "$FILENAME" },
+        args = { "--server", "--autocorrect-all", "--force-exclusion", "--stderr", "--stdin", "$FILENAME" },
       },
       prettierhtml = {
         command = "prettier",

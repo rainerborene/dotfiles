@@ -145,6 +145,7 @@ return {
     keys = {
       { "<leader>q", function() Snacks.bufdelete() end },
       { "<leader>M",  function() Snacks.notifier.show_history() end },
+      { "<leader><space>", function() Snacks.picker.files() end, },
       { "<leader><leader>", function() Snacks.picker.smart() end, },
       { "<leader><tab>", function() Snacks.picker.keymaps() end, },
       { "<leader>.", function() Snacks.picker.lsp_workspace_symbols() end, },

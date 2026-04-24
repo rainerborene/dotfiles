@@ -14,16 +14,16 @@ return {
       vim.g.splitjoin_join_mapping = ""
     end,
     keys = {
-      { "gS", ":SplitjoinSplit<cr>" },
-      { "gJ", ":SplitjoinJoin<cr>" },
+      { "gS", "<cmd>SplitjoinSplit<cr>" },
+      { "gJ", "<cmd>SplitjoinJoin<cr>" },
     },
   },
   {
     "AndrewRadev/sideways.vim",
     lazy = false,
     keys = {
-      { "sh", ":SidewaysLeft<cr>" },
-      { "sl", ":SidewaysRight<cr>" },
+      { "sh", "<cmd>SidewaysLeft<cr>" },
+      { "sl", "<cmd>SidewaysRight<cr>" },
       { "aa", "<Plug>SidewaysArgumentTextobjA", mode = { "o", "x" } },
       { "ia", "<Plug>SidewaysArgumentTextobjI", mode = { "o", "x" } },
     },

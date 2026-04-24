@@ -44,6 +44,7 @@ alias be 'bundle exec'
 alias rc 'rails console'
 alias rs 'rails server'
 alias dkk 'docker kill (docker ps -q)'
+alias cx 'claude --dangerously-skip-permissions'
 
 abbr p 'pnpm'
 abbr oc 'opencode'
@@ -104,7 +105,7 @@ end
 # Vivid
 # --------------------------------------------------------------------
 
-if which vivid 2>/dev/null; and status is-interactive
+if test -x (which vivid); and status is-interactive
   set -x LS_COLORS (vivid generate catppuccin-mocha)
 end
 

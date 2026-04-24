@@ -51,10 +51,10 @@ return {
           vim.cmd.TestNearest()
         end,
       },
-      { "<leader>rf", ":TestFile<cr>" },
-      { "<leader>ra", ":TestSuite<cr>" },
-      { "<leader>rl", ":TestLast<cr>" },
-      { "<leader>rg", ":TestVisit<cr>" },
+      { "<leader>rf", "<cmd>TestFile<cr>" },
+      { "<leader>ra", "<cmd>TestSuite<cr>" },
+      { "<leader>rl", "<cmd>TestLast<cr>" },
+      { "<leader>rg", "<cmd>TestVisit<cr>" },
     },
   },
 }

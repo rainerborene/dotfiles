@@ -77,7 +77,7 @@ return {
       end
 
       vim.diagnostic.config { virtual_text = true }
-      vim.lsp.document_color.enable(false)
+      -- vim.lsp.document_color.enable(false)
 
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("plugin_lsp", { clear = true }),

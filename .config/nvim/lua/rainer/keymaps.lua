@@ -17,12 +17,11 @@ map("", "gi", "gi<End>")
 map("n", "gI", "`.zz")
 
 -- Quit
-map("i", "<c-q>", "<esc>:q<cr>", { silent = true })
-map("n", "<c-q>", ":q<cr>", { silent = true })
+map("i", "<c-q>", "<esc><cmd>q<cr>")
+map("n", "<c-q>", "<cmd>q<cr>")
 
 -- Save
-map("i", "<C-s>", "<C-o>:update<cr>", { silent = true })
-map("n", "<C-s>", ":update<cr>", { silent = true })
+map({ "i", "n" }, "<C-s>", "<cmd>update<cr>")
 
 -- Open the package manager.
 map("n", "<leader>L", "<cmd>Lazy<cr>")
@@ -49,7 +48,7 @@ map("n", "==", [[mqHmwgg=G`wzt`q]])
 map("n", "=f", ":setfiletype<Space>")
 
 -- Open notes directory
-map("n", "<leader>n", ":tabedit /mnt/c/Users/Rainer\\ Borene/Dropbox/Notebook/Notes<cr>", { silent = true })
+map("n", "<leader>n", "<cmd>tabedit /mnt/c/Users/Rainer\\ Borene/Dropbox/Notebook/Notes<cr>")
 
 -- Fast escape from insert mode
 map("i", "jj", "<esc>", { remap = true })
@@ -80,19 +79,19 @@ map("", "<C-u>", "<C-u>zz")
 
 -- Use c-\ to do c-] but open it in a new split.
 map("n", "<c-]>", "<c-]>zz")
-map("n", "<c-\\>", ":vertical wincmd ]<cr>zz", { silent = true })
+map("n", "<c-\\>", "<cmd>vertical wincmd ]<cr>zz")
 
 -- `gf` opens file under cursor in a new vertical split
 map("c", "<Plug><cfile>", "<C-R><C-F>")
 map("n", "gf", ":vert sfind <Plug><cfile><CR>")
 
 -- [w ]w - Forward and backwards tabs
-map("n", "[w", "<esc>:tabprevious<cr>", { silent = true })
-map("n", "]w", "<esc>:tabnext<cr>", { silent = true })
+map("n", "[w", "<cmd>tabprevious<cr>")
+map("n", "]w", "<cmd>tabnext<cr>")
 
 -- [W ]W - Move tabs
-map("n", "[W", "<esc>:tabmove -1<cr>", { silent = true })
-map("n", "]W", "<esc>:tabmove +1<cr>", { silent = true })
+map("n", "[W", "<cmd>tabmove -1<cr>")
+map("n", "]W", "<cmd>tabmove +1<cr>")
 
 -- Space to toggle folds.
 map({ "n", "v" }, "<Space>", "za")

@@ -6,11 +6,12 @@ local augroup = function(name)
   return vim.api.nvim_create_augroup("rainer_" .. name, { clear = true })
 end
 
-autocmd({ "FocusGained", "BufEnter" }, {
+autocmd({ "FocusGained", "BufEnter", "BufReadPost" }, {
   group = augroup "checktime",
   desc = "Reload files from disk when we focus vim",
   pattern = "*",
-  command = "checktime",
+  nested = true,
+  command = "checktime %",
 })
 
 autocmd("TextYankPost", {

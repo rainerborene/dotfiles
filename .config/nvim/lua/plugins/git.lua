@@ -72,7 +72,7 @@ return {
         group = git_group,
         callback = vim.schedule_wrap(function()
           vim.opt_local.foldmethod = "syntax"
-          vim.opt_local.spell = true
+          -- vim.opt_local.spell = event.match == "gitcommit"
         end),
       })
 
@@ -80,14 +80,14 @@ return {
         pattern = "gitrebase",
         group = git_group,
         callback = function(event)
-          vim.keymap.set("n", "S", ":Cycle<cr>", { buffer = event.buf, silent = true })
+          vim.keymap.set("n", "S", "<cmd>Cycle<cr>", { buffer = event.buf, silent = true })
         end,
       })
     end,
     keys = {
-      { "<leader>ge", ":Gedit<cr>", silent = true },
-      { "<leader>gw", ":Gwrite<cr>", silent = true },
-      { "<leader>gs", ":Git<cr>gg)", silent = true, remap = true },
+      { "<leader>ge", "<cmd>Gedit<cr>", silent = true },
+      { "<leader>gw", "<cmd>Gwrite<cr>", silent = true },
+      { "<leader>gs", "<cmd>Git<cr>gg)", silent = true, remap = true },
     },
   },
   {
@@ -97,13 +97,13 @@ return {
       use_icons = false,
       keymaps = {
         view = {
-          { "n", "q", ":DiffviewClose<cr>", { desc = "Close the active Diffview" } },
+          { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close the active Diffview" } },
         },
         file_panel = {
-          { "n", "q", ":DiffviewClose<cr>", { desc = "Close the active Diffview" } },
+          { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close the active Diffview" } },
         },
         file_history_panel = {
-          { "n", "q", ":DiffviewClose<cr>", { desc = "Close the active Diffview" } },
+          { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close the active Diffview" } },
         },
       },
     },
