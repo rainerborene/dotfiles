@@ -12,9 +12,9 @@ run = [
 [tasks.gems]
 description = "Install gems for Ruby on Rails development"
 run = """
-gem install bundler-audit erb_lint herb i18n-tasks neovim \
-    rubocop rubocop-minitest rubocop-performance rubocop-rails \
-    rubocop-rails-omakase ruby-lsp ruby-lsp-rails
+gem install bundler-audit herb i18n-tasks irb-fzf-history neovim \
+  rubocop rubocop-minitest rubocop-performance rubocop-rails \
+  rubocop-rails-omakase ruby-lsp ruby-lsp-rails
 """
 
 [tasks."chrome-headless"]

@@ -8,11 +8,7 @@ return {
       ruby = { "rubocop" },
       json = { "jq" },
       javascript = { "oxlint" },
-      eruby = { "erb_lint" },
     }
-
-    lint.linters.erb_lint.cmd = "erb_lint"
-    lint.linters.erb_lint.args = { "--format", "compact" }
 
     vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
       callback = function()

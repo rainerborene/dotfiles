@@ -115,6 +115,7 @@ return {
     opts = {
       scope = { enabled = true },
       notifier = { enabled = true },
+      image = { enabled = true },
       picker = {
         icons = {
           files = { enabled = false },
@@ -143,6 +144,7 @@ return {
     },
     -- stylua: ignore
     keys = {
+      { "z=", function() Snacks.picker.spelling() end },
       { "<leader>q", function() Snacks.bufdelete() end },
       { "<leader>M",  function() Snacks.notifier.show_history() end },
       { "<leader><space>", function() Snacks.picker.files() end, },

@@ -14,7 +14,7 @@ fd = "latest"
 fzf = "latest"
 jq = "latest"
 lua-language-server = "latest"
-neovim = "0.11.7"
+neovim = "0.12.2"
 node = "22.12.0"
 "npm:@olrtg/emmet-language-server" = "latest"
 "npm:@tailwindcss/language-server" = "latest"
@@ -28,7 +28,7 @@ node = "22.12.0"
 "npm:wsl-open" = "latest"
 opencode = "latest"
 ripgrep = "latest"
-ruby = "4.0.0"
+ruby = "4.0.3"
 stylua = "latest"
 tree-sitter = "latest"
 usage = "latest"
@@ -38,13 +38,16 @@ zoxide = "latest"
 oxfmt = "latest"
 oxlint = "latest"
 task = "latest"
+github-cli = "latest"
+gitleaks = "latest"
+"github:axllent/mailpit" = "latest"
+"github:medialab/xan" = "latest"
 
+# https://github.com/protonpass/pass-cli/blob/main/CHANGELOG.md
 "http:pass-cli" = {
-  # https://github.com/protonpass/pass-cli/blob/main/CHANGELOG.md
   version = "1.8.0",
   version_list_url = "https://api.github.com/repos/protonpass/pass-cli/tags",
   version_json_path = ".[].name",
   url = "https://proton.me/download/pass-cli/{{ version }}/pass-cli-{{os()}}-{{arch(x64='x86_64', arm64='aarch64')}}",
   bin = "pass-cli"
 }
-"github:axllent/mailpit" = "latest"

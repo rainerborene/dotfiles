@@ -26,6 +26,10 @@ return {
         enable = true,
         disable = { "yaml", "ruby" },
       },
+      highlight = {
+        disable = { "eruby.yaml" },
+        additional_vim_regex = { "markdown" },
+      },
     },
     config = function(_, opts)
       vim.api.nvim_create_autocmd("FileType", {
@@ -33,10 +37,15 @@ return {
           local filetype = args.match
           local lang = vim.treesitter.language.get_lang(filetype)
           ---@diagnostic disable-next-line: param-type-mismatch
-          if not vim.treesitter.language.add(lang) then
+          if not lang or not vim.treesitter.language.add(lang) then
             return
           end
-          vim.treesitter.start()
+          if not vim.tbl_contains(opts.highlight.disable, vim.bo.filetype) then
+            vim.treesitter.start()
+          end
+          if vim.tbl_contains(opts.highlight.additional_vim_regex, vim.bo.filetype) then
+            vim.bo[args.buf].syntax = "on"
+          end
           if opts.indent.enable and not vim.tbl_contains(opts.indent.disable, vim.bo.filetype) then
             vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
           end

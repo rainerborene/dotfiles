@@ -29,7 +29,7 @@ M.tailwind_sort_classes = function(class_texts)
   })
 
   ---@diagnostic disable-next-line: param-type-mismatch
-  local response, err = client.request_sync("@/tailwindCSS/sortSelection", params, 2000, bufnr)
+  local response, err = client:request_sync("@/tailwindCSS/sortSelection", params, 2000, bufnr)
   if not response or err or not response.result then
     return class_texts[1]
   end

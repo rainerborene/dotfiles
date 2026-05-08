@@ -85,7 +85,7 @@ wezterm.on("trigger-vim-with-scrollback", function(window, pane)
   )
 end)
 
-config.default_domain = "WSL:archlinux"
+config.default_domain = "WSL:Ubuntu-22.04"
 config.color_scheme = "Catppuccin Mocha"
 config.font = wezterm.font("Berkeley Mono", { weight = "Bold" })
 config.force_reverse_video_cursor = true

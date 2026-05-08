@@ -128,7 +128,8 @@ map("n", "*", better_hlsearch)
 -- Disable hlsearch automatically when your search done and enable on next searching
 vim.on_key(function(char)
   local is_normal = vim.fn.mode() == "n" and char ~= "z"
-  if not is_normal or require("flash.prompt").visible() then
+  local ok, prompt = pcall(require, "flash.prompt")
+  if not is_normal or ok and prompt.visible() then
     return
   end
   local keys = { "<CR>", "n", "N", "*", "#", "?", "/" }

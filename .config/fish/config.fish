@@ -8,6 +8,12 @@ set -gx EDITOR nvim
 set -gx LANG en_US.UTF-8
 set -gx LC_ALL en_US.UTF-8
 
+# https://saiqulhaq.id/ruby_3_ubuntu_24_04
+# GCC is buggy on WSL2 (BIOS update fixed)
+set -gx CFLAGS "-O0"
+set -gx CPPFLAGS "-O0"
+set -gx CXXFLAGS "-O0"
+
 fish_add_path "/usr/bin"
 fish_add_path "/usr/local/bin"
 fish_add_path "/usr/local/share/npm/bin"

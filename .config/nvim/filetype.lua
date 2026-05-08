@@ -4,6 +4,7 @@ vim.filetype.add {
   },
   pattern = {
     ["Caddyfile.*"] = "caddy",
+    [".*%.md%.erb"] = "markdown",
   },
 }
 
