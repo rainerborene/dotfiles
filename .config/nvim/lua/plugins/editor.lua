@@ -110,77 +110,45 @@ return {
     },
   },
   {
-    "folke/snacks.nvim",
+    "ibhagwan/fzf-lua",
     lazy = false,
     opts = {
-      scope = { enabled = true },
-      notifier = { enabled = true },
-      image = { enabled = true },
-      picker = {
-        icons = {
-          files = { enabled = false },
+      "telescope",
+      fzf_opts = {
+        ["--no-cycle"] = true,
+      },
+      winopts = {
+        backdrop = 100,
+        preview = {
+          scrollbar = false,
         },
-        sources = {
-          files = { hidden = true },
-          grep = { hidden = true },
-          grep_word = { hidden = true },
-        },
-        layout = {
-          preset = "telescope",
-          cycle = false,
-        },
-        win = {
-          input = {
-            keys = {
-              ["<c-a>"] = "",
-              ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
-              ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
-              ["<PageUp>"] = { "list_scroll_up", mode = { "i", "n" } },
-              ["<PageDown>"] = { "list_scroll_down", mode = { "i", "n" } },
-            },
+      },
+      grep = {
+        hidden = true,
+      },
+      git = {
+        commits = {
+          cmd = [[git log --color --pretty=format:"%C(yellow)%h%Creset %C(blue)%ad%Creset ]]
+            .. [[%s %C(black)<%an>%Creset" --date=format:"%a %H:%M"]],
+          actions = {
+            ["enter"] = function(line, _)
+              vim.cmd.DiffviewOpen(line[1]:match "[^ ]+" .. "^!")
+            end,
           },
         },
       },
     },
     -- stylua: ignore
     keys = {
-      { "z=", function() Snacks.picker.spelling() end },
-      { "<leader>q", function() Snacks.bufdelete() end },
-      { "<leader>M",  function() Snacks.notifier.show_history() end },
-      { "<leader><space>", function() Snacks.picker.files() end, },
-      { "<leader><leader>", function() Snacks.picker.smart() end, },
-      { "<leader><tab>", function() Snacks.picker.keymaps() end, },
-      { "<leader>.", function() Snacks.picker.lsp_workspace_symbols() end, },
-      { "<leader>k", function() Snacks.picker.help() end, },
-      { "<leader>b", function() Snacks.picker.buffers() end, },
-      { "<leader>a", function() Snacks.picker.grep() end, },
-      { "<leader>A", function() Snacks.picker.grep_word() end, mode = { "n", "v" }, },
-      { "<leader>f", function() Snacks.picker.grep_word { search = vim.fn.input "Grep For > ", regex = true } end, },
-      { "<leader>u", function() Snacks.picker.undo() end, },
-      {
-        "<leader>gl",
-        function()
-          Snacks.picker.git_log {
-            follow = true,
-            current_file = vim.v.count > 0,
-            confirm = function(picker, item, action)
-              picker:close()
-              if not item then
-                return
-              end
-              if not action.cmd then
-                vim.cmd.DiffviewOpen(item.commit .. "^!")
-              elseif action.cmd == "split" then
-                vim.cmd.Gsplit(item.commit)
-              elseif action.cmd == "vsplit" then
-                vim.cmd.Gvsplit(item.commit)
-              elseif action.cmd == "tab" then
-                vim.cmd.Gtabedit(item.commit)
-              end
-            end,
-          }
-        end,
-      },
+      { "z=", function() require("fzf-lua").spell_suggest() end },
+      { "<leader><leader>", function() require("fzf-lua").files() end },
+      { "<leader><tab>", function() require("fzf-lua").keymaps() end },
+      { "<leader>a", function() require("fzf-lua").live_grep() end },
+      { "<leader>A", function() require("fzf-lua").grep_cword() end },
+      { "<leader>b", function() require("fzf-lua").buffers() end },
+      { "<leader>k", function() require("fzf-lua").help_tags() end },
+      { "<leader>u", function() require("fzf-lua").undotree() end },
+      { "<leader>gl", function() require("fzf-lua").git_commits() end },
       {
         "<leader>F",
         function()
@@ -188,38 +156,12 @@ return {
             return
           end
 
-          vim.ui.input({ prompt = "Bundle Grep For > " }, function(input)
-            if input == nil then
-              return
-            end
-
-            Snacks.picker.grep_word {
-              cwd = vim.b.bundler_paths[1]:match "(.*/).-$",
-              search = input,
-              dirs = vim.b.bundler_paths,
-              regex = true,
-            }
-          end)
+          require("fzf-lua").live_grep {
+            cwd = vim.b.bundler_paths[1]:match("(.*/).-$"),
+            search_paths = vim.b.bundler_paths,
+          }
         end,
       },
     },
-    init = function()
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "VeryLazy",
-        callback = function()
-          _G.dd = function(...)
-            Snacks.debug.inspect(...)
-          end
-          _G.bt = function()
-            Snacks.debug.backtrace()
-          end
-
-          ---@diagnostic disable-next-line: duplicate-set-field
-          vim._print = function(_, ...)
-            dd(...)
-          end
-        end,
-      })
-    end,
   },
 }

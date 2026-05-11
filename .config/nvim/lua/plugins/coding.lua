@@ -82,16 +82,4 @@ return {
       { "sr", "<Plug>(nvim-surround-change)" },
     },
   },
-  {
-    "coderifous/textobj-word-column.vim",
-    init = function()
-      vim.g.skip_default_textobj_word_column_mappings = 1
-    end,
-    keys = {
-      { "av", [[:<C-u>call TextObjWordBasedColumn("aw")<cr>]], mode = { "x", "o" }, silent = true },
-      { "aV", [[:<C-u>call TextObjWordBasedColumn("aW")<cr>]], mode = { "x", "o" }, silent = true },
-      { "iv", [[:<C-u>call TextObjWordBasedColumn("iw")<cr>]], mode = { "x", "o" }, silent = true },
-      { "iV", [[:<C-u>call TextObjWordBasedColumn("iW")<cr>]], mode = { "x", "o" }, silent = true },
-    },
-  },
 }
