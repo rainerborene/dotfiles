@@ -1,6 +1,12 @@
 [init]
   defaultBranch = main
 
+[include]
+  path = ~/.config/delta/catppuccin.gitconfig
+
+[delta]
+  features = catppuccin-mocha
+
 [core]
   excludesfile = ~/.cvsignore
   attributesfile = ~/.gitattributes

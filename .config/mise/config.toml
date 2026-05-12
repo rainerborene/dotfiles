@@ -8,6 +8,7 @@ atuin = "latest"
 bat = "latest"
 btop = { version = "latest", os = ["linux"] }
 difftastic = "latest"
+delta = "latest"
 eza = "latest"
 fastfetch = "latest"
 fd = "latest"

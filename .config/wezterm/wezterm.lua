@@ -63,28 +63,6 @@ wezterm.on("format-window-title", function(tab)
   return tab_title(tab)
 end)
 
-wezterm.on("trigger-vim-with-scrollback", function(window, pane)
-  -- Retrieve the text from the pane
-  local text = pane:get_lines_as_text(pane:get_dimensions().scrollback_rows)
-
-  -- Create a temporary file to pass to vim
-  local tmpfile = io.open([[\\wsl.localhost\Ubuntu-22.04\tmp\wezterm-scrollback]], "w+")
-  if tmpfile then
-    tmpfile:write(text)
-    tmpfile:flush()
-    tmpfile:close()
-  end
-
-  -- Open a new window running vim and tell it to open the file
-  window:perform_action(
-    wezterm.action.SpawnCommandInNewTab {
-      args = { "bash", "-l", "-c", "nvim /tmp/wezterm-scrollback" },
-      domain = "CurrentPaneDomain",
-    },
-    pane
-  )
-end)
-
 config.default_domain = "WSL:Ubuntu-22.04"
 config.color_scheme = "Catppuccin Mocha"
 config.font = wezterm.font("Berkeley Mono", { weight = "Bold" })
@@ -130,7 +108,6 @@ config.keys = {
   { key = "}", mods = "CTRL|SHIFT", action = wezterm.action { MoveTabRelative = 1 } },
   { key = "J", mods = "CTRL|SHIFT", action = wezterm.action { RotatePanes = "Clockwise" } },
   { key = "K", mods = "CTRL|SHIFT", action = wezterm.action { RotatePanes = "CounterClockwise" } },
-  { key = "E", mods = "CTRL|SHIFT", action = wezterm.action { EmitEvent = "trigger-vim-with-scrollback" } },
   {
     key = "c",
     mods = "LEADER",
