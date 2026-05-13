@@ -1,0 +1,8 @@
+{
+  "lastChangelogVersion": "0.74.0",
+  "theme": "catppuccin-mocha",
+  "defaultThinkingLevel": "low",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
+  "packages": []
+}

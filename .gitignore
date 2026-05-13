@@ -5,3 +5,5 @@
 .config/fish/completions
 .config/atuin/atuin-receipt.json
 .config/btop/btop.conf
+.pi/agent/sessions/
+.pi/agent/auth.json

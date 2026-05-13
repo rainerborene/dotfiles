@@ -1,4 +1,7 @@
 return {
+  { "tpope/vim-rsi" },
+  { "kana/vim-niceblock" },
+  { "folke/ts-comments.nvim" },
   {
     "AndrewRadev/switch.vim",
     init = function()
@@ -28,13 +31,6 @@ return {
       { "ia", "<Plug>SidewaysArgumentTextobjI", mode = { "o", "x" } },
     },
   },
-
-  { "folke/ts-comments.nvim" },
-
-  { "tpope/vim-rsi" },
-
-  { "kana/vim-niceblock" },
-
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
