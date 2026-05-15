@@ -36,9 +36,10 @@ return {
   {
     "mrjones2014/smart-splits.nvim",
     lazy = false,
-    opts = {
-      at_edge = "stop",
-    },
+    opts = { at_edge = "stop" },
+    cond = function()
+      return not vim.tbl_contains(vim.v.argv, "--headless")
+    end,
     -- stylua: ignore
     keys = {
       -- Resize splits
