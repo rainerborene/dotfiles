@@ -23,7 +23,7 @@
   "oil.nvim": { "branch": "master", "commit": "0fcc83805ad11cf714a949c98c605ed717e0b83e" },
   "schemastore.nvim": { "branch": "main", "commit": "1c28767e3a7f3c9b7c5cc66e7f16b268c964e2c9" },
   "sideways.vim": { "branch": "main", "commit": "1efb7db049e5536742dc89205f6e229297c31230" },
-  "smart-splits.nvim": { "branch": "master", "commit": "9053ebd394c38fe55fd2f4710daec27411c34fb9" },
+  "smart-splits.nvim": { "branch": "master", "commit": "3151100591670148cb0065388117622212208ee3" },
   "splitjoin.vim": { "branch": "main", "commit": "8c4c87e72d20d8d5eee8b29c320eb61767578841" },
   "switch.vim": { "branch": "main", "commit": "297346b630943ebd4ea58598dfd30bae5debc739" },
   "ts-comments.nvim": { "branch": "main", "commit": "123a9fb12e7229342f807ec9e6de478b1102b041" },
