@@ -1,5 +1,7 @@
 .git
 .gitignore
+.gitattributes
+.cvsignore
 README
 Taskfile.yml
 mise.toml

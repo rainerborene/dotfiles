@@ -8,8 +8,8 @@
   features = catppuccin-mocha
 
 [core]
-  excludesfile = ~/.cvsignore
-  attributesfile = ~/.gitattributes
+  excludesfile = ~/.dotfiles/.cvsignore
+  attributesfile = ~/.dotfiles/.gitattributes
 
 [diff]
   tool = difftastic

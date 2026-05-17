@@ -85,13 +85,31 @@ export default function usageExtension(pi: ExtensionAPI) {
 async function showUsageModal(ctx: ExtensionCommandContext, output: string): Promise<void> {
   await ctx.ui.custom<void>((_tui, _theme, _keybindings, done) => ({
     render(width: number): string[] {
-      return [...output.split("\n"), "", "Esc/q to close"].map((line) => truncateToWidth(line, width));
+      return [
+        topBorder(width),
+        ...output.split("\n").map(padModalLine),
+        "",
+        padModalLine(shortcutColor("Esc/q to close")),
+        topBorder(width),
+      ].map((line) => truncateToWidth(line, width));
     },
     handleInput(data: string): void {
       if (matchesKey(data, "escape") || matchesKey(data, "ctrl+c") || data === "q") done();
     },
     invalidate(): void { },
   }));
+}
+
+function topBorder(width: number): string {
+  return "─".repeat(Math.max(0, width));
+}
+
+function padModalLine(value: string): string {
+  return value.length === 0 ? "" : ` ${value}`;
+}
+
+function shortcutColor(value: string): string {
+  return `\x1b[90m${value}\x1b[39m`;
 }
 
 async function loadCredential(): Promise<Credential | null> {
