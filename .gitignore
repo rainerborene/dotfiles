@@ -7,4 +7,4 @@
 .config/btop/btop.conf
 .pi/agent/sessions/
 .pi/agent/auth.json
-.pi/agent/extensions/node_modules
+.pi/agent/node_modules
