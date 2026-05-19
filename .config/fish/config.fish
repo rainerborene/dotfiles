@@ -48,7 +48,8 @@ alias be 'bundle exec'
 alias rc 'rails console'
 alias rs 'rails server'
 alias dkk 'docker kill (docker ps -q)'
-alias cx 'claude --dangerously-skip-permissions'
+alias cl 'claude --dangerously-skip-permissions'
+alias cx 'codex --dangerously-bypass-approvals-and-sandbox'
 
 if test -r /proc/sys/kernel/osrelease; and string match -qi '*microsoft-standard-WSL2*' (cat /proc/sys/kernel/osrelease)
   if command -sq win32yank.exe
