@@ -1,3 +1,12 @@
+/**
+ * Codex Usage Extension
+ *
+ * Adds a `/usage` slash command that shows your OpenAI Codex rate-limit windows,
+ * extra-usage credit status, and approximate token/cost totals for the current Pi session.
+ * It reads the OpenAI Codex login saved by Pi (or the Codex CLI), refreshes the access
+ * token when needed, then displays the result in an interactive modal when the TUI is available.
+ */
+
 import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent";
 import { matchesKey, truncateToWidth } from "@earendil-works/pi-tui";
 import { readFile, writeFile } from "node:fs/promises";

@@ -43,14 +43,25 @@ alias vi 'nvim'
 alias v 'nvim'
 alias open 'wsl-open'
 alias rmzone 'find . -name "*:Zone.Identifier" -delete'
-alias pbcopy 'xsel --clipboard --input'
-alias pbpaste 'xsel --clipboard --output'
 alias mr 'mise run'
 alias be 'bundle exec'
 alias rc 'rails console'
 alias rs 'rails server'
 alias dkk 'docker kill (docker ps -q)'
 alias cx 'claude --dangerously-skip-permissions'
+
+if test -r /proc/sys/kernel/osrelease; and string match -qi '*microsoft-standard-WSL2*' (cat /proc/sys/kernel/osrelease)
+  if command -sq win32yank.exe
+    alias pbcopy 'win32yank.exe -i --crlf'
+    alias pbpaste 'win32yank.exe -o --lf'
+  else if command -sq win32yank
+    alias pbcopy 'win32yank -i --crlf'
+    alias pbpaste 'win32yank -o --lf'
+  end
+else
+  alias pbcopy 'xsel --clipboard --input'
+  alias pbpaste 'xsel --clipboard --output'
+end
 
 abbr p 'pnpm'
 abbr oc 'opencode'

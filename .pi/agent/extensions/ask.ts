@@ -1,3 +1,13 @@
+/**
+ * Ask User Tool Extension
+ *
+ * Registers an `ask_user` tool that lets the agent open a polished interactive
+ * question dialog in Pi's TUI. Use it when the agent needs a preference,
+ * clarification, or decision before continuing. The dialog supports 1-4 questions,
+ * 2-4 options per question, optional multi-select, previews, and a custom "Other"
+ * answer.
+ */
+
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Editor, Key, matchesKey, truncateToWidth, wrapTextWithAnsi, Text } from "@earendil-works/pi-tui";
 import { Type, type Static } from "typebox";
