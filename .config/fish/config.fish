@@ -51,6 +51,8 @@ alias dkk 'docker kill (docker ps -q)'
 alias cl 'claude --dangerously-skip-permissions'
 alias cx 'codex --dangerously-bypass-approvals-and-sandbox'
 
+abbr p 'pnpm'
+
 if test -r /proc/sys/kernel/osrelease; and string match -qi '*microsoft-standard-WSL2*' (cat /proc/sys/kernel/osrelease)
   if command -sq win32yank.exe
     alias pbcopy 'win32yank.exe -i --crlf'
@@ -63,9 +65,6 @@ else
   alias pbcopy 'xsel --clipboard --input'
   alias pbpaste 'xsel --clipboard --output'
 end
-
-abbr p 'pnpm'
-abbr oc 'opencode'
 
 function dkrm -d "Delete docker images by given name"
   docker images --format json \

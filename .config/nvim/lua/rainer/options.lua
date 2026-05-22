@@ -1,7 +1,3 @@
--- set leader key to comma
-vim.g.mapleader = ","
-vim.g.maplocalleader = "\\"
-
 -- misc
 vim.opt.confirm = true
 vim.opt.shortmess:append "c"

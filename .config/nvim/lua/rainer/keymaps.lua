@@ -1,5 +1,9 @@
 local map = vim.keymap.set
 
+-- set leader key to comma
+vim.g.mapleader = ","
+vim.g.maplocalleader = "\\"
+
 -- Easy command-line mode
 map("", ";", ":")
 

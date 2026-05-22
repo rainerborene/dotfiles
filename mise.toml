@@ -6,6 +6,7 @@ description = "Generate fish shell completions"
 run = [
   "mise completion fish > .config/fish/completions/mise.fish",
   "pnpm completion fish > .config/fish/completions/pnpm.fish",
+  "codex completion fish > .config/fish/completions/codex.fish",
   "wezterm shell-completion --shell fish > .config/fish/completions/wezterm.fish"
 ]
 
