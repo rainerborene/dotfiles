@@ -53,14 +53,9 @@ alias cx 'codex --dangerously-bypass-approvals-and-sandbox'
 
 abbr p 'pnpm'
 
-if test -r /proc/sys/kernel/osrelease; and string match -qi '*microsoft-standard-WSL2*' (cat /proc/sys/kernel/osrelease)
-  if command -sq win32yank.exe
-    alias pbcopy 'win32yank.exe -i --crlf'
-    alias pbpaste 'win32yank.exe -o --lf'
-  else if command -sq win32yank
-    alias pbcopy 'win32yank -i --crlf'
-    alias pbpaste 'win32yank -o --lf'
-  end
+if command -sq win32yank.exe
+  alias pbcopy 'win32yank.exe -i --crlf'
+  alias pbpaste 'win32yank.exe -o --lf'
 else
   alias pbcopy 'xsel --clipboard --input'
   alias pbpaste 'xsel --clipboard --output'
