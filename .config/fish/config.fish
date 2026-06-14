@@ -20,6 +20,7 @@ fish_add_path "/usr/local/share/npm/bin"
 fish_add_path "$HOME/.local/bin"
 fish_add_path "$HOME/.fzf/bin"
 fish_add_path "$HOME/.local/share/pnpm"
+fish_add_path "$HOME/.grok/bin"
 
 
 # Aliases
@@ -46,10 +47,11 @@ alias rmzone 'find . -name "*:Zone.Identifier" -delete'
 alias mr 'mise run'
 alias be 'bundle exec'
 alias rc 'rails console'
-alias rs 'rails server'
+alias rs 'CONSOLE_LEVEL=debug rails server'
 alias dkk 'docker kill (docker ps -q)'
 alias cl 'claude --dangerously-skip-permissions'
 alias cx 'codex --dangerously-bypass-approvals-and-sandbox'
+alias gk 'grok --always-approve'
 
 abbr p 'pnpm'
 

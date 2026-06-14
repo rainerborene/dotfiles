@@ -2,6 +2,8 @@
 .gitignore
 .gitattributes
 .cvsignore
+.ruby-lsp
 README
 Taskfile.yml
 mise.toml
+pkglist.txt

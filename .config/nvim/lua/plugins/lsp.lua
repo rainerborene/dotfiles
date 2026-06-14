@@ -91,7 +91,10 @@ return {
           map("<leader>le", vim.lsp.buf.references, { desc = "Find references" })
           map("<leader>lr", vim.lsp.buf.rename, { desc = "Rename" })
           map("<leader>la", vim.lsp.buf.code_action, { desc = "Code actions" })
-          map("<leader>ll", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
+          map("<leader>ll", function()
+            vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+          end, { desc = "Toggle diagnostics on/off" })
+
           map("<leader>ls", function()
             vim.lsp.buf.signature_help { border = "rounded" }
           end, { desc = "Show signature help" })
