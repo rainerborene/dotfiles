@@ -17,9 +17,7 @@ vim.opt.tabstop = 4
 vim.opt.textwidth = 80
 vim.opt.virtualedit = "block"
 vim.opt.completeopt = { "noinsert", "menuone", "noselect" }
-vim.schedule(function()
-  vim.opt.clipboard = "unnamedplus"
-end)
+vim.opt.clipboard = "unnamedplus"
 
 -- folding
 vim.opt.foldlevel = 99

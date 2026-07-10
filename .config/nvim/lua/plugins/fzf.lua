@@ -121,6 +121,7 @@ return {
     { "<leader>k", function() require("fzf-lua").help_tags() end },
     { "<leader>u", function() require("fzf-lua").undotree() end },
     { "<leader>gl", function() require("fzf-lua").git_commits() end },
+    { "<leader>gL", function() require("fzf-lua").git_bcommits() end },
     {
       "<leader>F",
       function()

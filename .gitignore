@@ -5,3 +5,5 @@
 !.config/fish/completions/.keep
 .config/atuin/atuin-receipt.json
 .config/btop/btop.conf
+.config/pgcli/log
+.config/pgcli/history

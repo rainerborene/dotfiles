@@ -11,6 +11,10 @@ run = [
   "wezterm shell-completion --shell fish > .config/fish/completions/wezterm.fish"
 ]
 
+[tasks.pgcli]
+description = "Install pgcli tool"
+run = "uv tool install pgcli"
+
 [tasks.gems]
 description = "Install gems for Ruby on Rails development"
 run = """
