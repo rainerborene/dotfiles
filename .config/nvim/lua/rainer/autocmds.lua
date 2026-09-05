@@ -11,7 +11,13 @@ autocmd({ "FocusGained", "BufEnter", "BufReadPost" }, {
   desc = "Reload files from disk when we focus vim",
   pattern = "*",
   nested = true,
-  command = "checktime %",
+  callback = function()
+    -- `checktime` is invalid inside the command-line window (q:, q/, ...)
+    if vim.fn.getcmdwintype() ~= "" then
+      return
+    end
+    vim.cmd.checktime "%"
+  end,
 })
 
 autocmd("TextYankPost", {
@@ -24,7 +30,10 @@ autocmd("TextYankPost", {
 
 autocmd("CmdwinEnter", {
   callback = function(args)
-    unmap({ "n", "x", "o" }, "<cr>", { buffer = args.buf })
+    -- only some of these modes may have a buffer-local <cr> mapping
+    for _, mode in ipairs { "n", "x", "o" } do
+      pcall(unmap, mode, "<cr>", { buffer = args.buf })
+    end
     map("n", "<c-c>", "<Cmd>quit<cr>", { buffer = args.buf })
   end,
 })

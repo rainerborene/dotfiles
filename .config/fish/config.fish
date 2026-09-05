@@ -46,6 +46,7 @@ alias dkk 'docker kill (docker ps -q)'
 alias cl 'claude --dangerously-skip-permissions'
 alias cx 'codex --dangerously-bypass-approvals-and-sandbox'
 alias gk 'grok --always-approve'
+alias wezsave 'wezterm cli get-text --escapes --start-line -100000 > wezterm-scrollback.txt'
 
 abbr p 'pnpm'
 

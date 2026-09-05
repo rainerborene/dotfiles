@@ -77,8 +77,10 @@ return {
       },
 
       buffers = {
-        keymap = { builtin = { ["<C-d>"] = false } },
-        actions = { ["ctrl-x"] = false, ["ctrl-d"] = { fn = actions.buf_del, reload = true } },
+        actions = {
+          ["ctrl-x"] = false,
+          ["ctrl-k"] = { fn = actions.buf_del, reload = true },
+        },
       },
 
       grep = {
@@ -86,6 +88,16 @@ return {
       },
 
       git = {
+        branches = {
+          actions = {
+            ["enter"] = function(selected)
+              local fzf = require "fzf-lua"
+              local branch = selected[1]:match "%s-[%+%*]?%s+([^ ]+)"
+              fzf.git_commits { cmd = fzf.config.globals.git.commits.cmd .. " " .. branch }
+            end,
+          },
+        },
+
         commits = {
           cmd = [[git log --color --pretty=format:"%C(yellow)%h%Creset %C(blue)%ad%Creset ]]
             .. [[%s %C(black)<%an>%Creset" --date=format:"%a %H:%M"]],
@@ -122,6 +134,7 @@ return {
     { "<leader>u", function() require("fzf-lua").undotree() end },
     { "<leader>gl", function() require("fzf-lua").git_commits() end },
     { "<leader>gL", function() require("fzf-lua").git_bcommits() end },
+    { "<leader>gb", function() require("fzf-lua").git_branches() end },
     {
       "<leader>F",
       function()
