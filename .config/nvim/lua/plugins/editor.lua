@@ -40,7 +40,10 @@ return {
     opts = {
       move = { at_edge = "stop" },
       mux = {
-        backend = "smart-splits-backend-wezterm",
+        -- Herdr app first (inner), then WezTerm
+        backend = function()
+          return { require "rainer.herdr_splits", require "smart-splits-backend-wezterm" }
+        end,
       },
     },
     dependencies = { "smart-splits-nvim/backend-wezterm" },
