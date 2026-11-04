@@ -34,12 +34,16 @@ return {
     opts = {
       options = {
         theme = "catppuccin-nvim",
-        section_separators = "",
+        -- rounded: pill-shaped sections, rounded caps at both ends
+        -- \238\130\180 = U+E0B4 (right half-circle), \238\130\182 = U+E0B6 (left half-circle)
+        section_separators = { left = "\238\130\180", right = "\238\130\182" },
         component_separators = "",
         globalstatus = true,
       },
       sections = {
+        lualine_a = { { "mode", separator = { left = "\238\130\182", right = "\238\130\180" } } },
         lualine_b = { "branch" },
+        lualine_z = { { "location", separator = { left = "\238\130\182", right = "\238\130\180" } } },
       },
       extensions = { "fugitive", "lazy", "oil" },
     },
