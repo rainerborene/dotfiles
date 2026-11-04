@@ -88,8 +88,14 @@ set -x FZF_CTRL_R_OPTS "--preview 'echo {}' --preview-window down:3:hidden:wrap 
 set -x FZF_CTRL_T_COMMAND 'fd --type f --type d --hidden --follow --exclude .git'
 set -x FZF_CTRL_T_OPTS "--preview 'bat -n --color=always {} --line-range :200'"
 set -x FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git'
-# terminal's 16 colours (follows Herdr's graphite)
-set -x FZF_DEFAULT_OPTS "--color=16"
+# Minimal look in graphite's colours, on the terminal's own background.
+# fzf-lua inherits this variable and overrides what it needs (its own colours and window).
+set -x FZF_DEFAULT_OPTS "\
+  --layout=reverse --info=inline-right --prompt='› ' --pointer='▌' --marker='▌' \
+  --gutter=' ' --no-separator --no-scrollbar \
+  --color=fg:#d2d4d9,fg+:#eeeeef,bg+:#25272b,gutter:-1,query:#eeeeef \
+  --color=hl:#96b2d7,hl+:#b0cbef,prompt:#96b2d7,pointer:#96b2d7,marker:#a6bd91 \
+  --color=info:#696a6d,spinner:#696a6d,header:#696a6d,border:#393b3f"
 # difftastic: "light" picks the normal red/green (graphite's softer #dc8c95 / #a6bd91)
 # instead of the bright bold ones; nothing else changes on a dark background
 set -x DFT_BACKGROUND light
@@ -101,7 +107,7 @@ function fco -d "Fuzzy-find and checkout a branch"
 end
 
 function fe -d "Open the selected file with the default editor"
-  set -l file (fzf --query="$argv[1]" --select-1 --exit-0)
+  set -l file (fzf --query="$argv[1]" --select-1 --exit-0 --height=40%)
   test -n "$file"; and nvim $file
 end
 

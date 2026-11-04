@@ -4,42 +4,100 @@ return {
   config = function()
     local actions = require("fzf-lua").actions
 
+    -- Herdr-style picker: a floating popover with rounded corners, the prompt on top,
+    -- matches in Herdr's accent blue (graphite palette, as in Herdr's "Go to…" picker).
+    local c = {
+      popover = "#25272b", -- Herdr's popover: a step lighter than the editor
+      border = "#393b3f", -- Herdr's hairline border over the popover
+      selected = "#34363a",
+      text = "#d2d4d9",
+      bright = "#eeeeef",
+      muted = "#98999b",
+      dim = "#696a6d",
+      accent = "#96b2d7",
+      accent_bright = "#b0cbef",
+      green = "#a6bd91",
+    }
+    local function set_hls()
+      local hl = vim.api.nvim_set_hl
+      hl(0, "FzfLuaNormal", { fg = c.text, bg = c.popover })
+      hl(0, "FzfLuaBorder", { fg = c.border, bg = c.popover })
+      hl(0, "FzfLuaTitle", { fg = c.muted, bg = c.popover, bold = true })
+      hl(0, "FzfLuaPreviewNormal", { fg = c.text, bg = c.popover })
+      hl(0, "FzfLuaPreviewBorder", { fg = c.border, bg = c.popover })
+      hl(0, "FzfLuaPreviewTitle", { fg = c.muted, bg = c.popover })
+      hl(0, "FzfLuaCursorLine", { bg = c.selected })
+      hl(0, "FzfLuaHeaderBind", { fg = c.dim })
+      hl(0, "FzfLuaHeaderText", { fg = c.dim })
+    end
+    set_hls()
+    vim.api.nvim_create_autocmd("ColorScheme", { callback = set_hls })
+
     require("fzf-lua").setup {
-      { "borderless-full" },
+      { "default-title" },
 
       defaults = {
-        prompt = " 🐺 ",
+        prompt = "› ",
       },
 
       fzf_opts = {
-        ["--info"] = "default",
+        ["--info"] = "inline-right",
         ["--cycle"] = false,
-        ["--layout"] = "default",
-        ["--pointer"] = " ",
+        ["--layout"] = "reverse",
+        ["--pointer"] = "▌",
+        ["--marker"] = "▌",
         ["--gutter"] = " ",
+        ["--separator"] = "─",
+        ["--scrollbar"] = "│",
       },
 
       fzf_colors = {
-        ["fg"] = { "fg", "NormalFloat" },
-        ["bg"] = { "bg", "NormalFloat" },
-        ["scrollbar"] = { "bg", "NormalFloat" },
-        ["info"] = { "fg", "EndOfBuffer" },
-        ["separator"] = { "bg", "NormalFloat" },
-        ["header"] = { "fg", "Comment" },
+        ["fg"] = c.text,
+        ["bg"] = c.popover,
+        ["fg+"] = c.bright,
+        ["bg+"] = c.selected,
+        ["gutter"] = c.popover,
+        ["hl"] = c.accent,
+        ["hl+"] = c.accent_bright,
+        ["query"] = c.bright,
+        ["prompt"] = c.accent,
+        ["pointer"] = c.accent,
+        ["marker"] = c.green,
+        ["info"] = c.dim,
+        ["spinner"] = c.dim,
+        ["separator"] = c.border,
+        ["scrollbar"] = c.border,
+        ["border"] = c.border,
+        ["header"] = c.dim,
       },
 
       hls = {
-        border = "NormalFloat",
-        preview_border = "NormalFloat",
-        title = "PmenuSel",
-        preview_title = "PmenuExtra",
-        header_bind = "Comment",
-        header_text = "Comment",
+        normal = "FzfLuaNormal",
+        border = "FzfLuaBorder",
+        title = "FzfLuaTitle",
+        preview_normal = "FzfLuaPreviewNormal",
+        preview_border = "FzfLuaPreviewBorder",
+        preview_title = "FzfLuaPreviewTitle",
+        cursorline = "FzfLuaCursorLine",
+        header_bind = "FzfLuaHeaderBind",
+        header_text = "FzfLuaHeaderText",
       },
 
       winopts = {
+        height = 0.8,
+        width = 0.85,
+        row = 0.4,
+        col = 0.5,
+        border = "rounded",
+        backdrop = false, -- Herdr's popups don't dim what's behind them
         title_pos = "left",
+        title_flags = false,
         preview = {
+          border = "rounded",
+          layout = "flex",
+          flip_columns = 140,
+          horizontal = "right:55%",
+          vertical = "down:50%",
           scrollbar = false,
           title_pos = "left",
           winopts = {
