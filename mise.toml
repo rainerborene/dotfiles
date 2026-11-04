@@ -37,3 +37,11 @@ rm -rf ~/.local/bin/chrome-headless-shell-linux64/
 mv -v chromedriver-win64/chromedriver.exe "`readlink $(which chromedriver)`"
 mv -v chrome-headless-shell-linux64/ ~/.local/bin/
 """
+
+[tasks."herdr:pull"]
+description = "Copy Herdr app config (Windows) into dotfiles"
+run = "herdr-app/sync pull"
+
+[tasks."herdr:push"]
+description = "Copy Herdr app config from dotfiles to Windows"
+run = "herdr-app/sync push"

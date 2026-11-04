@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Copy the Herdr app's personal config between its Windows home and this folder.
+#   sync pull   Herdr -> dotfiles (before committing)
+#   sync push   dotfiles -> Herdr (fresh machine; Herdr reloads live)
+# Only your files: settings, keys, programs, your themes/layouts, and mods Herdr didn't ship
+# (anything not in installed.json). Herdr rewrites the rest on every start.
+set -euo pipefail
+
+HERDR_HOME="${HERDR_HOME:-/mnt/c/Users/Rainer Borene/.config/herdr-app}"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+FILES=(settings.json keys.json programs.json)
+SHIPPED_THEMES=(atom-one-dark.json win98.json)
+SHIPPED_LAYOUTS=(main terminals win98)
+# written by Herdr inside every mod folder
+RSYNC=(rsync -a --exclude gpui-kit.d.ts --exclude herdr.d.ts --exclude jsconfig.json
+       --exclude node_modules --exclude '.*' --exclude '*.error')
+
+shipped_mods() { python3 -c 'import json,sys; print("\n".join(k for k in json.load(open(sys.argv[1])) if ":" not in k))' "$HERDR_HOME/installed.json"; }
+
+copy_tree() { # from to
+  local from=$1 to=$2 f n
+  mkdir -p "$to/themes" "$to/layouts" "$to/mods"
+  for f in "${FILES[@]}"; do [ -f "$from/$f" ] && cp "$from/$f" "$to/$f"; done
+  for f in "$from"/themes/*.json; do
+    [ -e "$f" ] || continue; n=$(basename "$f")
+    [[ " ${SHIPPED_THEMES[*]} " == *" $n "* ]] || cp "$f" "$to/themes/$n"
+  done
+  for f in "$from"/layouts/*; do
+    [ -f "$f" ] || continue; n=$(basename "$f"); n=${n%.*}
+    [[ " ${SHIPPED_LAYOUTS[*]} " == *" $n "* || "$f" == *.error || "$f" == *.old-* || "$f" == *.reset-* ]] || cp "$f" "$to/layouts/"
+  done
+}
+
+case "${1:-}" in
+  pull)
+    copy_tree "$HERDR_HOME" "$HERE"
+    mapfile -t shipped < <(shipped_mods)
+    for d in "$HERDR_HOME"/mods/*/; do
+      n=$(basename "$d")
+      [[ " ${shipped[*]} " == *" $n "* ]] && continue
+      "${RSYNC[@]}" --delete "$d" "$HERE/mods/$n/"
+    done
+    # mods you deleted in Herdr
+    for d in "$HERE"/mods/*/; do [ -d "$HERDR_HOME/mods/$(basename "$d")" ] || rm -rf "$d"; done
+    echo "pulled into $HERE"
+    ;;
+  push)
+    [ -d "$HERDR_HOME" ] || { echo "no Herdr home at $HERDR_HOME (start Herdr once)" >&2; exit 1; }
+    copy_tree "$HERE" "$HERDR_HOME"
+    for d in "$HERE"/mods/*/; do [ -d "$d" ] && "${RSYNC[@]}" "$d" "$HERDR_HOME/mods/$(basename "$d")/"; done
+    echo "pushed to $HERDR_HOME"
+    ;;
+  *) echo "usage: $0 pull|push" >&2; exit 2 ;;
+esac
