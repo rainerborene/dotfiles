@@ -7,4 +7,4 @@ README
 Taskfile.yml
 mise.toml
 pkglist.txt
-herdr-app
+^/\.config/herdr-app
