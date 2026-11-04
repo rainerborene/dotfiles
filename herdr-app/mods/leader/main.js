@@ -25,21 +25,14 @@ const keysTo = (key) => {
 
 // [keys, label, action]. Return true from an action to keep the popup open (it closes itself).
 const BINDINGS = [
-  [["h"], "pane ←", () => run("pane.go", { direction: "left" })],
-  [["j"], "pane ↓", () => run("pane.go", { direction: "down" })],
-  [["k"], "pane ↑", () => run("pane.go", { direction: "up" })],
-  [["l"], "pane →", () => run("pane.go", { direction: "right" })],
+  [["j"], "next space", () => run("space.next")],
+  [["k"], "prev space", () => run("space.prev")],
   [["v"], "split right", () => run("pane.split", { direction: "right" })],
   [["s"], "split down", () => run("pane.split", { direction: "down" })],
   [["z"], "zoom", () => run("pane.zoom")],
   [["x"], "close pane", () => run("pane.close")],
   [["c"], "new tab", null], // handled in pick(): needs a timer
-  [["n"], "next tab", () => run("tab.next")],
-  [["p"], "prev tab", () => run("tab.prev")],
   [[","], "rename tab", () => run("tab.rename")],
-  [["{", "shift-["], "move tab ←", () => moveTab(-1)],
-  [["}", "shift-]"], "move tab →", () => moveTab(1)],
-  [["ctrl-l"], "clear", () => keysTo("ctrl+l")],
   [["ctrl-f"], "send ctrl-f", () => keysTo("ctrl+f")],
 ];
 
@@ -51,6 +44,8 @@ export default class Leader extends View {
       for (;;) {
         const c = await nextCommand();
         if (c === "toggle") this.open ? this.close(true) : this.show(cx);
+        else if (c === "tab-left") moveTab(-1); // alt-shift-[ in keys.json
+        else if (c === "tab-right") moveTab(1); // alt-shift-]
         cx.notify();
       }
     });

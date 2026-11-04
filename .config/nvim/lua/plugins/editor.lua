@@ -40,10 +40,8 @@ return {
     opts = {
       move = { at_edge = "stop" },
       mux = {
-        -- Herdr app first (inner), then WezTerm
-        backend = function()
-          return { require "rainer.herdr_splits", require "smart-splits-backend-wezterm" }
-        end,
+        -- WezTerm only: in Herdr, ctrl-hjkl stays inside nvim and alt-hjkl moves Herdr panes
+        backend = "smart-splits-backend-wezterm",
       },
     },
     dependencies = { "smart-splits-nvim/backend-wezterm" },

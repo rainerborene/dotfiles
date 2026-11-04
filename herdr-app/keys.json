@@ -45,7 +45,7 @@
     "ctrl-shift-t": "tab.new",
     "ctrl-shift-k": "mod.open:picker",
     "ctrl-shift-p": "app.palette",
-    "ctrl-,": "app.settings",
+    "ctrl-,": "terminal",
     "ctrl-shift-o": "pane.split:right",
     "ctrl-shift-e": "pane.split:down",
     "ctrl-shift-w": "tab.close",
@@ -54,7 +54,13 @@
     "ctrl-shift-l": "layout.switch",
     "f2": "tab.rename",
     "shift-f2": "space.rename",
-    "ctrl-f": "leader.toggle"
+    "ctrl-f": "leader.toggle",
+    "alt-h": "pane.go:left",
+    "alt-j": "pane.go:down",
+    "alt-k": "pane.go:up",
+    "alt-l": "pane.go:right",
+    "alt-{": "leader.tab-left",
+    "alt-}": "leader.tab-right"
   },
   "terminal": {
     "ctrl-backspace": "send:\u0017",
@@ -64,7 +70,20 @@
     "ctrl-shift-v": "terminal.paste",
     "ctrl-v": "terminal",
     "ctrl-insert": "terminal.copy",
-    "shift-insert": "terminal.paste"
+    "shift-insert": "terminal.paste",
+    "ctrl-shift-f": "terminal.search",
+    "shift-pageup": {
+      "command": "terminal.scroll",
+      "args": {
+        "pages": -1
+      }
+    },
+    "shift-pagedown": {
+      "command": "terminal.scroll",
+      "args": {
+        "pages": 1
+      }
+    }
   },
   "layout:main-wsl": {
     "ctrl-shift-n": "wsl.new-space"
