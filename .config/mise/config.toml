@@ -1,9 +1,32 @@
 [settings]
+minimum_release_age = "0s"
 
 [settings.ruby]
 compile = false
 
 [tools]
+"npm:@olrtg/emmet-language-server" = "latest"
+"npm:@tailwindcss/language-server" = "latest"
+"npm:@herb-tools/language-server" = "latest"
+"npm:@herb-tools/linter" = "latest"
+"npm:@herb-tools/formatter" = "latest"
+"npm:vscode-langservers-extracted" = "latest"
+"npm:typescript-language-server" = "latest"
+"npm:typescript" = "5"
+"npm:agent-browser" = "latest"
+"npm:cf" = "latest"
+"npm:wsl-open" = "latest"
+"github:axllent/mailpit" = "latest"
+"github:medialab/xan" = "latest"
+"http:pass-cli" = {
+  version = "1.8.0",
+  version_list_url = "https://api.github.com/repos/protonpass/pass-cli/tags",
+  version_json_path = ".[].name",
+  url = "https://proton.me/download/pass-cli/{{ version }}/pass-cli-{{os()}}-{{arch(x64='x86_64', arm64='aarch64')}}",
+  bin = "pass-cli"
+  # changelog = https://github.com/protonpass/pass-cli/blob/main/CHANGELOG.md
+}
+
 atuin = "latest"
 bat = "latest"
 btop = { version = "latest", os = ["linux"] }
@@ -16,14 +39,16 @@ fzf = "latest"
 jq = "latest"
 lua-language-server = "latest"
 neovim = "0.12.5"
-node = "22.12.0"
+node = "22.22.0"
 codex = "latest"
+claude = "latest"
 ripgrep = "latest"
 ruby = "4.0.3"
 uv = "latest"
 stylua = "latest"
 tree-sitter = "latest"
 usage = "latest"
+ffmpeg = "latest"
 vivid = { version = "latest", os = ["linux"] }
 watchexec = "latest"
 zoxide = "latest"
@@ -31,25 +56,4 @@ oxfmt = "latest"
 oxlint = "latest"
 resvg = "latest"
 github-cli = "latest"
-"npm:@olrtg/emmet-language-server" = "latest"
-"npm:@tailwindcss/language-server" = "latest"
-"npm:@herb-tools/language-server" = "latest"
-"npm:@herb-tools/linter" = "latest"
-"npm:@herb-tools/formatter" = "latest"
-"npm:vscode-langservers-extracted" = "latest"
-"npm:typescript-language-server" = "latest"
-"npm:typescript" = "5"
-"npm:prettier" = "latest"
-"npm:agent-browser" = "latest"
-"npm:wsl-open" = "latest"
-"github:axllent/mailpit" = "latest"
-"github:medialab/xan" = "latest"
-
-# https://github.com/protonpass/pass-cli/blob/main/CHANGELOG.md
-"http:pass-cli" = {
-  version = "1.8.0",
-  version_list_url = "https://api.github.com/repos/protonpass/pass-cli/tags",
-  version_json_path = ".[].name",
-  url = "https://proton.me/download/pass-cli/{{ version }}/pass-cli-{{os()}}-{{arch(x64='x86_64', arm64='aarch64')}}",
-  bin = "pass-cli"
-}
+glow = "latest"

@@ -4,8 +4,8 @@ return {
   opts = {
     formatters_by_ft = {
       ruby = { "rubocop" },
-      html = { "prettierhtml" },
-      svg = { "prettierhtml" },
+      html = { "oxfmthtml" },
+      svg = { "oxfmthtml" },
       json = { "jq" },
       eruby = { "herb" },
       javascript = { "oxfmt" },
@@ -18,9 +18,13 @@ return {
       rubocop = {
         args = { "--server", "--autocorrect-all", "--force-exclusion", "--stderr", "--stdin", "$FILENAME" },
       },
-      prettierhtml = {
-        command = "prettier",
-        args = { "--parser", "html", "--print-width", "200" },
+      oxfmthtml = {
+        command = "oxfmt",
+        -- oxfmt picks the parser from the extension and rejects .svg, so always claim .html
+        args = function(_, ctx)
+          return { "--config", vim.fn.stdpath("config") .. "/oxfmtrc.json", "--stdin-filepath", ctx.filename .. ".html" }
+        end,
+        stdin = true,
       },
       herb = {
         command = "herb-format",

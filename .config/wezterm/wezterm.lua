@@ -1,17 +1,7 @@
 ---@diagnostic disable: undefined-field
 local wezterm = require "wezterm"
+local smart_splits = wezterm.plugin.require "https://github.com/smart-splits-nvim/backend-wezterm"
 local config = wezterm.config_builder()
-
-local function is_vim(pane)
-  return pane:get_user_vars().IS_NVIM == "true"
-end
-
-local direction_keys = {
-  h = "Left",
-  j = "Down",
-  k = "Up",
-  l = "Right",
-}
 
 local function active_tab_idx(mux_win)
   for _, item in ipairs(mux_win:tabs_with_info()) do
@@ -19,24 +9,6 @@ local function active_tab_idx(mux_win)
       return item.index
     end
   end
-end
-
-local function split_nav(resize_or_move, key)
-  return {
-    key = key,
-    mods = resize_or_move == "resize" and "META" or "CTRL",
-    action = wezterm.action_callback(function(win, pane)
-      if is_vim(pane) then
-        win:perform_action({ SendKey = { key = key, mods = resize_or_move == "resize" and "META" or "CTRL" } }, pane)
-      else
-        if resize_or_move == "resize" then
-          win:perform_action({ AdjustPaneSize = { direction_keys[key], 3 } }, pane)
-        else
-          win:perform_action({ ActivatePaneDirection = direction_keys[key] }, pane)
-        end
-      end
-    end),
-  }
 end
 
 local function get_current_working_dir(tab)
@@ -145,18 +117,17 @@ config.keys = {
       end),
     },
   },
-
-  -- move between split panes
-  split_nav("move", "h"),
-  split_nav("move", "j"),
-  split_nav("move", "k"),
-  split_nav("move", "l"),
-
-  -- resize panes
-  split_nav("resize", "h"),
-  split_nav("resize", "j"),
-  split_nav("resize", "k"),
-  split_nav("resize", "l"),
 }
+
+-- Forward WEZTERM_PANE and the plugin's SMART_SPLITS_WEZTERM handshake into WSL,
+-- otherwise the Neovim backend's detect() fails. WezTerm appends its TERM vars to this.
+config.set_environment_variables = { WSLENV = "WEZTERM_PANE:SMART_SPLITS_WEZTERM" }
+
+-- Owns CTRL+hjkl (move) and META+hjkl (resize), forwarding to Neovim when IS_NVIM is set.
+smart_splits.apply_to_config(config, {
+  direction_keys = { "h", "j", "k", "l" },
+  modifiers = { move = "CTRL", resize = "META" },
+  at_edge = "stop",
+})
 
 return config

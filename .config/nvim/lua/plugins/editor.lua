@@ -34,9 +34,16 @@ return {
     },
   },
   {
-    "mrjones2014/smart-splits.nvim",
+    "smart-splits-nvim/smart-splits.nvim",
+    version = "^3.0.0",
     lazy = false,
-    opts = { at_edge = "stop" },
+    opts = {
+      move = { at_edge = "stop" },
+      mux = {
+        backend = "smart-splits-backend-wezterm",
+      },
+    },
+    dependencies = { "smart-splits-nvim/backend-wezterm" },
     cond = function()
       return not vim.tbl_contains(vim.v.argv, "--headless")
     end,

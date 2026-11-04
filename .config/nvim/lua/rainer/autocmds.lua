@@ -20,6 +20,21 @@ autocmd({ "FocusGained", "BufEnter", "BufReadPost" }, {
   end,
 })
 
+autocmd("FileChangedShell", {
+  group = augroup "deleted_outside",
+  desc = "Close the buffer of a file deleted outside Neovim",
+  callback = function(args)
+    if vim.v.fcs_reason == "deleted" and not vim.bo[args.buf].modified then
+      vim.v.fcs_choice = ""
+      vim.schedule(function()
+        vim.api.nvim_buf_delete(args.buf, { force = true })
+      end)
+    else
+      vim.v.fcs_choice = "ask"
+    end
+  end,
+})
+
 autocmd("TextYankPost", {
   group = augroup "yank_highlight",
   desc = "Highlight on yank",

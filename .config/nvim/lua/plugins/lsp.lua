@@ -30,7 +30,7 @@ return {
           before_init = function(_, new_config)
             new_config.settings.editor = { tabSize = vim.lsp.util.get_effective_tabstop() }
             new_config.settings.tailwindCSS.experimental.configFile =
-              unpack(vim.fs.find("tailwind.website.js", { type = "file" }))
+              unpack(vim.fs.find("tailwind.application.js", { type = "file" }))
           end,
         },
         lua_ls = {

@@ -85,6 +85,21 @@ return {
 
       grep = {
         hidden = true,
+        -- Text after ` --` in the live grep query is split into tokens:
+        -- tokens starting with `-` become rg options (e.g. `--pcre2`),
+        -- everything else becomes an `--iglob` like the default behavior.
+        rg_glob_fn = function(query, opts)
+          local search, rest = query:match("(.-)" .. opts.glob_separator .. "(.*)")
+          local args = {}
+          for _, tok in ipairs(vim.split(rest or "", "%s+", { trimempty = true })) do
+            if tok:sub(1, 1) == "-" then
+              table.insert(args, vim.fn.shellescape(tok))
+            else
+              table.insert(args, opts.glob_flag .. " " .. vim.fn.shellescape(tok))
+            end
+          end
+          return search or "", table.concat(args, " ")
+        end,
       },
 
       git = {

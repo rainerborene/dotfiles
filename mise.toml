@@ -8,6 +8,7 @@ run = [
   "pnpm completion fish > .config/fish/completions/pnpm.fish",
   "codex completion fish > .config/fish/completions/codex.fish",
   "grok completions fish > .config/fish/completions/grok.fish",
+  "glow completion fish > .config/fish/completions/glow.fish",
   "wezterm shell-completion --shell fish > .config/fish/completions/wezterm.fish"
 ]
 
