@@ -35,6 +35,6 @@
   "vim-rails": { "branch": "master", "commit": "b0a5c76f86ea214ade36ab0b811e730c3f0add67" },
   "vim-rsi": { "branch": "master", "commit": "45540637ead22f011e8215f1c90142e49d946a54" },
   "vim-startify": { "branch": "master", "commit": "4e089dffdad46f3f5593f34362d530e8fe823dcf" },
-  "vim-test": { "branch": "master", "commit": "7a5f7e1848b573de556adffe718097933d827d32" },
+  "vim-test": { "branch": "master", "commit": "fe5de45f059f30b18df9990ad99169f3cd2d2a70" },
   "vim-unimpaired": { "branch": "master", "commit": "db65482581a28e4ccf355be297f1864a4e66985c" }
 }
