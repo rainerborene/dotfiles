@@ -88,12 +88,11 @@ set -x FZF_CTRL_R_OPTS "--preview 'echo {}' --preview-window down:3:hidden:wrap 
 set -x FZF_CTRL_T_COMMAND 'fd --type f --type d --hidden --follow --exclude .git'
 set -x FZF_CTRL_T_OPTS "--preview 'bat -n --color=always {} --line-range :200'"
 set -x FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git'
-set -x FZF_DEFAULT_OPTS "\
-  --color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 \
-  --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
-  --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
-  --color=selected-bg:#45475A \
-  --color=border:#6C7086,label:#CDD6F4"
+# terminal's 16 colours (follows Herdr's graphite)
+set -x FZF_DEFAULT_OPTS "--color=16"
+# difftastic: "light" picks the normal red/green (graphite's softer #dc8c95 / #a6bd91)
+# instead of the bright bold ones; nothing else changes on a dark background
+set -x DFT_BACKGROUND light
 
 function fco -d "Fuzzy-find and checkout a branch"
   git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)" | read -z branches;
@@ -115,7 +114,7 @@ end
 # --------------------------------------------------------------------
 
 if test -x (which vivid); and status is-interactive
-  set -x LS_COLORS (vivid generate catppuccin-mocha)
+  set -x LS_COLORS (vivid generate ansi)
 end
 
 

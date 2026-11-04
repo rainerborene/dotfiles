@@ -1,9 +1,10 @@
 {
-  "zoom": 1,
+  "zoom": 1.0,
   "sounds": {
     "enabled": true
   },
-  "font_size": 13,
-  "minimum_contrast": 1,
-  "theme": "catppuccin-mocha"
+  "font_size": 13.0,
+  "font_ligatures": false,
+  "minimum_contrast": 1.0,
+  "theme": "graphite"
 }

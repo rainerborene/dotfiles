@@ -232,4 +232,5 @@ records = true
 # tcp_port = 8889
 
 [theme]
-name = "catppuccin-mocha-mauve"
+# built-in theme in the terminal's own colours (follows graphite)
+name = "default"

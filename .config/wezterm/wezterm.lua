@@ -36,7 +36,27 @@ wezterm.on("format-window-title", function(tab)
 end)
 
 config.default_domain = "WSL:Ubuntu-22.04"
-config.color_scheme = "Catppuccin Mocha"
+-- Herdr's "graphite" palette
+config.colors = {
+  foreground = "#d2d4d9",
+  background = "#17191d",
+  cursor_bg = "#d2d4d9",
+  cursor_fg = "#17191d",
+  cursor_border = "#d2d4d9",
+  selection_bg = "#394454",
+  selection_fg = "#eeeeef",
+  split = "#2c2e31",
+  ansi = { "#45484f", "#dc8c95", "#a6bd91", "#d8be87", "#96b2d7", "#b5a2ce", "#8cbdc3", "#d2d4d9" },
+  brights = { "#818793", "#f0a5ad", "#bad5a2", "#ead2a1", "#b0cbef", "#cbb7e6", "#a4d5db", "#f0f0f2" },
+  tab_bar = {
+    background = "#101114",
+    active_tab = { bg_color = "#17191d", fg_color = "#eeeeef" },
+    inactive_tab = { bg_color = "#101114", fg_color = "#98999b" },
+    inactive_tab_hover = { bg_color = "#25272b", fg_color = "#d2d4d9" },
+    new_tab = { bg_color = "#101114", fg_color = "#696a6d" },
+    new_tab_hover = { bg_color = "#25272b", fg_color = "#d2d4d9" },
+  },
+}
 config.font = wezterm.font("Berkeley Mono", { weight = "Bold" })
 config.force_reverse_video_cursor = true
 config.canonicalize_pasted_newlines = "None"

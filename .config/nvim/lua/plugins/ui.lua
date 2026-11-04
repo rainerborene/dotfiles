@@ -4,12 +4,48 @@ return {
     name = "catppuccin",
     priority = 1000,
     opts = {
+      flavour = "mocha",
+      -- Herdr's "graphite" palette on top of Catppuccin's highlight rules.
+      -- Graphite has 6 hues + brights; the extra Catppuccin names borrow the nearest one.
+      color_overrides = {
+        mocha = {
+          -- backgrounds and greys
+          base = "#17191d",
+          mantle = "#131518",
+          crust = "#101114",
+          surface0 = "#2c2e31",
+          surface1 = "#3c3f45",
+          surface2 = "#4f5259",
+          overlay0 = "#696a6d",
+          overlay1 = "#818793",
+          overlay2 = "#98999b",
+          subtext0 = "#adaeb0",
+          subtext1 = "#c4c6ca",
+          text = "#d2d4d9",
+          -- hues (normal, then bright variants for the extra names)
+          red = "#dc8c95",
+          maroon = "#f0a5ad",
+          flamingo = "#f0a5ad",
+          rosewater = "#f0f0f2",
+          peach = "#ead2a1",
+          yellow = "#d8be87",
+          green = "#a6bd91",
+          teal = "#8cbdc3",
+          sky = "#a4d5db",
+          sapphire = "#b0cbef",
+          blue = "#96b2d7",
+          lavender = "#b0cbef",
+          mauve = "#b5a2ce",
+          pink = "#cbb7e6",
+        },
+      },
       auto_integrations = true,
       custom_highlights = function()
         return {
           htmlTagN = { link = "htmlTagName" },
           SlimLine = { link = "StatusLine" },
           MatchWord = { bold = true },
+          Visual = { bg = "#394454" }, -- graphite's selection
         }
       end,
     },

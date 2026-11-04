@@ -1,11 +1,20 @@
 [init]
   defaultBranch = main
 
-[include]
-  path = ~/.config/delta/catppuccin.gitconfig
-
 [delta]
-  features = catppuccin-mocha
+  # follow the terminal's 16 colours (Herdr's graphite)
+  syntax-theme = ansi
+  dark = true
+  # diff backgrounds = nvim's DiffAdd / DiffDelete (as in diffview.nvim); emph is a stronger tint
+  plus-style = syntax "#313732"
+  minus-style = syntax "#3a2e33"
+  plus-emph-style = syntax "#424a40"
+  minus-emph-style = syntax "#523b41"
+  line-numbers-plus-style = "#a6bd91"
+  line-numbers-minus-style = "#dc8c95"
+  line-numbers-zero-style = "#3c3f45"
+  line-numbers-left-style = "#3c3f45"
+  line-numbers-right-style = "#3c3f45"
 
 [core]
   excludesfile = ~/.dotfiles/.cvsignore

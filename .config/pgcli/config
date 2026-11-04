@@ -206,33 +206,34 @@ use_local_timezone = True
 
 # Custom colors for the completion menu, toolbar, etc.
 [colors]
-completion-menu.completion.current = 'bg:#313244 #9399b2 bold'
-completion-menu.completion = 'bg:#181825 #9399b2'
-completion-menu.meta.completion.current = 'bg:#313244 #6c7086 bold'
-completion-menu.meta.completion = 'bg:#181825 #6c7086'
-completion-menu.multi-column-meta = 'bg:#181825 #6c7086'
-scrollbar.arrow = 'bg:#6c7086'
-scrollbar = 'bg:#313244'
-selected = '#cdd6f4 bg:#45475a bold'
-search = '#cdd6f4 bg:#3e5767'
-search.current = '#181825 bg:#f38ba8'
-bottom-toolbar = 'bg:#181825 #cdd6f4'
-bottom-toolbar.off = 'bg:#181825 #6c7086'
-bottom-toolbar.on = 'bg:#181825 #cdd6f4'
+# Herdr's graphite palette (same mapping as nvim's catppuccin override)
+completion-menu.completion.current = 'bg:#2c2e31 #98999b bold'
+completion-menu.completion = 'bg:#131518 #98999b'
+completion-menu.meta.completion.current = 'bg:#2c2e31 #696a6d bold'
+completion-menu.meta.completion = 'bg:#131518 #696a6d'
+completion-menu.multi-column-meta = 'bg:#131518 #696a6d'
+scrollbar.arrow = 'bg:#696a6d'
+scrollbar = 'bg:#2c2e31'
+selected = '#d2d4d9 bg:#394454 bold'
+search = '#d2d4d9 bg:#3d4755'
+search.current = '#131518 bg:#dc8c95'
+bottom-toolbar = 'bg:#131518 #d2d4d9'
+bottom-toolbar.off = 'bg:#131518 #696a6d'
+bottom-toolbar.on = 'bg:#131518 #d2d4d9'
 search-toolbar = 'noinherit bold'
 search-toolbar.text = 'nobold'
 system-toolbar = 'noinherit bold'
 arg-toolbar = 'noinherit bold'
 arg-toolbar.text = 'nobold'
-bottom-toolbar.transaction.valid = 'bg:#181825 #a6e3a1 bold'
-bottom-toolbar.transaction.failed = 'bg:#181825 #f38ba8 bold'
-literal.string = '#a6e3a1'
-literal.number = '#fab387'
-keyword = 'bold #cba6f7'
-output.header = "#89b4fa bold"
+bottom-toolbar.transaction.valid = 'bg:#131518 #a6bd91 bold'
+bottom-toolbar.transaction.failed = 'bg:#131518 #dc8c95 bold'
+literal.string = '#a6bd91'
+literal.number = '#ead2a1'
+keyword = 'bold #b5a2ce'
+output.header = "#96b2d7 bold"
 output.odd-row = ""
 output.even-row = ""
-output.null = "#6c7086"
+output.null = "#696a6d"
 
 # Named queries are queries you can execute by name.
 [named queries]
