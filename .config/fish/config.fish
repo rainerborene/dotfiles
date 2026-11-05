@@ -44,7 +44,7 @@ alias rc 'rails console'
 alias rs 'CONSOLE_LEVEL=debug rails server'
 alias dkk 'docker kill (docker ps -q)'
 alias cl 'claude --dangerously-skip-permissions'
-alias cx 'codex --dangerously-bypass-approvals-and-sandbox'
+alias cx 'codex --no-daemon --dangerously-bypass-approvals-and-sandbox'
 alias gk 'grok --always-approve'
 
 abbr p 'pnpm'
