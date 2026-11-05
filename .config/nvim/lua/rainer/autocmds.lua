@@ -6,17 +6,18 @@ local augroup = function(name)
   return vim.api.nvim_create_augroup("rainer_" .. name, { clear = true })
 end
 
-autocmd({ "FocusGained", "BufEnter", "BufReadPost" }, {
-  group = augroup "checktime",
-  desc = "Reload files from disk when we focus vim",
-  pattern = "*",
-  nested = true,
-  callback = function()
-    -- `checktime` is invalid inside the command-line window (q:, q/, ...)
-    if vim.fn.getcmdwintype() ~= "" then
-      return
-    end
-    vim.cmd.checktime "%"
+autocmd({ "BufReadPost", "BufWritePost", "BufFilePost" }, {
+  group = augroup "watch_files",
+  desc = "Watch the file for changes made outside Neovim",
+  callback = function(args)
+    require("rainer.watch").watch(args.buf)
+  end,
+})
+
+autocmd({ "BufUnload", "BufWipeout" }, {
+  group = augroup "unwatch_files",
+  callback = function(args)
+    require("rainer.watch").unwatch(args.buf)
   end,
 })
 
