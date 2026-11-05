@@ -11,6 +11,12 @@ map("", ";", ":")
 map("", "<Tab>", "%", { remap = true })
 map("", "<C-o>", "<Nop>")
 
+-- Move between windows (Herdr panes are alt-h/j/k/l; resize with <C-w> + - < >)
+map("n", "<C-h>", "<C-w>h")
+map("n", "<C-j>", "<C-w>j")
+map("n", "<C-k>", "<C-w>k")
+map("n", "<C-l>", "<C-w>l")
+
 -- Keep the cursor in place while joining lines
 map("n", "J", "mzJ`z")
 

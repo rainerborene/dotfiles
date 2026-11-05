@@ -34,36 +34,6 @@ return {
     },
   },
   {
-    "smart-splits-nvim/smart-splits.nvim",
-    version = "^3.0.0",
-    lazy = false,
-    opts = {
-      move = { at_edge = "stop" },
-      mux = {
-        -- WezTerm only: in Herdr, ctrl-hjkl stays inside nvim and alt-hjkl moves Herdr panes
-        backend = "smart-splits-backend-wezterm",
-      },
-    },
-    dependencies = { "smart-splits-nvim/backend-wezterm" },
-    cond = function()
-      return not vim.tbl_contains(vim.v.argv, "--headless")
-    end,
-    -- stylua: ignore
-    keys = {
-      -- Resize splits
-      { "<A-h>", function() require("smart-splits").resize_left() end, },
-      { "<A-j>", function() require("smart-splits").resize_down() end, },
-      { "<A-k>", function() require("smart-splits").resize_up() end, },
-      { "<A-l>", function() require("smart-splits").resize_right() end, },
-
-      -- Moving between splits
-      { "<C-h>", function() require("smart-splits").move_cursor_left() end, },
-      { "<C-j>", function() require("smart-splits").move_cursor_down() end, },
-      { "<C-k>", function() require("smart-splits").move_cursor_up() end, },
-      { "<C-l>", function() require("smart-splits").move_cursor_right() end, },
-    },
-  },
-  {
     "MagicDuck/grug-far.nvim",
     keys = {
       {

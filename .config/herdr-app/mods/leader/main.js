@@ -1,4 +1,4 @@
-// WezTerm-style leader. Lives in a floating block at the bottom of the layout (layouts/main-wsl.json),
+// ctrl-f leader. Lives in a floating block at the bottom of the layout (layouts/main-wsl.json),
 // empty until ctrl-f sends `leader.toggle`; then it takes the keyboard, the next key runs one action,
 // and focus goes back to the pane you were in. Esc, an unbound key or clicking elsewhere closes it.
 import { View, div } from "gpui-kit";
@@ -78,7 +78,7 @@ export default class Leader extends View {
       return cx.notify();
     }
     if (b[0][0] === "c") {
-      // WezTerm's leader-c: new tab right after the current one
+      // leader-c: new tab right after the current one
       this.close(true);
       const { tab } = curTab();
       run("tab.new");

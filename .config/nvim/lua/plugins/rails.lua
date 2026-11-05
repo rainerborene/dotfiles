@@ -41,16 +41,12 @@ return {
   {
     "janko-m/vim-test",
     init = function()
-      vim.g["test#strategy"] = "wezterm"
+      local herdr = require "rainer.herdr_test"
+      vim.g["test#custom_strategies"] = { herdr = herdr.strategy }
+      vim.g["test#strategy"] = herdr.name()
     end,
     keys = {
-      {
-        "<leader>rr",
-        function()
-          vim.g["test#wezterm#pane_id"] = nil
-          vim.cmd.TestNearest()
-        end,
-      },
+      { "<leader>rr", "<cmd>TestNearest<cr>" },
       { "<leader>rf", "<cmd>TestFile<cr>" },
       { "<leader>ra", "<cmd>TestSuite<cr>" },
       { "<leader>rl", "<cmd>TestLast<cr>" },
