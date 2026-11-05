@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 # Copy the Herdr app's personal config between its Windows home and this folder.
-#   sync pull   Herdr -> dotfiles (before committing)
-#   sync push   dotfiles -> Herdr (fresh machine; Herdr reloads live)
+#   herdr-config pull   Herdr -> dotfiles (before committing)
+#   herdr-config push   dotfiles -> Herdr (fresh machine; Herdr reloads live)
+#   herdr-config link   ~/.local/bin/herdr-app -> the Windows herdr-app.exe
+# The dotfiles copy is .config/herdr-app. Connecting WSL to Herdr is herdr-connect-wsl.
 # Only your files: settings, keys, programs, your themes/layouts, and mods Herdr didn't ship
 # (anything not in installed.json). Herdr rewrites the rest on every start.
 set -euo pipefail
 
-HERDR_HOME="${HERDR_HOME:-/mnt/c/Users/Rainer Borene/.config/herdr-app}"
-HERE="$(cd "$(dirname "$0")" && pwd)"
+BIN="$(cd "$(dirname "$0")" && pwd)"
+. "$BIN/herdr-lib.sh"
+HERE="$(cd "$BIN/../.config/herdr-app" && pwd)" # the dotfiles copy of Herdr's home
 FILES=(settings.json keys.json programs.json)
 SHIPPED_THEMES=(atom-one-dark.json win98.json)
 SHIPPED_LAYOUTS=(main terminals win98)
@@ -32,6 +35,14 @@ copy_tree() { # from to
 }
 
 case "${1:-}" in
+  link)
+    need_herdr
+    target="$WIN_PROGRAMS/herdr-app/herdr-app.exe"; link="$HOME/.local/bin/herdr-app"
+    mkdir -p "$HOME/.local/bin"
+    if [ "$(readlink "$link" 2>/dev/null)" = "$target" ]; then echo "herdr-app already linked"; exit 0; fi
+    [ -e "$link" ] || [ -L "$link" ] && { echo "$link exists and points elsewhere; leaving it" >&2; exit 1; }
+    ln -s "$target" "$link" && echo "linked $link -> $target"
+    ;;
   pull)
     copy_tree "$HERDR_HOME" "$HERE"
     mapfile -t shipped < <(shipped_mods)
@@ -45,10 +56,11 @@ case "${1:-}" in
     echo "pulled into $HERE"
     ;;
   push)
+    need_herdr
     [ -d "$HERDR_HOME" ] || { echo "no Herdr home at $HERDR_HOME (start Herdr once)" >&2; exit 1; }
     copy_tree "$HERE" "$HERDR_HOME"
     for d in "$HERE"/mods/*/; do [ -d "$d" ] && "${RSYNC[@]}" "$d" "$HERDR_HOME/mods/$(basename "$d")/"; done
     echo "pushed to $HERDR_HOME"
     ;;
-  *) echo "usage: $0 pull|push" >&2; exit 2 ;;
+  *) echo "usage: $0 pull|push|link" >&2; exit 2 ;;
 esac

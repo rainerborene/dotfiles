@@ -8,3 +8,4 @@ Taskfile.yml
 mise.toml
 pkglist.txt
 ^/\.config/herdr-app
+^/bin

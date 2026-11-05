@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+# Make this WSL distro a Herdr machine. Herdr's Windows core reaches other machines over ssh,
+# so: an sshd in this distro that only this PC can reach, a key for it on Windows, an ssh
+# Host entry, then `hc machine add`. Same files and markers as herdr-wsl's setup.ps1
+# (github.com/emoss08/herdr-wsl), so a machine it set up is recognised as done.
+# Every step checks first and only changes what's missing; sudo is used only when needed.
+# Env: HERDR_MACHINE (default wsl), HERDR_SSH_PORT (default 2222).
+set -euo pipefail
+
+BIN="$(cd "$(dirname "$0")" && pwd)"
+. "$BIN/herdr-lib.sh"
+PORT="${HERDR_SSH_PORT:-2222}"
+SSH_DIR_WIN="$WIN_USER_HOME/.ssh"
+KEY="$SSH_DIR_WIN/herdr_wsl_ed25519"
+WIN_SSH_CONFIG="$SSH_DIR_WIN/config"
+OPENSSH=/mnt/c/Windows/System32/OpenSSH
+SSHD_CONF=/etc/ssh/sshd_config.d/herdr-wsl.conf
+DISTRO="$(wslpath -w / | sed -E 's#^\\\\[^\\]+\\([^\\]+)\\?$#\1#')" # \\wsl.localhost\Ubuntu-22.04\
+
+step() { printf '\n%s\n' "$*"; }
+ok() { printf '  ✓ %s\n' "$*"; }
+did() { printf '  + %s\n' "$*"; }
+
+# ---------------------------------------------------------------- checks
+need_herdr
+[ -x "$HC_EXE" ] || die "herdr-core isn't installed on Windows ($HC_EXE)"
+[ -x "$OPENSSH/ssh.exe" ] || die "Windows OpenSSH client is missing ($OPENSSH/ssh.exe)"
+[ "$(ps -p 1 -o comm=)" = systemd ] ||
+  die "systemd isn't running in this distro: add [boot] systemd=true to /etc/wsl.conf, then run 'wsl --shutdown' in Windows"
+
+# ---------------------------------------------------------------- 1. sshd
+step "1. sshd on 127.0.0.1:$PORT"
+if ! [ -x /usr/sbin/sshd ]; then
+  sudo apt-get update -q && sudo apt-get install -y -q openssh-server
+  did "installed openssh-server"
+fi
+conf="# herdr-wsl: this distro as a Herdr machine, reachable from Windows only
+Port $PORT
+ListenAddress 127.0.0.1
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+PubkeyAuthentication yes"
+restart=0
+if [ "$(cat "$SSHD_CONF" 2>/dev/null)" != "$conf" ]; then
+  printf '%s\n' "$conf" | sudo tee "$SSHD_CONF" >/dev/null && did "wrote $SSHD_CONF" && restart=1
+else
+  ok "$SSHD_CONF"
+fi
+if ! grep -qE '^Include /etc/ssh/sshd_config\.d/\*\.conf' /etc/ssh/sshd_config; then
+  sudo sed -i '1i # herdr-wsl\nInclude /etc/ssh/sshd_config.d/*.conf' /etc/ssh/sshd_config && did "added Include to sshd_config" && restart=1
+fi
+if ! ls /etc/ssh/ssh_host_*_key >/dev/null 2>&1; then
+  sudo ssh-keygen -A && did "created host keys" && restart=1
+fi
+listening() { ss -ltn | grep -q "127.0.0.1:$PORT "; }
+if [ "$restart" = 1 ] || ! listening; then
+  sudo mkdir -p /run/sshd
+  sudo sshd -t
+  sudo systemctl disable --now ssh.socket >/dev/null 2>&1 || true
+  sudo systemctl enable ssh >/dev/null 2>&1
+  sudo systemctl restart ssh
+  sleep 1
+  listening || die "sshd isn't listening on 127.0.0.1:$PORT (see: sudo journalctl -u ssh)"
+  did "sshd (re)started"
+fi
+ok "listening on 127.0.0.1:$PORT"
+
+# ---------------------------------------------------------------- 2. key and ssh Host
+step "2. key and ssh Host '$HERDR_MACHINE'"
+mkdir -p "$SSH_DIR_WIN"
+if ! [ -f "$KEY" ]; then
+  win "$OPENSSH/ssh-keygen.exe" -q -t ed25519 -N "" -C "herdr-wsl" -f "$(wslpath -w "$KEY")"
+  did "created $KEY"
+else
+  ok "key ${KEY#"$WIN_USER_HOME"/}"
+fi
+pub="$(tr -d '\r' <"$KEY.pub")"
+keybody="$(awk '{print $2}' <<<"$pub")"
+line="from=\"127.0.0.1,::1\" $pub"
+mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
+if grep -qxF "$line" ~/.ssh/authorized_keys; then
+  ok "~/.ssh/authorized_keys"
+else
+  grep -vF "$keybody" ~/.ssh/authorized_keys >~/.ssh/authorized_keys.tmp || true
+  printf '%s\n' "$line" >>~/.ssh/authorized_keys.tmp && mv ~/.ssh/authorized_keys.tmp ~/.ssh/authorized_keys
+  did "authorized the key in ~/.ssh/authorized_keys"
+fi
+block="# >>> herdr-wsl
+Host $HERDR_MACHINE
+  # distro: $DISTRO
+  HostName 127.0.0.1
+  Port $PORT
+  User $(whoami)
+  IdentityFile ~/.ssh/herdr_wsl_ed25519
+  IdentitiesOnly yes
+  StrictHostKeyChecking accept-new
+# <<< herdr-wsl"
+touch "$WIN_SSH_CONFIG"
+current="$(sed -n '/^# >>> herdr-wsl$/,/^# <<< herdr-wsl$/p' "$WIN_SSH_CONFIG" | tr -d '\r')"
+if [ "$current" = "$block" ]; then
+  ok "Host $HERDR_MACHINE in ${WIN_SSH_CONFIG#"$WIN_USER_HOME"/}"
+else
+  outside="$(sed '/^# >>> herdr-wsl$/,/^# <<< herdr-wsl$/d' "$WIN_SSH_CONFIG" | tr -d '\r')"
+  grep -qiE "^\s*Host\s+(.*\s)?$HERDR_MACHINE(\s|$)" <<<"$outside" &&
+    die "$WIN_SSH_CONFIG already has a 'Host $HERDR_MACHINE' of its own; rename it or set HERDR_MACHINE"
+  { [ -n "$outside" ] && printf '%s\n\n' "$outside"; printf '%s\n' "$block"; } >"$WIN_SSH_CONFIG.tmp"
+  mv "$WIN_SSH_CONFIG.tmp" "$WIN_SSH_CONFIG"
+  did "wrote Host $HERDR_MACHINE in ${WIN_SSH_CONFIG#"$WIN_USER_HOME"/}"
+fi
+win "$OPENSSH/ssh.exe" -o BatchMode=yes -o ConnectTimeout=5 "$HERDR_MACHINE" true ||
+  die "Windows ssh can't log in to '$HERDR_MACHINE'"
+ok "Windows ssh logs in to '$HERDR_MACHINE'"
+
+# ---------------------------------------------------------------- 3. Herdr machine
+step "3. Herdr machine '$HERDR_MACHINE'"
+if win "$HC_EXE" machine ls --json | python3 -c 'import json,sys; sys.exit(0 if any(m["name"]==sys.argv[1] for m in json.load(sys.stdin)["machines"]) else 1)' "$HERDR_MACHINE"; then
+  ok "already added"
+else
+  win "$HC_EXE" machine add "$HERDR_MACHINE" --name "$HERDR_MACHINE" --install --json >/dev/null
+  did "added (herdr-core copied into this distro if needed)"
+fi
+printf '\nDone: Herdr reaches this distro as "%s".\n' "$HERDR_MACHINE"

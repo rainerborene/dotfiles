@@ -1,5 +1,9 @@
-# Bootstrap dotfiles with:
-# $ stow && curl https://mise.run | sh
+# New machine: install mise (curl https://mise.run | sh), then
+# $ mise run setup
+
+[tasks.setup]
+description = "Set up this machine: link dotfiles, install tools, set up Herdr"
+run = ["stow -v .", "mise install", "mise run herdr:setup"]
 
 [tasks.completions]
 description = "Generate fish shell completions"
@@ -39,8 +43,20 @@ mv -v chrome-headless-shell-linux64/ ~/.local/bin/
 
 [tasks."herdr:pull"]
 description = "Copy Herdr app config (Windows) into dotfiles"
-run = ".config/herdr-app/sync pull"
+run = "bin/herdr-config pull"
 
 [tasks."herdr:push"]
 description = "Copy Herdr app config from dotfiles to Windows"
-run = ".config/herdr-app/sync push"
+run = "bin/herdr-config push"
+
+[tasks."herdr:link"]
+description = "Put herdr-app (the Windows app) on PATH as ~/.local/bin/herdr-app"
+run = "bin/herdr-config link"
+
+[tasks."herdr:connect"]
+description = "Make this WSL distro a Herdr machine (sshd, key, ssh Host, hc machine add)"
+run = "bin/herdr-connect-wsl"
+
+[tasks."herdr:setup"]
+description = "Set up Herdr: link herdr-app, connect this distro, push the config"
+run = ["mise run herdr:link", "mise run herdr:connect", "mise run herdr:push"]
