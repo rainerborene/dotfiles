@@ -71,18 +71,39 @@ return {
       options = {
         theme = "catppuccin-nvim",
         -- rounded: pill-shaped sections, rounded caps at both ends
-        -- \238\130\180 = U+E0B4 (right half-circle), \238\130\182 = U+E0B6 (left half-circle)
-        section_separators = { left = "\238\130\180", right = "\238\130\182" },
+        section_separators = { left = "", right = "" },
         component_separators = "",
         globalstatus = true,
       },
       sections = {
-        lualine_a = { { "mode", separator = { left = "\238\130\182", right = "\238\130\180" } } },
+        lualine_a = { { "mode", separator = { left = "", right = "" } } },
         lualine_b = { "branch" },
-        lualine_z = { { "location", separator = { left = "\238\130\182", right = "\238\130\180" } } },
+        lualine_z = { { "location", separator = { left = "", right = "" } } },
       },
-      extensions = { "fugitive", "lazy", "oil" },
     },
+    config = function(_, opts)
+      local pill = { left = "", right = "" }
+
+      -- built-in extensions replace our sections, dropping the pill caps on a/z;
+      -- wrap them so their outer sections get the same rounded ends
+      local function rounded(name)
+        local ext = vim.deepcopy(require("lualine.extensions." .. name))
+        for _, key in ipairs { "sections", "inactive_sections" } do
+          for _, sec in ipairs { "lualine_a", "lualine_z" } do
+            local comps = ext[key] and ext[key][sec]
+            for i, c in ipairs(comps or {}) do
+              if type(c) ~= "table" then c = { c } end
+              c.separator = c.separator or pill
+              comps[i] = c
+            end
+          end
+        end
+        return ext
+      end
+
+      opts.extensions = vim.tbl_map(rounded, { "fugitive", "lazy", "oil" })
+      require("lualine").setup(opts)
+    end,
   },
   {
     "mhinz/vim-startify",
