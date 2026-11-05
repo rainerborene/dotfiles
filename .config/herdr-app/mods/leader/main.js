@@ -3,7 +3,7 @@
 // and focus goes back to the pane you were in. Esc, an unbound key or clicking elsewhere closes it.
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
-import { run, hc, theme, focused, spaces, nextCommand } from "herdr";
+import { run, hc, theme, focused, spaces, panes, nextCommand } from "herdr";
 
 const curTab = () => {
   const f = focused();
@@ -16,6 +16,28 @@ const moveTab = (delta) => {
   if (!sp || !tab) return;
   const to = Math.min(Math.max(tab.index + delta, 1), sp.tabs.length);
   if (to !== tab.index) run("tab.move", { id: tab.id, index: to });
+};
+
+// ctrl-f !: move the pane into a new tab of its own (WezTerm's move_to_new_tab). Herdr has no
+// command for it: park the terminal (its pane goes, the program keeps running), then keep it
+// without a place, which gives it a pane in a new tab.
+const hasPane = (terminal) => panes().some((p) => p.terminal === terminal);
+const until = async (cx, ok) => {
+  for (let i = 0; i < 40 && !ok(); i++) await new Promise((r) => cx.timer.after(50, () => r()));
+  return ok();
+};
+const paneToTab = async (me, cx) => {
+  if (!me?.pane || !me.terminal) return;
+  const mine = panes().find((p) => p.pane === me.pane);
+  if (!panes().some((p) => p.tab === mine?.tab && p.pane !== me.pane)) return; // already alone
+  run("terminal.park", { terminal: me.terminal });
+  if (!(await until(cx, () => !hasPane(me.terminal)))) return;
+  run("terminal.keep", { terminal: me.terminal });
+  if (!(await until(cx, () => hasPane(me.terminal)))) return;
+  // Herdr names a kept terminal's tab after its address ("wsl/t12"); go back to a plain number
+  const tab = panes().find((p) => p.terminal === me.terminal)?.tab;
+  if (tab) run("tab.rename", { id: tab, name: "" });
+  run("pane.focus", { terminal: me.terminal });
 };
 
 const keysTo = (key) => {
@@ -33,6 +55,7 @@ const BINDINGS = [
   [["x"], "close pane", () => run("pane.close")],
   [["c"], "new tab", null], // handled in pick(): needs a timer
   [[","], "rename tab", () => run("tab.rename")],
+  [["!", "shift-1"], "pane → new tab", null], // handled in pick(): async
   [["ctrl-f"], "send ctrl-f", () => keysTo("ctrl+f")],
 ];
 
@@ -46,6 +69,7 @@ export default class Leader extends View {
         if (c === "toggle") this.open ? this.close(true) : this.show(cx);
         else if (c === "tab-left") moveTab(-1); // alt-shift-[ in keys.json
         else if (c === "tab-right") moveTab(1); // alt-shift-]
+        else if (c === "pane-to-tab") await paneToTab(focused(), cx);
         cx.notify();
       }
     });
@@ -75,6 +99,12 @@ export default class Leader extends View {
       // shift/ctrl alone shouldn't dismiss; anything else unbound does
       if (["shift", "control", "alt", "platform", "function"].includes(e.key)) return;
       this.close(true);
+      return cx.notify();
+    }
+    if (b[0][0] === "!") {
+      const me = focused();
+      this.close(true);
+      cx.spawn(async (cx) => { await paneToTab(me, cx); });
       return cx.notify();
     }
     if (b[0][0] === "c") {
