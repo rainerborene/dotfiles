@@ -5,7 +5,11 @@ return {
     lazy = false,
     opts = {
       servers = {
-        ruby_lsp = {},
+        ruby_lsp = {
+          capabilities = {
+            workspace = { didChangeWatchedFiles = { dynamicRegistration = true } },
+          },
+        },
         ts_ls = {
           init_options = {
             tsserver = {
