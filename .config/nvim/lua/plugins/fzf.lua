@@ -197,17 +197,17 @@ return {
 
   -- stylua: ignore
   keys = {
-    { "z=", function() require("fzf-lua").spell_suggest() end },
-    { "<leader><leader>", function() require("fzf-lua").files() end },
-    { "<leader><tab>", function() require("fzf-lua").keymaps() end },
-    { "<leader>a", function() require("fzf-lua").live_grep() end },
-    { "<leader>A", function() require("fzf-lua").grep_cword() end },
-    { "<leader>b", function() require("fzf-lua").buffers() end },
-    { "<leader>k", function() require("fzf-lua").help_tags() end },
-    { "<leader>u", function() require("fzf-lua").undotree() end },
-    { "<leader>gl", function() require("fzf-lua").git_commits() end },
-    { "<leader>gL", function() require("fzf-lua").git_bcommits() end },
-    { "<leader>gb", function() require("fzf-lua").git_branches() end },
+    { "z=", function() require("fzf-lua").spell_suggest() end, desc = "Spelling suggestions" },
+    { "<leader><leader>", function() require("fzf-lua").files() end, desc = "Find files" },
+    { "<leader><tab>", function() require("fzf-lua").keymaps() end, desc = "Search keymaps" },
+    { "<leader>a", function() require("fzf-lua").live_grep() end, desc = "Live grep" },
+    { "<leader>A", function() require("fzf-lua").grep_cword() end, desc = "Grep word under cursor" },
+    { "<leader>b", function() require("fzf-lua").buffers() end, desc = "Open buffers" },
+    { "<leader>k", function() require("fzf-lua").help_tags() end, desc = "Help tags" },
+    { "<leader>u", function() require("fzf-lua").undotree() end, desc = "Undo tree" },
+    { "<leader>gl", function() require("fzf-lua").git_commits() end, desc = "Git commits" },
+    { "<leader>gL", function() require("fzf-lua").git_bcommits() end, desc = "Git commits for buffer" },
+    { "<leader>gb", function() require("fzf-lua").git_branches() end, desc = "Git branches" },
     {
       "<leader>F",
       function()
@@ -220,6 +220,7 @@ return {
           search_paths = vim.b.bundler_paths,
         }
       end,
+      desc = "Live grep in bundled gems",
     },
   },
 }

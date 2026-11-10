@@ -46,11 +46,11 @@ return {
       vim.g["test#strategy"] = herdr.name()
     end,
     keys = {
-      { "<leader>rr", "<cmd>TestNearest<cr>" },
-      { "<leader>rf", "<cmd>TestFile<cr>" },
-      { "<leader>ra", "<cmd>TestSuite<cr>" },
-      { "<leader>rl", "<cmd>TestLast<cr>" },
-      { "<leader>rg", "<cmd>TestVisit<cr>" },
+      { "<leader>rr", "<cmd>TestNearest<cr>", desc = "Run nearest test" },
+      { "<leader>rf", "<cmd>TestFile<cr>", desc = "Run test file" },
+      { "<leader>ra", "<cmd>TestSuite<cr>", desc = "Run test suite" },
+      { "<leader>rl", "<cmd>TestLast<cr>", desc = "Run last test" },
+      { "<leader>rg", "<cmd>TestVisit<cr>", desc = "Go to last test" },
     },
   },
 }

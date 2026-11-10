@@ -56,8 +56,8 @@ return {
         end, { desc = "git [D]iff against last commit" })
 
         -- Text object
-        map({ "o", "x" }, "ih", gitsigns.select_hunk)
-        map({ "o", "x" }, "ah", gitsigns.select_hunk)
+        map({ "o", "x" }, "ih", gitsigns.select_hunk, { desc = "Select git hunk" })
+        map({ "o", "x" }, "ah", gitsigns.select_hunk, { desc = "Select git hunk" })
       end,
     },
   },
@@ -85,9 +85,9 @@ return {
       })
     end,
     keys = {
-      { "<leader>ge", "<cmd>Gedit<cr>", silent = true },
-      { "<leader>gw", "<cmd>Gwrite<cr>", silent = true },
-      { "<leader>gs", "<cmd>Git<cr>gg)", silent = true, remap = true },
+      { "<leader>ge", "<cmd>Gedit<cr>", silent = true, desc = "Git edit object" },
+      { "<leader>gw", "<cmd>Gwrite<cr>", silent = true, desc = "Git write and stage file" },
+      { "<leader>gs", "<cmd>Git<cr>", silent = true, remap = true, desc = "Git status" },
     },
   },
   {
@@ -108,8 +108,8 @@ return {
       },
     },
     keys = {
-      { "<leader>gd", "<cmd>DiffviewOpen<cr>" },
-      { "<leader>gD", "<cmd>DiffviewFileHistory %<cr>" },
+      { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff view" },
+      { "<leader>gD", "<cmd>DiffviewFileHistory %<cr>", desc = "File history" },
     },
   },
 }

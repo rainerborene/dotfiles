@@ -132,8 +132,8 @@ local better_hlsearch = function()
   vim.opt.hlsearch = true
 end
 
-map("n", "#", better_hlsearch)
-map("n", "*", better_hlsearch)
+map("n", "#", better_hlsearch, { desc = "Highlight word under cursor" })
+map("n", "*", better_hlsearch, { desc = "Highlight word under cursor" })
 
 -- Disable hlsearch automatically when your search done and enable on next searching
 vim.on_key(function(char)
@@ -158,7 +158,7 @@ map({ "x", "o" }, "gp", function()
   vim.api.nvim_win_set_cursor(0, vim.api.nvim_buf_get_mark(0, "["))
   vim.cmd.normal { is_visual and "o" or "v", bang = true }
   vim.api.nvim_win_set_cursor(0, vim.api.nvim_buf_get_mark(0, "]"))
-end)
+end, { desc = "Select last pasted text" })
 
 -- Close quickfix/location window
 map("n", "<leader>c", function()
@@ -169,10 +169,10 @@ map("n", "<leader>c", function()
   if nr == vim.fn.winnr "$" then
     vim.cmd.cclose()
   end
-end)
+end, { desc = "Toggle quickfix window" })
 
 -- Stop snippet on escape
 map({ "i", "s", "n" }, "<esc>", function()
   vim.snippet.stop()
   return "<esc>"
-end, { expr = true })
+end, { expr = true, desc = "Stop snippet and escape" })

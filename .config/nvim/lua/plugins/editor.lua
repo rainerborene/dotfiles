@@ -44,12 +44,14 @@ return {
             staticTitle = "Search and Replace",
           }
         end,
+        desc = "Toggle search and replace",
       },
       {
         "<leader>X",
         function()
           require("grug-far").open { prefills = { search = vim.fn.expand "<cword>" } }
         end,
+        desc = "Search and replace word under cursor",
       },
     },
   },
@@ -70,6 +72,7 @@ return {
         function()
           require("flash").jump()
         end,
+        desc = "Flash jump",
         mode = { "n", "x", "o" },
       },
       {
@@ -77,6 +80,7 @@ return {
         function()
           require("flash").treesitter_search()
         end,
+        desc = "Flash treesitter search",
         mode = "o",
       },
       {
@@ -84,6 +88,7 @@ return {
         function()
           require("flash").remote()
         end,
+        desc = "Flash remote",
         mode = "o",
       },
     },
