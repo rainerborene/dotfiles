@@ -1,0 +1,1 @@
+../../.agents/prompts/commit.md
