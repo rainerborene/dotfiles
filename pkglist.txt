@@ -1,3 +1,4 @@
 bubblewrap
 stow
 fish
+inotify-tools
