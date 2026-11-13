@@ -5,6 +5,16 @@
 description = "Set up this machine: link dotfiles, install tools, set up Herdr"
 run = ["stow -v .", "mise install", "mise run herdr:setup"]
 
+[tasks."skills:link"]
+description = "Link every .agents/skills/* into .claude/skills (committed symlinks), then restow"
+run = """
+for skill in .agents/skills/*/; do
+  name=$(basename "$skill")
+  ln -sfnv "../../.agents/skills/$name" ".claude/skills/$name"
+done
+stow -R -v .
+"""
+
 [tasks.completions]
 description = "Generate fish shell completions"
 run = [
