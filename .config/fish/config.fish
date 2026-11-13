@@ -14,7 +14,6 @@ fish_add_path "/usr/local/share/npm/bin"
 fish_add_path "$HOME/.local/bin"
 fish_add_path "$HOME/.fzf/bin"
 fish_add_path "$HOME/.local/share/pnpm"
-fish_add_path "$HOME/.grok/bin"
 
 
 # Aliases
